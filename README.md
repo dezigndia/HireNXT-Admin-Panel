@@ -1,1 +1,1 @@
-# HireNXT-Admin
+# HireNXT-Admin-Panel
