@@ -8,10 +8,9 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />}>
-          {/* <Route path="*" element={<NoPage />} /> */}
-          <Route path="/login" element={<Login />}></Route>
-        </Route>
+        <Route path="/*" element={<Dashboard />} />
+        {/* <Route path="*" element={<NoPage />} /> */}
+        <Route path="/login" element={<Login />}></Route>
       </Routes>
     </BrowserRouter>
   );

@@ -16,6 +16,9 @@ import {
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { DashboardWrapper } from "./Dashboard.style";
 import Logo from "./../../assets/logo.svg";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Overview from "./Overview/Overview";
+import RolePermission from "./RolePermission/RolePermission";
 
 const { Header, Content, Sider } = Layout;
 
@@ -25,8 +28,12 @@ const items1 = ["1", "2", "3"].map((key) => ({
 }));
 
 const sideBarMenu = [
-  { key: 1, label: "Dashboard", icon: <DashboardOutlined /> },
-  { key: 2, label: "Roles & Permissions", icon: <SecurityScanOutlined /> },
+  { key: "/home", label: "Dashboard", icon: <DashboardOutlined /> },
+  {
+    key: "/role-permission",
+    label: "Roles & Permissions",
+    icon: <SecurityScanOutlined />,
+  },
   { key: 3, label: "User Management", icon: <UserOutlined /> },
   { key: 4, label: "Talents Profiles", icon: <AuditOutlined /> },
   { key: 5, label: "Projects", icon: <ProjectOutlined /> },
@@ -56,6 +63,11 @@ const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
 );
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+
+  const handleClick = (e) => {
+    navigate(e.key);
+  };
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -93,28 +105,23 @@ const Dashboard = () => {
               defaultSelectedKeys={["1"]}
               defaultOpenKeys={["sub1"]}
               style={{
-                height: "100%",
                 borderRight: 0,
               }}
               items={sideBarMenu}
+              onClick={handleClick}
             />
           </Sider>
           <Layout
             style={{
               padding: "0 24px 24px",
+              overflow: "scroll",
+              height: "90vh",
             }}
           >
-            <Content
-              style={{
-                padding: 24,
-                margin: 0,
-                minHeight: 280,
-                background: colorBgContainer,
-                borderRadius: borderRadiusLG,
-              }}
-            >
-              Content
-            </Content>
+            <Routes>
+              <Route path="/home" element={<Overview />} />
+              <Route path="/role-permission" element={<RolePermission />} />
+            </Routes>
           </Layout>
         </Layout>
       </Layout>
