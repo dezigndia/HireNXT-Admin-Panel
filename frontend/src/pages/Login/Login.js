@@ -1,7 +1,17 @@
 // @ts-nocheck
 import React from "react";
-import { Col, Row, Carousel, Form, Input, Button, Checkbox } from "antd";
+import {
+  Col,
+  Row,
+  Carousel,
+  Form,
+  Input,
+  Button,
+  Checkbox,
+  Typography,
+} from "antd";
 import { LoginWrapper } from "./Login.style";
+const { Title, Paragraph } = Typography;
 
 const contentStyle = {
   margin: 0,
@@ -62,6 +72,8 @@ const Login = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
+            <Title>Hi, Welcome back !</Title>
+            <Paragraph>Continue where you left off</Paragraph>
             <Form.Item
               label="Username"
               name="username"
