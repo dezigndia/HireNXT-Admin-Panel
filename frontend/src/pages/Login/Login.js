@@ -1,5 +1,6 @@
 // @ts-nocheck
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   Col,
   Row,
@@ -23,13 +24,64 @@ const contentStyle = {
 };
 
 const Login = () => {
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const onFinish = async (e) => {
+    //e.preventDefault();
+
+    // Perform input validation
+    if (!email || !password) {
+      setError('Username and password are required');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:3443/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle success (e.g., store authentication token)
+        console.log('Login successful:', data);
+        localStorage.setItem('authToken', data.token);
+        // Redirect to home page after successful login
+        navigate('/home');
+      } else {
+        // Handle error response (invalid credentials, etc.)
+        setError(data.message || 'Login failed');
+      }
+    } catch (error) {
+      // Handle fetch error
+      setError('Network error, please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const onChange = (currentSlide) => {
     console.log(currentSlide);
   };
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
+  // const onFinish = (values) => {
+  //   console.log("Success:", values);
+  // };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
@@ -68,6 +120,7 @@ const Login = () => {
             initialValues={{
               remember: true,
             }}
+            //onSubmit={handleSubmit}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -84,7 +137,10 @@ const Login = () => {
                 },
               ]}
             >
-              <Input />
+              <Input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+               />
             </Form.Item>
 
             <Form.Item
@@ -97,7 +153,10 @@ const Login = () => {
                 },
               ]}
             >
-              <Input.Password />
+              <Input.Password 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+               />
             </Form.Item>
 
             <Form.Item name="remember" valuePropName="checked">
