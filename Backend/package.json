@@ -1,5 +1,5 @@
 {
-  "name": "virmall-backend",
+  "name": "hirenext-admin-backend",
   "version": "20.13.0",
   "description": "api rest-api postgresql docker typescript",
   "main": "index.js",
@@ -17,7 +17,7 @@
     "docker",
     "typescript"
   ],
-  "author": "inncrewin",
+  "author": "dezigndia",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
