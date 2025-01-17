@@ -1,25 +1,9 @@
 import {Router} from 'express';
-import {login} from '../controllers/authController';
+import AUTH_ROUTE from './auth.route';
 
-const API_ROUTE = Router();
+const ROUTE = Router();
 
-API_ROUTE.get('/', (req, res) => {
-       res.send('Hello from user routes!');
-   });
- 
-// API_ROUTE.get('/getUsers', (req, res) => {
-    
-//     async function users() {
-//         const query = "select * from auth.users;";
-//         const selectQuery = new databaseDAO(query);
-//         const result = await selectQuery.selectQueryResult();
-//         console.log(result.rows[0]);
-//     }
-//     users();
-//     res.send('Hello from user routes!- get users');
-// });
-API_ROUTE.post('/login', (req, res) => {
-    login(req, res);
-});
+ROUTE.use('/', AUTH_ROUTE);
 
-export default API_ROUTE;
+
+export default ROUTE;

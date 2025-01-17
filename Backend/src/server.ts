@@ -69,7 +69,7 @@ export class RestServer {
         this._app.use(helmet.contentSecurityPolicy(this.contentSecurityPolicy));
 
         //enable only in production it allow application to run in HTTPS only
-        // this._app.use(hsts(this.strictTranspostPolicyOptions));
+        this._app.use(hsts(this.strictTranspostPolicyOptions));
         
         // this._app.use(i18n);
         this._app.set('etag', false);
