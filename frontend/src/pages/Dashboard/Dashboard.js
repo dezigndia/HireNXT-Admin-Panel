@@ -19,6 +19,8 @@ import Logo from "./../../assets/logo.svg";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Overview from "./Overview/Overview";
 import RolePermission from "./RolePermission/RolePermission";
+import UserManagement from "./UserManagement/UserManagement";
+import TalentProfiles from "./TalentProfiles/TalentProfiles";
 
 const { Header, Content, Sider } = Layout;
 
@@ -30,12 +32,20 @@ const items1 = ["1", "2", "3"].map((key) => ({
 const sideBarMenu = [
   { key: "/home", label: "Dashboard", icon: <DashboardOutlined /> },
   {
-    key: "/role-permission",
+    key: "/home/role-permission",
     label: "Roles & Permissions",
     icon: <SecurityScanOutlined />,
   },
-  { key: 3, label: "User Management", icon: <UserOutlined /> },
-  { key: 4, label: "Talents Profiles", icon: <AuditOutlined /> },
+  {
+    key: "/home/user-management",
+    label: "User Management",
+    icon: <UserOutlined />,
+  },
+  {
+    key: "/home/talent-profiles",
+    label: "Talents Profiles",
+    icon: <AuditOutlined />,
+  },
   { key: 5, label: "Projects", icon: <ProjectOutlined /> },
   { key: 6, label: "Job Requirements", icon: <FileDoneOutlined /> },
   { key: 7, label: "Interviews", icon: <TeamOutlined /> },
@@ -121,6 +131,8 @@ const Dashboard = () => {
             <Routes>
               <Route path="/home" element={<Overview />} />
               <Route path="/role-permission" element={<RolePermission />} />
+              <Route path="/user-management" element={<UserManagement />} />
+              <Route path="/talent-profiles" element={<TalentProfiles />} />
             </Routes>
           </Layout>
         </Layout>

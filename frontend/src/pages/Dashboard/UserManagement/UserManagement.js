@@ -18,7 +18,7 @@ const usersData = [
 
 const { Option } = Select;
 
-const RolePermission = () => {
+const UserManagement = () => {
   const [activeTab, setActiveTab] = useState("Customer");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -59,19 +59,26 @@ const RolePermission = () => {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Roles and Permissions</h2>
+      <h2>User Management</h2>
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
         <Button
           type={activeTab === "Customer" ? "primary" : "default"}
           onClick={() => setActiveTab("Customer")}
         >
-          Roles
+          {usersData.filter((user) => user.type === "Customer").length}{" "}
+          Customers
         </Button>
         <Button
           type={activeTab === "Partner" ? "primary" : "default"}
           onClick={() => setActiveTab("Partner")}
         >
-          Permissions
+          {usersData.filter((user) => user.type === "Partner").length} Partners
+        </Button>
+        <Button
+          type={activeTab === "Admin" ? "primary" : "default"}
+          onClick={() => setActiveTab("Admin")}
+        >
+          {usersData.filter((user) => user.type === "Admin").length} Admin
         </Button>
         <Button
           type="primary"
@@ -180,4 +187,4 @@ const RolePermission = () => {
   );
 };
 
-export default RolePermission;
+export default UserManagement;
