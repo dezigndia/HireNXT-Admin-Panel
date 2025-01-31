@@ -1,9 +1,11 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-const ProtectedRoute = ({ element }) => {
+const ProtectedRoute = ({ element, isLogout }) => {
  
-    //localStorage.clear();  
+  if(isLogout){
+    localStorage.clear();
+  }   
   const isAuthenticated = localStorage.getItem('authToken');
 
   if (!isAuthenticated) {

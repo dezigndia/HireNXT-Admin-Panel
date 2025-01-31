@@ -13,7 +13,8 @@ function App() {
         {/* <Route path="*" element={<NoPage />} /> */}
         <Route path="/" element={<Login />} />
         {/* <Route path="/home" element={<ProtectedRoute element={<Dashboard />} />} /> */}
-        <Route path="/home/*" element={<Dashboard />} />
+        <Route path="/home/*" element={<ProtectedRoute element={<Dashboard />} isLogout={false}/>} />
+        <Route path="/logout" element={<ProtectedRoute element={<Dashboard />} isLogout={true}/>} />
         <Route path="/*" element={<Login />} />
       </Routes>
     </BrowserRouter>
