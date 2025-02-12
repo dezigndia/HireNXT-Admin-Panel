@@ -1,33 +1,27 @@
+/* eslint-disable no-unused-vars */
 // @ts-nocheck
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import {
   Col,
   Row,
-  Carousel,
   Form,
   Input,
   Button,
   Checkbox,
   Typography,
+  Image,
+  Flex,
 } from "antd";
 import { LoginWrapper } from "./Login.style";
-const { Title, Paragraph } = Typography;
-
-const contentStyle = {
-  margin: 0,
-  height: "100vh",
-  color: "#fff",
-  lineHeight: "160px",
-  textAlign: "center",
-  background: "#364d79",
-};
+import Logo from "./../../assets/logo.svg";
+import lgSlider from "./../../assets/lg-slider-1.png";
+const { Title, Paragraph, Link } = Typography;
 
 const Login = () => {
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -36,18 +30,18 @@ const Login = () => {
 
     // Perform input validation
     if (!email || !password) {
-      setError('Username and password are required');
+      setError("Username and password are required");
       return;
     }
 
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const response = await fetch('http://localhost:3443/api/login', {
-        method: 'POST',
+      const response = await fetch("http://localhost:3443/api/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
@@ -59,17 +53,17 @@ const Login = () => {
 
       if (response.ok) {
         // Handle success (e.g., store authentication token)
-        console.log('Login successful:', data);
-        localStorage.setItem('authToken', data.token);
+        console.log("Login successful:", data);
+        localStorage.setItem("authToken", data.token);
         // Redirect to home page after successful login
-        navigate('/home');
+        navigate("/home");
       } else {
         // Handle error response (invalid credentials, etc.)
-        setError(data.message || 'Login failed');
+        setError(data.message || "Login failed");
       }
     } catch (error) {
       // Handle fetch error
-      setError('Network error, please try again later.');
+      setError("Network error, please try again later.");
     } finally {
       setLoading(false);
     }
@@ -79,30 +73,26 @@ const Login = () => {
     console.log(currentSlide);
   };
 
-  // const onFinish = (values) => {
-  //   console.log("Success:", values);
-  // };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
   return (
     <LoginWrapper>
-      <Row>
-        <Col span={12} md={12} sm={0}>
-          <Carousel afterChange={onChange}>
-            <div>
-              <h3 style={contentStyle}>1</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>2</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>3</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>4</h3>
-            </div>
-          </Carousel>
+      <Row className="login-row">
+        <Col span={12} md={12} sm={0} className="bg-login">
+          <Flex align="center" vertical="center" className="bg-content">
+            <Image width={200} preview={false} src={Logo} />
+            <Paragraph className="bg-text-1">
+              Hire Top 1% vetted Technology experts to scale your{" "}
+            </Paragraph>
+            <Paragraph className="bg-text-2">Next Big Thing!!!</Paragraph>
+            <Image preview={false} src={lgSlider} />
+            <Paragraph className="bg-text-3">Skills Coverage</Paragraph>
+            <Paragraph className="bg-text-4">
+              It is a long established fact that a reader will be distracted by
+              the readable content of a page when looking at its layout.
+            </Paragraph>
+          </Flex>
         </Col>
         <Col span={12} md={12} sm={24} className="login-form-container">
           <Form
@@ -125,22 +115,21 @@ const Login = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-            <Title>Hi, Welcome back !</Title>
-            <Paragraph>Continue where you left off</Paragraph>
+            <Title className="bg-text-1">Hi, Welcome back !</Title>
+            <Paragraph>
+              Start your journey to scale your Enterprise Now!!!
+            </Paragraph>
             <Form.Item
-              label="Username"
+              label="Email Id"
               name="username"
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: "Enter Your Email id",
                 },
               ]}
             >
-              <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-               />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
             </Form.Item>
 
             <Form.Item
@@ -153,10 +142,10 @@ const Login = () => {
                 },
               ]}
             >
-              <Input.Password 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-               />
+              <Input.Password
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </Form.Item>
 
             <Form.Item name="remember" valuePropName="checked">
@@ -164,10 +153,16 @@ const Login = () => {
             </Form.Item>
 
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
+              <Button type="primary" htmlType="submit" block>
+                Login
               </Button>
             </Form.Item>
+            <Paragraph className="bg-text-2">
+              Don't have an account with us?{" "}
+              <Link href="https://ant.design" target="_blank">
+                Sign up here
+              </Link>
+            </Paragraph>
           </Form>
         </Col>
       </Row>
