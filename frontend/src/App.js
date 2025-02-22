@@ -1,4 +1,3 @@
-
 import logo from "./logo.svg";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -12,9 +11,15 @@ function App() {
       <Routes>
         {/* <Route path="*" element={<NoPage />} /> */}
         <Route path="/" element={<Login />} />
-        {/* <Route path="/home" element={<ProtectedRoute element={<Dashboard />} />} /> */}
-        <Route path="/home/*" element={<ProtectedRoute element={<Dashboard />} isLogout={false}/>} />
-        <Route path="/logout" element={<ProtectedRoute element={<Dashboard />} isLogout={true}/>} />
+        <Route
+          path="/home/*"
+          element={<ProtectedRoute element={<Dashboard />} isLogout={false} />}
+        />
+        <Route
+          path="/logout"
+          element={<ProtectedRoute element={<Dashboard />} isLogout={true} />}
+        />
+        <Route path="/home/*" element={<Dashboard />} />
         <Route path="/*" element={<Login />} />
       </Routes>
     </BrowserRouter>
