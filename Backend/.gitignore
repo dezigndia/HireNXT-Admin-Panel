@@ -39,6 +39,7 @@ build/**/*
 dist/**/*
 node_modules
 log/**/*
+/db/
 
 # dotenv environment variables file
 .prod.env

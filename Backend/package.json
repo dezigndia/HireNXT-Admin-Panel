@@ -1,5 +1,5 @@
 {
-  "name": "virmall-backend",
+  "name": "hirenext-admin-backend",
   "version": "20.13.0",
   "description": "api rest-api postgresql docker typescript",
   "main": "index.js",
@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "start:dev": "nodemon --exec node -r ts-node/register --env-file=.development.env ./src/index.ts",
-    "start:prod": "node -r ts-node/register --env-file=.env ./dist/index.js",
+    "start:dev": "nodemon --exec ts-node -r tsconfig-paths/register ./src/index.ts",
+    "start:prod": "node -r tsconfig-paths/register --env-file=.env ./dist/index.js",
     "build": "rimraf ./build && tsc --project tsconfig.json && tsc-alias -p tsconfig.json && gulp"
   },
   "keywords": [
@@ -17,7 +17,7 @@
     "docker",
     "typescript"
   ],
-  "author": "inncrewin",
+  "author": "dezigndia",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -63,6 +63,7 @@
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.4.5",
     "typescript-eslint": "^7.8.0"
   }

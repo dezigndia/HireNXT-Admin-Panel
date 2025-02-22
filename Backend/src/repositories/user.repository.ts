@@ -1,31 +1,36 @@
-import { User } from "models";
+import { IUser } from "models";
 import {query} from '@utils';
 
-export interface UserRepository {
-    createUser(user: User): Promise<User>;
-    getUserById(userId: number): Promise<User | null>;
-    updateUser(userId: number, user: User): Promise<User | null>;
+export interface IUserRepository {
+    createUser(user: IUser): Promise<IUser>;
+    getUser(column: string, value: number | string): Promise<IUser | null>;
+    updateUser(userId: number, user: IUser): Promise<IUser | null>;
     deleteUser(userId: number): Promise<boolean>;
 }
 
-export class PostgreSQLUserRepository implements UserRepository {
-    async createUser(user: User): Promise<User> {
+export class UserRepository implements IUserRepository {
+    private tableName: string = '';
+
+    constructor(tableName: string) {
+        this.tableName = tableName;
+    }
+    async createUser(user: IUser): Promise<IUser> {
         // Database query to insert a user
         return user;
     }
     
-    async getUserById(userId: number): Promise<User | null> {
-        const getQuery = `select * from users where id = $1`;
-        const user = await query<User>(getQuery, [userId]);
+    async getUser(lable: string, value: string | number): Promise<IUser | null> {
+        const getQuery = `select * from ${this.tableName} where ${lable} = $1`;
+        const user = await query<IUser>(getQuery, [value]);
         return user[0];
     }
     
-    async updateUser(userId: number, user: User): Promise<User | null> {
+    async updateUser(userId: number, user: IUser): Promise<IUser | null> {
         return user;
     }
     
     async deleteUser(userId: number): Promise<boolean> {
-        const deleteQuery = `delete from users where id = $1`;
+        const deleteQuery = `delete from ${this.tableName} where id = $1`;
         await query(deleteQuery, [userId]);
         return true;
     }

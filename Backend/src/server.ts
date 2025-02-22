@@ -1,7 +1,7 @@
 
 import express, { Application, json, Request, Response, urlencoded } from "express";
 import cors, { CorsOptions } from "cors";
-import helmet  from "helmet";
+import helmet, {hsts}  from "helmet";
 import { join } from "path";
 import { StatusCodes } from "http-status-codes";
 import { createWriteStream, existsSync, mkdirSync } from "fs";
@@ -37,6 +37,21 @@ export class RestServer {
         optionsSuccessStatus: 200,
         credentials: true
       };
+
+    private readonly strictTranspostPolicyOptions = {
+      maxAge: 31536000, // one year
+      includeSubDomains: true,
+      preload: true
+    }
+
+    private readonly contentSecurityPolicy = {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", 'trusted-scripts.com'],
+        styleSrc: ["'self'", 'trusted-styles.com'],
+        // Add other directives based on your app's needs
+      },
+    }
     
     constructor() {
         this._app = express();
@@ -51,7 +66,11 @@ export class RestServer {
         this._app.use(urlencoded({extended: true, limit: "10mb"}));
         this._app.use(cors(this.corsOptions));
         // this._app.use(cookieParser())
-        this._app.use(helmet());
+        this._app.use(helmet.contentSecurityPolicy(this.contentSecurityPolicy));
+
+        //enable only in production it allow application to run in HTTPS only
+        this._app.use(hsts(this.strictTranspostPolicyOptions));
+        
         // this._app.use(i18n);
         this._app.set('etag', false);
 
