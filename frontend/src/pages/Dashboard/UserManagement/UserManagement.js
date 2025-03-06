@@ -2,17 +2,27 @@ import React, { useState } from "react";
 import { Table, Button, Input, Modal, Form, Select, Checkbox } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
+var key="";
+var name="";
+var email="";
+var contact="";
+var organization="";
+var designation="";
+var createdOn="";
+var modifiedOn="";
+var type=""
+
 const usersData = [
   {
-    key: "1",
-    name: "Akshay Kumar Malhotra",
-    email: "akshay.malhotra@dezignindia.com",
-    contact: "+91-9343535359",
-    organization: "Dezigndia Technologies Pvt Ltd",
-    designation: "Sr. Program Manager",
-    createdOn: "12-Oct-24 | 11:30",
-    modifiedOn: "12-Oct-24 | 14:30",
-    type: "Customer",
+    key: key,
+    name: name,
+    email: email,
+    contact: contact,
+    organization: organization,
+    designation: designation,
+    createdOn: createdOn,
+    modifiedOn: modifiedOn,
+    type: type,
   },
 ];
 
@@ -48,14 +58,39 @@ const UserManagement = () => {
     setSelectedRole(null); // Reset role on modal close
   };
 
-  const handleSubmit = (values) => {
-    console.log("Form Values:", values);
-    handleCloseModal();
-  };
+  // const handleSubmit = (values) => {
+  //   console.log("Form Values:", values);
+  //   handleCloseModal();
+  // };
 
   const handleRoleChange = (value) => {
     setSelectedRole(value); // Update the selected role
   };
+
+  const handleSubmit = async (e) => {
+    try {
+      // Send form data to the backend
+      const response = await fetch('http://localhost:4000/api/add-user-management', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(e),
+      });
+
+      // Check for successful response
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Form submitted successfully:', data);
+      } else {
+        console.error('Error submitting form:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Network error:', error);
+    }
+    handleCloseModal();
+  };
+
 
   return (
     <div style={{ padding: "20px" }}>
