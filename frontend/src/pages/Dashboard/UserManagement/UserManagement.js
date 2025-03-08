@@ -1,34 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Button, Input, Modal, Form, Select, Checkbox } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 
-var key="";
-var name="";
-var email="";
-var contact="";
-var organization="";
-var designation="";
-var createdOn="";
-var modifiedOn="";
-var type=""
-
-const usersData = [
-  {
-    key: key,
-    name: name,
-    email: email,
-    contact: contact,
-    organization: organization,
-    designation: designation,
-    createdOn: createdOn,
-    modifiedOn: modifiedOn,
-    type: type,
-  },
-];
 
 const { Option } = Select;
 
 const UserManagement = () => {
+  
+  const [usersData , setUsersData] = useState([{},]);
   const [activeTab, setActiveTab] = useState("Customer");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -45,11 +24,33 @@ const UserManagement = () => {
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
   ];
 
+  useEffect(() => {
+    // Function to fetch data from the backend
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/get-user-management',{
+           method: 'POST'
+        });
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const result = await response.json();
+        console.log(result);
+        setUsersData(result.Response);
+      } catch (error) {
+        console.log(error.message); // Store error message in state
+      } 
+    };
+    fetchData();
+  }, []); 
+
   const filteredData = usersData
     .filter((user) => user.type === activeTab)
     .filter((user) =>
       user.name.toLowerCase().includes(searchText.toLowerCase())
     );
+  
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => {
@@ -57,11 +58,6 @@ const UserManagement = () => {
     form.resetFields();
     setSelectedRole(null); // Reset role on modal close
   };
-
-  // const handleSubmit = (values) => {
-  //   console.log("Form Values:", values);
-  //   handleCloseModal();
-  // };
 
   const handleRoleChange = (value) => {
     setSelectedRole(value); // Update the selected role
