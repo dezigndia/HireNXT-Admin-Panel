@@ -78,6 +78,7 @@ const UserManagement = () => {
       if (response.ok) {
         const data = await response.json();
         console.log('Form submitted successfully:', data);
+        window.location.reload();
       } else {
         console.error('Error submitting form:', response.statusText);
       }
