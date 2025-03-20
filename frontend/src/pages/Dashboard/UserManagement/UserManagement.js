@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Button, Input, Modal, Form, Select, Checkbox } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { API_CONST } from "../../../const";
 
 
 const { Option } = Select;
@@ -28,7 +29,7 @@ const UserManagement = () => {
     // Function to fetch data from the backend
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/get-user-management',{
+        const response = await fetch(API_CONST.GET_USER_MANAGEMENT,{
            method: 'POST'
         });
         
@@ -66,7 +67,7 @@ const UserManagement = () => {
   const handleSubmit = async (e) => {
     try {
       // Send form data to the backend
-      const response = await fetch('http://localhost:4000/api/add-user-management', {
+      const response = await fetch(API_CONST.ADD_USER_MANAGEMENT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
