@@ -15,6 +15,7 @@ import {
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import { DashboardWrapper } from "./Dashboard.style";
+// @ts-ignore
 import Logo from "./../../assets/logo.svg";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Overview from "./Overview/Overview";
@@ -46,12 +47,12 @@ const sideBarMenu = [
     label: "Talents Profiles",
     icon: <AuditOutlined />,
   },
-  { key: 5, label: "Projects", icon: <ProjectOutlined /> },
+  // { key: 5, label: "Projects", icon: <ProjectOutlined /> },
   { key: 6, label: "Job Requirements", icon: <FileDoneOutlined /> },
-  { key: 7, label: "Interviews", icon: <TeamOutlined /> },
-  { key: 8, label: "Timesheets", icon: <FieldTimeOutlined /> },
+  // { key: 7, label: "Interviews", icon: <TeamOutlined /> },
+  // { key: 8, label: "Timesheets", icon: <FieldTimeOutlined /> },
   { key: 9, label: "Approval Process", icon: <FieldTimeOutlined /> },
-  { key: 10, label: "Finance", icon: <DollarOutlined /> },
+  // { key: 10, label: "Finance", icon: <DollarOutlined /> },
   { key: 11, label: "Settings", icon: <SettingOutlined /> },
 ];
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
