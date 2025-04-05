@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Button,
@@ -14,11 +14,8 @@ import {
 import { SearchOutlined } from "@ant-design/icons";
 import { UserManagementWrapper } from "./UserManagement.style";
 import MaskGroup from "./../../../assets/Mask-Group.svg";
-const { Text, Link, Title } = Typography;
-import React, { useEffect, useState } from "react";
-import { Table, Button, Input, Modal, Form, Select, Checkbox } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
 import { API_CONST } from "../../../const";
+const { Text, Link, Title } = Typography;
 const { Option } = Select;
 
 const usersData = [
@@ -190,8 +187,7 @@ const usersData = [
 ];
 
 const UserManagement = () => {
-  
-  const [usersData , setUsersData] = useState([{},]);
+  const [usersData, setUsersData] = useState([{}]);
   const [activeTab, setActiveTab] = useState("Customer");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -216,34 +212,33 @@ const UserManagement = () => {
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
   ];
-  
+
   useEffect(() => {
     // Function to fetch data from the backend
     const fetchData = async () => {
       try {
-        const response = await fetch(API_CONST.GET_USER_MANAGEMENT,{
-           method: 'POST'
+        const response = await fetch(API_CONST.GET_USER_MANAGEMENT, {
+          method: "POST",
         });
-        
+
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error("Network response was not ok");
         }
         const result = await response.json();
         console.log(result);
         setUsersData(result.Response);
       } catch (error) {
         console.log(error.message); // Store error message in state
-      } 
+      }
     };
     fetchData();
-  }, []); 
+  }, []);
 
   const filteredData = usersData
     .filter((user) => user.type === activeTab)
     .filter((user) =>
       user.name.toLowerCase().includes(searchText.toLowerCase())
     );
-  
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => {
@@ -275,9 +270,9 @@ const UserManagement = () => {
     try {
       // Send form data to the backend
       const response = await fetch(API_CONST.ADD_USER_MANAGEMENT, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(e),
       });
@@ -285,13 +280,13 @@ const UserManagement = () => {
       // Check for successful response
       if (response.ok) {
         const data = await response.json();
-        console.log('Form submitted successfully:', data);
+        console.log("Form submitted successfully:", data);
         window.location.reload();
       } else {
-        console.error('Error submitting form:', response.statusText);
+        console.error("Error submitting form:", response.statusText);
       }
     } catch (error) {
-      console.error('Network error:', error);
+      console.error("Network error:", error);
     }
     handleCloseModal();
   };
