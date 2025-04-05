@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Button,
@@ -14,7 +14,9 @@ import {
 import { SearchOutlined } from "@ant-design/icons";
 import { UserManagementWrapper } from "./UserManagement.style";
 import MaskGroup from "./../../../assets/Mask-Group.svg";
+import { API_CONST } from "../../../const";
 const { Text, Link, Title } = Typography;
+const { Option } = Select;
 
 const usersData = [
   {
@@ -184,9 +186,8 @@ const usersData = [
   },
 ];
 
-const { Option } = Select;
-
 const UserManagement = () => {
+  const [usersData, setUsersData] = useState([{}]);
   const [activeTab, setActiveTab] = useState("Customer");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -212,6 +213,27 @@ const UserManagement = () => {
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
   ];
 
+  useEffect(() => {
+    // Function to fetch data from the backend
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_CONST.GET_USER_MANAGEMENT, {
+          method: "POST",
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        console.log(result);
+        setUsersData(result.Response);
+      } catch (error) {
+        console.log(error.message); // Store error message in state
+      }
+    };
+    fetchData();
+  }, []);
+
   const filteredData = usersData
     .filter((user) => user.type === activeTab)
     .filter((user) =>
@@ -223,11 +245,6 @@ const UserManagement = () => {
     setIsModalVisible(false);
     form.resetFields();
     setSelectedRole(null); // Reset role on modal close
-  };
-
-  const handleSubmit = (values) => {
-    console.log("Form Values:", values);
-    handleCloseModal();
   };
 
   const handleRoleChange = (value) => {
@@ -247,6 +264,31 @@ const UserManagement = () => {
       // Column configuration not to be checked
       name: record.name,
     }),
+  };
+
+  const handleSubmit = async (e) => {
+    try {
+      // Send form data to the backend
+      const response = await fetch(API_CONST.ADD_USER_MANAGEMENT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(e),
+      });
+
+      // Check for successful response
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Form submitted successfully:", data);
+        window.location.reload();
+      } else {
+        console.error("Error submitting form:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+    handleCloseModal();
   };
 
   return (

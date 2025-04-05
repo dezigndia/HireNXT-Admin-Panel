@@ -16,6 +16,7 @@ import {
 import { LoginWrapper } from "./Login.style";
 import Logo from "./../../assets/logo.svg";
 import lgSlider from "./../../assets/lg-slider-1.png";
+import { API_CONST } from "./../../const";
 const { Title, Paragraph, Link } = Typography;
 
 const Login = () => {
@@ -38,8 +39,8 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch("http://localhost:3443/api/login", {
-        method: "POST",
+      const response = await fetch(API_CONST.LOGIN, {
+        method: 'POST',
         headers: {
           "Content-Type": "application/json",
         },
