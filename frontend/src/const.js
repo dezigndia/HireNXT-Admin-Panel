@@ -1,5 +1,5 @@
-
-let PORT_URL = "http://localhost:4000";
+//let PORT_URL = "http://localhost:4000";
+let PORT_URL = "http://65.2.123.21";
 
 export const API_CONST = Object.freeze({
     LOGIN: PORT_URL+"/api/login",
