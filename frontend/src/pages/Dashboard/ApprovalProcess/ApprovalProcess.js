@@ -33,10 +33,10 @@ const usersData = Array.from({ length: 25 }, (_, index) => ({
   modifiedOn: "12-Oct-24 | 14:30",
   type:
     index % 3 === 0
-      ? "Active Resource"
+      ? "User to Review"
       : index % 3 === 1
-      ? "Job Applied"
-      : "Talents Hired",
+      ? "Job to Review"
+      : "Profile to Review",
 }));
 
 const adminColumns = [
@@ -54,8 +54,8 @@ const adminColumns = [
   { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
 ];
 
-const TalentProfiles = () => {
-  const [activeTab, setActiveTab] = useState("Active Resource");
+const ApprovalProcess = () => {
+  const [activeTab, setActiveTab] = useState("User to Review");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -78,28 +78,31 @@ const TalentProfiles = () => {
   return (
     <UserManagementWrapper>
       <div style={{ padding: "20px" }}>
-        <h2 className="title-header">Talent Profile</h2>
+        <h2 className="title-header">Approval Process</h2>
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          {["Active Resource", "Job Applied", "Talents Hired"].map((tab) => (
-            <Button
-              key={tab}
-              className={
-                activeTab === tab ? "tab-button active-tab" : "tab-button"
-              }
-              type={activeTab === tab ? "primary" : "default"}
-              onClick={() => setActiveTab(tab)}
-            >
-              <Avatar
-                size={50}
-                className="icon-bg"
-                style={{
-                  backgroundColor: activeTab === tab ? "#ffffff" : "#E4F6FF",
-                }}
-                src={<img src={MaskGroup} alt="avatar" />}
-              />
-              &nbsp;{usersData.filter((user) => user.type === tab).length} {tab}
-            </Button>
-          ))}
+          {["User to Review", "Job to Review", "Profile to Review"].map(
+            (tab) => (
+              <Button
+                key={tab}
+                className={
+                  activeTab === tab ? "tab-button active-tab" : "tab-button"
+                }
+                type={activeTab === tab ? "primary" : "default"}
+                onClick={() => setActiveTab(tab)}
+              >
+                <Avatar
+                  size={50}
+                  className="icon-bg"
+                  style={{
+                    backgroundColor: activeTab === tab ? "#ffffff" : "#E4F6FF",
+                  }}
+                  src={<img src={MaskGroup} alt="avatar" />}
+                />
+                &nbsp;{usersData.filter((user) => user.type === tab).length}{" "}
+                {tab}
+              </Button>
+            )
+          )}
         </div>
         <Flex align="start" justify="space-between">
           <Input
@@ -262,4 +265,4 @@ const TalentProfiles = () => {
   );
 };
 
-export default TalentProfiles;
+export default ApprovalProcess;
