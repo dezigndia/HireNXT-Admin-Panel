@@ -6,6 +6,7 @@ import {
   FieldTimeOutlined,
   FileDoneOutlined,
   LaptopOutlined,
+  LogoutOutlined,
   NotificationOutlined,
   ProjectOutlined,
   SecurityScanOutlined,
@@ -13,7 +14,7 @@ import {
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme } from "antd";
+import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
 import { DashboardWrapper } from "./Dashboard.style";
 // @ts-ignore
 import Logo from "./../../assets/logo.svg";
@@ -22,6 +23,9 @@ import Overview from "./Overview/Overview";
 import RolePermission from "./RolePermission/RolePermission";
 import UserManagement from "./UserManagement/UserManagement";
 import TalentProfiles from "./TalentProfiles/TalentProfiles";
+import JobRequirments from "./JobRequirments/JobRequirments";
+import PostNewJob from "./JobRequirments/PostNewJob";
+import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
 
 const { Header, Content, Sider } = Layout;
 
@@ -47,31 +51,22 @@ const sideBarMenu = [
     label: "Talents Profiles",
     icon: <AuditOutlined />,
   },
-  // { key: 5, label: "Projects", icon: <ProjectOutlined /> },
-  { key: 6, label: "Job Requirements", icon: <FileDoneOutlined /> },
-  // { key: 7, label: "Interviews", icon: <TeamOutlined /> },
-  // { key: 8, label: "Timesheets", icon: <FieldTimeOutlined /> },
-  { key: 9, label: "Approval Process", icon: <FieldTimeOutlined /> },
-  // { key: 10, label: "Finance", icon: <DollarOutlined /> },
-  { key: 11, label: "Settings", icon: <SettingOutlined /> },
+  {
+    key: "/home/job-requirments",
+    label: "Job Requirements",
+    icon: <FileDoneOutlined />,
+  },
+  {
+    key: "/home/approval-process",
+    label: "Approval Process",
+    icon: <FieldTimeOutlined />,
+  },
 ];
-const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-  (icon, index) => {
-    const key = String(index + 1);
-    return {
-      key: `sub${key}`,
-      icon: React.createElement(icon),
-      label: `subnav ${key}`,
-      children: new Array(4).fill(null).map((_, j) => {
-        const subKey = index * 4 + j + 1;
-        return {
-          key: subKey,
-          label: `option${subKey}`,
-        };
-      }),
-    };
-  }
-);
+
+const sideBarMenu2 = [
+  { key: 11, label: "Settings", icon: <SettingOutlined /> },
+  { key: 12, label: "Logout", icon: <LogoutOutlined /> },
+];
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -121,6 +116,15 @@ const Dashboard = () => {
               items={sideBarMenu}
               onClick={handleClick}
             />
+
+            <Menu
+              mode="inline"
+              style={{
+                borderRight: 0,
+              }}
+              items={sideBarMenu2}
+              onClick={handleClick}
+            />
           </Sider>
           <Layout
             style={{
@@ -134,6 +138,12 @@ const Dashboard = () => {
               <Route path="/role-permission" element={<RolePermission />} />
               <Route path="/user-management" element={<UserManagement />} />
               <Route path="/talent-profiles" element={<TalentProfiles />} />
+              <Route path="/job-requirments" element={<JobRequirments />} />
+              <Route
+                path="/job-requirments/new-job-post"
+                element={<PostNewJob />}
+              />
+              <Route path="/approval-process" element={<ApprovalProcess />} />
             </Routes>
           </Layout>
         </Layout>
