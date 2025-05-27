@@ -10,6 +10,7 @@ import {
   Flex,
   Avatar,
   Typography,
+  message,
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { UserManagementWrapper } from "./UserManagement.style";
@@ -280,7 +281,7 @@ const UserManagement = () => {
       // Check for successful response
       if (response.ok) {
         const data = await response.json();
-        console.log("Form submitted successfully:", data);
+        message.success("Processing complete!");
         window.location.reload();
       } else {
         console.error("Error submitting form:", response.statusText);

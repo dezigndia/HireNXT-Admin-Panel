@@ -6,6 +6,7 @@ import JobFormStepOne from "./PostNewJob/JobFormStepOne";
 import BasicDetails from "./PostNewJob/BasicDetails";
 import WorkPreferenceForm from "./PostNewJob/WorkPreferenceForm";
 import { PostNewJobWrapper } from "./PostNewJob.style";
+import { API_CONST } from "../../../const";
 
 const PostNewJob = () => {
   const toolbarOptions = [
@@ -111,9 +112,29 @@ const PostNewJob = () => {
   const next = () => setCurrent((prev) => prev + 1);
   const prev = () => setCurrent((prev) => prev - 1);
 
-  const handleSubmit = () => {
-    console.log("Form Data:", formData);
-    message.success("Processing complete!");
+  const handleSubmit = async (e) => {
+    try {
+      // Send form data to the backend
+      const response = await fetch(API_CONST.ADD_JOB_REQUIREMENTS, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      // Check for successful response
+      if (response.ok) {
+        const data = await response.json();
+        message.success("Processing complete!");
+        window.location.reload();
+      } else {
+        console.error("Error submitting form:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+    //window.location.reload();
   };
 
   const items = steps.map((item) => ({ key: item.title, title: item.title }));
@@ -147,3 +168,7 @@ const PostNewJob = () => {
   );
 };
 export default PostNewJob;
+function handleCloseModal() {
+  throw new Error("Function not implemented.");
+}
+

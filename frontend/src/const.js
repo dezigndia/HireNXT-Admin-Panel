@@ -6,6 +6,9 @@ export const API_CONST = Object.freeze({
     ADD_USER_MANAGEMENT: PORT_URL+"/api/add-user-management",
     GET_USER_MANAGEMENT: PORT_URL+"/api/get-user-management",
     ADD_TALENT_PROFILE: PORT_URL+"/api/add-talents-profiles",
+    GET_TALENT_PROFILE: PORT_URL+"/api/get-talents-profiles",
+    ADD_JOB_REQUIREMENTS: PORT_URL+"/api/add-job-requirements",
+    GET_JOB_REQUIREMENTS: PORT_URL+"/api/get-job-requirements",
   });
 
 
