@@ -13,8 +13,14 @@ import {
   Upload,
   Row,
   Col,
+  Dropdown,
+  Menu,
 } from "antd";
-import { UploadOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  SearchOutlined,
+  MoreOutlined,
+} from "@ant-design/icons";
 import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 import axios from "axios";
@@ -54,6 +60,25 @@ const adminColumns = [
   { title: "Experience", dataIndex: "experience", key: "experience" },
   { title: "Cost (INR)", dataIndex: "cost", key: "cost" },
   { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
+  {
+    title: "Action",
+    key: "action",
+    render: () => (
+      <Dropdown
+        overlay={
+          <Menu>
+            <Menu.Item key="1">Edit</Menu.Item>
+            <Menu.Item key="2">Delete</Menu.Item>
+            <Menu.Item key="3">View Details</Menu.Item>
+            <Menu.Item key="4">Reset Password</Menu.Item>
+          </Menu>
+        }
+        trigger={["click"]}
+      >
+        <MoreOutlined />
+      </Dropdown>
+    ),
+  },
 ];
 
 const TalentProfiles = () => {
@@ -79,30 +104,27 @@ const TalentProfiles = () => {
   };
 
   const handleSubmit = async (values) => {
+    const data = new FormData();
+    if (resume) data.append("resume", resume);
+    if (Aadhar) data.append("Aadhar", Aadhar);
+    if (pan) data.append("pan", pan);
+    if (degree) data.append("degree", degree);
+    if (values) data.append("data", JSON.stringify(values));
 
-  const data = new FormData();
-  if (resume) data.append('resume', resume);
-  if (Aadhar) data.append('Aadhar', Aadhar);
-  if (pan) data.append('pan', pan);
-  if (degree) data.append('degree', degree);
-  if (values) data.append('data', JSON.stringify(values));
-
-  try {
-    const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
-      headers: {
-        'Content-Type': "multipart/form-data"
-      },
-    });
-    console.log('File uploaded successfully!');
-    console.log(response.data);  
-  } catch (error) {
-    console.error(error);
-  }
+    try {
+      const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("File uploaded successfully!");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
 
     handleCloseModal();
   };
-
-  
 
   // const handleFileSubmit = async (e) => {
   //   console.log(resume);
@@ -113,13 +135,12 @@ const TalentProfiles = () => {
   //       },
   //     });
   //     console.log('File uploaded successfully!');
-  //     console.log(response.data);  
+  //     console.log(response.data);
   //   } catch (error) {
   //     console.error(error);
   //   }
   //   handleCloseModal();
   // };
-
 
   return (
     <UserManagementWrapper>
@@ -192,7 +213,7 @@ const TalentProfiles = () => {
                 }}
                 showUploadList={false}
               >
-                <Button icon={<UploadOutlined />} >Click to Upload</Button>
+                <Button icon={<UploadOutlined />}>Click to Upload</Button>
               </Upload>
               {resume && (
                 <div style={{ marginTop: "10px" }}>
@@ -276,59 +297,59 @@ const TalentProfiles = () => {
             <Row gutter={16}>
               <Col span={8}>
                 <Form.Item label="Upload Aadhar Card">
-                <Upload
-                beforeUpload={(file) => {
-                  setAadhar(file);
-                  return false;
-                }}
-                showUploadList={false}
-              >
-                <Button icon={<UploadOutlined />} >Upload Aadhar</Button>
-              </Upload>
-              {resume && (
-                <div style={{ marginTop: "10px" }}>
-                  {resume.name}{" "}
-                  <Button onClick={() => setAadhar(null)}>✖</Button>
-                </div>
-              )}
+                  <Upload
+                    beforeUpload={(file) => {
+                      setAadhar(file);
+                      return false;
+                    }}
+                    showUploadList={false}
+                  >
+                    <Button icon={<UploadOutlined />}>Upload Aadhar</Button>
+                  </Upload>
+                  {resume && (
+                    <div style={{ marginTop: "10px" }}>
+                      {resume.name}{" "}
+                      <Button onClick={() => setAadhar(null)}>✖</Button>
+                    </div>
+                  )}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item label="Upload PAN Card">
-                <Upload
-                beforeUpload={(file) => {
-                  setPan(file);
-                  return false;
-                }}
-                showUploadList={false}
-              >
-                <Button icon={<UploadOutlined />} >Upload PAN</Button>
-              </Upload>
-              {resume && (
-                <div style={{ marginTop: "10px" }}>
-                  {resume.name}{" "}
-                  <Button onClick={() => setPan(null)}>✖</Button>
-                </div>
-              )}
+                  <Upload
+                    beforeUpload={(file) => {
+                      setPan(file);
+                      return false;
+                    }}
+                    showUploadList={false}
+                  >
+                    <Button icon={<UploadOutlined />}>Upload PAN</Button>
+                  </Upload>
+                  {resume && (
+                    <div style={{ marginTop: "10px" }}>
+                      {resume.name}{" "}
+                      <Button onClick={() => setPan(null)}>✖</Button>
+                    </div>
+                  )}
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item label="Upload Degree Proof">
-                <Upload
-                beforeUpload={(file) => {
-                  setDegree(file);
-                  return false;
-                }}
-                showUploadList={false}
-              >
-                <Button icon={<UploadOutlined />} >Upload Degree</Button>
-              </Upload>
-              {resume && (
-                <div style={{ marginTop: "10px" }}>
-                  {resume.name}{" "}
-                  <Button onClick={() => setDegree(null)}>✖</Button>
-                </div>
-              )}
+                  <Upload
+                    beforeUpload={(file) => {
+                      setDegree(file);
+                      return false;
+                    }}
+                    showUploadList={false}
+                  >
+                    <Button icon={<UploadOutlined />}>Upload Degree</Button>
+                  </Upload>
+                  {resume && (
+                    <div style={{ marginTop: "10px" }}>
+                      {resume.name}{" "}
+                      <Button onClick={() => setDegree(null)}>✖</Button>
+                    </div>
+                  )}
                 </Form.Item>
               </Col>
             </Row>

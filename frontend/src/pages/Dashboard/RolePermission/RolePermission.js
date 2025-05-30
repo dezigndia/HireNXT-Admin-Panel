@@ -9,8 +9,10 @@ import {
   Typography,
   message,
   Flex,
+  Dropdown,
+  Menu,
 } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 
 const { Text, Title } = Typography;
 
@@ -80,7 +82,25 @@ const RolePermission = () => {
     },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
-    { title: "Action", key: "action", render: () => <Button>Edit</Button> },
+    {
+      title: "Action",
+      key: "action",
+      render: () => (
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key="1">Edit</Menu.Item>
+              <Menu.Item key="2">Delete</Menu.Item>
+              <Menu.Item key="3">View Details</Menu.Item>
+              <Menu.Item key="4">Reset Password</Menu.Item>
+            </Menu>
+          }
+          trigger={["click"]}
+        >
+          <MoreOutlined />
+        </Dropdown>
+      ),
+    },
   ];
 
   const permissionColumns = [

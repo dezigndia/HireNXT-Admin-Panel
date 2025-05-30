@@ -13,8 +13,14 @@ import {
   Upload,
   Row,
   Col,
+  Dropdown,
+  Menu,
 } from "antd";
-import { UploadOutlined, SearchOutlined } from "@ant-design/icons";
+import {
+  UploadOutlined,
+  SearchOutlined,
+  MoreOutlined,
+} from "@ant-design/icons";
 import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 const { Text } = Typography;
@@ -52,6 +58,25 @@ const adminColumns = [
   { title: "Experience", dataIndex: "experience", key: "experience" },
   { title: "Cost (INR)", dataIndex: "cost", key: "cost" },
   { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
+  {
+    title: "Action",
+    key: "action",
+    render: () => (
+      <Dropdown
+        overlay={
+          <Menu>
+            <Menu.Item key="1">Edit</Menu.Item>
+            <Menu.Item key="2">Delete</Menu.Item>
+            <Menu.Item key="3">View Details</Menu.Item>
+            <Menu.Item key="4">Reset Password</Menu.Item>
+          </Menu>
+        }
+        trigger={["click"]}
+      >
+        <MoreOutlined />
+      </Dropdown>
+    ),
+  },
 ];
 
 const ApprovalProcess = () => {
