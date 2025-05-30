@@ -134,7 +134,7 @@ const Dashboard = () => {
             }}
           >
             <Routes>
-              <Route path="/home" element={<Overview />} />
+              <Route path="*" element={<Overview />} />
               <Route path="/role-permission" element={<RolePermission />} />
               <Route path="/user-management" element={<UserManagement />} />
               <Route path="/talent-profiles" element={<TalentProfiles />} />

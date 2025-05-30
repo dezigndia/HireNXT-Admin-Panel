@@ -7,8 +7,10 @@ import BasicDetails from "./PostNewJob/BasicDetails";
 import WorkPreferenceForm from "./PostNewJob/WorkPreferenceForm";
 import { PostNewJobWrapper } from "./PostNewJob.style";
 import { API_CONST } from "../../../const";
+import { useNavigate } from "react-router-dom";
 
 const PostNewJob = () => {
+  const navigate = useNavigate();
   const toolbarOptions = [
     ["bold", "italic", "underline", "strike"], // toggled buttons
     ["blockquote", "code-block"],
@@ -147,22 +149,33 @@ const PostNewJob = () => {
         style={{ marginBottom: 24, marginTop: 24 }}
       />
       <div>{steps[current].content}</div>
-      <div style={{ marginTop: 24 }}>
-        {current < steps.length - 1 && (
-          <Button type="primary" onClick={next}>
-            Next
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button type="primary" onClick={handleSubmit}>
-            Done
-          </Button>
-        )}
-        {current > 0 && (
-          <Button style={{ margin: "0 8px" }} onClick={prev}>
-            Previous
-          </Button>
-        )}
+      <div
+        style={{
+          marginTop: 24,
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
+        <Button onClick={() => navigate("/home/job-requirments")}>
+          Cancel
+        </Button>
+        <div>
+          {current > 0 && (
+            <Button style={{ marginRight: 8 }} onClick={prev}>
+              Previous
+            </Button>
+          )}
+          {current < steps.length - 1 && (
+            <Button type="primary" onClick={next}>
+              Next
+            </Button>
+          )}
+          {current === steps.length - 1 && (
+            <Button type="primary" onClick={handleSubmit}>
+              Done
+            </Button>
+          )}
+        </div>
       </div>
     </PostNewJobWrapper>
   );
@@ -171,4 +184,3 @@ export default PostNewJob;
 function handleCloseModal() {
   throw new Error("Function not implemented.");
 }
-

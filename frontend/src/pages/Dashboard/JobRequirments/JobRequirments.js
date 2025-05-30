@@ -8,8 +8,11 @@ import {
   Flex,
   Avatar,
   Typography,
+  Dropdown,
+  Menu,
 } from "antd";
 import {
+  MoreOutlined,
   SearchOutlined,
   ShoppingOutlined,
   SnippetsOutlined,
@@ -57,6 +60,25 @@ const JobRequirments = () => {
     { title: "Designation", dataIndex: "designation", key: "designation" },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
+    {
+      title: "Action",
+      key: "action",
+      render: () => (
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key="1">Edit</Menu.Item>
+              <Menu.Item key="2">Delete</Menu.Item>
+              <Menu.Item key="3">View Details</Menu.Item>
+              <Menu.Item key="4">Reset Password</Menu.Item>
+            </Menu>
+          }
+          trigger={["click"]}
+        >
+          <MoreOutlined />
+        </Dropdown>
+      ),
+    },
   ];
 
   const adminColumns = [
@@ -66,6 +88,25 @@ const JobRequirments = () => {
     { title: "Role", dataIndex: "role", key: "role" },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
+    {
+      title: "Action",
+      key: "action",
+      render: () => (
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key="1">Edit</Menu.Item>
+              <Menu.Item key="2">Delete</Menu.Item>
+              <Menu.Item key="3">View Details</Menu.Item>
+              <Menu.Item key="4">Reset Password</Menu.Item>
+            </Menu>
+          }
+          trigger={["click"]}
+        >
+          <MoreOutlined />
+        </Dropdown>
+      ),
+    },
   ];
 
   useEffect(() => {

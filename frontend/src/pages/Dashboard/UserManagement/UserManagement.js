@@ -11,181 +11,15 @@ import {
   Avatar,
   Typography,
   message,
+  Dropdown,
+  Menu,
 } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
 import { UserManagementWrapper } from "./UserManagement.style";
 import MaskGroup from "./../../../assets/Mask-Group.svg";
 import { API_CONST } from "../../../const";
 const { Text, Link, Title } = Typography;
 const { Option } = Select;
-
-const usersData = [
-  {
-    key: "1",
-    name: "Akshay Kumar Malhotra",
-    email: "akshay.malhotra@dezignindia.com",
-    contact: "+91-9343535359",
-    organization: "Dezigndia Technologies Pvt Ltd",
-    designation: "Sr. Program Manager",
-    createdOn: "12-Oct-24 | 11:30",
-    modifiedOn: "12-Oct-24 | 14:30",
-    type: "Customer",
-  },
-  {
-    key: "2",
-    name: "Neha Sharma",
-    email: "neha.sharma@techhub.com",
-    contact: "+91-9876543210",
-    organization: "TechHub Solutions",
-    designation: "Product Manager",
-    createdOn: "15-Oct-24 | 10:00",
-    modifiedOn: "15-Oct-24 | 12:45",
-    type: "Admin",
-  },
-  {
-    key: "3",
-    name: "Rahul Verma",
-    email: "rahul.verma@globaltrade.com",
-    contact: "+91-9234567890",
-    organization: "Global Trade Inc.",
-    designation: "Business Analyst",
-    createdOn: "10-Oct-24 | 09:20",
-    modifiedOn: "10-Oct-24 | 11:15",
-    type: "Partner",
-  },
-  {
-    key: "4",
-    name: "Sanjay Kapoor",
-    email: "sanjay.kapoor@enterpriseltd.com",
-    contact: "+91-9563412789",
-    organization: "Enterprise Ltd",
-    designation: "CTO",
-    createdOn: "08-Oct-24 | 14:10",
-    modifiedOn: "08-Oct-24 | 16:30",
-    type: "Admin",
-  },
-  {
-    key: "5",
-    name: "Pooja Mehta",
-    email: "pooja.mehta@retailmart.com",
-    contact: "+91-9876123456",
-    organization: "Retail Mart Pvt Ltd",
-    designation: "Marketing Head",
-    createdOn: "07-Oct-24 | 13:50",
-    modifiedOn: "07-Oct-24 | 15:10",
-    type: "Customer",
-  },
-  {
-    key: "6",
-    name: "Vikram Joshi",
-    email: "vikram.joshi@solutionspro.com",
-    contact: "+91-9988776655",
-    organization: "SolutionsPro Pvt Ltd",
-    designation: "Solutions Architect",
-    createdOn: "05-Oct-24 | 10:45",
-    modifiedOn: "05-Oct-24 | 12:00",
-    type: "Partner",
-  },
-  {
-    key: "7",
-    name: "Priya Agarwal",
-    email: "priya.agarwal@techinnovate.com",
-    contact: "+91-9234876521",
-    organization: "Tech Innovate Ltd",
-    designation: "Software Engineer",
-    createdOn: "02-Oct-24 | 11:30",
-    modifiedOn: "02-Oct-24 | 13:00",
-    type: "Customer",
-  },
-  {
-    key: "8",
-    name: "Ravi Shankar",
-    email: "ravi.shankar@infotech.com",
-    contact: "+91-9356123478",
-    organization: "InfoTech Solutions",
-    designation: "Data Scientist",
-    createdOn: "01-Oct-24 | 15:20",
-    modifiedOn: "01-Oct-24 | 17:30",
-    type: "Admin",
-  },
-  {
-    key: "9",
-    name: "Anjali Das",
-    email: "anjali.das@healthcareplus.com",
-    contact: "+91-9213456789",
-    organization: "Healthcare Plus",
-    designation: "HR Manager",
-    createdOn: "29-Sep-24 | 12:15",
-    modifiedOn: "29-Sep-24 | 14:00",
-    type: "Customer",
-  },
-  {
-    key: "10",
-    name: "Rajeev Nair",
-    email: "rajeev.nair@financelink.com",
-    contact: "+91-9001234567",
-    organization: "Finance Link Pvt Ltd",
-    designation: "Finance Consultant",
-    createdOn: "27-Sep-24 | 16:00",
-    modifiedOn: "27-Sep-24 | 18:30",
-    type: "Partner",
-  },
-  {
-    key: "11",
-    name: "Sonia Kapoor",
-    email: "sonia.kapoor@ecomm.com",
-    contact: "+91-9807654321",
-    organization: "E-Comm Ventures",
-    designation: "Operations Head",
-    createdOn: "25-Sep-24 | 10:00",
-    modifiedOn: "25-Sep-24 | 12:30",
-    type: "Admin",
-  },
-  {
-    key: "12",
-    name: "Harsh Gupta",
-    email: "harsh.gupta@b2bconnect.com",
-    contact: "+91-9214536789",
-    organization: "B2B Connect Pvt Ltd",
-    designation: "Account Manager",
-    createdOn: "20-Sep-24 | 14:10",
-    modifiedOn: "20-Sep-24 | 16:00",
-    type: "Customer",
-  },
-  {
-    key: "13",
-    name: "Meera Iyer",
-    email: "meera.iyer@techfusion.com",
-    contact: "+91-9234561230",
-    organization: "Tech Fusion Ltd",
-    designation: "UI/UX Designer",
-    createdOn: "18-Sep-24 | 09:30",
-    modifiedOn: "18-Sep-24 | 11:45",
-    type: "Customer",
-  },
-  {
-    key: "14",
-    name: "Amit Bansal",
-    email: "amit.bansal@saasworld.com",
-    contact: "+91-9334567891",
-    organization: "SaaS World Pvt Ltd",
-    designation: "CEO",
-    createdOn: "15-Sep-24 | 10:15",
-    modifiedOn: "15-Sep-24 | 12:00",
-    type: "Admin",
-  },
-  {
-    key: "15",
-    name: "Kiran Rao",
-    email: "kiran.rao@logisticsplus.com",
-    contact: "+91-9445671234",
-    organization: "Logistics Plus",
-    designation: "Logistics Head",
-    createdOn: "12-Sep-24 | 13:45",
-    modifiedOn: "12-Sep-24 | 15:30",
-    type: "Partner",
-  },
-];
 
 const UserManagement = () => {
   const [usersData, setUsersData] = useState([{}]);
@@ -203,6 +37,7 @@ const UserManagement = () => {
     { title: "Designation", dataIndex: "designation", key: "designation" },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
+    { title: "Action", key: "action", render: () => <Button>Edit</Button> },
   ];
 
   const adminColumns = [
@@ -212,6 +47,25 @@ const UserManagement = () => {
     { title: "Role", dataIndex: "role", key: "role" },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
+    {
+      title: "Action",
+      key: "action",
+      render: () => (
+        <Dropdown
+          overlay={
+            <Menu>
+              <Menu.Item key="1">Edit</Menu.Item>
+              <Menu.Item key="2">Delete</Menu.Item>
+              <Menu.Item key="3">View Details</Menu.Item>
+              <Menu.Item key="4">Reset Password</Menu.Item>
+            </Menu>
+          }
+          trigger={["click"]}
+        >
+          <MoreOutlined />
+        </Dropdown>
+      ),
+    },
   ];
 
   useEffect(() => {
