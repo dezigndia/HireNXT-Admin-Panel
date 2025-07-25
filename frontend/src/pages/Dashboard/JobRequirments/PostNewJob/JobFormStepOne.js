@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Row, Col, Select, Typography } from "antd";
 
 const { Title } = Typography;
@@ -25,7 +25,7 @@ const skills = [
 ];
 const expertiseLevels = ["Beginner", "Intermediate", "Expert"];
 
-const JobFormStepOne = ({ formData, onChange }) => {
+const JobFormStepOne = ({ formData, onChange, setIsValid }) => {
   const handlePrimarySkillChange = (index, key, value) => {
     const updated = [...formData.primarySkills];
     updated[index] = {
@@ -34,6 +34,19 @@ const JobFormStepOne = ({ formData, onChange }) => {
     };
     onChange("primarySkills", updated);
   };
+
+  useEffect(() => {
+    const isValid =
+      formData.role &&
+      formData.experienceRange &&
+      formData.primarySkills[0]?.skill &&
+      formData.primarySkills[0]?.level &&
+      formData.primarySkills[1]?.skill &&
+      formData.primarySkills[1]?.level &&
+      formData.secondarySkills?.length > 0;
+
+    setIsValid(isValid);
+  }, [formData, setIsValid]);
 
   return (
     <>

@@ -35,6 +35,9 @@ const PostNewJob = () => {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
   const [value, setValue] = useState(""); // For ReactQuill
+  const [isValidBasicDetails, setIsValidBasicDetails] = useState(false);
+  const [isValidWorkPreference, setIsValidWorkPreference] = useState(false);
+  const [isValidJobDescription, setIsValidJobDescription] = useState(false);
 
   const [formData, setFormData] = useState({
     role: "",
@@ -70,7 +73,7 @@ const PostNewJob = () => {
       title: "Skill Required",
       content: (
         <div className="step-body">
-          <JobFormStepOne formData={formData} onChange={handleChange} />
+          <JobFormStepOne formData={formData} onChange={handleChange} setIsValid={setIsValidJobDescription}/>
         </div>
       ),
     },
@@ -78,7 +81,11 @@ const PostNewJob = () => {
       title: "Basic Details",
       content: (
         <div className="step-body">
-          <BasicDetails formData={formData} onChange={handleChange} />
+          <BasicDetails
+            formData={formData}
+            onChange={handleChange}
+            setIsValid={setIsValidBasicDetails}
+          />
         </div>
       ),
     },
@@ -86,7 +93,7 @@ const PostNewJob = () => {
       title: "Preferences",
       content: (
         <div className="step-body">
-          <WorkPreferenceForm formData={formData} onChange={handleChange} />
+          <WorkPreferenceForm formData={formData} onChange={handleChange} setIsValid={setIsValidWorkPreference}/>
         </div>
       ),
     },
@@ -181,6 +188,3 @@ const PostNewJob = () => {
   );
 };
 export default PostNewJob;
-function handleCloseModal() {
-  throw new Error("Function not implemented.");
-}
