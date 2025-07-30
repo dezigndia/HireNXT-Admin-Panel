@@ -151,64 +151,26 @@ const UserManagement = () => {
       <div style={{ padding: "20px" }}>
         <h2 className="title-header">User Management</h2>
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          <Button
-            className={
-              activeTab === "Customer" ? "tab-button active-tab" : "tab-button"
-            }
-            type={activeTab === "Customer" ? "primary" : "default"}
-            onClick={() => setActiveTab("Customer")}
-          >
-            <Avatar
-              size={50}
-              className="icon-bg"
-              style={{
-                backgroundColor:
-                  activeTab === "Customer" ? "#ffffff" : "#E4F6FF",
-              }}
-              src={<img src={MaskGroup} alt="avatar" />}
-            />
-            &nbsp;
-            {usersData.filter((user) => user.type === "Customer").length}{" "}
-            Customers
-          </Button>
-          <Button
-            className={
-              activeTab === "Partner" ? "tab-button active-tab" : "tab-button"
-            }
-            type={activeTab === "Partner" ? "primary" : "default"}
-            onClick={() => setActiveTab("Partner")}
-          >
-            <Avatar
-              size={50}
-              className="icon-bg"
-              style={{
-                backgroundColor:
-                  activeTab === "Partner" ? "#ffffff" : "#E4F6FF",
-              }}
-              src={<img src={MaskGroup} alt="avatar" />}
-            />
-            &nbsp;
-            {usersData.filter((user) => user.type === "Partner").length}{" "}
-            Partners
-          </Button>
-          <Button
-            className={
-              activeTab === "Admin" ? "tab-button active-tab" : "tab-button"
-            }
-            type={activeTab === "Admin" ? "primary" : "default"}
-            onClick={() => setActiveTab("Admin")}
-          >
-            <Avatar
-              size={50}
-              className="icon-bg"
-              style={{
-                backgroundColor: activeTab === "Admin" ? "#ffffff" : "#E4F6FF",
-              }}
-              src={<img src={MaskGroup} alt="avatar" />}
-            />
-            &nbsp;
-            {usersData.filter((user) => user.type === "Admin").length} Admin
-          </Button>
+        {["Admin", "Customer", "Partner"].map((tab) => (
+            <Button
+              key={tab}
+              className={
+                activeTab === tab ? "tab-button active-tab" : "tab-button"
+              }
+              type={activeTab === tab ? "primary" : "default"}
+              onClick={() => setActiveTab(tab)}
+            >
+              <Avatar
+                size={50}
+                className="icon-bg"
+                style={{
+                  backgroundColor: activeTab === tab ? "#ffffff" : "#E4F6FF",
+                }}
+                src={<img src={MaskGroup} alt="avatar" />}
+              />
+              &nbsp;{usersData.filter((user) => user.type === tab).length} {tab}
+            </Button>
+          ))}
         </div>
         <Flex align="start" justify="space-between">
           <Input
