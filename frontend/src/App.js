@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import { ConfigProvider } from "antd";
+import PartnerDashboard from "./pages/Partner/PartnerDashboard/PartnerDashboard";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           {/* <Route path="/home" element={<ProtectedRoute element={<Dashboard />} />} /> */}
           <Route path="/home/*" element={<Dashboard />} />
           <Route path="/*" element={<Login />} />
+          <Route path="/partner/*" element={<PartnerDashboard />} />
         </Routes>
       </BrowserRouter>
     </ConfigProvider>
