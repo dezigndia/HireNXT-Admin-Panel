@@ -116,15 +116,10 @@ const Login = () => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
           >
-<<<<<<< HEAD
-            <Title>Hi, Welcome back !!!</Title>
-            <Paragraph>Continue where you left off</Paragraph>
-=======
             <Title className="bg-text-1">Hi, Welcome back !</Title>
             <Paragraph>
               Start your journey to scale your Enterprise Now!!!
             </Paragraph>
->>>>>>> 48da209f339077a8d08ffccd2e306e158b3fa40c
             <Form.Item
               label="Email Id"
               name="username"
