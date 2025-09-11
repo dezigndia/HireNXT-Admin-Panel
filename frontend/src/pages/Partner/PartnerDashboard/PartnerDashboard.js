@@ -1,65 +1,40 @@
+import { Layout, Menu } from "antd";
+import { Header } from "antd/es/layout/layout";
+import Sider from "antd/es/layout/Sider";
 import React from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+// @ts-ignore
+import Logo from "./../../../assets/logo.svg";
 import {
   AuditOutlined,
   DashboardOutlined,
-  DollarOutlined,
   FieldTimeOutlined,
   FileDoneOutlined,
-  LaptopOutlined,
   LogoutOutlined,
-  NotificationOutlined,
-  ProjectOutlined,
   SecurityScanOutlined,
   SettingOutlined,
-  TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
-import { DashboardWrapper } from "./Dashboard.style";
-// @ts-ignore
-import Logo from "./../../assets/logo.svg";
-import { Route, Routes, useNavigate } from "react-router-dom";
-import Overview from "./Overview/Overview";
-import RolePermission from "./RolePermission/RolePermission";
-import UserManagement from "./UserManagement/UserManagement";
-import TalentProfiles from "./TalentProfiles/TalentProfiles";
-import JobRequirments from "./JobRequirments/JobRequirments";
-import PostNewJob from "./JobRequirments/PostNewJob";
-import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
-
-const { Header, Content, Sider } = Layout;
-
-const items1 = ["1", "2", "3"].map((key) => ({
-  key,
-  label: `nav ${key}`,
-}));
+import { PartnerDashboardWrapper } from "./PartnerDashboard.style";
+import OngoingJobs from "../OngoingJobs/OngoingJobs";
+import TalentsHired from "../TalentsHired/TalentsHired";
 
 const sideBarMenu = [
-  { key: "/home", label: "Dashboard", icon: <DashboardOutlined /> },
+  { key: "/partner", label: "Dashboard", icon: <DashboardOutlined /> },
   {
-    key: "/home/role-permission",
-    label: "Roles & Permissions",
+    key: "/partner/ongoing-jobs",
+    label: "Ongoing Jobs",
     icon: <SecurityScanOutlined />,
   },
   {
-    key: "/home/user-management",
-    label: "User Management",
+    key: "/partner/bench-pool",
+    label: "Bench Pool",
     icon: <UserOutlined />,
   },
   {
-    key: "/home/talent-profiles",
-    label: "Talents Profiles",
+    key: "/partner/talent-hired",
+    label: "Talents Hired",
     icon: <AuditOutlined />,
-  },
-  {
-    key: "/home/job-requirments",
-    label: "Job Requirements",
-    icon: <FileDoneOutlined />,
-  },
-  {
-    key: "/home/approval-process",
-    label: "Approval Process",
-    icon: <FieldTimeOutlined />,
   },
 ];
 
@@ -68,17 +43,15 @@ const sideBarMenu2 = [
   { key: 12, label: "Logout", icon: <LogoutOutlined /> },
 ];
 
-const Dashboard = () => {
+const PartnerDashboard = () => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
     navigate(e.key);
   };
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+
   return (
-    <DashboardWrapper>
+    <PartnerDashboardWrapper>
       <Layout>
         <Header
           style={{
@@ -134,22 +107,22 @@ const Dashboard = () => {
             }}
           >
             <Routes>
-              <Route path="*" element={<Overview />} />
-              <Route path="/role-permission" element={<RolePermission />} />
-              <Route path="/user-management" element={<UserManagement />} />
-              <Route path="/talent-profiles" element={<TalentProfiles />} />
+              {/* <Route path="*" element={<Overview />} /> */}
+              <Route path="/ongoing-jobs" element={<OngoingJobs />} />
+              <Route path="/talent-hired" element={<TalentsHired />} />
+              {/* <Route path="/talent-profiles" element={<TalentProfiles />} />
               <Route path="/job-requirments" element={<JobRequirments />} />
               <Route
                 path="/job-requirments/new-job-post"
                 element={<PostNewJob />}
               />
-              <Route path="/approval-process" element={<ApprovalProcess />} />
+              <Route path="/approval-process" element={<ApprovalProcess />} /> */}
             </Routes>
           </Layout>
         </Layout>
       </Layout>
-    </DashboardWrapper>
+    </PartnerDashboardWrapper>
   );
 };
 
-export default Dashboard;
+export default PartnerDashboard;

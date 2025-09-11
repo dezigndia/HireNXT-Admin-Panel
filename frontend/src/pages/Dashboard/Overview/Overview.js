@@ -117,7 +117,7 @@ const Overview = () => {
     <OverviewWrapper>
       <Row align={"middle"}>
         <Col span={12}>
-          <Typography.Title>Performance Overview</Typography.Title>
+          <Typography.Title className="page-title">Dashboard</Typography.Title>
         </Col>
         <Col span={12}>
           <Flex justify="end">
@@ -143,7 +143,7 @@ const Overview = () => {
                   }}
                 >
                   <div>
-                    <Title>{item.total}</Title>
+                    <Title className="page-title">{item.total}</Title>
                     <Text>
                       <UpCircleTwoTone />
                       {item.gain}

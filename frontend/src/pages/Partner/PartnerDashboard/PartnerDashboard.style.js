@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const DashboardWrapper = styled.div`
+export const PartnerDashboardWrapper = styled.div`
   .ant-layout {
     height: 100vh;
   }

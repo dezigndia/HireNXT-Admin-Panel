@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   Button,
@@ -23,8 +23,6 @@ import {
 } from "@ant-design/icons";
 import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
-import axios from "axios";
-import { API_CONST } from "../../../const";
 const { Text } = Typography;
 const { Option } = Select;
 
@@ -41,24 +39,25 @@ const usersData = Array.from({ length: 25 }, (_, index) => ({
   modifiedOn: "12-Oct-24 | 14:30",
   type:
     index % 3 === 0
-      ? "Active Resource"
+      ? "User to Review"
       : index % 3 === 1
-      ? "Job Applied"
-      : "Talents Hired",
+      ? "Job to Review"
+      : "Profile to Review",
 }));
 
 const adminColumns = [
   { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email Id", dataIndex: "email", key: "email" },
-    { title: "Contact No", dataIndex: "contact", key: "contact" },
-    { title: "Organization", dataIndex: "organization", key: "organization" },
-    { title: "Rate", dataIndex: "rate", key: "rate" },
-    { title: "Experience", dataIndex: "experience", key: "experience" },
-    { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
-    { title: "Degree", dataIndex: "degree", key: "degree" },
-    { title: "Pan", dataIndex: "pan", key: "pan" },
-    { title: "Aadhar", dataIndex: "Aadhar", key: "Aadhar" },
-    { title: "Action", key: "action", render: () => <Button>Edit</Button> },
+  { title: "Email Id", dataIndex: "email", key: "email" },
+  { title: "Contact No", dataIndex: "contact", key: "contact" },
+  {
+    title: "Partner Organization",
+    dataIndex: "organization",
+    key: "organization",
+  },
+  { title: "Designation", dataIndex: "designation", key: "designation" },
+  { title: "Experience", dataIndex: "experience", key: "experience" },
+  { title: "Cost (INR)", dataIndex: "cost", key: "cost" },
+  { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
   {
     title: "Action",
     key: "action",
@@ -80,16 +79,12 @@ const adminColumns = [
   },
 ];
 
-const TalentProfiles = () => {
-  const [activeTab, setActiveTab] = useState("Active Resource");
+const ApprovalProcess = () => {
+  const [activeTab, setActiveTab] = useState("User to Review");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const [resume, setResume] = useState(null);
-  const [Aadhar, setAadhar] = useState(null);
-  const [pan, setPan] = useState(null);
-  const [degree, setDegree] = useState(null);
-  const [usersData, setUsersData] = useState([{}]);
 
   const filteredData = usersData.filter((user) => user.type === activeTab);
 
@@ -98,81 +93,41 @@ const TalentProfiles = () => {
     setIsModalVisible(false);
     form.resetFields();
     setResume(null);
-    setAadhar(null);
-    setPan(null);
-    setDegree(null);
   };
 
-  useEffect(() => {
-    // Function to fetch data from the backend
-    const fetchData = async () => {
-      try {
-        const response = await fetch(API_CONST.GET_TALENT_PROFILE, {
-          method: "POST",
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        console.log(result);
-        setUsersData(result.Response);
-      } catch (error) {
-        console.log(error.message); // Store error message in state
-      }
-    };
-    fetchData();
-  }, []);
-
-  const handleSubmit = async (values) => {
-  const data = new FormData();
-  if (resume) data.append('resume', resume);
-  if (Aadhar) data.append('Aadhar', Aadhar);
-  if (pan) data.append('pan', pan);
-  if (degree) data.append('degree', degree);
-  if (values) data.append('data', JSON.stringify(values));
-
-  try {
-    const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
-      headers: {
-        'Content-Type': "multipart/form-data"
-      },
-    });
-    console.log('File uploaded successfully!');
-    console.log(response.data);  
-  } catch (error) {
-    console.error(error);
-  }
-
+  const handleSubmit = (values) => {
+    console.log("Form Values:", values);
     handleCloseModal();
   };
-
 
   return (
     <UserManagementWrapper>
       <div style={{ padding: "20px" }}>
-        <h2 className="title-header">Talent Profile</h2>
+        <h2 className="title-header">Approval Process</h2>
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          {["Active Resource", "Job Applied", "Talents Hired"].map((tab) => (
-            <Button
-              key={tab}
-              className={
-                activeTab === tab ? "tab-button active-tab" : "tab-button"
-              }
-              type={activeTab === tab ? "primary" : "default"}
-              onClick={() => setActiveTab(tab)}
-            >
-              <Avatar
-                size={50}
-                className="icon-bg"
-                style={{
-                  backgroundColor: activeTab === tab ? "#ffffff" : "#E4F6FF",
-                }}
-                src={<img src={MaskGroup} alt="avatar" />}
-              />
-              &nbsp;{usersData.filter((user) => user.type === tab).length} {tab}
-            </Button>
-          ))}
+          {["User to Review", "Job to Review", "Profile to Review"].map(
+            (tab) => (
+              <Button
+                key={tab}
+                className={
+                  activeTab === tab ? "tab-button active-tab" : "tab-button"
+                }
+                type={activeTab === tab ? "primary" : "default"}
+                onClick={() => setActiveTab(tab)}
+              >
+                <Avatar
+                  size={50}
+                  className="icon-bg"
+                  style={{
+                    backgroundColor: activeTab === tab ? "#ffffff" : "#E4F6FF",
+                  }}
+                  src={<img src={MaskGroup} alt="avatar" />}
+                />
+                &nbsp;{usersData.filter((user) => user.type === tab).length}{" "}
+                {tab}
+              </Button>
+            )
+          )}
         </div>
         <Flex align="start" justify="space-between">
           <Input
@@ -303,59 +258,23 @@ const TalentProfiles = () => {
             <Row gutter={16}>
               <Col span={8}>
                 <Form.Item label="Upload Aadhar Card">
-                <Upload
-                beforeUpload={(file) => {
-                  setAadhar(file);
-                  return false;
-                }}
-                showUploadList={false}
-              >
+                  <Upload showUploadList={false}>
                     <Button icon={<UploadOutlined />}>Upload Aadhar</Button>
-              </Upload>
-              {resume && (
-                <div style={{ marginTop: "10px" }}>
-                  {resume.name}{" "}
-                  <Button onClick={() => setAadhar(null)}>✖</Button>
-                </div>
-              )}
+                  </Upload>
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item label="Upload PAN Card">
-                <Upload
-                beforeUpload={(file) => {
-                  setPan(file);
-                  return false;
-                }}
-                showUploadList={false}
-              >
+                  <Upload showUploadList={false}>
                     <Button icon={<UploadOutlined />}>Upload PAN</Button>
-              </Upload>
-              {resume && (
-                <div style={{ marginTop: "10px" }}>
-                  {resume.name}{" "}
-                  <Button onClick={() => setPan(null)}>✖</Button>
-                </div>
-              )}
+                  </Upload>
                 </Form.Item>
               </Col>
               <Col span={8}>
                 <Form.Item label="Upload Degree Proof">
-                <Upload
-                beforeUpload={(file) => {
-                  setDegree(file);
-                  return false;
-                }}
-                showUploadList={false}
-              >
+                  <Upload showUploadList={false}>
                     <Button icon={<UploadOutlined />}>Upload Degree</Button>
-              </Upload>
-              {resume && (
-                <div style={{ marginTop: "10px" }}>
-                  {resume.name}{" "}
-                  <Button onClick={() => setDegree(null)}>✖</Button>
-                </div>
-              )}
+                  </Upload>
                 </Form.Item>
               </Col>
             </Row>
@@ -371,4 +290,4 @@ const TalentProfiles = () => {
   );
 };
 
-export default TalentProfiles;
+export default ApprovalProcess;
