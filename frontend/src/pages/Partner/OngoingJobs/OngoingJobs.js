@@ -20,7 +20,6 @@ import {
   LaptopOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 import { API_CONST } from "../../../const";
 import { Link } from "react-router-dom";
 
