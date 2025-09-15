@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Input,
   Card,
@@ -21,157 +21,37 @@ import {
   ClockCircleOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import { API_CONST } from "../../../const";
 
 const { Search } = Input;
 const { Title, Text, Paragraph } = Typography;
 
 // Sample jobs data with new fields
-const jobsData = [
-  {
-    id: "J101",
-    title: "Frontend Developer",
-    company: "TechCorp",
-    companyType: "Software Company",
-    location: "Bangalore",
-    openPositions: 3,
-    designation: "Frontend Developer",
-    experience: "2-4 yrs",
-    employmentType: "Full Time",
-    salary: "$2500/mo",
-    skills: ["React", "Redux", "JavaScript"],
-    primarySkills: ["React", "Redux"],
-    goodToHaveSkills: ["TypeScript", "Jest"],
-    interested: 12,
-    projectDuration: "6 months",
-    communication: "Excellent",
-    startDate: "2024-07-01",
-    systemProvided: true,
-    workTime: "40 hours/week",
-    timeZone: "IST",
-    descriptionPoints: [
-      "Develop UI components using React.",
-      "Collaborate with backend team.",
-      "Write clean and maintainable code.",
-      "Participate in code reviews.",
-    ],
-  },
-  {
-    id: "J102",
-    title: "Backend Developer",
-    company: "DataSoft",
-    companyType: "Software Company",
-    location: "Remote",
-    openPositions: 2,
-    designation: "Backend Developer",
-    experience: "3-5 yrs",
-    employmentType: "Contract",
-    salary: "$3000/mo",
-    skills: ["Node.js", "Express", "MongoDB"],
-    primarySkills: ["Node.js", "Express"],
-    goodToHaveSkills: ["AWS", "Docker"],
-    interested: 8,
-    projectDuration: "12 months",
-    communication: "Excellent",
-    startDate: "2024-08-15",
-    systemProvided: false,
-    workTime: "40 hours/week",
-    timeZone: "EST",
-    descriptionPoints: [
-      "Build RESTful APIs.",
-      "Integrate with databases.",
-      "Ensure security best practices.",
-      "Optimize performance.",
-    ],
-  },
-  {
-    id: "J103",
-    title: "UI/UX Designer",
-    company: "Designify",
-    companyType: "Realestate Company",
-    location: "Mumbai",
-    openPositions: 1,
-    designation: "UI/UX Designer",
-    experience: "1-3 yrs",
-    employmentType: "Full Time",
-    salary: "$2000/mo",
-    skills: ["Figma", "Sketch", "Adobe XD"],
-    primarySkills: ["Figma", "Sketch"],
-    goodToHaveSkills: ["Photoshop", "Illustrator"],
-    interested: 5,
-    projectDuration: "3 months",
-    communication: "Excellent",
-    startDate: "2024-07-20",
-    systemProvided: true,
-    workTime: "40 hours/week",
-    timeZone: "IST",
-    descriptionPoints: [
-      "Design wireframes and prototypes.",
-      "Work with product managers.",
-      "Conduct user research.",
-      "Deliver high-fidelity designs.",
-    ],
-  },
-  {
-    id: "J104",
-    title: "Frontend Developer 2",
-    company: "TechCorp",
-    companyType: "Software Company",
-    location: "Bangalore",
-    openPositions: 3,
-    designation: "Frontend Developer",
-    experience: "2-4 yrs",
-    employmentType: "Full Time",
-    salary: "$2500/mo",
-    skills: ["React", "Redux", "JavaScript"],
-    primarySkills: ["React", "Redux"],
-    goodToHaveSkills: ["TypeScript", "Jest"],
-    interested: 12,
-    projectDuration: "6 months",
-    communication: "Excellent",
-    startDate: "2024-07-01",
-    systemProvided: true,
-    workTime: "40 hours/week",
-    timeZone: "IST",
-    descriptionPoints: [
-      "Develop UI components using React.",
-      "Collaborate with backend team.",
-      "Write clean and maintainable code.",
-      "Participate in code reviews.",
-    ],
-  },
-  {
-    id: "J105",
-    title: "Frontend Developer 5",
-    company: "TechCorp",
-    companyType: "Software Company",
-    location: "Bangalore",
-    openPositions: 3,
-    designation: "Frontend Developer",
-    experience: "2-4 yrs",
-    employmentType: "Full Time",
-    salary: "$2500/mo",
-    skills: ["React", "Redux", "JavaScript"],
-    primarySkills: ["React", "Redux"],
-    goodToHaveSkills: ["TypeScript", "Jest"],
-    interested: 12,
-    projectDuration: "6 months",
-    communication: "Excellent",
-    startDate: "2024-07-01",
-    systemProvided: true,
-    workTime: "40 hours/week",
-    timeZone: "IST",
-    descriptionPoints: [
-      "Develop UI components using React.",
-      "Collaborate with backend team.",
-      "Write clean and maintainable code.",
-      "Participate in code reviews.",
-    ],
-  },
-];
 
-export default function OngoingJobs() {
+const OngoingJobs = () => {
   const [search, setSearch] = useState("");
   const [selectedJob, setSelectedJob] = useState(null);
+  const [jobsData, setUsersData] = useState([]);
+  useEffect(() => {
+    // Function to fetch data from the backend
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_CONST.GET_JOB_REQUIREMENTS, {
+          method: "POST",
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        console.log(result);
+        setUsersData(result.Response);
+      } catch (error) {
+        console.log(error.message); // Store error message in state
+      }
+    };
+    fetchData();
+  }, []);
 
   const filteredJobs = jobsData.filter(
     (job) =>
@@ -514,4 +394,5 @@ export default function OngoingJobs() {
       </Row>
     </div>
   );
-}
+};
+export default OngoingJobs;

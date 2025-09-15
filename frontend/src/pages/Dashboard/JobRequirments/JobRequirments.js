@@ -53,13 +53,16 @@ const JobRequirments = () => {
   const [form] = Form.useForm();
 
   const columns = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email Id", dataIndex: "email", key: "email" },
-    { title: "Contact No", dataIndex: "contact", key: "contact" },
-    { title: "Organization", dataIndex: "organization", key: "organization" },
-    { title: "Designation", dataIndex: "designation", key: "designation" },
-    { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
-    { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
+    { title: "Job Id", dataIndex: "id", key: "id" },
+    { title: "Job Requirement Title", dataIndex: "role", key: "role" },
+    { title: "Location", dataIndex: "location", key: "location" },
+    { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
+    { title: "Positions", dataIndex: "requirement_count", key: "requirement_count" },
+    { title: "Experience", dataIndex: "createdOn", key: "createdOn" },
+    { title: "Duration", dataIndex: "engagement_months", key: "engagement_months" },
+    { title: "Start Date", dataIndex: "start_date", key: "start_date" },
+    { title: "Salary(INR)", dataIndex: "budget", key: "budget" },
+    { title: "Created On", dataIndex: "created_on", key: "created_on" },
     {
       title: "Action",
       key: "action",
@@ -81,39 +84,12 @@ const JobRequirments = () => {
     },
   ];
 
-  const adminColumns = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email Id", dataIndex: "email", key: "email" },
-    { title: "Contact No", dataIndex: "contact", key: "contact" },
-    { title: "Role", dataIndex: "role", key: "role" },
-    { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
-    { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
-    {
-      title: "Action",
-      key: "action",
-      render: () => (
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="1">Edit</Menu.Item>
-              <Menu.Item key="2">Delete</Menu.Item>
-              <Menu.Item key="3">View Details</Menu.Item>
-              <Menu.Item key="4">Reset Password</Menu.Item>
-            </Menu>
-          }
-          trigger={["click"]}
-        >
-          <MoreOutlined />
-        </Dropdown>
-      ),
-    },
-  ];
 
   useEffect(() => {
     // Function to fetch data from the backend
     const fetchData = async () => {
       try {
-        const response = await fetch(API_CONST.GET_USER_MANAGEMENT, {
+        const response = await fetch(API_CONST.GET_JOB_REQUIREMENTS, {
           method: "POST",
         });
 
@@ -143,10 +119,6 @@ const JobRequirments = () => {
     setSelectedRole(null); // Reset role on modal close
   };
 
-  const handleRoleChange = (value) => {
-    setSelectedRole(value); // Update the selected role
-  };
-
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
@@ -160,31 +132,6 @@ const JobRequirments = () => {
       // Column configuration not to be checked
       name: record.name,
     }),
-  };
-
-  const handleSubmit = async (e) => {
-    try {
-      // Send form data to the backend
-      const response = await fetch(API_CONST.ADD_USER_MANAGEMENT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(e),
-      });
-
-      // Check for successful response
-      if (response.ok) {
-        const data = await response.json();
-        console.log("Form submitted successfully:", data);
-        window.location.reload();
-      } else {
-        console.error("Error submitting form:", response.statusText);
-      }
-    } catch (error) {
-      console.error("Network error:", error);
-    }
-    handleCloseModal();
   };
 
   return (
@@ -296,7 +243,7 @@ const JobRequirments = () => {
                 type: "checkbox",
                 ...rowSelection,
               }}
-              columns={adminColumns}
+              columns={columns}
               dataSource={filteredData}
               pagination={{ pageSize: 5 }}
             />
