@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import { API_CONST } from "../../../const";
 import { Link } from "react-router-dom";
+import { API_CONST } from "../../../const";
 
 const { Search } = Input;
 const { Title, Text, Paragraph } = Typography;
