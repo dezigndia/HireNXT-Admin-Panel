@@ -26,8 +26,6 @@ import { API_CONST } from "../../../const";
 const { Search } = Input;
 const { Title, Text, Paragraph } = Typography;
 
-// Sample jobs data with new fields
-
 const OngoingJobs = () => {
   const [search, setSearch] = useState("");
   const [selectedJob, setSelectedJob] = useState(null);
