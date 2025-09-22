@@ -24,6 +24,7 @@ import { Link } from "react-router-dom";
 import { API_CONST } from "../../../const";
 import { Link } from "react-router-dom";
 import { API_CONST } from "../../../const";
+import { Link } from "react-router-dom";
 
 const { Search } = Input;
 const { Title, Text, Paragraph } = Typography;
