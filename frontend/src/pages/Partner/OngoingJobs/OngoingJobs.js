@@ -20,6 +20,7 @@ import {
   LaptopOutlined,
   ClockCircleOutlined,
 } from "@ant-design/icons";
+import { Link } from "react-router-dom";
 
 const { Search } = Input;
 const { Title, Text, Paragraph } = Typography;
@@ -215,7 +216,7 @@ export default function OngoingJobs() {
         {/* Jobs List */}
         <Col
           xs={24}
-          md={10}
+          md={8}
           style={{
             width: "100%",
             maxWidth: "100%",
@@ -315,7 +316,7 @@ export default function OngoingJobs() {
         {/* Selected Job Details */}
         <Col
           xs={24}
-          md={14}
+          md={16}
           style={{
             width: "100%",
             maxWidth: "100%",
@@ -330,30 +331,49 @@ export default function OngoingJobs() {
           >
             {selectedJob ? (
               <>
-                {/* 1st row: 4 columns */}
-                <Row gutter={16} style={{ marginBottom: 12 }}>
-                  <Col span={6}>
+                {/* /* 1st row: 4 columns + Submit Profile button */}
+                <Row
+                  gutter={16}
+                  style={{ marginBottom: 12, alignItems: "center" }}
+                >
+                  <Col span={5}>
                     <Text strong>
                       Job ID: <Tag color="blue">{selectedJob.id}</Tag>
                     </Text>
                   </Col>
-                  <Col span={6}>
+                  <Col span={5}>
                     <Text>
                       <UserOutlined style={{ marginRight: 4 }} />
                       {selectedJob.interested} Interested
                     </Text>
                   </Col>
-                  <Col span={6}>
+                  <Col span={5}>
                     <Text>
                       <EnvironmentOutlined style={{ marginRight: 4 }} />
                       {selectedJob.location}
                     </Text>
                   </Col>
-                  <Col span={6}>
+                  <Col span={4}>
                     <Text>
                       <LaptopOutlined style={{ marginRight: 4 }} />
                       {selectedJob.openPositions} Open
                     </Text>
+                  </Col>
+                  <Col span={5} style={{ textAlign: "right" }}>
+                    <Link to="/partner/job-details">
+                      <button
+                        style={{
+                          background: "#1890ff",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: 4,
+                          padding: "6px 16px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Submit Profile
+                      </button>
+                    </Link>
                   </Col>
                 </Row>
                 <Divider style={{ margin: "8px 0" }} />
