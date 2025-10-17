@@ -169,6 +169,7 @@ const JobDetails = () => {
           <Typography.Title level={4}>Profile Submitted</Typography.Title>
         </Col>
         <Col>
+          <Button type="default">Add from Bench Pool</Button>
           <Button type="primary">Add Resources</Button>
         </Col>
       </Row>
