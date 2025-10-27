@@ -46,10 +46,18 @@ const Login = () => {
       if (response.ok) {
         // Handle success (e.g., store authentication token)
         console.log("Login successful:", data);
+        
+        if (!data.user || !data.token) {
+          setError("Invalid login response");
+          return;
+        }
+        
         localStorage.setItem("authToken", data.token);
+        localStorage.setItem("userRole", data.user.role);
+        localStorage.setItem("userName", data.user.name);
         
         // Role-based routing
-        const userRole = data.user?.role || "admin";
+        const userRole = data.user.role;
         if (userRole === "customer") {
           navigate("/customer");
         } else if (userRole === "partner") {
