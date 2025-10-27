@@ -61,6 +61,46 @@ const mockTalents = [
     skills: ["React", "HTML", "JavaScript", "CSS"],
     avatar: null,
   },
+  {
+    id: 5,
+    name: "Priya Sharma",
+    location: "Bangalore, India",
+    experience: 6,
+    role: "Full Stack Developer",
+    hourlyRate: "₹ 1,80,000",
+    skills: ["NodeJs", "React", "MongoDB", "Express"],
+    avatar: null,
+  },
+  {
+    id: 6,
+    name: "Amit Kumar",
+    location: "Delhi, India",
+    experience: 8,
+    role: "Backend Developer",
+    hourlyRate: "₹ 2,00,000",
+    skills: ["Java", "Spring", "MySQL", "AWS"],
+    avatar: null,
+  },
+  {
+    id: 7,
+    name: "Sneha Patel",
+    location: "Mumbai, India",
+    experience: 4,
+    role: "UI/UX Developer",
+    hourlyRate: "₹ 1,40,000",
+    skills: ["Figma", "React", "CSS", "JavaScript"],
+    avatar: null,
+  },
+  {
+    id: 8,
+    name: "Rahul Verma",
+    location: "Pune, India",
+    experience: 9,
+    role: "DevOps Engineer",
+    hourlyRate: "₹ 2,80,000",
+    skills: ["Docker", "Kubernetes", "Jenkins", "AWS"],
+    avatar: null,
+  },
 ];
 
 const FindTalents = () => {
@@ -99,12 +139,40 @@ const FindTalents = () => {
   };
 
   const filteredTalents = mockTalents.filter((talent) => {
-    if (searchText && !talent.name.toLowerCase().includes(searchText.toLowerCase())) {
-      return false;
+    if (searchText) {
+      const searchLower = searchText.toLowerCase();
+      const matchesName = talent.name.toLowerCase().includes(searchLower);
+      const matchesRole = talent.role.toLowerCase().includes(searchLower);
+      if (!matchesName && !matchesRole) {
+        return false;
+      }
     }
+
     if (primaryRole && !talent.role.toLowerCase().includes(primaryRole.toLowerCase())) {
       return false;
     }
+
+    if (seniority) {
+      const exp = talent.experience;
+      if (seniority === "junior" && (exp < 0 || exp > 2)) return false;
+      if (seniority === "mid" && (exp < 3 || exp > 5)) return false;
+      if (seniority === "senior" && (exp < 6 || exp > 10)) return false;
+      if (seniority === "lead" && exp < 10) return false;
+    }
+
+    if (filterValues.secondaryTech && filterValues.secondaryTech.length > 0) {
+      const hasMatchingTech = filterValues.secondaryTech.some((tech) =>
+        talent.skills.some((skill) => skill.toLowerCase().includes(tech.toLowerCase()))
+      );
+      if (!hasMatchingTech) return false;
+    }
+
+    if (filterValues.location) {
+      if (!talent.location.toLowerCase().includes(filterValues.location.toLowerCase())) {
+        return false;
+      }
+    }
+
     return true;
   });
 
@@ -129,11 +197,13 @@ const FindTalents = () => {
           onChange={setPrimaryRole}
           allowClear
         >
-          <Option value="full-stack">Full Stack Developer</Option>
-          <Option value="frontend">Front End Developer</Option>
+          <Option value="full stack">Full Stack Developer</Option>
+          <Option value="front end">Front End Developer</Option>
           <Option value="backend">Backend Developer</Option>
           <Option value="django">Django Developer</Option>
           <Option value="mern">MERN Stack Developer</Option>
+          <Option value="devops">DevOps Engineer</Option>
+          <Option value="ui/ux">UI/UX Developer</Option>
         </Select>
 
         <Select
@@ -227,17 +297,26 @@ const FindTalents = () => {
               mode="multiple"
               placeholder="Select technologies"
               style={{ width: "100%", marginTop: 8 }}
+              value={filterValues.secondaryTech}
               onChange={(values) =>
                 setFilterValues({ ...filterValues, secondaryTech: values })
               }
             >
-              <Option value="javascript">JavaScript</Option>
-              <Option value="typescript">TypeScript</Option>
+              <Option value="react">React</Option>
+              <Option value="nodejs">NodeJs</Option>
               <Option value="python">Python</Option>
               <Option value="java">Java</Option>
-              <Option value="dotnet">.NET</Option>
-              <Option value="go">Go</Option>
-              <Option value="rust">Rust</Option>
+              <Option value="angular">Angular</Option>
+              <Option value="php">PHP</Option>
+              <Option value="mongodb">MongoDB</Option>
+              <Option value="html">HTML</Option>
+              <Option value="css">CSS</Option>
+              <Option value="javascript">JavaScript</Option>
+              <Option value="docker">Docker</Option>
+              <Option value="kubernetes">Kubernetes</Option>
+              <Option value="aws">AWS</Option>
+              <Option value="spring">Spring</Option>
+              <Option value="mysql">MySQL</Option>
             </Select>
           </div>
 
@@ -246,9 +325,11 @@ const FindTalents = () => {
             <Select
               placeholder="Select location"
               style={{ width: "100%", marginTop: 8 }}
+              value={filterValues.location}
               onChange={(value) =>
                 setFilterValues({ ...filterValues, location: value })
               }
+              allowClear
             >
               <Option value="bangalore">Bangalore</Option>
               <Option value="hyderabad">Hyderabad</Option>
@@ -264,9 +345,11 @@ const FindTalents = () => {
             <Select
               placeholder="Select work mode"
               style={{ width: "100%", marginTop: 8 }}
+              value={filterValues.mode}
               onChange={(value) =>
                 setFilterValues({ ...filterValues, mode: value })
               }
+              allowClear
             >
               <Option value="remote">Remote</Option>
               <Option value="hybrid">Hybrid</Option>
