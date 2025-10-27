@@ -144,6 +144,27 @@ export const TableContainer = styled.div`
     font-size: 14px;
   }
 
+  .days-left {
+    font-weight: 500;
+    font-size: 14px;
+
+    &.critical {
+      color: #f5222d;
+    }
+
+    &.warning {
+      color: #fa8c16;
+    }
+
+    &.safe {
+      color: #52c41a;
+    }
+
+    &.inactive {
+      color: #999;
+    }
+  }
+
   .action-buttons {
     display: flex;
     align-items: center;
