@@ -1,165 +1,227 @@
 import React, { useState, useEffect } from "react";
-import { Table, Button, Input, Tag, Typography, Dropdown, Menu } from "antd";
-import { MoreOutlined, PlusOutlined, SearchOutlined } from "@ant-design/icons";
+import { Card, Button, Tag, Row, Col, Dropdown, Menu, Segmented } from "antd";
+import {
+  MoreOutlined,
+  PlusOutlined,
+  BriefcaseOutlined,
+  UserOutlined,
+  CheckCircleOutlined,
+  EditOutlined,
+  CloseCircleOutlined,
+} from "@ant-design/icons";
 import { MyJobsWrapper } from "./MyJobs.style";
-import { API_CONST } from "../../../const";
 
-const { Title } = Typography;
-const { Search } = Input;
+const mockJobs = [
+  {
+    id: "2930493",
+    title: "SAP Hana Developer",
+    type: "Full Time Contract",
+    location: "Remote",
+    experience: "5 to 6 years of Experience",
+    submittedProfiles: 5,
+    interviewing: 5,
+    rejected: 2,
+    hired: 1,
+    status: "ongoing",
+    postedDate: "Feb 10, 2024",
+  },
+  {
+    id: "2930494",
+    title: "React Frontend Developer",
+    type: "Full Time Contract",
+    location: "Bangalore",
+    experience: "3 to 5 years of Experience",
+    submittedProfiles: 8,
+    interviewing: 4,
+    rejected: 1,
+    hired: 2,
+    status: "ongoing",
+    postedDate: "Feb 12, 2024",
+  },
+  {
+    id: "2930495",
+    title: "DevOps Engineer",
+    type: "Contract",
+    location: "Remote",
+    experience: "4 to 7 years of Experience",
+    submittedProfiles: 6,
+    interviewing: 3,
+    rejected: 2,
+    hired: 0,
+    status: "closed",
+    postedDate: "Jan 28, 2024",
+  },
+  {
+    id: "2930496",
+    title: "Python Backend Developer",
+    type: "Full Time",
+    location: "Hyderabad",
+    experience: "2 to 4 years of Experience",
+    submittedProfiles: 10,
+    interviewing: 6,
+    rejected: 3,
+    hired: 1,
+    status: "ongoing",
+    postedDate: "Feb 15, 2024",
+  },
+];
 
 const MyJobs = () => {
-  const [jobsData, setJobsData] = useState([]);
-  const [searchText, setSearchText] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState("all");
+  const [jobs, setJobs] = useState(mockJobs);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(API_CONST.GET_JOB_REQUIREMENTS, {
-          method: "POST",
-        });
+  const filteredJobs = jobs.filter((job) => {
+    if (filter === "all") return true;
+    return job.status === filter;
+  });
 
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        console.log(result);
-        setJobsData(result.Response || []);
-      } catch (error) {
-        console.log(error.message);
-        setJobsData([
-          {
-            key: "1",
-            id: "JOB001",
-            role: "Senior React Developer",
-            location: "Bangalore",
-            engagement_type: "Full Time",
-            requirement_count: 3,
-            experience: "5-8 years",
-            engagement_months: "12 months",
-            start_date: "2024-11-15",
-            budget: "₹15-20 LPA",
-            created_on: "2024-10-20",
-            status: "Active",
-            profilesSubmitted: 12,
-          },
-          {
-            key: "2",
-            id: "JOB002",
-            role: "DevOps Engineer",
-            location: "Remote",
-            engagement_type: "Contract",
-            requirement_count: 2,
-            experience: "3-5 years",
-            engagement_months: "6 months",
-            start_date: "2024-11-01",
-            budget: "₹80-100k/month",
-            created_on: "2024-10-18",
-            status: "Active",
-            profilesSubmitted: 8,
-          },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+  const ongoingCount = jobs.filter((j) => j.status === "ongoing").length;
+  const closedCount = jobs.filter((j) => j.status === "closed").length;
+  const totalProfiles = jobs.reduce((sum, job) => sum + job.submittedProfiles, 0);
+  const totalHired = jobs.reduce((sum, job) => sum + job.hired, 0);
 
-  const columns = [
-    { title: "Job ID", dataIndex: "id", key: "id", width: 100 },
-    { 
-      title: "Job Title", 
-      dataIndex: "role", 
-      key: "role",
-      width: 200,
-    },
-    { title: "Location", dataIndex: "location", key: "location", width: 120 },
-    { 
-      title: "Type", 
-      dataIndex: "engagement_type", 
-      key: "engagement_type",
-      width: 120,
-      render: (type) => (
-        <Tag color={type === "Full Time" ? "green" : "orange"}>
-          {type}
-        </Tag>
-      ),
-    },
-    { title: "Positions", dataIndex: "requirement_count", key: "requirement_count", width: 100 },
-    { title: "Experience", dataIndex: "experience", key: "experience", width: 120 },
-    { title: "Duration", dataIndex: "engagement_months", key: "engagement_months", width: 100 },
-    { title: "Start Date", dataIndex: "start_date", key: "start_date", width: 120 },
-    { title: "Budget", dataIndex: "budget", key: "budget", width: 150 },
-    { 
-      title: "Status", 
-      dataIndex: "status", 
-      key: "status",
-      width: 100,
-      render: (status) => (
-        <Tag color={status === "Active" ? "green" : "default"}>
-          {status || "Active"}
-        </Tag>
-      ),
-    },
-    { title: "Profiles", dataIndex: "profilesSubmitted", key: "profilesSubmitted", width: 100 },
-    {
-      title: "Action",
-      key: "action",
-      width: 80,
-      render: () => (
-        <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="1">View Details</Menu.Item>
-              <Menu.Item key="2">Edit</Menu.Item>
-              <Menu.Item key="3">View Profiles</Menu.Item>
-              <Menu.Item key="4">Close Job</Menu.Item>
-            </Menu>
-          }
-          trigger={["click"]}
-        >
-          <MoreOutlined style={{ cursor: "pointer" }} />
-        </Dropdown>
-      ),
-    },
-  ];
+  const handleMenuClick = (jobId, action) => {
+    if (action === "edit") {
+      console.log("Edit job:", jobId);
+    } else if (action === "close") {
+      console.log("Close job:", jobId);
+      setJobs(jobs.map(job => 
+        job.id === jobId ? { ...job, status: "closed" } : job
+      ));
+    }
+  };
 
-  const filteredData = jobsData.filter((job) =>
-    job.role?.toLowerCase().includes(searchText.toLowerCase()) ||
-    job.id?.toLowerCase().includes(searchText.toLowerCase()) ||
-    job.location?.toLowerCase().includes(searchText.toLowerCase())
+  const getActionMenu = (jobId) => (
+    <Menu>
+      <Menu.Item
+        key="edit"
+        icon={<EditOutlined />}
+        onClick={() => handleMenuClick(jobId, "edit")}
+      >
+        Edit Job
+      </Menu.Item>
+      <Menu.Item
+        key="close"
+        icon={<CloseCircleOutlined />}
+        onClick={() => handleMenuClick(jobId, "close")}
+      >
+        Close Job
+      </Menu.Item>
+    </Menu>
   );
 
   return (
     <MyJobsWrapper>
-      <div style={{ padding: "20px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-          <Title level={2} className="title-header">My Job Posts</Title>
-          <Button type="primary" icon={<PlusOutlined />}>
-            Post New Job
-          </Button>
-        </div>
+      <div className="header">
+        <h2>Job Briefs</h2>
+        <Button type="primary" icon={<PlusOutlined />} className="post-job-btn">
+          Post Job
+        </Button>
+      </div>
 
-        <div style={{ marginBottom: "20px" }}>
-          <Search
-            placeholder="Search by job title, ID, or location"
-            prefix={<SearchOutlined />}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{ width: "100%", maxWidth: "400px" }}
-            allowClear
-          />
-        </div>
+      <Row gutter={16} className="metrics-row">
+        <Col xs={24} sm={8} md={8}>
+          <Card className="metric-card" hoverable>
+            <div className="metric-content">
+              <div className="metric-icon" style={{ background: "#e6f7ff" }}>
+                <BriefcaseOutlined style={{ color: "#1890ff", fontSize: 24 }} />
+              </div>
+              <div className="metric-info">
+                <h3 className="metric-value">{ongoingCount}</h3>
+                <p className="metric-label">Job Live</p>
+              </div>
+            </div>
+          </Card>
+        </Col>
+        <Col xs={24} sm={8} md={8}>
+          <Card className="metric-card" hoverable>
+            <div className="metric-content">
+              <div className="metric-icon" style={{ background: "#f0f5ff" }}>
+                <UserOutlined style={{ color: "#597ef7", fontSize: 24 }} />
+              </div>
+              <div className="metric-info">
+                <h3 className="metric-value">{totalProfiles}</h3>
+                <p className="metric-label">Profile Received</p>
+              </div>
+            </div>
+          </Card>
+        </Col>
+        <Col xs={24} sm={8} md={8}>
+          <Card className="metric-card" hoverable>
+            <div className="metric-content">
+              <div className="metric-icon" style={{ background: "#f6ffed" }}>
+                <CheckCircleOutlined style={{ color: "#52c41a", fontSize: 24 }} />
+              </div>
+              <div className="metric-info">
+                <h3 className="metric-value">{totalHired}</h3>
+                <p className="metric-label">Talent Hired</p>
+              </div>
+            </div>
+          </Card>
+        </Col>
+      </Row>
 
-        <Table
-          columns={columns}
-          dataSource={filteredData}
-          pagination={{ pageSize: 10 }}
-          loading={loading}
-          scroll={{ x: 1500 }}
+      <div className="filter-section">
+        <Segmented
+          value={filter}
+          onChange={setFilter}
+          options={[
+            { label: "All Jobs", value: "all" },
+            { label: `Ongoing Job (${ongoingCount})`, value: "ongoing" },
+            { label: `Closed Job (${closedCount})`, value: "closed" },
+          ]}
+          className="job-filter"
         />
+      </div>
+
+      <div className="jobs-list">
+        {filteredJobs.map((job) => (
+          <Card key={job.id} className="job-card" hoverable>
+            <div className="job-header">
+              <div className="job-title-section">
+                <p className="job-id">Job id: {job.id}</p>
+                <h3 className="job-title">{job.title}</h3>
+                <p className="job-meta">
+                  <Tag color="cyan">{job.type}</Tag>
+                  <Tag color="blue">{job.location}</Tag>
+                  <span className="experience">{job.experience}</span>
+                </p>
+              </div>
+              <div className="job-actions">
+                <span className="posted-date">Posted on {job.postedDate}</span>
+                <Dropdown
+                  overlay={getActionMenu(job.id)}
+                  trigger={["click"]}
+                  placement="bottomRight"
+                >
+                  <MoreOutlined className="action-icon" />
+                </Dropdown>
+              </div>
+            </div>
+
+            <div className="job-stats">
+              <div className="stat-item">
+                <h4>{job.submittedProfiles}</h4>
+                <p>Submitted</p>
+              </div>
+              <div className="stat-divider"></div>
+              <div className="stat-item">
+                <h4>{job.interviewing}</h4>
+                <p>Interviewing</p>
+              </div>
+              <div className="stat-divider"></div>
+              <div className="stat-item rejected">
+                <h4>{job.rejected}</h4>
+                <p>Rejected</p>
+              </div>
+              <div className="stat-divider"></div>
+              <div className="stat-item hired">
+                <h4>{job.hired}</h4>
+                <p>Hired</p>
+              </div>
+            </div>
+          </Card>
+        ))}
       </div>
     </MyJobsWrapper>
   );
