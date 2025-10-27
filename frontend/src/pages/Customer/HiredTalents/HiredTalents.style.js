@@ -1,28 +1,35 @@
 import styled from "styled-components";
 
 export const HiredTalentsContainer = styled.div`
-  padding: 40px;
-  background: #f5f5f5;
+  padding: 40px 48px;
+  background: #f8f9fa;
   min-height: 100vh;
 `;
 
 export const PageHeader = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 
   h1 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: #1a1a1a;
-    margin: 0 0 24px 0;
+    margin: 0 0 20px 0;
   }
 `;
 
 export const TabsContainer = styled.div`
-  margin-bottom: 24px;
+  margin-bottom: 28px;
+  border-bottom: 1px solid #e8e8e8;
 
   .ant-segmented {
     background: transparent;
     padding: 0;
+    border: none;
+  }
+
+  .ant-segmented-group {
+    background: transparent;
+    border: none;
   }
 
   .ant-segmented-item {
@@ -31,28 +38,30 @@ export const TabsContainer = styled.div`
     color: #999;
     font-size: 14px;
     font-weight: 500;
-    padding: 8px 0;
-    margin-right: 32px;
+    padding: 12px 0;
+    margin-right: 40px;
     border-radius: 0;
+    position: relative;
 
     &::after {
       content: '';
       position: absolute;
-      bottom: 0;
+      bottom: -1px;
       left: 0;
       right: 0;
       height: 2px;
       background: transparent;
+      transition: background 0.3s;
     }
   }
 
   .ant-segmented-item-selected {
     background: transparent;
-    color: #26c6b8;
+    color: #1890ff;
     font-weight: 600;
 
     &::after {
-      background: #26c6b8;
+      background: #1890ff;
     }
   }
 
@@ -64,20 +73,22 @@ export const TabsContainer = styled.div`
 export const TableContainer = styled.div`
   background: white;
   border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
 
   .ant-table {
     font-size: 14px;
   }
 
   .ant-table-thead > tr > th {
-    background: white;
+    background: #fafafa;
     color: #666;
     font-weight: 600;
     font-size: 13px;
-    border-bottom: 2px solid #f0f0f0;
-    padding: 16px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 16px 20px;
+    text-align: left;
 
     &::before {
       display: none;
@@ -85,9 +96,11 @@ export const TableContainer = styled.div`
   }
 
   .ant-table-tbody > tr > td {
-    padding: 20px 12px;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 20px 20px;
+    border-bottom: 1px solid #f5f5f5;
     color: #333;
+    font-size: 14px;
+    vertical-align: middle;
   }
 
   .ant-table-tbody > tr:last-child > td {
@@ -101,99 +114,82 @@ export const TableContainer = styled.div`
   .talent-name {
     color: #1890ff;
     font-weight: 500;
-    cursor: pointer;
     text-decoration: none;
+    cursor: pointer;
 
     &:hover {
+      color: #40a9ff;
       text-decoration: underline;
     }
   }
 
-  .status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
+  .email-text {
+    color: #666;
+    font-size: 14px;
+  }
+
+  .date-text {
+    color: #333;
+    font-size: 14px;
+  }
+
+  .duration-text {
+    color: #333;
+    font-size: 14px;
+  }
+
+  .rate-text {
+    color: #333;
     font-weight: 500;
-
-    &.active {
-      background: #e6f7f1;
-      color: #00a86b;
-    }
-
-    &.inactive {
-      background: #fff3e0;
-      color: #ff9800;
-    }
-
-    &.warning {
-      background: #ffebee;
-      color: #f44336;
-    }
+    font-size: 14px;
   }
 
   .action-buttons {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
 
   .icon-button {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    background: #f0f0f0;
     border: none;
-    color: #666;
     transition: all 0.2s;
+    font-size: 16px;
 
-    &:hover {
-      background: #e0e0e0;
-    }
-  }
+    &.notification-btn {
+      background: #e6f7ff;
+      color: #1890ff;
 
-  .rate-info {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    .current-rate {
-      color: #333;
-      font-weight: 500;
+      &:hover {
+        background: #bae7ff;
+      }
     }
 
-    .market-rate {
+    &.menu-btn {
+      background: #f5f5f5;
       color: #999;
-      font-size: 12px;
+
+      &:hover {
+        background: #e8e8e8;
+        color: #666;
+      }
     }
   }
 
-  .days-left {
-    font-weight: 500;
-
-    &.critical {
-      color: #f44336;
-    }
-
-    &.warning {
-      color: #ff9800;
-    }
-
-    &.safe {
-      color: #00a86b;
-    }
+  .ant-table-pagination {
+    padding: 16px 20px;
   }
 `;
 
 export const EmptyState = styled.div`
   text-align: center;
-  padding: 60px 20px;
+  padding: 80px 20px;
   color: #999;
 
   .ant-empty-description {

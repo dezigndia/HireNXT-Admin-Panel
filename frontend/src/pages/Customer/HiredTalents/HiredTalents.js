@@ -19,71 +19,69 @@ const HiredTalents = () => {
       email: "aditya.k@designindia.com",
       onboardingDate: "2024-01-12",
       contractDuration: "1 Year",
-      lastWorkingDay: "2025-01-12",
-      daysLeft: 77,
       monthlyRate: 150000,
       marketRate: 250000,
       status: "active",
     },
     {
       id: 2,
+      name: "Gaurav Ambekar",
+      email: "aditya.k@designindia.com",
+      onboardingDate: "2024-01-12",
+      contractDuration: "14 Year",
+      monthlyRate: 150000,
+      marketRate: 250000,
+      status: "active",
+    },
+    {
+      id: 3,
+      name: "Gaurav Ambekar",
+      email: "aditya.k@designindia.com",
+      onboardingDate: "2024-01-12",
+      contractDuration: "2 Year",
+      monthlyRate: 150000,
+      marketRate: 250000,
+      status: "active",
+    },
+    {
+      id: 4,
       name: "Priya Sharma",
       email: "priya.sharma@techsolutions.com",
       onboardingDate: "2023-06-15",
       contractDuration: "2 Years",
-      lastWorkingDay: "2025-06-15",
-      daysLeft: 230,
       monthlyRate: 180000,
       marketRate: 280000,
       status: "active",
     },
     {
-      id: 3,
+      id: 5,
       name: "Rahul Verma",
       email: "rahul.v@innovations.com",
       onboardingDate: "2024-03-20",
       contractDuration: "1 Year",
-      lastWorkingDay: "2025-03-20",
-      daysLeft: 144,
       monthlyRate: 165000,
       marketRate: 270000,
-      status: "active",
-    },
-    {
-      id: 4,
-      name: "Sneha Patel",
-      email: "sneha.p@devstudio.com",
-      onboardingDate: "2024-02-10",
-      contractDuration: "18 Months",
-      lastWorkingDay: "2025-08-10",
-      daysLeft: 286,
-      monthlyRate: 140000,
-      marketRate: 240000,
       status: "active",
     },
   ];
 
   const mockInactiveTalents = [
     {
-      id: 5,
+      id: 6,
       name: "Amit Kumar",
       email: "amit.k@pastproject.com",
       onboardingDate: "2022-05-10",
       contractDuration: "1 Year",
-      lastWorkingDay: "2023-05-10",
-      daysLeft: -600,
       monthlyRate: 120000,
       marketRate: 220000,
       status: "inactive",
     },
     {
-      id: 6,
+      id: 7,
       name: "Neha Singh",
       email: "neha.singh@oldclient.com",
       onboardingDate: "2021-08-15",
       contractDuration: "2 Years",
-      lastWorkingDay: "2023-08-15",
-      daysLeft: -503,
       monthlyRate: 135000,
       marketRate: 235000,
       status: "inactive",
@@ -97,18 +95,12 @@ const HiredTalents = () => {
     console.log(`${action} for talent:`, record);
   };
 
-  const getDaysLeftClass = (days) => {
-    if (days < 0) return "inactive";
-    if (days <= 30) return "critical";
-    if (days <= 90) return "warning";
-    return "safe";
-  };
-
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      width: "18%",
       render: (text) => (
         <a href="#" className="talent-name">
           {text}
@@ -116,77 +108,90 @@ const HiredTalents = () => {
       ),
     },
     {
+      title: "Onboarded Date",
+      dataIndex: "onboardingDate",
+      key: "onboardingDate",
+      width: "15%",
+      render: (date) => (
+        <span className="date-text">
+          {new Date(date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </span>
+      ),
+    },
+    {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      width: "22%",
+      render: (email) => <span className="email-text">{email}</span>,
     },
     {
-      title: "Onboarding Date",
-      dataIndex: "onboardingDate",
-      key: "onboardingDate",
-      render: (date) => new Date(date).toLocaleDateString("en-GB"),
-    },
-    {
-      title: "Contract Duration",
+      title: "Duration",
       dataIndex: "contractDuration",
       key: "contractDuration",
-    },
-    {
-      title: "Last Working Day",
-      dataIndex: "lastWorkingDay",
-      key: "lastWorkingDay",
-      render: (date) => new Date(date).toLocaleDateString("en-GB"),
-    },
-    {
-      title: "Days Left",
-      dataIndex: "daysLeft",
-      key: "daysLeft",
-      render: (days) => (
-        <span className={`days-left ${getDaysLeftClass(days)}`}>
-          {days < 0 ? "Completed" : `${days} days`}
-        </span>
-      ),
+      width: "12%",
+      render: (duration) => <span className="duration-text">{duration}</span>,
     },
     {
       title: "Monthly Rate",
       dataIndex: "monthlyRate",
       key: "monthlyRate",
-      render: (rate) => `₹${rate.toLocaleString("en-IN")}`,
+      width: "13%",
+      render: (rate) => (
+        <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
+      ),
     },
     {
       title: "Market Rate",
       dataIndex: "marketRate",
       key: "marketRate",
-      render: (rate) => `₹${rate.toLocaleString("en-IN")}`,
+      width: "13%",
+      render: (rate) => (
+        <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
+      ),
     },
     {
       title: "Action",
       key: "action",
-      width: 120,
+      width: "7%",
+      align: "center",
       render: (_, record) => (
         <div className="action-buttons">
-          <button className="icon-button" title="Notifications">
+          <button
+            className="icon-button notification-btn"
+            title="Notifications"
+          >
             <BellOutlined />
           </button>
-          <Dropdown menu={{ items: [
-            {
-              key: 'renew',
-              label: 'Renew Contract',
-              onClick: () => handleMenuClick("Renew Contract", record)
-            },
-            {
-              key: 'issue',
-              label: 'Raise Issue',
-              onClick: () => handleMenuClick("Raise Issue", record)
-            },
-            {
-              key: 'terminate',
-              label: 'Initiate Termination',
-              onClick: () => handleMenuClick("Initiate Termination", record),
-              danger: true
-            }
-          ]}} trigger={["click"]}>
-            <button className="icon-button">
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  key: "renew",
+                  label: "Renew Contract",
+                  onClick: () => handleMenuClick("Renew Contract", record),
+                },
+                {
+                  key: "issue",
+                  label: "Raise Issue",
+                  onClick: () => handleMenuClick("Raise Issue", record),
+                },
+                {
+                  key: "terminate",
+                  label: "Initiate Termination",
+                  onClick: () =>
+                    handleMenuClick("Initiate Termination", record),
+                  danger: true,
+                },
+              ],
+            }}
+            trigger={["click"]}
+          >
+            <button className="icon-button menu-btn">
               <MoreOutlined />
             </button>
           </Dropdown>
@@ -220,6 +225,7 @@ const HiredTalents = () => {
             rowKey="id"
             pagination={{
               pageSize: 10,
+              showSizeChanger: false,
               showTotal: (total) => `Total ${total} talents`,
             }}
           />
