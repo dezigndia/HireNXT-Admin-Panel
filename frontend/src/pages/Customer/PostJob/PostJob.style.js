@@ -1,163 +1,189 @@
 import styled from "styled-components";
 
 export const PostJobWrapper = styled.div`
-  padding: 0;
   background: #f5f5f5;
   min-height: 100vh;
 
   .post-job-header {
-    padding: 24px 24px 16px;
+    padding: 24px 40px;
     background: white;
-    margin-bottom: 0;
+    border-bottom: 1px solid #e8e8e8;
 
     h2 {
       font-size: 24px;
       font-weight: 600;
-      color: #333;
+      color: #1a1a1a;
       margin: 0;
     }
   }
 
   .steps-container {
-    margin-bottom: 0;
     background: white;
-    padding: 16px 24px 24px;
-    border-radius: 0;
-    border-bottom: 1px solid #f0f0f0;
+    padding: 32px 40px 24px;
+    border-bottom: 1px solid #e8e8e8;
 
-    .ant-steps {
-      max-width: 800px;
+    .ant-steps-item {
+      padding: 0;
+    }
+
+    .ant-steps-item-icon {
+      width: 36px;
+      height: 36px;
+      line-height: 36px;
+      font-size: 14px;
+      font-weight: 600;
       margin: 0 auto;
     }
 
+    .ant-steps-item-wait .ant-steps-item-icon {
+      background-color: #f5f5f5;
+      border-color: #d9d9d9;
+      
+      .ant-steps-icon {
+        color: #999;
+      }
+    }
+
     .ant-steps-item-process .ant-steps-item-icon {
-      background-color: #00bfa5;
-      border-color: #00bfa5;
+      background-color: #26c6b8;
+      border-color: #26c6b8;
+      
+      .ant-steps-icon {
+        color: white;
+      }
     }
 
     .ant-steps-item-finish .ant-steps-item-icon {
-      background-color: #00bfa5;
-      border-color: #00bfa5;
+      background-color: #26c6b8;
+      border-color: #26c6b8;
+      
+      .ant-steps-icon {
+        color: white;
+      }
     }
 
-    .ant-steps-item-finish
-      > .ant-steps-item-container
-      > .ant-steps-item-tail::after {
-      background-color: #00bfa5;
+    .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
+      background-color: #26c6b8;
+    }
+
+    .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-tail::after {
+      background-color: #d9d9d9;
     }
 
     .ant-steps-item-title {
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 32px;
+      color: #595959;
+    }
+
+    .ant-steps-item-process .ant-steps-item-title {
+      color: #1a1a1a;
+      font-weight: 600;
+    }
+
+    .ant-steps-item-finish .ant-steps-item-title {
+      color: #1a1a1a;
     }
   }
 
   .form-card {
     background: white;
-    padding: 40px 24px 24px;
-    border-radius: 0;
-    box-shadow: none;
-    max-width: 1000px;
-    margin: 0 auto;
+    padding: 40px;
+    margin: 24px 40px;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 
     .ant-form-item {
       margin-bottom: 24px;
     }
 
     .ant-form-item-label {
-      padding-bottom: 6px;
-    }
+      padding-bottom: 8px;
 
-    .ant-form-item-label > label {
-      font-weight: 500;
-      color: #333;
-      font-size: 14px;
-      height: auto;
-    }
+      > label {
+        font-size: 13px;
+        font-weight: 500;
+        color: #262626;
+        height: auto;
 
-    .ant-form-item-label
+        &::after {
+          display: none;
+        }
+      }
+
       > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
-      color: #ff4d4f;
+        color: #ff4d4f;
+        margin-right: 4px;
+      }
     }
 
     .ant-input,
     .ant-select-selector,
-    .ant-input-number,
-    .ant-picker {
-      border-radius: 6px;
-      font-size: 14px;
+    .ant-input-number-input {
+      font-size: 13px;
+      color: #595959;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      padding: 8px 12px;
+
+      &::placeholder {
+        color: #bfbfbf;
+      }
+
+      &:hover {
+        border-color: #40a9ff;
+      }
+
+      &:focus,
+      &:focus-within {
+        border-color: #40a9ff;
+        box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.1);
+      }
+    }
+
+    .ant-select-selector {
+      height: 40px !important;
+      padding: 4px 12px !important;
+    }
+
+    .ant-select-selection-search-input {
+      height: 38px !important;
+    }
+
+    .ant-select-selection-item,
+    .ant-select-selection-placeholder {
+      line-height: 38px !important;
+      font-size: 13px;
     }
 
     .ant-input-number {
       width: 100%;
-    }
+      border-radius: 4px;
 
-    .helper-text {
-      font-size: 12px;
-      color: #999;
-      margin-top: 4px;
+      .ant-input-number-input {
+        height: 38px;
+        padding: 8px 12px;
+      }
     }
 
     .skill-row {
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 16px;
+      margin-bottom: 16px;
 
       .ant-form-item {
-        flex: 1;
-        margin-bottom: 16px;
-      }
-
-      .expertise-select {
-        width: 150px;
-        flex: none;
-      }
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 40px;
-      padding-top: 24px;
-      border-top: 1px solid #f0f0f0;
-
-      .ant-btn {
-        min-width: 120px;
-        height: 40px;
-        font-weight: 500;
-        border-radius: 6px;
-      }
-
-      .ant-btn-primary {
-        background-color: #004a7c;
-        border-color: #004a7c;
-
-        &:hover {
-          background-color: #003a5d;
-          border-color: #003a5d;
-        }
+        margin-bottom: 0;
       }
     }
 
     .two-column-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
 
       @media (max-width: 768px) {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .three-column-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-
-      @media (max-width: 992px) {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      @media (max-width: 576px) {
         grid-template-columns: 1fr;
       }
     }
@@ -165,7 +191,7 @@ export const PostJobWrapper = styled.div`
     .four-column-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 20px;
+      gap: 24px;
 
       @media (max-width: 1200px) {
         grid-template-columns: repeat(2, 1fr);
@@ -176,21 +202,41 @@ export const PostJobWrapper = styled.div`
       }
     }
 
-    .budget-input-group {
+    .form-actions {
       display: flex;
-      gap: 8px;
+      gap: 12px;
+      margin-top: 32px;
+      padding-top: 0;
+      border-top: none;
 
-      .ant-form-item {
-        margin-bottom: 0;
+      .ant-btn {
+        height: 40px;
+        padding: 0 32px;
+        font-size: 14px;
+        font-weight: 500;
+        border-radius: 4px;
       }
 
-      .budget-input {
-        flex: 1;
+      .ant-btn-default {
+        color: #595959;
+        border-color: #d9d9d9;
+        background: white;
+
+        &:hover {
+          color: #40a9ff;
+          border-color: #40a9ff;
+        }
       }
 
-      .budget-suffix {
-        width: 120px;
-        flex: none;
+      .ant-btn-primary {
+        background-color: #004a7c;
+        border-color: #004a7c;
+        color: white;
+
+        &:hover {
+          background-color: #003a63;
+          border-color: #003a63;
+        }
       }
     }
 
@@ -198,14 +244,14 @@ export const PostJobWrapper = styled.div`
       .quill {
         background: white;
         border: 1px solid #d9d9d9;
-        border-radius: 6px;
+        border-radius: 4px;
 
         .ql-toolbar {
           border: none;
           border-bottom: 1px solid #f0f0f0;
           background: #fafafa;
-          border-radius: 6px 6px 0 0;
-          padding: 12px;
+          border-radius: 4px 4px 0 0;
+          padding: 8px;
         }
 
         .ql-container {
@@ -213,18 +259,19 @@ export const PostJobWrapper = styled.div`
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
             "Helvetica Neue", Arial;
           font-size: 14px;
-          min-height: 250px;
+          min-height: 200px;
         }
 
         .ql-editor {
-          min-height: 250px;
-          padding: 16px;
+          min-height: 200px;
+          padding: 12px;
+          font-size: 13px;
         }
 
         .ql-editor.ql-blank::before {
           color: #bfbfbf;
           font-style: normal;
-          padding: 16px;
+          left: 12px;
         }
       }
     }

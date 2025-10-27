@@ -65,7 +65,6 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             placeholder="Enter your price"
             style={{ width: "100%" }}
             min={0}
-            size="large"
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
@@ -74,7 +73,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
         </Form.Item>
 
         <Form.Item name="budgetPeriod" label=" " initialValue="Per/month">
-          <Select size="large">
+          <Select>
             <Option value="Per/month">Per/month</Option>
             <Option value="Per/hour">Per/hour</Option>
             <Option value="Fixed Price">Fixed Price</Option>
@@ -86,7 +85,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           label="Reporting Location"
           rules={[{ required: true, message: "Please select location" }]}
         >
-          <Select placeholder="e.g. Chennai, Tamilnadu, Kolkata" showSearch size="large">
+          <Select placeholder="e.g. Chennai, Tamilnadu, Kolkata" showSearch>
             {locationOptions.map((location) => (
               <Option key={location} value={location}>
                 {location}
@@ -108,7 +107,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             { required: true, message: "Please select engagement period" },
           ]}
         >
-          <Select placeholder="3 Months" size="large">
+          <Select placeholder="3 Months">
             {engagementMonths.map((month) => (
               <Option key={month} value={month}>
                 {month}
@@ -122,7 +121,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           label="Engagement Type"
           rules={[{ required: true, message: "Please select type" }]}
         >
-          <Select placeholder="Full-Time Contract" size="large">
+          <Select placeholder="Full-Time Contract">
             {engagementTypes.map((type) => (
               <Option key={type} value={type}>
                 {type}
@@ -140,12 +139,11 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             placeholder="Enter your price"
             style={{ width: "100%" }}
             min={1}
-            size="large"
           />
         </Form.Item>
 
         <Form.Item name="numberOfRequirementsPeriod" label=" " initialValue="Per/month">
-          <Select size="large">
+          <Select>
             <Option value="Per/month">Per/month</Option>
             <Option value="Total">Total</Option>
           </Select>
@@ -161,7 +159,6 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           <Input
             type="date"
             placeholder="e.g. Chennai, Tamilnadu, Kolkata"
-            size="large"
           />
         </Form.Item>
         <Form.Item
@@ -171,7 +168,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             { required: true, message: "Please select communication level" },
           ]}
         >
-          <Select placeholder="Excellent" size="large">
+          <Select placeholder="Excellent">
             {communicationLevels.map((level) => (
               <Option key={level} value={level}>
                 {level}
@@ -195,15 +192,14 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           placeholder="Enter client expectations"
           showCount
           maxLength={500}
-          size="large"
         />
       </Form.Item>
 
       <div className="form-actions">
-        <Button size="large" onClick={onBack}>
+        <Button onClick={onBack}>
           Back
         </Button>
-        <Button type="primary" htmlType="submit" size="large">
+        <Button type="primary" htmlType="submit">
           Save & Next
         </Button>
       </div>

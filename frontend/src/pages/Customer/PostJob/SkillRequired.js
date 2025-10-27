@@ -1,9 +1,9 @@
 import React from "react";
-import { Form, Select, Button, Row, Col } from "antd";
+import { Form, Select, Button } from "antd";
 
 const { Option } = Select;
 
-const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
+const SkillRequired = ({ initialData, onNext }) => {
   const [form] = Form.useForm();
 
   const handleSubmit = (values) => {
@@ -83,7 +83,6 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
           <Select
             placeholder="Search Developer Role"
             showSearch
-            size="large"
             filterOption={(input, option) =>
               (option?.children || "").toLowerCase().indexOf(input.toLowerCase()) >= 0
             }
@@ -95,6 +94,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             ))}
           </Select>
         </Form.Item>
+        
         <Form.Item
           name="experienceRange"
           label="Relevant Experience Range"
@@ -102,7 +102,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             { required: true, message: "Please select experience range" },
           ]}
         >
-          <Select placeholder="1-2 Years" size="large">
+          <Select placeholder="1-2 Years">
             {experienceRanges.map((range) => (
               <Option key={range} value={range}>
                 {range}
@@ -121,7 +121,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             ]}
             noStyle
           >
-            <Select placeholder="Select primary skill : 1" showSearch size="large">
+            <Select placeholder="Select primary skill : 1" showSearch>
               {skillOptions.map((skill) => (
                 <Option key={skill} value={skill}>
                   {skill}
@@ -134,7 +134,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             rules={[{ required: true, message: "Select level" }]}
             noStyle
           >
-            <Select placeholder="Expert" className="expertise-select" size="large">
+            <Select placeholder="Expert">
               {expertiseLevels.map((level) => (
                 <Option key={level} value={level}>
                   {level}
@@ -146,7 +146,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
 
         <div className="skill-row">
           <Form.Item name={["primarySkills", 1, "skill"]} noStyle>
-            <Select placeholder="Select primary skill : 2" showSearch size="large">
+            <Select placeholder="Select primary skill : 2" showSearch>
               {skillOptions.map((skill) => (
                 <Option key={skill} value={skill}>
                   {skill}
@@ -155,7 +155,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             </Select>
           </Form.Item>
           <Form.Item name={["primarySkills", 1, "level"]} noStyle>
-            <Select placeholder="Expert" className="expertise-select" size="large">
+            <Select placeholder="Expert">
               {expertiseLevels.map((level) => (
                 <Option key={level} value={level}>
                   {level}
@@ -174,11 +174,10 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
         ]}
       >
         <Select
-          mode="multiple"
+          mode="tags"
           placeholder="Select secondary skills"
           showSearch
           allowClear
-          size="large"
         >
           {skillOptions.map((skill) => (
             <Option key={skill} value={skill}>
@@ -189,7 +188,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
       </Form.Item>
 
       <div className="form-actions">
-        <Button type="primary" htmlType="submit" size="large">
+        <Button type="primary" htmlType="submit">
           Save & Next
         </Button>
       </div>
