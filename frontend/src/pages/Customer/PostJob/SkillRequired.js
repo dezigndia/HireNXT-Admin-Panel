@@ -74,46 +74,43 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
       onFinish={handleSubmit}
       initialValues={initialData}
     >
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="role"
-            label="Role"
-            rules={[{ required: true, message: "Please select a role" }]}
+      <div className="two-column-grid">
+        <Form.Item
+          name="role"
+          label="Role"
+          rules={[{ required: true, message: "Please select a role" }]}
+        >
+          <Select
+            placeholder="Search Developer Role"
+            showSearch
+            size="large"
+            filterOption={(input, option) =>
+              (option?.children || "").toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
           >
-            <Select
-              placeholder="Search Developer Role"
-              showSearch
-              filterOption={(input, option) =>
-                (option?.children || "").toLowerCase().indexOf(input.toLowerCase()) >= 0
-              }
-            >
-              {roleOptions.map((role) => (
-                <Option key={role} value={role}>
-                  {role}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="experienceRange"
-            label="Relevant Experience Range"
-            rules={[
-              { required: true, message: "Please select experience range" },
-            ]}
-          >
-            <Select placeholder="1-2 Years">
-              {experienceRanges.map((range) => (
-                <Option key={range} value={range}>
-                  {range}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row>
+            {roleOptions.map((role) => (
+              <Option key={role} value={role}>
+                {role}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="experienceRange"
+          label="Relevant Experience Range"
+          rules={[
+            { required: true, message: "Please select experience range" },
+          ]}
+        >
+          <Select placeholder="1-2 Years" size="large">
+            {experienceRanges.map((range) => (
+              <Option key={range} value={range}>
+                {range}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </div>
 
       <Form.Item label="Primary Skills" required>
         <div className="skill-row">
@@ -124,7 +121,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             ]}
             noStyle
           >
-            <Select placeholder="Select primary skill : 1" showSearch>
+            <Select placeholder="Select primary skill : 1" showSearch size="large">
               {skillOptions.map((skill) => (
                 <Option key={skill} value={skill}>
                   {skill}
@@ -137,7 +134,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             rules={[{ required: true, message: "Select level" }]}
             noStyle
           >
-            <Select placeholder="Expert" className="expertise-select">
+            <Select placeholder="Expert" className="expertise-select" size="large">
               {expertiseLevels.map((level) => (
                 <Option key={level} value={level}>
                   {level}
@@ -149,7 +146,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
 
         <div className="skill-row">
           <Form.Item name={["primarySkills", 1, "skill"]} noStyle>
-            <Select placeholder="Select primary skill : 2" showSearch>
+            <Select placeholder="Select primary skill : 2" showSearch size="large">
               {skillOptions.map((skill) => (
                 <Option key={skill} value={skill}>
                   {skill}
@@ -158,7 +155,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
             </Select>
           </Form.Item>
           <Form.Item name={["primarySkills", 1, "level"]} noStyle>
-            <Select placeholder="Expert" className="expertise-select">
+            <Select placeholder="Expert" className="expertise-select" size="large">
               {expertiseLevels.map((level) => (
                 <Option key={level} value={level}>
                   {level}
@@ -181,6 +178,7 @@ const SkillRequired = ({ initialData, onNext, isFirstStep }) => {
           placeholder="Select secondary skills"
           showSearch
           allowClear
+          size="large"
         >
           {skillOptions.map((skill) => (
             <Option key={skill} value={skill}>

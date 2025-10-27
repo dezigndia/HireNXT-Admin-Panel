@@ -52,7 +52,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
       form={form}
       layout="vertical"
       onFinish={handleSubmit}
-      initialValues={initialData}
+      initialValues={{ ...initialData, budgetPeriod: "Per/month", numberOfRequirementsPeriod: "Per/month" }}
     >
       <div className="four-column-grid">
         <Form.Item
@@ -65,6 +65,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             placeholder="Enter your price"
             style={{ width: "100%" }}
             min={0}
+            size="large"
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
@@ -72,8 +73,8 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           />
         </Form.Item>
 
-        <Form.Item name="budgetPeriod" label=" ">
-          <Select>
+        <Form.Item name="budgetPeriod" label=" " initialValue="Per/month">
+          <Select size="large">
             <Option value="Per/month">Per/month</Option>
             <Option value="Per/hour">Per/hour</Option>
             <Option value="Fixed Price">Fixed Price</Option>
@@ -85,7 +86,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           label="Reporting Location"
           rules={[{ required: true, message: "Please select location" }]}
         >
-          <Select placeholder="e.g. Chennai, Tamilnadu, Kolkata" showSearch>
+          <Select placeholder="e.g. Chennai, Tamilnadu, Kolkata" showSearch size="large">
             {locationOptions.map((location) => (
               <Option key={location} value={location}>
                 {location}
@@ -95,7 +96,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
         </Form.Item>
 
         <Form.Item name="worldwide" valuePropName="checked" label=" ">
-          <Checkbox>Worldwide</Checkbox>
+          <Checkbox style={{ marginTop: '8px' }}>Worldwide</Checkbox>
         </Form.Item>
       </div>
 
@@ -107,7 +108,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             { required: true, message: "Please select engagement period" },
           ]}
         >
-          <Select placeholder="3 Months">
+          <Select placeholder="3 Months" size="large">
             {engagementMonths.map((month) => (
               <Option key={month} value={month}>
                 {month}
@@ -121,7 +122,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           label="Engagement Type"
           rules={[{ required: true, message: "Please select type" }]}
         >
-          <Select placeholder="Full-Time Contract">
+          <Select placeholder="Full-Time Contract" size="large">
             {engagementTypes.map((type) => (
               <Option key={type} value={type}>
                 {type}
@@ -139,48 +140,46 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             placeholder="Enter your price"
             style={{ width: "100%" }}
             min={1}
+            size="large"
           />
         </Form.Item>
 
-        <Form.Item name="numberOfRequirementsPeriod" label=" ">
-          <Select>
+        <Form.Item name="numberOfRequirementsPeriod" label=" " initialValue="Per/month">
+          <Select size="large">
             <Option value="Per/month">Per/month</Option>
             <Option value="Total">Total</Option>
           </Select>
         </Form.Item>
       </div>
 
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="tentativeStartDate"
-            label="Tentative Start Date"
-            rules={[{ required: true, message: "Please enter start date" }]}
-          >
-            <Input
-              type="date"
-              placeholder="e.g. Chennai, Tamilnadu, Kolkata"
-            />
-          </Form.Item>
-        </Col>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="communication"
-            label="Communication (EN)"
-            rules={[
-              { required: true, message: "Please select communication level" },
-            ]}
-          >
-            <Select placeholder="Excellent">
-              {communicationLevels.map((level) => (
-                <Option key={level} value={level}>
-                  {level}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row>
+      <div className="two-column-grid">
+        <Form.Item
+          name="tentativeStartDate"
+          label="Tentative Start Date"
+          rules={[{ required: true, message: "Please enter start date" }]}
+        >
+          <Input
+            type="date"
+            placeholder="e.g. Chennai, Tamilnadu, Kolkata"
+            size="large"
+          />
+        </Form.Item>
+        <Form.Item
+          name="communication"
+          label="Communication (EN)"
+          rules={[
+            { required: true, message: "Please select communication level" },
+          ]}
+        >
+          <Select placeholder="Excellent" size="large">
+            {communicationLevels.map((level) => (
+              <Option key={level} value={level}>
+                {level}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </div>
 
       <Form.Item
         name="expectations"
@@ -196,6 +195,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
           placeholder="Enter client expectations"
           showCount
           maxLength={500}
+          size="large"
         />
       </Form.Item>
 

@@ -63,7 +63,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Working time"
           rules={[{ required: true, message: "Please select timezone" }]}
         >
-          <Select placeholder="Select Working time-zone" showSearch>
+          <Select placeholder="Select Working time-zone" showSearch size="large">
             {workingTimeZones.map((zone) => (
               <Option key={zone} value={zone}>
                 {zone}
@@ -82,6 +82,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
             style={{ width: "100%" }}
             min={1}
             max={168}
+            size="large"
           />
         </Form.Item>
 
@@ -90,7 +91,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Travel Preference"
           rules={[{ required: true, message: "Please select preference" }]}
         >
-          <Select placeholder="Remote">
+          <Select placeholder="Remote" size="large">
             {travelPreferences.map((pref) => (
               <Option key={pref} value={pref}>
                 {pref}
@@ -104,7 +105,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Do you provide System"
           rules={[{ required: true, message: "Please select option" }]}
         >
-          <Select placeholder="Not Specified">
+          <Select placeholder="Not Specified" size="large">
             {systemProvision.map((option) => (
               <Option key={option} value={option}>
                 {option}
@@ -114,23 +115,21 @@ const Preferences = ({ initialData, onNext, onBack }) => {
         </Form.Item>
       </div>
 
-      <Row gutter={16}>
-        <Col xs={24} md={12}>
-          <Form.Item
-            name="toolsUsed"
-            label="Tools Used to Manage"
-            rules={[{ required: true, message: "Please select tools" }]}
-          >
-            <Select placeholder="Agile Practice" showSearch>
-              {toolsOptions.map((tool) => (
-                <Option key={tool} value={tool}>
-                  {tool}
-                </Option>
-              ))}
-            </Select>
-          </Form.Item>
-        </Col>
-      </Row>
+      <div className="two-column-grid">
+        <Form.Item
+          name="toolsUsed"
+          label="Tools Used to Manage"
+          rules={[{ required: true, message: "Please select tools" }]}
+        >
+          <Select placeholder="Agile Practice" showSearch size="large">
+            {toolsOptions.map((tool) => (
+              <Option key={tool} value={tool}>
+                {tool}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
+      </div>
 
       <div className="form-actions">
         <Button size="large" onClick={onBack}>

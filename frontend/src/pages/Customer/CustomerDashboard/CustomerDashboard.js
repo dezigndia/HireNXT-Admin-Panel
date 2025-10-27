@@ -34,11 +34,6 @@ const sideBarMenu = [
     icon: <FileDoneOutlined />,
   },
   {
-    key: "/customer/post-job",
-    label: "Job Briefs",
-    icon: <FileDoneOutlined />,
-  },
-  {
     key: "/customer/submitted-profiles",
     label: "Submitted Profiles",
     icon: <AuditOutlined />,
@@ -85,7 +80,7 @@ const CustomerDashboard = () => {
     const path = location.pathname;
     if (path === "/customer" || path === "/customer/") return "/customer";
     if (path.startsWith("/customer/find-talents")) return "/customer/find-talents";
-    if (path.startsWith("/customer/post-job")) return "/customer/post-job";
+    if (path.startsWith("/customer/post-job")) return "/customer/my-jobs";
     if (path.startsWith("/customer/my-jobs")) return "/customer/my-jobs";
     if (path.startsWith("/customer/submitted-profiles")) return "/customer/submitted-profiles";
     if (path.startsWith("/customer/hired-talents")) return "/customer/hired-talents";

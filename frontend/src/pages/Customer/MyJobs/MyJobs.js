@@ -116,7 +116,12 @@ const MyJobs = () => {
     <MyJobsWrapper>
       <div className="header">
         <h2>Job Briefs</h2>
-        <Button type="primary" icon={<PlusOutlined />} className="post-job-btn">
+        <Button 
+          type="primary" 
+          icon={<PlusOutlined />} 
+          className="post-job-btn"
+          onClick={() => navigate("/customer/post-job")}
+        >
           Post Job
         </Button>
       </div>
