@@ -47,8 +47,16 @@ const Login = () => {
         // Handle success (e.g., store authentication token)
         console.log("Login successful:", data);
         localStorage.setItem("authToken", data.token);
-        // Redirect to home page after successful login
-        navigate("/home");
+        
+        // Role-based routing
+        const userRole = data.user?.role || "admin";
+        if (userRole === "customer") {
+          navigate("/customer");
+        } else if (userRole === "partner") {
+          navigate("/partner");
+        } else {
+          navigate("/home");
+        }
       } else {
         // Handle error response (invalid credentials, etc.)
         setError(data.message || "Login failed");
