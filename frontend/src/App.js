@@ -4,6 +4,7 @@ import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import { ConfigProvider } from "antd";
 import PartnerDashboard from "./pages/Partner/PartnerDashboard/PartnerDashboard";
+import CustomerDashboard from "./pages/Customer/CustomerDashboard/CustomerDashboard";
 
 function App() {
   return (
@@ -22,8 +23,9 @@ function App() {
           <Route path="/" element={<Login />} />
           {/* <Route path="/home" element={<ProtectedRoute element={<Dashboard />} />} /> */}
           <Route path="/home/*" element={<Dashboard />} />
-          <Route path="/*" element={<Login />} />
           <Route path="/partner/*" element={<PartnerDashboard />} />
+          <Route path="/customer/*" element={<CustomerDashboard />} />
+          <Route path="/*" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </ConfigProvider>
