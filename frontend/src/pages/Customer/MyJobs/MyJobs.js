@@ -3,7 +3,7 @@ import { Card, Button, Tag, Row, Col, Dropdown, Menu, Segmented } from "antd";
 import {
   MoreOutlined,
   PlusOutlined,
-  BriefcaseOutlined,
+  FileTextOutlined,
   UserOutlined,
   CheckCircleOutlined,
   EditOutlined,
@@ -124,7 +124,7 @@ const MyJobs = () => {
           <Card className="metric-card" hoverable>
             <div className="metric-content">
               <div className="metric-icon" style={{ background: "#e6f7ff" }}>
-                <BriefcaseOutlined style={{ color: "#1890ff", fontSize: 24 }} />
+                <FileTextOutlined style={{ color: "#1890ff", fontSize: 24 }} />
               </div>
               <div className="metric-info">
                 <h3 className="metric-value">{ongoingCount}</h3>
