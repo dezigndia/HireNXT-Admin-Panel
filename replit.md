@@ -68,6 +68,31 @@ This is a React-based admin panel for the HireNXT platform. The application mana
   - Added 8 mock talent profiles with diverse roles and skills
   - Files: `src/pages/Customer/FindTalents/*`
 
+- **2025-10-27**: My Jobs Redesign (Card-Based Layout)
+  - **Redesigned My Jobs section** from table to card-based layout matching design reference
+  - **Added Metrics Cards** displaying:
+    * Job Live (count of ongoing jobs)
+    * Profile Received (total submitted profiles across all jobs)
+    * Talent Hired (total hired count)
+  - **Implemented Filter Tabs** using Ant Design Segmented component:
+    * All Jobs
+    * Ongoing Job (with dynamic count)
+    * Closed Job (with dynamic count)
+  - **Created Job Cards** showing:
+    * Job ID and title (styled as clickable link)
+    * Job type, location tags, and experience requirement
+    * Stats section: Submitted Profiles, Interviewing, Rejected (red), Hired (green)
+    * Posted date
+    * Action menu with Edit Job and Close Job options
+  - **Functional Features**:
+    * Filter tabs work correctly (All/Ongoing/Closed)
+    * Close Job action updates status dynamically
+    * Edit Job action (placeholder for future implementation)
+    * Metrics recalculate based on current job data
+  - **Mock Data**: 4 sample jobs (3 ongoing, 1 closed) with comprehensive fields
+  - **Responsive Design**: Mobile-friendly with proper breakpoints
+  - Files: `src/pages/Customer/MyJobs/MyJobs.js`, `src/pages/Customer/MyJobs/MyJobs.style.js`
+
 ## Features
 - User authentication and login with role-based routing
 - **Admin Dashboard** with multiple management sections:
@@ -85,7 +110,12 @@ This is a React-based admin panel for the HireNXT platform. The application mana
     * Advanced filters: Secondary Tech, Location, Work Mode
     * Responsive grid layout with talent cards
     * View Details and Schedule Interview actions
-  - My Jobs - view and manage job postings
+  - **My Jobs** - view and manage job postings
+    * Metrics cards showing Job Live, Profile Received, Talent Hired
+    * Filter tabs for All Jobs, Ongoing, and Closed jobs
+    * Card-based layout with job details and stats
+    * Action menu for Edit Job and Close Job
+    * Shows Submitted Profiles, Interviewing, Rejected, and Hired counts per job
   - Submitted Profiles - review talent profiles for jobs
   - Hero section with talent search
   - Quick actions for posting jobs and consultations
