@@ -11,14 +11,21 @@ import {
   LogoutOutlined,
   SettingOutlined,
   UserOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { CustomerDashboardWrapper } from "./CustomerDashboard.style";
 import CustomerOverview from "../CustomerOverview/CustomerOverview";
+import FindTalents from "../FindTalents/FindTalents";
 import MyJobs from "../MyJobs/MyJobs";
 import SubmittedProfiles from "../SubmittedProfiles/SubmittedProfiles";
 
 const sideBarMenu = [
   { key: "/customer", label: "Dashboard", icon: <DashboardOutlined /> },
+  {
+    key: "/customer/find-talents",
+    label: "Find Talents",
+    icon: <SearchOutlined />,
+  },
   {
     key: "/customer/my-jobs",
     label: "My Jobs",
@@ -70,6 +77,7 @@ const CustomerDashboard = () => {
   const getSelectedKey = () => {
     const path = location.pathname;
     if (path === "/customer" || path === "/customer/") return "/customer";
+    if (path.startsWith("/customer/find-talents")) return "/customer/find-talents";
     if (path.startsWith("/customer/my-jobs")) return "/customer/my-jobs";
     if (path.startsWith("/customer/submitted-profiles")) return "/customer/submitted-profiles";
     if (path.startsWith("/customer/hired-talents")) return "/customer/hired-talents";
@@ -132,6 +140,7 @@ const CustomerDashboard = () => {
           >
             <Routes>
               <Route path="*" element={<CustomerOverview />} />
+              <Route path="/find-talents" element={<FindTalents />} />
               <Route path="/my-jobs" element={<MyJobs />} />
               <Route path="/submitted-profiles" element={<SubmittedProfiles />} />
             </Routes>
