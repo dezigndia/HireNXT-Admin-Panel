@@ -63,7 +63,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Working time"
           rules={[{ required: true, message: "Please select timezone" }]}
         >
-          <Select placeholder="Select Working time-zone" showSearch size="large">
+          <Select placeholder="Select Working time-zone" showSearch>
             {workingTimeZones.map((zone) => (
               <Option key={zone} value={zone}>
                 {zone}
@@ -82,7 +82,6 @@ const Preferences = ({ initialData, onNext, onBack }) => {
             style={{ width: "100%" }}
             min={1}
             max={168}
-            size="large"
           />
         </Form.Item>
 
@@ -91,7 +90,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Travel Preference"
           rules={[{ required: true, message: "Please select preference" }]}
         >
-          <Select placeholder="Remote" size="large">
+          <Select placeholder="Remote">
             {travelPreferences.map((pref) => (
               <Option key={pref} value={pref}>
                 {pref}
@@ -105,7 +104,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Do you provide System"
           rules={[{ required: true, message: "Please select option" }]}
         >
-          <Select placeholder="Not Specified" size="large">
+          <Select placeholder="Not Specified">
             {systemProvision.map((option) => (
               <Option key={option} value={option}>
                 {option}
@@ -121,7 +120,7 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Tools Used to Manage"
           rules={[{ required: true, message: "Please select tools" }]}
         >
-          <Select placeholder="Agile Practice" showSearch size="large">
+          <Select placeholder="Agile Practice" showSearch>
             {toolsOptions.map((tool) => (
               <Option key={tool} value={tool}>
                 {tool}
@@ -132,10 +131,10 @@ const Preferences = ({ initialData, onNext, onBack }) => {
       </div>
 
       <div className="form-actions">
-        <Button size="large" onClick={onBack}>
+        <Button onClick={onBack}>
           Back
         </Button>
-        <Button type="primary" htmlType="submit" size="large">
+        <Button type="primary" htmlType="submit">
           Save & Next
         </Button>
       </div>

@@ -79,13 +79,13 @@ const JobResponsibilities = ({ initialData, onBack, onSubmit }) => {
       </Form.Item>
 
       <div className="form-actions">
-        <Button size="large" onClick={handleCancel}>
+        <Button onClick={handleCancel}>
           Cancel
         </Button>
-        <Button size="large" onClick={onBack}>
+        <Button onClick={onBack}>
           Back
         </Button>
-        <Button type="primary" htmlType="button" size="large" onClick={handleSubmit}>
+        <Button type="primary" htmlType="button" onClick={handleSubmit}>
           Post Job
         </Button>
       </div>
