@@ -36,15 +36,35 @@ This is a React-based admin panel for the HireNXT platform. The application mana
   - Environment-based toggle via `REACT_APP_USE_MOCK_AUTH` flag
   - Application is running successfully with mock auth enabled by default
 
+- **2025-10-27**: Customer Dashboard Implementation
+  - **Created complete Customer Dashboard** matching design reference
+  - Implemented CustomerDashboard with sidebar navigation (Dashboard, My Jobs, Submitted Profiles, Hired Talents)
+  - Built CustomerOverview with metrics cards, hero section, quick actions, and about sections
+  - Created MyJobs component for viewing and managing job postings
+  - Created SubmittedProfiles component with filtering and status management
+  - **Implemented role-based access control** with ProtectedRoute component
+  - Added role verification in CustomerDashboard with redirect for unauthorized users
+  - Enhanced Login to store userRole, userName in localStorage
+  - Fixed menu state highlighting with selectedKeys bound to current location
+  - Improved logout handling to clear all auth data (token, role, name)
+  - Added customer and partner mock users for testing
+  - Files: `src/pages/Customer/*`, `src/components/ProtectedRoute.js`
+
 ## Features
-- User authentication and login
-- Dashboard with multiple management sections:
+- User authentication and login with role-based routing
+- **Admin Dashboard** with multiple management sections:
   - User Management
   - Talent Profiles
   - Job Requirements
   - Approval Process
   - Role Permissions
-- Partner dashboard for viewing ongoing jobs and hired talents
+- **Partner Dashboard** for viewing ongoing jobs and hired talents
+- **Customer Dashboard** (New!) for job posting and talent hiring:
+  - Overview with metrics (Job Live, Interviews, Applications, Talents Hired)
+  - My Jobs - view and manage job postings
+  - Submitted Profiles - review talent profiles for jobs
+  - Hero section with talent search
+  - Quick actions for posting jobs and consultations
 
 ## API Endpoints
 The application connects to the following API endpoints (defined in `frontend/src/const.js`):
@@ -64,9 +84,10 @@ The application connects to the following API endpoints (defined in `frontend/sr
 - Mock authentication is currently **ENABLED** via `REACT_APP_USE_MOCK_AUTH=true`
 - Login works with dummy credentials without hitting the real API
 - Test credentials:
-  - Email: `sripadbal@gmail.com` | Password: `1234`
-  - Email: `admin@hirenxt.com` | Password: `admin123`
-  - Email: `user@hirenxt.com` | Password: `user123`
+  - **Admin**: `sripadbal@gmail.com` / `1234` or `admin@hirenxt.com` / `admin123`
+  - **User**: `user@hirenxt.com` / `user123`
+  - **Customer**: `customer@hirenxt.com` / `customer123`
+  - **Partner**: `partner@hirenxt.com` / `partner123`
 - Console displays orange warning: "⚠️ DEVELOPMENT MODE: Using mock authentication"
 - Files: `src/services/authService.js`, `src/mocks/mockUsers.js`
 
