@@ -156,7 +156,7 @@ This is a React-based admin panel for the HireNXT platform. The application mana
     * "Save & Next" to move forward, "Back" to review previous steps
     * Final "Post Job" submits and redirects to My Jobs
     * State persists across all steps
-  - **Navigation**: Added "Job Briefs" menu item to access Post Job page
+  - **Navigation**: Post Job accessed via "Post Job" button in My Jobs section (no separate menu item)
   - **Styling**: Professional form design matching HireNXT brand with responsive grid layouts
   - Files: `src/pages/Customer/PostJob/*`, `src/pages/Customer/CustomerDashboard/CustomerDashboard.js`
 
