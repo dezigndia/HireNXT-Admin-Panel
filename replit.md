@@ -124,6 +124,42 @@ This is a React-based admin panel for the HireNXT platform. The application mana
   - **Styling**: Professional card-based layout, color-coded metric icons, responsive table design
   - Files: `src/pages/Customer/JobDetails/*`, `src/pages/Customer/CustomerDashboard/CustomerDashboard.js`
 
+- **2025-10-27**: Post Job Feature (4-Step Form)
+  - **Created comprehensive Post Job wizard** with 4-step stepper interface
+  - **Step 1 - Skill Required**:
+    * Role selection (searchable dropdown)
+    * Relevant Experience Range (0-1 Years to 10+ Years)
+    * Primary Skills (2 skill slots with expertise levels: Expert, Advanced, Intermediate)
+    * Secondary Skills (multi-select tags)
+  - **Step 2 - Basic Details**:
+    * Budget (with Per/month, Per/hour, Fixed Price options)
+    * Reporting Location (with Worldwide checkbox)
+    * Month of Engagement (1-24 months)
+    * Engagement Type (Full-Time, Part-Time, Freelance, Permanent)
+    * Number of Requirements
+    * Tentative Start Date (date picker)
+    * Expectations (textarea with minimum 60 characters)
+    * Communication Level (Excellent, Good, Average, Basic)
+  - **Step 3 - Preferences**:
+    * Working Time Zone (IST, EST, PST, GMT, CST, JST, AEST)
+    * Working Hours per Week (number input)
+    * Travel Preference (Remote, Hybrid, On-site, etc.)
+    * System Provision (Laptop, Desktop, Both, Not Specified, No)
+    * Tools/Methodology (Agile, Scrum, Kanban, Jira, etc.)
+  - **Step 4 - Job Responsibilities**:
+    * Rich text editor (React Quill) with full formatting toolbar
+    * Bold, italic, underline, headers, lists, links, images
+    * Cancel and Post Job buttons
+  - **Features**:
+    * Step-by-step progress indicator at the top
+    * Form validation at each step before proceeding
+    * "Save & Next" to move forward, "Back" to review previous steps
+    * Final "Post Job" submits and redirects to My Jobs
+    * State persists across all steps
+  - **Navigation**: Added "Job Briefs" menu item to access Post Job page
+  - **Styling**: Professional form design matching HireNXT brand with responsive grid layouts
+  - Files: `src/pages/Customer/PostJob/*`, `src/pages/Customer/CustomerDashboard/CustomerDashboard.js`
+
 ## Features
 - User authentication and login with role-based routing
 - **Admin Dashboard** with multiple management sections:
@@ -155,6 +191,13 @@ This is a React-based admin panel for the HireNXT platform. The application mana
     * Action buttons: Schedule Interview, Download Resume, Hire, Reject
     * Real-time profile status updates
     * Back navigation to My Jobs list
+  - **Post Job (Job Briefs)** - 4-step wizard for posting new jobs
+    * Step 1: Skill Required - role, experience, primary/secondary skills
+    * Step 2: Basic Details - budget, location, engagement, expectations
+    * Step 3: Preferences - working hours, timezone, travel, tools
+    * Step 4: Job Responsibilities - rich text editor for detailed description
+    * Progress stepper, form validation, state management
+    * Navigates to My Jobs on successful submission
   - Submitted Profiles - review talent profiles for jobs
   - Hero section with talent search
   - Quick actions for posting jobs and consultations
