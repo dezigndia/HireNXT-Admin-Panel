@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Dropdown, Menu, Segmented, Tag, Empty } from "antd";
+import { Table, Dropdown, Segmented, Empty } from "antd";
 import { BellOutlined, MoreOutlined } from "@ant-design/icons";
 import {
   HiredTalentsContainer,
@@ -97,30 +97,6 @@ const HiredTalents = () => {
     console.log(`${action} for talent:`, record);
   };
 
-  const actionMenu = (record) => (
-    <Menu>
-      <Menu.Item
-        key="renew"
-        onClick={() => handleMenuClick("Renew Contract", record)}
-      >
-        Renew Contract
-      </Menu.Item>
-      <Menu.Item
-        key="issue"
-        onClick={() => handleMenuClick("Raise Issue", record)}
-      >
-        Raise Issue
-      </Menu.Item>
-      <Menu.Item
-        key="terminate"
-        onClick={() => handleMenuClick("Initiate Termination", record)}
-        danger
-      >
-        Initiate Termination
-      </Menu.Item>
-    </Menu>
-  );
-
   const getDaysLeftClass = (days) => {
     if (days < 0) return "inactive";
     if (days <= 30) return "critical";
@@ -192,7 +168,24 @@ const HiredTalents = () => {
           <button className="icon-button" title="Notifications">
             <BellOutlined />
           </button>
-          <Dropdown overlay={actionMenu(record)} trigger={["click"]}>
+          <Dropdown menu={{ items: [
+            {
+              key: 'renew',
+              label: 'Renew Contract',
+              onClick: () => handleMenuClick("Renew Contract", record)
+            },
+            {
+              key: 'issue',
+              label: 'Raise Issue',
+              onClick: () => handleMenuClick("Raise Issue", record)
+            },
+            {
+              key: 'terminate',
+              label: 'Initiate Termination',
+              onClick: () => handleMenuClick("Initiate Termination", record),
+              danger: true
+            }
+          ]}} trigger={["click"]}>
             <button className="icon-button">
               <MoreOutlined />
             </button>
