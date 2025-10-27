@@ -1,8 +1,8 @@
 import { Layout, Menu } from "antd";
 import { Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
-import React from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import Logo from "./../../../assets/logo.svg";
 import {
   DashboardOutlined,
@@ -43,14 +43,37 @@ const sideBarMenu2 = [
 
 const CustomerDashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    const userRole = localStorage.getItem("userRole");
+    
+    if (!token || userRole !== "customer") {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
 
   const handleClick = (e) => {
     if (e.key === 12) {
       localStorage.removeItem("authToken");
-      navigate("/");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      navigate("/", { replace: true });
+    } else if (e.key === 11) {
+      navigate("/customer/settings");
     } else {
       navigate(e.key);
     }
+  };
+
+  const getSelectedKey = () => {
+    const path = location.pathname;
+    if (path === "/customer" || path === "/customer/") return "/customer";
+    if (path.startsWith("/customer/my-jobs")) return "/customer/my-jobs";
+    if (path.startsWith("/customer/submitted-profiles")) return "/customer/submitted-profiles";
+    if (path.startsWith("/customer/hired-talents")) return "/customer/hired-talents";
+    return "/customer";
   };
 
   return (
@@ -83,8 +106,7 @@ const CustomerDashboard = () => {
           >
             <Menu
               mode="inline"
-              defaultSelectedKeys={["1"]}
-              defaultOpenKeys={["sub1"]}
+              selectedKeys={[getSelectedKey()]}
               style={{
                 borderRight: 0,
               }}

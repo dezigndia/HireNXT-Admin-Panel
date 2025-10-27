@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import { ConfigProvider } from "antd";
 import PartnerDashboard from "./pages/Partner/PartnerDashboard/PartnerDashboard";
 import CustomerDashboard from "./pages/Customer/CustomerDashboard/CustomerDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -23,8 +24,8 @@ function App() {
           <Route path="/" element={<Login />} />
           {/* <Route path="/home" element={<ProtectedRoute element={<Dashboard />} />} /> */}
           <Route path="/home/*" element={<Dashboard />} />
-          <Route path="/partner/*" element={<PartnerDashboard />} />
-          <Route path="/customer/*" element={<CustomerDashboard />} />
+          <Route path="/partner/*" element={<ProtectedRoute requiredRole="partner"><PartnerDashboard /></ProtectedRoute>} />
+          <Route path="/customer/*" element={<ProtectedRoute requiredRole="customer"><CustomerDashboard /></ProtectedRoute>} />
           <Route path="/*" element={<Login />} />
         </Routes>
       </BrowserRouter>
