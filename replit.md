@@ -22,14 +22,19 @@ This is a React-based admin panel for the HireNXT platform. The application mana
 - **API Connection**: Uses external backend (no local backend in this repository)
 
 ## Recent Changes
-- **2025-10-27**: Initial Replit setup completed
+- **2025-10-27**: Initial Replit setup and mock authentication
   - Installed Node.js 20 and all npm dependencies
   - Configured dev server for port 5000 with 0.0.0.0 host
   - Set up proper .gitignore for Node.js projects
   - Disabled host checking for Replit's iframe proxy environment via .env file
   - Configured workflow "Frontend Server" to run React development server
   - Set up deployment configuration for production (autoscale with serve)
-  - Application is running successfully and login page is fully functional
+  - **Updated API endpoint to Azure**: `https://hirenxt-api-gwhpfddbfnc9d5dc.westus2-01.azurewebsites.net`
+  - **Implemented mock authentication system** for development (bypasses API)
+  - Created authentication service layer (`src/services/authService.js`)
+  - Added mock user database (`src/mocks/mockUsers.js`) with test credentials
+  - Environment-based toggle via `REACT_APP_USE_MOCK_AUTH` flag
+  - Application is running successfully with mock auth enabled by default
 
 ## Features
 - User authentication and login
@@ -52,6 +57,24 @@ The application connects to the following API endpoints (defined in `frontend/sr
 - The app may show a React hooks warning in the console related to styled-components v6, but this doesn't affect functionality
 - All dependencies use React 18.3.1 consistently
 - The frontend communicates with an external backend API (not included in this repository)
+
+## Authentication Modes
+
+### Development Mode (Current: ENABLED ✅)
+- Mock authentication is currently **ENABLED** via `REACT_APP_USE_MOCK_AUTH=true`
+- Login works with dummy credentials without hitting the real API
+- Test credentials:
+  - Email: `sripadbal@gmail.com` | Password: `1234`
+  - Email: `admin@hirenxt.com` | Password: `admin123`
+  - Email: `user@hirenxt.com` | Password: `user123`
+- Console displays orange warning: "⚠️ DEVELOPMENT MODE: Using mock authentication"
+- Files: `src/services/authService.js`, `src/mocks/mockUsers.js`
+
+### Production Mode (To enable later)
+- Set `REACT_APP_USE_MOCK_AUTH=false` in `.env` to use real Azure API
+- All authentication requests will go to Azure backend
+- Before production deployment, remove mock files and disable mock mode
+- See `frontend/AUTHENTICATION_SETUP.md` for detailed instructions
 
 ## Deployment
 - **Deployment Type**: Autoscale (stateless)

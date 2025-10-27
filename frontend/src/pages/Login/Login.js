@@ -16,7 +16,7 @@ import {
 import { LoginWrapper } from "./Login.style";
 import Logo from "./../../assets/logo.svg";
 import lgSlider from "./../../assets/lg-slider-1.png";
-import { API_CONST } from "./../../const";
+import { login as authLogin } from "./../../services/authService";
 const { Title, Paragraph, Link } = Typography;
 
 const Login = () => {
@@ -39,17 +39,8 @@ const Login = () => {
     setError("");
 
     try {
-      const response = await fetch(API_CONST.LOGIN, {
-        method: 'POST',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
+      // Use authService which handles both mock and real API
+      const response = await authLogin(email, password);
       const data = await response.json();
 
       if (response.ok) {
