@@ -19,6 +19,7 @@ import FindTalents from "../FindTalents/FindTalents";
 import MyJobs from "../MyJobs/MyJobs";
 import SubmittedProfiles from "../SubmittedProfiles/SubmittedProfiles";
 import JobDetails from "../JobDetails/JobDetails";
+import PostJob from "../PostJob/PostJob";
 
 const sideBarMenu = [
   { key: "/customer", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -30,6 +31,11 @@ const sideBarMenu = [
   {
     key: "/customer/my-jobs",
     label: "My Jobs",
+    icon: <FileDoneOutlined />,
+  },
+  {
+    key: "/customer/post-job",
+    label: "Job Briefs",
     icon: <FileDoneOutlined />,
   },
   {
@@ -79,6 +85,7 @@ const CustomerDashboard = () => {
     const path = location.pathname;
     if (path === "/customer" || path === "/customer/") return "/customer";
     if (path.startsWith("/customer/find-talents")) return "/customer/find-talents";
+    if (path.startsWith("/customer/post-job")) return "/customer/post-job";
     if (path.startsWith("/customer/my-jobs")) return "/customer/my-jobs";
     if (path.startsWith("/customer/submitted-profiles")) return "/customer/submitted-profiles";
     if (path.startsWith("/customer/hired-talents")) return "/customer/hired-talents";
@@ -142,6 +149,7 @@ const CustomerDashboard = () => {
             <Routes>
               <Route path="*" element={<CustomerOverview />} />
               <Route path="/find-talents" element={<FindTalents />} />
+              <Route path="/post-job" element={<PostJob />} />
               <Route path="/my-jobs" element={<MyJobs />} />
               <Route path="/my-jobs/:jobId" element={<JobDetails />} />
               <Route path="/submitted-profiles" element={<SubmittedProfiles />} />
