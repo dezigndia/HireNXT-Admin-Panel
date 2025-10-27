@@ -19,48 +19,58 @@ const HiredTalents = () => {
       email: "aditya.k@designindia.com",
       onboardingDate: "2024-01-12",
       contractDuration: "1 Year",
+      lastWorkingDay: "2025-01-12",
+      daysLeft: 77,
       monthlyRate: 150000,
       marketRate: 250000,
       status: "active",
     },
     {
       id: 2,
-      name: "Gaurav Ambekar",
-      email: "aditya.k@designindia.com",
-      onboardingDate: "2024-01-12",
-      contractDuration: "14 Year",
-      monthlyRate: 150000,
-      marketRate: 250000,
-      status: "active",
-    },
-    {
-      id: 3,
-      name: "Gaurav Ambekar",
-      email: "aditya.k@designindia.com",
-      onboardingDate: "2024-01-12",
-      contractDuration: "2 Year",
-      monthlyRate: 150000,
-      marketRate: 250000,
-      status: "active",
-    },
-    {
-      id: 4,
       name: "Priya Sharma",
       email: "priya.sharma@techsolutions.com",
       onboardingDate: "2023-06-15",
       contractDuration: "2 Years",
+      lastWorkingDay: "2025-06-15",
+      daysLeft: 230,
       monthlyRate: 180000,
       marketRate: 280000,
       status: "active",
     },
     {
-      id: 5,
+      id: 3,
       name: "Rahul Verma",
       email: "rahul.v@innovations.com",
       onboardingDate: "2024-03-20",
       contractDuration: "1 Year",
+      lastWorkingDay: "2025-03-20",
+      daysLeft: 144,
       monthlyRate: 165000,
       marketRate: 270000,
+      status: "active",
+    },
+    {
+      id: 4,
+      name: "Sneha Patel",
+      email: "sneha.p@devstudio.com",
+      onboardingDate: "2024-02-10",
+      contractDuration: "18 Months",
+      lastWorkingDay: "2025-08-10",
+      daysLeft: 286,
+      monthlyRate: 140000,
+      marketRate: 240000,
+      status: "active",
+    },
+    {
+      id: 5,
+      name: "Aditya Kumar",
+      email: "aditya.k@techcorp.com",
+      onboardingDate: "2024-09-01",
+      contractDuration: "6 Months",
+      lastWorkingDay: "2025-03-01",
+      daysLeft: 125,
+      monthlyRate: 155000,
+      marketRate: 260000,
       status: "active",
     },
   ];
@@ -72,6 +82,8 @@ const HiredTalents = () => {
       email: "amit.k@pastproject.com",
       onboardingDate: "2022-05-10",
       contractDuration: "1 Year",
+      lastWorkingDay: "2023-05-10",
+      daysLeft: -600,
       monthlyRate: 120000,
       marketRate: 220000,
       status: "inactive",
@@ -82,6 +94,8 @@ const HiredTalents = () => {
       email: "neha.singh@oldclient.com",
       onboardingDate: "2021-08-15",
       contractDuration: "2 Years",
+      lastWorkingDay: "2023-08-15",
+      daysLeft: -503,
       monthlyRate: 135000,
       marketRate: 235000,
       status: "inactive",
@@ -95,12 +109,19 @@ const HiredTalents = () => {
     console.log(`${action} for talent:`, record);
   };
 
+  const getDaysLeftClass = (days) => {
+    if (days < 0) return "inactive";
+    if (days <= 30) return "critical";
+    if (days <= 90) return "warning";
+    return "safe";
+  };
+
   const columns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "18%",
+      width: "14%",
       render: (text) => (
         <a href="#" className="talent-name">
           {text}
@@ -108,10 +129,17 @@ const HiredTalents = () => {
       ),
     },
     {
-      title: "Onboarded Date",
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      width: "16%",
+      render: (email) => <span className="email-text">{email}</span>,
+    },
+    {
+      title: "Onboarding Date",
       dataIndex: "onboardingDate",
       key: "onboardingDate",
-      width: "15%",
+      width: "11%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -123,24 +151,43 @@ const HiredTalents = () => {
       ),
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      width: "22%",
-      render: (email) => <span className="email-text">{email}</span>,
-    },
-    {
-      title: "Duration",
+      title: "Contract Duration",
       dataIndex: "contractDuration",
       key: "contractDuration",
-      width: "12%",
+      width: "11%",
       render: (duration) => <span className="duration-text">{duration}</span>,
+    },
+    {
+      title: "Last Working Day",
+      dataIndex: "lastWorkingDay",
+      key: "lastWorkingDay",
+      width: "11%",
+      render: (date) => (
+        <span className="date-text">
+          {new Date(date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Days Left",
+      dataIndex: "daysLeft",
+      key: "daysLeft",
+      width: "9%",
+      render: (days) => (
+        <span className={`days-left ${getDaysLeftClass(days)}`}>
+          {days < 0 ? "Completed" : `${days} days`}
+        </span>
+      ),
     },
     {
       title: "Monthly Rate",
       dataIndex: "monthlyRate",
       key: "monthlyRate",
-      width: "13%",
+      width: "10%",
       render: (rate) => (
         <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
       ),
@@ -149,7 +196,7 @@ const HiredTalents = () => {
       title: "Market Rate",
       dataIndex: "marketRate",
       key: "marketRate",
-      width: "13%",
+      width: "10%",
       render: (rate) => (
         <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
       ),
@@ -157,7 +204,7 @@ const HiredTalents = () => {
     {
       title: "Action",
       key: "action",
-      width: "7%",
+      width: "8%",
       align: "center",
       render: (_, record) => (
         <div className="action-buttons">
@@ -228,6 +275,7 @@ const HiredTalents = () => {
               showSizeChanger: false,
               showTotal: (total) => `Total ${total} talents`,
             }}
+            scroll={{ x: 1200 }}
           />
         ) : (
           <EmptyState>
