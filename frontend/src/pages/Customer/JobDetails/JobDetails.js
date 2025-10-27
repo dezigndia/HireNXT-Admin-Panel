@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, Table, Tag, Button, Dropdown, Menu, Avatar, Tooltip } from "antd";
 import {
@@ -18,30 +18,31 @@ import { JobDetailsWrapper } from "./JobDetails.style";
 const mockJobDetails = {
   "2930493": {
     id: "2930493",
-    title: "Apigee Developer with 3 to 4 years of Experience",
-    type: "Full-Time Contract",
-    salary: "1,00,000 / Month (6 Months)",
-    location: "Bangalore, India",
+    title: "SAP Hana Developer",
+    type: "Full Time Contract",
+    salary: "₹1,50,000 / Month (6 Months)",
+    location: "Remote",
     openPositions: 2,
-    salaryPerMonth: "1,80,000",
+    salaryPerMonth: "1,50,000",
     projectDuration: "6 Months",
-    communication: "(En)Excellent",
+    communication: "Excellent",
     primarySkills: [
-      { skill: "OpenAPISpec documentation", level: "Expert" },
-      { skill: "API monitoring (Splunk, Datadog)", level: "Expert" },
+      { skill: "SAP HANA", level: "Expert" },
+      { skill: "SQL", level: "Advanced" },
+      { skill: "Data Modeling", level: "Expert" },
     ],
-    description: "We are looking for an experienced Apigee Developer to join our team. The ideal candidate should have strong expertise in API development, management, and monitoring.",
+    description: "We are looking for an experienced SAP Hana Developer with 5 to 6 years of experience.",
     submittedProfiles: [
       {
         id: 1,
         name: "Akshay Joshi",
-        role: "Apigee Developer",
+        role: "SAP HANA Developer",
         skills: [
-          { skill: "OpenAPISpec documentation", level: "Expert" },
-          { skill: "API monitoring (Splunk, Datadog)", level: "Expert" },
+          { skill: "SAP HANA", level: "Expert" },
+          { skill: "SQL", level: "Advanced" },
         ],
         monthlyRate: "₹ 75,000",
-        experience: "2.4 Year",
+        experience: "5.2 Year",
         noticePeriod: "30 Days",
         resumeUrl: "#",
         status: "submitted",
@@ -49,38 +50,52 @@ const mockJobDetails = {
       {
         id: 2,
         name: "Vineet Malhotra",
-        role: "Apigee Developer",
+        role: "SAP HANA Developer",
         skills: [
-          { skill: "OpenAPISpec documentation", level: "Expert" },
-          { skill: "API monitoring (Splunk, Datadog)", level: "Expert" },
+          { skill: "SAP HANA", level: "Expert" },
+          { skill: "Data Modeling", level: "Expert" },
         ],
-        monthlyRate: "₹ 75,000",
-        experience: "2.4 Year",
-        noticePeriod: "30 Days",
+        monthlyRate: "₹ 80,000",
+        experience: "5.8 Year",
+        noticePeriod: "45 Days",
         resumeUrl: "#",
         status: "submitted",
+      },
+      {
+        id: 3,
+        name: "Raj Kumar",
+        role: "SAP HANA Developer",
+        skills: [
+          { skill: "SAP HANA", level: "Advanced" },
+          { skill: "SQL", level: "Expert" },
+        ],
+        monthlyRate: "₹ 70,000",
+        experience: "5.0 Year",
+        noticePeriod: "30 Days",
+        resumeUrl: "#",
+        status: "interviewing",
       },
     ],
   },
   "2930494": {
     id: "2930494",
     title: "React Frontend Developer",
-    type: "Full-Time Contract",
-    salary: "80,000 / Month",
+    type: "Full Time Contract",
+    salary: "₹90,000 / Month (12 Months)",
     location: "Bangalore",
     openPositions: 1,
-    salaryPerMonth: "80,000",
+    salaryPerMonth: "90,000",
     projectDuration: "12 Months",
-    communication: "Excellent",
+    communication: "Good",
     primarySkills: [
       { skill: "React", level: "Expert" },
       { skill: "TypeScript", level: "Advanced" },
       { skill: "Redux", level: "Expert" },
     ],
-    description: "Looking for a skilled React developer with strong TypeScript knowledge.",
+    description: "Looking for a skilled React developer with 3 to 5 years of experience.",
     submittedProfiles: [
       {
-        id: 3,
+        id: 4,
         name: "Priya Sharma",
         role: "React Developer",
         skills: [
@@ -93,6 +108,100 @@ const mockJobDetails = {
         resumeUrl: "#",
         status: "submitted",
       },
+      {
+        id: 5,
+        name: "Amit Singh",
+        role: "React Developer",
+        skills: [
+          { skill: "React", level: "Expert" },
+          { skill: "Redux", level: "Expert" },
+        ],
+        monthlyRate: "₹ 70,000",
+        experience: "4.0 Year",
+        noticePeriod: "30 Days",
+        resumeUrl: "#",
+        status: "interviewing",
+      },
+    ],
+  },
+  "2930495": {
+    id: "2930495",
+    title: "DevOps Engineer",
+    type: "Contract",
+    salary: "₹1,20,000 / Month (6 Months)",
+    location: "Remote",
+    openPositions: 1,
+    salaryPerMonth: "1,20,000",
+    projectDuration: "6 Months",
+    communication: "Excellent",
+    primarySkills: [
+      { skill: "Docker", level: "Expert" },
+      { skill: "Kubernetes", level: "Advanced" },
+      { skill: "AWS", level: "Expert" },
+    ],
+    description: "Looking for an experienced DevOps Engineer with 4 to 7 years of experience.",
+    submittedProfiles: [
+      {
+        id: 6,
+        name: "Karthik Reddy",
+        role: "DevOps Engineer",
+        skills: [
+          { skill: "Docker", level: "Expert" },
+          { skill: "Kubernetes", level: "Advanced" },
+        ],
+        monthlyRate: "₹ 95,000",
+        experience: "6.0 Year",
+        noticePeriod: "60 Days",
+        resumeUrl: "#",
+        status: "submitted",
+      },
+    ],
+  },
+  "2930496": {
+    id: "2930496",
+    title: "Python Backend Developer",
+    type: "Full Time",
+    salary: "₹75,000 / Month (12 Months)",
+    location: "Hyderabad",
+    openPositions: 2,
+    salaryPerMonth: "75,000",
+    projectDuration: "12 Months",
+    communication: "Good",
+    primarySkills: [
+      { skill: "Python", level: "Expert" },
+      { skill: "Django", level: "Advanced" },
+      { skill: "PostgreSQL", level: "Advanced" },
+    ],
+    description: "Looking for a Python Backend Developer with 2 to 4 years of experience.",
+    submittedProfiles: [
+      {
+        id: 7,
+        name: "Neha Gupta",
+        role: "Python Developer",
+        skills: [
+          { skill: "Python", level: "Expert" },
+          { skill: "Django", level: "Advanced" },
+        ],
+        monthlyRate: "₹ 60,000",
+        experience: "3.0 Year",
+        noticePeriod: "30 Days",
+        resumeUrl: "#",
+        status: "submitted",
+      },
+      {
+        id: 8,
+        name: "Rohit Mehta",
+        role: "Python Developer",
+        skills: [
+          { skill: "Python", level: "Expert" },
+          { skill: "PostgreSQL", level: "Advanced" },
+        ],
+        monthlyRate: "₹ 58,000",
+        experience: "2.5 Year",
+        noticePeriod: "15 Days",
+        resumeUrl: "#",
+        status: "interviewing",
+      },
     ],
   },
 };
@@ -100,11 +209,14 @@ const mockJobDetails = {
 const JobDetails = () => {
   const { jobId } = useParams();
   const navigate = useNavigate();
-  const [profiles, setProfiles] = useState(
-    mockJobDetails[jobId]?.submittedProfiles || []
-  );
-
   const jobData = mockJobDetails[jobId];
+  const [profiles, setProfiles] = useState([]);
+
+  useEffect(() => {
+    if (jobData) {
+      setProfiles(jobData.submittedProfiles || []);
+    }
+  }, [jobId, jobData]);
 
   if (!jobData) {
     return (
