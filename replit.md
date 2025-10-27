@@ -50,6 +50,24 @@ This is a React-based admin panel for the HireNXT platform. The application mana
   - Added customer and partner mock users for testing
   - Files: `src/pages/Customer/*`, `src/components/ProtectedRoute.js`
 
+- **2025-10-27**: Find Talents Feature
+  - **Created Find Talents page** for customer dashboard to search and browse talent profiles
+  - Implemented comprehensive search by name and role
+  - Added Primary Role filter dropdown (Full Stack, Front End, Backend, Django, MERN, DevOps, UI/UX)
+  - Added Seniority filter with experience ranges (Junior 0-2, Mid 3-5, Senior 6-10, Lead 10+)
+  - Implemented "All Filters" modal with:
+    * Secondary Tech multi-select filter (React, NodeJs, Python, Java, Angular, etc.)
+    * Location filter (Bangalore, Hyderabad, Kolkata, Delhi, Mumbai, Pune)
+    * Mode filter (Remote, Hybrid, In-Office) - infrastructure ready for API integration
+  - Created responsive talent profile cards with:
+    * Avatar, name, location, experience
+    * Role title and hourly rate
+    * Top skills as tags
+    * "View Details" and "Schedule Interview" action buttons
+  - All filters work together with AND logic for precise talent matching
+  - Added 8 mock talent profiles with diverse roles and skills
+  - Files: `src/pages/Customer/FindTalents/*`
+
 ## Features
 - User authentication and login with role-based routing
 - **Admin Dashboard** with multiple management sections:
@@ -59,8 +77,14 @@ This is a React-based admin panel for the HireNXT platform. The application mana
   - Approval Process
   - Role Permissions
 - **Partner Dashboard** for viewing ongoing jobs and hired talents
-- **Customer Dashboard** (New!) for job posting and talent hiring:
+- **Customer Dashboard** for job posting and talent hiring:
   - Overview with metrics (Job Live, Interviews, Applications, Talents Hired)
+  - **Find Talents** - search and browse talent profiles with advanced filters
+    * Search by name or role
+    * Filter by Primary Role, Seniority/Experience
+    * Advanced filters: Secondary Tech, Location, Work Mode
+    * Responsive grid layout with talent cards
+    * View Details and Schedule Interview actions
   - My Jobs - view and manage job postings
   - Submitted Profiles - review talent profiles for jobs
   - Hero section with talent search
