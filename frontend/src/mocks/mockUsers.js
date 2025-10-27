@@ -23,6 +23,20 @@ export const MOCK_USERS = [
     token: "mock-auth-token-11111",
     name: "Regular User",
     role: "user"
+  },
+  {
+    email: "customer@hirenxt.com",
+    password: "customer123",
+    token: "mock-auth-token-22222",
+    name: "Customer User",
+    role: "customer"
+  },
+  {
+    email: "partner@hirenxt.com",
+    password: "partner123",
+    token: "mock-auth-token-33333",
+    name: "Partner User",
+    role: "partner"
   }
 ];
 
