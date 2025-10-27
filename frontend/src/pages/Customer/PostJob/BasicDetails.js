@@ -68,7 +68,7 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
             formatter={(value) =>
               `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
             }
-            parser={(value) => value.replace(/,/g, "")}
+            parser={(value) => (value ? value.replace(/,/g, "") : "")}
           />
         </Form.Item>
 
