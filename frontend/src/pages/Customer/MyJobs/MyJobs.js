@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, Button, Tag, Row, Col, Dropdown, Menu, Segmented } from "antd";
 import {
   MoreOutlined,
@@ -67,6 +68,7 @@ const mockJobs = [
 ];
 
 const MyJobs = () => {
+  const navigate = useNavigate();
   const [filter, setFilter] = useState("all");
   const [jobs, setJobs] = useState(mockJobs);
 
@@ -180,7 +182,12 @@ const MyJobs = () => {
             <div className="job-header">
               <div className="job-title-section">
                 <p className="job-id">Job id: {job.id}</p>
-                <h3 className="job-title">{job.title}</h3>
+                <h3 
+                  className="job-title" 
+                  onClick={() => navigate(`/customer/my-jobs/${job.id}`)}
+                >
+                  {job.title}
+                </h3>
                 <p className="job-meta">
                   <Tag color="cyan">{job.type}</Tag>
                   <Tag color="blue">{job.location}</Tag>
