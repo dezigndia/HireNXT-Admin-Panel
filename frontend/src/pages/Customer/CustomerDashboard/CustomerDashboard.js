@@ -18,6 +18,7 @@ import CustomerOverview from "../CustomerOverview/CustomerOverview";
 import FindTalents from "../FindTalents/FindTalents";
 import MyJobs from "../MyJobs/MyJobs";
 import SubmittedProfiles from "../SubmittedProfiles/SubmittedProfiles";
+import JobDetails from "../JobDetails/JobDetails";
 
 const sideBarMenu = [
   { key: "/customer", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -142,6 +143,7 @@ const CustomerDashboard = () => {
               <Route path="*" element={<CustomerOverview />} />
               <Route path="/find-talents" element={<FindTalents />} />
               <Route path="/my-jobs" element={<MyJobs />} />
+              <Route path="/my-jobs/:jobId" element={<JobDetails />} />
               <Route path="/submitted-profiles" element={<SubmittedProfiles />} />
             </Routes>
           </Layout>
