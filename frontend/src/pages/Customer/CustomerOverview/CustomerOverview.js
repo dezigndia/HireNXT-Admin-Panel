@@ -9,7 +9,6 @@ import {
   DollarOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-import { Chart } from "@antv/g2";
 
 const { Title, Text } = Typography;
 
@@ -23,33 +22,6 @@ const CustomerOverview = () => {
     { total: 32, gain: "13.42%", title: "Active Requirements", icon: <FileDoneOutlined /> },
   ];
 
-  const chartData = [
-    { name: "Posted", month: "Jan.", averageValue: 3 },
-    { name: "Posted", month: "Feb.", averageValue: 5 },
-    { name: "Posted", month: "Mar.", averageValue: 7 },
-    { name: "Posted", month: "Apr.", averageValue: 4 },
-    { name: "Posted", month: "May", averageValue: 6 },
-    { name: "Posted", month: "Jun.", averageValue: 8 },
-    { name: "Hired", month: "Jan.", averageValue: 1 },
-    { name: "Hired", month: "Feb.", averageValue: 2 },
-    { name: "Hired", month: "Mar.", averageValue: 3 },
-    { name: "Hired", month: "Apr.", averageValue: 2 },
-    { name: "Hired", month: "May", averageValue: 4 },
-    { name: "Hired", month: "Jun.", averageValue: 5 },
-  ];
-
-  const config = {
-    data: {
-      value: chartData,
-    },
-    xField: "month",
-    yField: "averageValue",
-    colorField: "name",
-    group: true,
-    style: {
-      inset: 5,
-    },
-  };
 
   return (
     <OverviewWrapper>
@@ -90,9 +62,9 @@ const CustomerOverview = () => {
 
       <Row gutter={16} style={{ marginTop: "20px" }}>
         <Col span={24}>
-          <Card title="Job Posts & Hiring Trends" style={{ width: "100%" }}>
-            <div style={{ height: 300 }}>
-              <Chart {...config} />
+          <Card title="Recent Activity" style={{ width: "100%" }}>
+            <div style={{ padding: "20px", textAlign: "center" }}>
+              <Text type="secondary">Your recent job postings and hiring activity will appear here</Text>
             </div>
           </Card>
         </Col>
