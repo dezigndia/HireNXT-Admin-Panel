@@ -93,6 +93,37 @@ This is a React-based admin panel for the HireNXT platform. The application mana
   - **Responsive Design**: Mobile-friendly with proper breakpoints
   - Files: `src/pages/Customer/MyJobs/MyJobs.js`, `src/pages/Customer/MyJobs/MyJobs.style.js`
 
+- **2025-10-27**: Job Details Page with Submitted Profiles
+  - **Created comprehensive Job Details page** accessible by clicking job titles/IDs from My Jobs
+  - **Job Summary Section** displaying:
+    * Job ID, full title, contract type, salary, location, open positions
+    * Three metric cards: Salary/month, Project Duration, Communication level
+    * Primary Skills as tags with expertise levels
+  - **Submitted Profiles Table** with columns:
+    * Resume (PDF icon for viewing)
+    * Name (clickable, styled in blue)
+    * Role
+    * Top Skills (as tags with levels)
+    * Monthly Rate
+    * Experience
+    * Notice Period
+    * Action buttons: Schedule Interview, Download Resume, More menu (Hire/Reject)
+  - **Navigation & Routing**:
+    * Route: `/customer/my-jobs/:jobId`
+    * Back button to return to My Jobs list
+    * Job titles in My Jobs are clickable links
+  - **Data Management**:
+    * useEffect hook syncs profiles with jobId changes
+    * Mock data aligned between MyJobs and JobDetails
+    * Complete data for all 4 jobs with 1-3 submitted profiles each
+  - **Interactive Features**:
+    * Schedule Interview button updates profile status
+    * Hire/Reject actions from dropdown menu
+    * Download Resume functionality
+    * Profile status tracking (submitted, interviewing, hired, rejected)
+  - **Styling**: Professional card-based layout, color-coded metric icons, responsive table design
+  - Files: `src/pages/Customer/JobDetails/*`, `src/pages/Customer/CustomerDashboard/CustomerDashboard.js`
+
 ## Features
 - User authentication and login with role-based routing
 - **Admin Dashboard** with multiple management sections:
@@ -116,6 +147,14 @@ This is a React-based admin panel for the HireNXT platform. The application mana
     * Card-based layout with job details and stats
     * Action menu for Edit Job and Close Job
     * Shows Submitted Profiles, Interviewing, Rejected, and Hired counts per job
+    * Clickable job titles navigate to detailed job pages
+  - **Job Details** - comprehensive job and candidate management
+    * Job summary with metrics (salary, duration, communication)
+    * Primary skills display with expertise levels
+    * Submitted profiles table with candidate information
+    * Action buttons: Schedule Interview, Download Resume, Hire, Reject
+    * Real-time profile status updates
+    * Back navigation to My Jobs list
   - Submitted Profiles - review talent profiles for jobs
   - Hero section with talent search
   - Quick actions for posting jobs and consultations
