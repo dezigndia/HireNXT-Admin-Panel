@@ -19,36 +19,44 @@ export const OngoingJobsWrapper = styled.div`
       .search-input {
         flex: 1;
         min-width: 280px;
+        border-radius: 8px;
 
-        .ant-input {
+        .ant-input-affix-wrapper {
           border-radius: 8px;
           border: 1px solid #d9d9d9;
-          font-size: 14px;
-          padding: 8px 12px;
-          height: 40px;
+          padding: 8px 16px;
           background: white;
           
           &:hover {
             border-color: #00d9a9;
           }
           
-          &:focus {
+          &:focus-within {
             border-color: #00d9a9;
             box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
-            outline: none;
           }
-        }
 
-        .ant-input-prefix {
-          color: #8c8c8c;
-          margin-right: 8px;
-        }
+          .ant-input {
+            font-size: 14px;
+            border: none;
+            box-shadow: none;
+            
+            &:focus {
+              box-shadow: none;
+            }
+          }
 
-        .ant-input-clear-icon {
-          color: #8c8c8c;
-          
-          &:hover {
-            color: #595959;
+          .ant-input-prefix {
+            color: #999;
+            margin-right: 8px;
+          }
+
+          .ant-input-clear-icon {
+            color: #8c8c8c;
+            
+            &:hover {
+              color: #595959;
+            }
           }
         }
       }
