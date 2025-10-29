@@ -386,10 +386,17 @@ const SubmitProfiles = () => {
       dataIndex: "name",
       key: "name",
       width: 160,
-      render: (text) => (
-        <Text strong style={{ color: "#014c75", fontSize: "13px" }}>
+      render: (text, record) => (
+        <a
+          href={`/partner/talent-details/${record.id}`}
+          style={{ color: "#1890ff", fontWeight: 600, fontSize: "13px" }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/partner/talent-details/${record.id}`);
+          }}
+        >
           {text}
-        </Text>
+        </a>
       ),
     },
     {

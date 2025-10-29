@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   Button,
@@ -111,6 +112,7 @@ const dummyBenchData = [
 ];
 
 const BenchPool = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -248,7 +250,18 @@ const BenchPool = () => {
       dataIndex: "name",
       key: "name",
       width: 160,
-      render: (name) => <Text strong>{name}</Text>,
+      render: (name, record) => (
+        <a
+          href="#"
+          style={{ color: "#1890ff", fontWeight: 600 }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/partner/talent-details/${record.key}`);
+          }}
+        >
+          {name}
+        </a>
+      ),
     },
     {
       title: "Role",
