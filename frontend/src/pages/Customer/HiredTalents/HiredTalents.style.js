@@ -168,7 +168,7 @@ export const TableContainer = styled.div`
   .action-buttons {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
   }
 
   .icon-button {
@@ -182,15 +182,6 @@ export const TableContainer = styled.div`
     border: none;
     transition: all 0.2s;
     font-size: 16px;
-
-    &.notification-btn {
-      background: #e6f7ff;
-      color: #1890ff;
-
-      &:hover {
-        background: #bae7ff;
-      }
-    }
 
     &.menu-btn {
       background: #f5f5f5;
