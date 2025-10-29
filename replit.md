@@ -21,6 +21,8 @@ The application is a React-based single-page application (SPA) built with Create
 
 **Technical Implementations & Feature Specifications:**
 - **Authentication:** Role-based access control with a `ProtectedRoute` component ensures only authorized users access specific routes. Mock authentication is available for development, allowing testing with dummy credentials for Admin, User, Customer, and Partner roles.
+- **Verification Badges:** Both Customer and Partner modules display Aadhar Card and PAN Card verification badges on Talent Details pages as green success tags with checkmark icons, confirming background verification status.
+
 - **Customer Dashboard:** A central hub for customers featuring:
     - **Overview:** Metrics cards (Job Live, Profile Received, Talent Hired) and quick actions.
     - **Find Talents:** Advanced search and filtering capabilities for talent profiles (by role, seniority, skills, location, work mode). Displays talent profiles as responsive cards.
@@ -35,6 +37,7 @@ The application is a React-based single-page application (SPA) built with Create
         - **Left Panel (Job List):** Scrollable list of job cards showing company type, location, open positions, designation with experience, employment type tags, and highlighted salary (teal text). Selected job highlighted with teal border and background.
         - **Right Panel (Job Details):** Top section with "Submit Profiles" button inline with properly aligned job metadata using Space component (Job ID, interested candidates, location, open positions all in one row with consistent spacing). Displays designation, highlighted salary (teal text), project duration, communication level, primary skills, good-to-have skills, start date, system provision status, work time, timezone, and complete job description as formatted text string (matching data structure from Post Job feature).
         - **API Integration:** Uses `API_CONST.GET_JOB_REQUIREMENTS` endpoint with POST method, falls back to dummy data (5 sample jobs) when API is unavailable.
+        - **Navigation:** Name columns in all Partner tables (Bench Pool, Talents Hired, Submit Profiles bench pool modal) link to Talent Details page for comprehensive talent information viewing.
     - **Submit Profiles:** Dedicated page for submitting candidate profiles to specific job opportunities:
         - **Job Summary Card:** Displays job ID, title, type, highlighted salary, location, open positions, salary per month metric, project duration, communication level, and primary skills.
         - **Action Buttons:** Two prominent buttons above the profiles table - "Add from Bench Pool" (to select from existing resources) and "Add New Resource" (to add new candidates).
@@ -42,6 +45,7 @@ The application is a React-based single-page application (SPA) built with Create
         - **Add New Resource Modal:** Comprehensive form modal identical to Admin's "Add Bench Resource" functionality, excluding Partner Organization field (auto-filled from logged-in partner). Includes file uploads for resume, Aadhar, PAN, and degree proof, with proper validation and form styling.
         - **Profiles Table:** Comprehensive table showing resume PDF icon, candidate name, role, top skills with proficiency levels, highlighted monthly rate, experience, notice period, and download resume action.
         - **Navigation:** Back button to return to Ongoing Jobs, maintains design consistency with Customer Dashboard's Job Details page.
+    - **Talent Details:** Dedicated talent profile page accessible from Partner module showing comprehensive talent information including professional summary, technical skills with proficiency levels, project experience, verification badges (Aadhar Card & PAN Card verified), contact details, rates, and availability. Features back button navigation and action buttons for scheduling interviews and downloading resumes. Shared component with Customer module for consistency.
     - **Bench Pool:** Comprehensive resource management page for partners:
         - **Top Metrics:** Three metric cards displaying Active Resources, Jobs Applied (total across all resources), and Talents Hired (total past hires). Each card features an icon with colored background, large metric number, and descriptive label with hover effects.
         - **Tabs:** Active and Inactive tabs for filtering resources by status, showing resource count in each tab with teal accent (#00d9a9) for active tab.
@@ -58,7 +62,15 @@ The application is a React-based single-page application (SPA) built with Create
           - **Jobs Applied:** Count displayed as centered cyan tag (120px)
           - **Past Hired:** Count displayed as centered green tag (110px)
           - **Action:** Centered dropdown menu (80px) with View Details, Download Resume, Mark Active/Inactive, Edit, and Delete options
-        - **Add New Resource:** Button at top right to add new bench pool resources, opens same modal as Submit Profiles implementation
+        - **Add New Resource:** Comprehensive modal for adding new bench pool resources with expanded data capture:
+          - **Basic Information:** Name, Role, Email, Phone, Location, Notice Period, Experience (Years/Months)
+          - **Rates:** Monthly Rate, Hourly Rate, Market Rate
+          - **Availability:** Dropdown selection for immediate or future availability
+          - **Professional Summary:** Multi-line text area for detailed professional background
+          - **Top Skills:** Comma-separated skills input
+          - **Project Experience:** Optional multi-line text area for project details
+          - **Document Uploads:** Resume (required), Aadhar Card, PAN Card, Degree Proof
+          - All fields structured to match data shown in Talent Details page for consistency
         - **Pagination:** Table pagination with page size options and total count display
         - **API Integration:** Ready for backend integration with dummy data (5 sample resources) for development and testing
     - **Talents Hired:** Partner-specific talent contract management with Active/Inactive tabs:
