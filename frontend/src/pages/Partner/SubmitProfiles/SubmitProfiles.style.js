@@ -206,36 +206,38 @@ export const SubmitProfilesWrapper = styled.div`
     }
   }
 
-  .bench-pool-modal {
+  .bench-pool-modal,
+  .add-resource-modal {
     .ant-modal-header {
-      border-bottom: 1px solid #f0f0f0;
-      padding: 20px 24px;
+      display: none;
     }
 
     .ant-modal-body {
-      padding: 24px;
+      padding: 32px;
+    }
+
+    .ant-modal-close {
+      top: 16px;
+      right: 16px;
     }
 
     .modal-content {
       .modal-search {
         margin-bottom: 20px;
-        border-radius: 8px;
 
         .ant-input-affix-wrapper {
           border-radius: 8px;
           border: 1px solid #d9d9d9;
-          padding: 8px 16px;
-          background: #fafafa;
-          
+          padding: 10px 16px;
+          background: #ffffff;
+
           &:hover {
             border-color: #00d9a9;
-            background: white;
           }
-          
+
           &:focus-within {
             border-color: #00d9a9;
             box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
-            background: white;
           }
 
           .ant-input {
@@ -243,28 +245,27 @@ export const SubmitProfilesWrapper = styled.div`
             border: none;
             box-shadow: none;
             background: transparent;
-            
+
             &:focus {
               box-shadow: none;
             }
 
             &::placeholder {
-              color: #999;
+              color: #bfbfbf;
             }
           }
 
           .ant-input-prefix {
-            color: #999;
-            margin-right: 8px;
+            margin-right: 12px;
           }
         }
       }
 
       .bench-table {
-        margin-bottom: 20px;
+        margin-bottom: 24px;
 
         .ant-table {
-          border: 1px solid #f0f0f0;
+          border: 1px solid #e8e8e8;
           border-radius: 8px;
           overflow: hidden;
         }
@@ -273,13 +274,20 @@ export const SubmitProfilesWrapper = styled.div`
           background: #fafafa;
           font-weight: 600;
           color: #014c75;
-          border-bottom: 2px solid #f0f0f0;
+          border-bottom: 2px solid #e8e8e8;
           font-size: 14px;
+          padding: 16px;
         }
 
         .ant-table-tbody > tr {
+          transition: all 0.3s;
+
+          td {
+            padding: 16px;
+          }
+
           &:hover > td {
-            background: #f5fbff;
+            background: #f8f9fd;
           }
 
           &.ant-table-row-selected > td {
@@ -293,8 +301,14 @@ export const SubmitProfilesWrapper = styled.div`
             border-color: #014c75;
           }
 
+          .ant-checkbox:hover .ant-checkbox-inner {
+            border-color: #014c75;
+          }
+
           .ant-checkbox-inner {
             border-radius: 4px;
+            width: 18px;
+            height: 18px;
           }
         }
       }
@@ -303,27 +317,29 @@ export const SubmitProfilesWrapper = styled.div`
         background: #f8f9fd;
         border: 1px solid #e8e8e8;
         border-radius: 8px;
-        padding: 16px;
-        margin-bottom: 20px;
+        padding: 20px;
+        margin-bottom: 24px;
 
         .selected-tags {
-          margin-top: 12px;
+          margin-top: 16px;
           display: flex;
           flex-wrap: wrap;
-          gap: 8px;
+          gap: 10px;
 
           .selected-tag {
             background: white;
             border: 1px solid #014c75;
             color: #014c75;
             font-size: 13px;
-            padding: 4px 12px;
-            border-radius: 16px;
+            padding: 6px 16px;
+            border-radius: 20px;
             margin: 0;
 
             .anticon-close {
               color: #014c75;
-              
+              margin-left: 8px;
+              transition: color 0.3s;
+
               &:hover {
                 color: #ff4d4f;
               }
@@ -335,16 +351,17 @@ export const SubmitProfilesWrapper = styled.div`
       .modal-footer {
         display: flex;
         justify-content: flex-end;
-        padding-top: 16px;
-        border-top: 1px solid #f0f0f0;
+        padding-top: 24px;
+        border-top: 1px solid #e8e8e8;
 
         .add-resource-btn-modal {
           background: #014c75;
           border-color: #014c75;
           font-weight: 600;
           height: 44px;
-          padding: 0 32px;
+          padding: 0 36px;
           border-radius: 8px;
+          font-size: 15px;
           box-shadow: 0 4px 12px rgba(1, 76, 117, 0.3);
 
           &:hover:not(:disabled) {
@@ -360,6 +377,108 @@ export const SubmitProfilesWrapper = styled.div`
             box-shadow: none;
             cursor: not-allowed;
           }
+        }
+      }
+    }
+
+    .ant-form {
+      .ant-form-item {
+        margin-bottom: 20px;
+      }
+
+      .ant-form-item-label {
+        padding-bottom: 8px;
+
+        > label {
+          font-weight: 500;
+          color: #262626;
+          font-size: 14px;
+
+          &::after {
+            content: none;
+          }
+        }
+      }
+
+      .ant-input,
+      .ant-select-selector,
+      .ant-input-number {
+        border-radius: 6px;
+        border: 1px solid #d9d9d9;
+        padding: 10px 16px;
+        font-size: 14px;
+
+        &:hover {
+          border-color: #00d9a9;
+        }
+
+        &:focus,
+        &:focus-within {
+          border-color: #00d9a9;
+          box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
+        }
+
+        &::placeholder {
+          color: #bfbfbf;
+        }
+      }
+
+      .ant-select-selector {
+        padding: 8px 12px !important;
+        height: auto !important;
+      }
+
+      .ant-select-selection-placeholder {
+        color: #bfbfbf;
+      }
+
+      .ant-upload {
+        .ant-btn {
+          border-radius: 6px;
+          border: 1px solid #d9d9d9;
+          height: 40px;
+          padding: 0 24px;
+          font-size: 14px;
+
+          &:hover {
+            border-color: #00d9a9;
+            color: #00d9a9;
+          }
+
+          .anticon {
+            margin-right: 8px;
+          }
+        }
+      }
+
+      .ant-btn-primary {
+        background: #00d9a9;
+        border-color: #00d9a9;
+        font-weight: 600;
+        height: 44px;
+        padding: 0 36px;
+        border-radius: 8px;
+        font-size: 15px;
+        box-shadow: 0 4px 12px rgba(0, 217, 169, 0.3);
+
+        &:hover {
+          background: #01c49b;
+          border-color: #01c49b;
+          box-shadow: 0 6px 16px rgba(0, 217, 169, 0.4);
+        }
+      }
+
+      .ant-btn-default {
+        height: 44px;
+        padding: 0 36px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        border: 1px solid #d9d9d9;
+
+        &:hover {
+          border-color: #00d9a9;
+          color: #00d9a9;
         }
       }
     }
@@ -396,22 +515,54 @@ export const SubmitProfilesWrapper = styled.div`
       }
     }
 
-    .bench-pool-modal {
+    .bench-pool-modal,
+    .add-resource-modal {
       .ant-modal {
         max-width: 100%;
         margin: 0;
         top: 0;
       }
 
+      .ant-modal-body {
+        padding: 20px;
+      }
+
       .modal-content {
         .bench-table {
           .ant-table {
             font-size: 12px;
+
+            .ant-table-thead > tr > th,
+            .ant-table-tbody > tr > td {
+              padding: 12px 8px;
+            }
           }
         }
 
         .selected-section {
-          padding: 12px;
+          padding: 16px;
+        }
+
+        .modal-footer {
+          .add-resource-btn-modal {
+            width: 100%;
+          }
+        }
+      }
+
+      .ant-form {
+        .ant-row {
+          margin: 0;
+        }
+
+        .ant-col {
+          padding: 0 4px;
+        }
+
+        .ant-btn-primary,
+        .ant-btn-default {
+          width: 100%;
+          margin-top: 8px;
         }
       }
     }
