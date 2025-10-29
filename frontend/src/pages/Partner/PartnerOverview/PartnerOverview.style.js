@@ -1,271 +1,227 @@
 import styled from "styled-components";
 
 export const OverviewWrapper = styled.div`
-  .overview-container {
-    padding: 20px 0;
+  padding: 20px 0;
+  background-color: #f8f9fd;
+
+  .page-title {
+    color: #014c75;
+    margin-bottom: 0;
   }
 
   .account-alert {
-    margin-bottom: 24px;
-    border-radius: 8px;
-    background: #e6f7ff;
+    background-color: #e6f7ff;
     border: 1px solid #91d5ff;
-  }
-
-  .page-title {
-    font-size: 28px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 24px;
-  }
-
-  .metrics-row {
-    margin-bottom: 32px;
+    border-radius: 8px;
+    
+    .ant-alert-message {
+      color: #014c75;
+      font-size: 14px;
+    }
   }
 
   .metric-card {
-    border-radius: 12px;
-    border: 1px solid #f0f0f0;
-    transition: all 0.3s;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8e8e8;
+    margin-bottom: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 
     &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
       transform: translateY(-2px);
     }
 
     .ant-card-body {
-      padding: 20px;
+      padding: 20px 16px;
     }
   }
 
   .metric-content {
     display: flex;
     align-items: center;
-    gap: 16px;
-  }
+    gap: 12px;
 
-  .metric-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #26c6b8 0%, #1ea89a 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: white;
-    flex-shrink: 0;
-  }
-
-  .metric-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .metric-count {
-    font-size: 24px;
-    font-weight: 700;
-    color: #1a1a1a;
-    line-height: 1.2;
-  }
-
-  .metric-label {
-    font-size: 13px;
-    color: #666;
-    margin-top: 4px;
-  }
-
-  .arrow-icon {
-    color: #d9d9d9;
-    font-size: 16px;
-    transition: all 0.3s;
-  }
-
-  .metric-card:hover .arrow-icon {
-    color: #26c6b8;
-    transform: translateX(4px);
-  }
-
-  .search-section {
-    background: linear-gradient(135deg, #26c6b8 0%, #1ea89a 100%);
-    border-radius: 16px;
-    padding: 48px 40px;
-    margin-bottom: 32px;
-    text-align: center;
-  }
-
-  .search-content {
-    max-width: 800px;
-    margin: 0 auto;
-  }
-
-  .search-title {
-    color: white;
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    line-height: 1.4;
-
-    .highlight {
-      font-weight: 700;
-    }
-  }
-
-  .search-input {
-    margin-top: 24px;
-    border-radius: 8px;
-    padding: 12px 16px;
-    font-size: 14px;
-
-    .ant-input {
-      font-size: 14px;
+    .metric-icon {
+      font-size: 32px;
+      color: #00d9a9;
+      background: #e6fff9;
+      padding: 12px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .anticon {
-      color: #999;
+    .metric-count {
+      margin: 0;
+      color: #014c75;
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .metric-label {
+      color: #666;
+      font-size: 13px;
+      display: block;
+      margin-top: -4px;
+    }
+
+    .arrow-icon {
+      margin-left: auto;
+      color: #ccc;
       font-size: 16px;
     }
   }
 
-  .quick-actions-section {
-    margin-bottom: 32px;
-  }
-
-  .section-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 20px;
-  }
-
-  .action-card {
+  .hero-section {
+    background: linear-gradient(135deg, #00d9a9 0%, #01c49b 100%);
     border-radius: 12px;
-    border: 1px solid #f0f0f0;
-    height: 100%;
-    transition: all 0.3s;
+    padding: 48px 32px;
+    margin: 30px 0;
+    text-align: center;
 
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      transform: translateY(-2px);
+    .hero-title {
+      color: white;
+      font-size: 24px;
+      margin-bottom: 24px;
+      font-weight: 500;
+
+      .highlight {
+        font-weight: 700;
+      }
     }
 
-    .ant-card-body {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
+    .hero-search {
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 8px;
+      background: white;
+
+      .ant-input {
+        font-size: 14px;
+      }
+
+      .ant-input-prefix {
+        color: #999;
+      }
+    }
+  }
+
+  .quick-action-section {
+    margin: 40px 0;
+
+    .section-title {
+      color: #014c75;
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .action-card {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8e8e8;
       height: 100%;
-    }
-  }
+      transition: all 0.3s ease;
 
-  .action-icon-wrapper {
-    width: 56px;
-    height: 56px;
-    border-radius: 12px;
-    background: #f0f9ff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-    font-size: 28px;
-    color: #26c6b8;
-  }
+      &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+      }
 
-  .action-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 12px;
-  }
-
-  .action-description {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 16px;
-    flex: 1;
-  }
-
-  .action-link {
-    padding: 0;
-    font-size: 14px;
-    font-weight: 500;
-    color: #26c6b8;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    align-self: flex-start;
-
-    &:hover {
-      color: #1ea89a;
+      .ant-card-body {
+        padding: 24px;
+      }
     }
 
-    .anticon {
-      font-size: 12px;
+    .action-icon-wrapper {
+      font-size: 48px;
+      color: #00d9a9;
+      margin-bottom: 16px;
+      
+      svg {
+        width: 48px;
+        height: 48px;
+      }
+    }
+
+    .action-title {
+      color: #014c75;
+      font-size: 16px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .action-description {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      min-height: 60px;
+    }
+
+    .action-link {
+      color: #00d9a9;
+      padding: 0;
+      font-weight: 500;
+      font-size: 14px;
+
+      &:hover {
+        color: #01c49b;
+      }
     }
   }
 
   .about-section {
-    margin-bottom: 32px;
-  }
+    margin: 40px 0;
 
-  .about-card {
-    border-radius: 12px;
-    border: 1px solid #f0f0f0;
-    height: 100%;
-
-    .ant-card-body {
-      padding: 24px;
-    }
-  }
-
-  .about-card-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #1a1a1a;
-    margin-bottom: 16px;
-  }
-
-  .about-card-description {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 12px;
-  }
-
-  .about-link {
-    padding: 0;
-    font-size: 14px;
-    font-weight: 500;
-    color: #26c6b8;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-
-    &:hover {
-      color: #1ea89a;
+    .section-title {
+      color: #014c75;
+      margin-bottom: 20px;
+      font-size: 18px;
+      font-weight: 600;
     }
 
-    .anticon {
-      font-size: 12px;
-    }
-  }
+    .about-card {
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border: 1px solid #e8e8e8;
+      height: 100%;
 
-  @media (max-width: 768px) {
-    .overview-container {
-      padding: 16px 0;
+      .ant-card-body {
+        padding: 24px;
+      }
+
+      h5 {
+        color: #014c75;
+        font-size: 16px;
+        margin-bottom: 16px;
+        font-weight: 600;
+      }
+
+      .ant-typography {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .tour-text {
+        margin-top: 16px;
+        margin-bottom: 12px;
+      }
     }
 
-    .search-section {
-      padding: 32px 24px;
-    }
+    .about-link {
+      color: #00d9a9;
+      padding: 0;
+      font-weight: 500;
+      font-size: 14px;
 
-    .search-title {
-      font-size: 20px;
-    }
-
-    .metric-count {
-      font-size: 20px;
+      &:hover {
+        color: #01c49b;
+      }
     }
   }
 `;
