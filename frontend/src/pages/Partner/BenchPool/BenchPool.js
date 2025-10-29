@@ -29,6 +29,8 @@ import {
   TrophyOutlined,
   DownloadOutlined,
   FilterOutlined,
+  PlusOutlined,
+  MinusCircleOutlined,
 } from "@ant-design/icons";
 import { BenchPoolWrapper } from "./BenchPool.style";
 import axios from "axios";
@@ -564,11 +566,6 @@ const BenchPool = () => {
             </Row>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item label="Top Skills" name="skills">
-                  <Input placeholder="Enter skills separated by commas" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
                 <Form.Item label="Experience">
                   <Row gutter={8}>
                     <Col span={12}>
@@ -585,6 +582,58 @@ const BenchPool = () => {
                 </Form.Item>
               </Col>
             </Row>
+            
+            <Form.Item label="Technical Skills">
+              <Form.List name="skills">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Row key={key} gutter={16} style={{ marginBottom: 8 }}>
+                        <Col span={11}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'skill']}
+                            rules={[{ required: true, message: 'Please enter skill name' }]}
+                          >
+                            <Input placeholder="Skill Name (e.g., React, Python)" />
+                          </Form.Item>
+                        </Col>
+                        <Col span={11}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'level']}
+                            rules={[{ required: true, message: 'Please select proficiency' }]}
+                          >
+                            <Select placeholder="Proficiency Level">
+                              <Option value="Expert">Expert</Option>
+                              <Option value="Advanced">Advanced</Option>
+                              <Option value="Intermediate">Intermediate</Option>
+                              <Option value="Beginner">Beginner</Option>
+                            </Select>
+                          </Form.Item>
+                        </Col>
+                        <Col span={2}>
+                          <MinusCircleOutlined
+                            onClick={() => remove(name)}
+                            style={{ color: '#ff4d4f', fontSize: '18px', marginTop: '8px' }}
+                          />
+                        </Col>
+                      </Row>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add Skill
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
             <Row gutter={16}>
               <Col span={12}>
                 <Form.Item label="Monthly Rate" name="rate">
@@ -613,11 +662,6 @@ const BenchPool = () => {
               <Col span={12}>
                 <Form.Item label="Hourly Rate" name="hourlyRate">
                   <Input placeholder="Enter Hourly Rate" prefix="₹" />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item label="Market Rate" name="marketRate">
-                  <Input placeholder="Enter Market Rate" prefix="₹" />
                 </Form.Item>
               </Col>
             </Row>
@@ -652,11 +696,97 @@ const BenchPool = () => {
               />
             </Form.Item>
             
-            <Form.Item label="Project Experience (Optional)" name="projectExperience">
-              <Input.TextArea 
-                rows={6} 
-                placeholder="Enter project details including project titles, client names, duration, role, description, and technologies used. Separate multiple projects with blank lines." 
-              />
+            <Form.Item label="Project Experience (Optional)">
+              <Form.List name="projects">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Card
+                        key={key}
+                        size="small"
+                        style={{ marginBottom: 16, background: '#fafafa' }}
+                        extra={
+                          <MinusCircleOutlined
+                            onClick={() => remove(name)}
+                            style={{ color: '#ff4d4f', fontSize: '16px' }}
+                          />
+                        }
+                      >
+                        <Row gutter={16}>
+                          <Col span={12}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'title']}
+                              label="Project Title"
+                              rules={[{ required: true, message: 'Please enter project title' }]}
+                            >
+                              <Input placeholder="e.g., E-commerce Platform Development" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'client']}
+                              label="Client"
+                            >
+                              <Input placeholder="e.g., Fortune 500 Company" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row gutter={16}>
+                          <Col span={8}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'duration']}
+                              label="Duration"
+                            >
+                              <Input placeholder="e.g., 6 months" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'role']}
+                              label="Your Role"
+                            >
+                              <Input placeholder="e.g., Lead Developer" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'technologies']}
+                              label="Technologies"
+                            >
+                              <Input placeholder="e.g., React, Node.js, MongoDB" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'description']}
+                          label="Description"
+                        >
+                          <Input.TextArea
+                            rows={3}
+                            placeholder="Describe the project, your contributions, and achievements..."
+                          />
+                        </Form.Item>
+                      </Card>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add Project
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
             </Form.Item>
             
             <Row gutter={16}>
