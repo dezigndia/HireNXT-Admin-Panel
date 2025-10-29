@@ -481,30 +481,28 @@ const OngoingJobs = () => {
           <Card className="details-card">
             {selectedJob ? (
               <>
-                <Row gutter={16} className="job-header-row" align="middle">
+                <Row gutter={[16, 16]} className="job-header-row" align="middle">
                   <Col xs={24} sm={16}>
-                    <Row gutter={[16, 8]}>
-                      <Col xs={12} sm={6}>
-                        <Text strong className="label">Job ID:</Text>
-                        <Tag color="blue">{selectedJob.id}</Tag>
-                      </Col>
-                      <Col xs={12} sm={6}>
-                        <Text className="info-text">
-                          <UserOutlined />
-                          {selectedJob.interested} Interested
-                        </Text>
-                      </Col>
-                      <Col xs={12} sm={6}>
-                        <Text className="info-text">
-                          <EnvironmentOutlined />
-                          {selectedJob.location}
-                        </Text>
-                      </Col>
-                      <Col xs={12} sm={6}>
-                        <Text className="info-text">
-                          <LaptopOutlined />
-                          {selectedJob.openPositions} Open
-                        </Text>
+                    <Row gutter={[12, 8]} align="middle">
+                      <Col xs={24} sm={24}>
+                        <Space size={16} wrap>
+                          <div>
+                            <Text strong className="label">Job ID: </Text>
+                            <Tag color="blue">{selectedJob.id}</Tag>
+                          </div>
+                          <Text className="info-text">
+                            <UserOutlined style={{ marginRight: 4 }} />
+                            {selectedJob.interested} Interested
+                          </Text>
+                          <Text className="info-text">
+                            <EnvironmentOutlined style={{ marginRight: 4 }} />
+                            {selectedJob.location}
+                          </Text>
+                          <Text className="info-text">
+                            <LaptopOutlined style={{ marginRight: 4 }} />
+                            {selectedJob.openPositions} Open
+                          </Text>
+                        </Space>
                       </Col>
                     </Row>
                   </Col>

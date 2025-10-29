@@ -222,8 +222,12 @@ export const SubmitProfilesWrapper = styled.div`
     }
 
     .modal-content {
+      .search-wrapper {
+        margin-bottom: 24px;
+      }
+
       .modal-search {
-        margin-bottom: 20px;
+        width: 100%;
 
         .ant-input-affix-wrapper {
           border-radius: 8px;
@@ -258,6 +262,15 @@ export const SubmitProfilesWrapper = styled.div`
           .ant-input-prefix {
             margin-right: 12px;
           }
+
+          .ant-input-clear-icon {
+            font-size: 14px;
+            color: #bfbfbf;
+
+            &:hover {
+              color: #00d9a9;
+            }
+          }
         }
       }
 
@@ -275,15 +288,16 @@ export const SubmitProfilesWrapper = styled.div`
           font-weight: 600;
           color: #014c75;
           border-bottom: 2px solid #e8e8e8;
-          font-size: 14px;
-          padding: 16px;
+          font-size: 13px;
+          padding: 12px 14px;
         }
 
         .ant-table-tbody > tr {
           transition: all 0.3s;
 
           td {
-            padding: 16px;
+            padding: 12px 14px;
+            font-size: 13px;
           }
 
           &:hover > td {

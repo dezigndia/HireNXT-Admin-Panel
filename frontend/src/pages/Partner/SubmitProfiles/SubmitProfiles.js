@@ -385,8 +385,9 @@ const SubmitProfiles = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      width: 160,
       render: (text) => (
-        <Text strong style={{ color: "#014c75" }}>
+        <Text strong style={{ color: "#014c75", fontSize: "13px" }}>
           {text}
         </Text>
       ),
@@ -395,16 +396,18 @@ const SubmitProfiles = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      render: (text) => <Text style={{ color: "#595959" }}>{text}</Text>,
+      width: 180,
+      render: (text) => <Text style={{ color: "#595959", fontSize: "13px" }}>{text}</Text>,
     },
     {
       title: "Top Skills",
       dataIndex: "topSkills",
       key: "topSkills",
+      width: 260,
       render: (skills) => (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
           {skills.map((skill, index) => (
-            <Tag key={index} color="cyan" style={{ marginBottom: 4 }}>
+            <Tag key={index} color="cyan" style={{ marginBottom: 4, fontSize: "12px" }}>
               {skill.skill} - {skill.level}
             </Tag>
           ))}
@@ -415,8 +418,9 @@ const SubmitProfiles = () => {
       title: "Monthly Rate",
       dataIndex: "monthlyRate",
       key: "monthlyRate",
+      width: 130,
       render: (text) => (
-        <Text strong style={{ color: "#00d9a9", fontSize: "15px" }}>
+        <Text strong style={{ color: "#00d9a9", fontSize: "13px" }}>
           {text}
         </Text>
       ),
@@ -425,6 +429,8 @@ const SubmitProfiles = () => {
       title: "Experience",
       dataIndex: "experience",
       key: "experience",
+      width: 110,
+      render: (text) => <Text style={{ fontSize: "13px" }}>{text}</Text>,
     },
   ];
 
@@ -638,15 +644,22 @@ const SubmitProfiles = () => {
           </Text>
         </Flex>
         <div className="modal-content">
-          <Input
-            placeholder="Search Developer"
-            prefix={<SearchOutlined style={{ color: "#999" }} />}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            size="large"
-            className="modal-search"
-            allowClear
-          />
+          <div className="search-wrapper">
+            <Input
+              placeholder="Search by name, role, or skill"
+              prefix={<SearchOutlined style={{ color: "#bfbfbf", fontSize: "16px" }} />}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              size="large"
+              className="modal-search"
+              allowClear
+              style={{
+                borderRadius: "8px",
+                border: "1px solid #d9d9d9",
+                fontSize: "14px",
+              }}
+            />
+          </div>
 
           <Table
             columns={benchColumns}
@@ -656,12 +669,13 @@ const SubmitProfiles = () => {
             pagination={false}
             scroll={{ y: 320 }}
             className="bench-table"
+            size="middle"
           />
 
           {selectedResources.length > 0 && (
             <div className="selected-section">
-              <Text strong style={{ color: "#014c75", fontSize: "14px" }}>
-                Resource Selected {selectedResources.length}
+              <Text strong style={{ color: "#014c75", fontSize: "15px", marginBottom: "12px", display: "block" }}>
+                Resources Selected: {selectedResources.length}
               </Text>
               <div className="selected-tags">
                 {selectedResources.map((resource) => (
@@ -670,6 +684,15 @@ const SubmitProfiles = () => {
                     closable
                     onClose={() => handleRemoveSelected(resource.id)}
                     className="selected-tag"
+                    style={{
+                      padding: "6px 12px",
+                      fontSize: "13px",
+                      borderRadius: "6px",
+                      background: "#e6fff9",
+                      border: "1px solid #00d9a9",
+                      color: "#014c75",
+                      marginBottom: "8px",
+                    }}
                   >
                     {resource.name}
                   </Tag>
