@@ -38,8 +38,30 @@ The application is a React-based single-page application (SPA) built with Create
     - **Submit Profiles:** Dedicated page for submitting candidate profiles to specific job opportunities:
         - **Job Summary Card:** Displays job ID, title, type, highlighted salary, location, open positions, salary per month metric, project duration, communication level, and primary skills.
         - **Action Buttons:** Two prominent buttons above the profiles table - "Add from Bench Pool" (to select from existing resources) and "Add New Resource" (to add new candidates).
+        - **Add from Bench Pool Modal:** Professional modal with centered title, clean search bar with search icon, table with checkboxes for bulk selection, selected resources display with removable tags, and primary action button (dark blue #014c75) for adding resources. Matches Admin module's design aesthetics.
+        - **Add New Resource Modal:** Comprehensive form modal identical to Admin's "Add Bench Resource" functionality, excluding Partner Organization field (auto-filled from logged-in partner). Includes file uploads for resume, Aadhar, PAN, and degree proof, with proper validation and form styling.
         - **Profiles Table:** Comprehensive table showing resume PDF icon, candidate name, role, top skills with proficiency levels, highlighted monthly rate, experience, notice period, and download resume action.
         - **Navigation:** Back button to return to Ongoing Jobs, maintains design consistency with Customer Dashboard's Job Details page.
+    - **Bench Pool:** Comprehensive resource management page for partners:
+        - **Top Metrics:** Three metric cards displaying Active Resources, Jobs Applied (total across all resources), and Talents Hired (total past hires). Each card features an icon with colored background, large metric number, and descriptive label with hover effects.
+        - **Tabs:** Active and Inactive tabs for filtering resources by status, showing resource count in each tab with teal accent (#00d9a9) for active tab.
+        - **Search & Filters:** Professional search bar with search icon and filter dropdown for Location. Search filters resources by name or role in real-time.
+        - **Bulk Actions:** "Change Status" button appears when resources are selected, allowing bulk status changes between Active and Inactive. Dropdown menu with action options.
+        - **Data Table:** Comprehensive table with checkbox selection for bulk actions and the following columns:
+          - **Resume:** PDF icon for resume download/view
+          - **Name:** Resource full name in bold
+          - **Role:** Job designation/position
+          - **Top Skill:** Skill with proficiency level displayed as blue tag
+          - **Monthly Rate:** Highlighted in teal (#00d9a9) for visibility
+          - **Experience:** Years and months of work experience
+          - **Location:** City/region
+          - **Jobs Applied:** Count displayed as cyan tag
+          - **Past Hired:** Count displayed as green tag  
+          - **Total Billed:** Total revenue generated from this resource
+          - **Action:** Dropdown menu with View Details, Download Resume, Mark Active/Inactive, Edit, and Delete options
+        - **Add New Resource:** Button at top right to add new bench pool resources, opens same modal as Submit Profiles implementation
+        - **Pagination:** Table pagination with page size options and total count display
+        - **API Integration:** Ready for backend integration with dummy data (5 sample resources) for development and testing
     - **Talents Hired:** Section for managing hired talent contracts (similar to Customer Dashboard implementation).
 - **Admin Dashboard:** Comprehensive management sections including User Management, Talent Profiles, Job Requirements, Approval Process, and Role Permissions.
 

@@ -20,6 +20,7 @@ import PartnerOverview from "../PartnerOverview/PartnerOverview";
 import OngoingJobs from "../OngoingJobs/OngoingJobs";
 import TalentsHired from "../TalentsHired/TalentsHired";
 import SubmitProfiles from "../SubmitProfiles/SubmitProfiles";
+import BenchPool from "../BenchPool/BenchPool";
 
 const sideBarMenu = [
   { key: "/partner", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -111,6 +112,7 @@ const PartnerDashboard = () => {
             <Routes>
               <Route path="*" element={<PartnerOverview />} />
               <Route path="/ongoing-jobs" element={<OngoingJobs />} />
+              <Route path="/bench-pool" element={<BenchPool />} />
               <Route path="/submit-profiles/:jobId" element={<SubmitProfiles />} />
               <Route path="/talent-hired" element={<TalentsHired />} />
             </Routes>
