@@ -279,13 +279,6 @@ const BenchPool = () => {
       ),
     },
     {
-      title: "Total Billed",
-      dataIndex: "totalBilled",
-      key: "totalBilled",
-      width: 130,
-      render: (amount) => <Text strong>{amount}</Text>,
-    },
-    {
       title: "Experience",
       dataIndex: "experience",
       key: "experience",
