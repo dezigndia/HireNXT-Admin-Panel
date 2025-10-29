@@ -16,57 +16,53 @@ const TalentsHired = () => {
     {
       id: 1,
       name: "Rajesh Kumar",
-      email: "rajesh.kumar@techcorp.com",
+      role: "Senior Full Stack Developer",
+      experience: "8 Years",
       onboardingDate: "2024-01-15",
       contractDuration: "1 Year",
       lastWorkingDay: "2025-01-15",
       daysLeft: 80,
       monthlyRate: 150000,
-      clientRate: 180000,
-      commission: 30000,
-      client: "TechCorp Solutions",
+      totalBilled: 1200000,
       status: "active",
     },
     {
       id: 2,
       name: "Priya Sharma",
-      email: "priya.sharma@innovations.com",
+      role: "React Native Developer",
+      experience: "6 Years",
       onboardingDate: "2023-08-20",
       contractDuration: "2 Years",
       lastWorkingDay: "2025-08-20",
       daysLeft: 267,
       monthlyRate: 165000,
-      clientRate: 200000,
-      commission: 35000,
-      client: "Innovations Inc",
+      totalBilled: 2640000,
       status: "active",
     },
     {
       id: 3,
       name: "Amit Patel",
-      email: "amit.patel@devstudio.com",
+      role: "Backend Developer",
+      experience: "5 Years",
       onboardingDate: "2024-03-10",
       contractDuration: "18 Months",
       lastWorkingDay: "2025-09-10",
       daysLeft: 288,
       monthlyRate: 140000,
-      clientRate: 175000,
-      commission: 35000,
-      client: "DevStudio Labs",
+      totalBilled: 1120000,
       status: "active",
     },
     {
       id: 4,
       name: "Sneha Reddy",
-      email: "sneha.reddy@cloudservices.com",
+      role: "Cloud Architect",
+      experience: "10 Years",
       onboardingDate: "2024-02-01",
       contractDuration: "1 Year",
       lastWorkingDay: "2025-02-01",
       daysLeft: 97,
       monthlyRate: 170000,
-      clientRate: 210000,
-      commission: 40000,
-      client: "Cloud Services Co",
+      totalBilled: 1530000,
       status: "active",
     },
   ];
@@ -75,29 +71,27 @@ const TalentsHired = () => {
     {
       id: 5,
       name: "Vikram Singh",
-      email: "vikram.singh@pastclient.com",
+      role: "DevOps Engineer",
+      experience: "7 Years",
       onboardingDate: "2022-06-15",
       contractDuration: "1 Year",
       lastWorkingDay: "2023-06-15",
       daysLeft: -565,
       monthlyRate: 130000,
-      clientRate: 160000,
-      commission: 30000,
-      client: "Past Client Ltd",
+      totalBilled: 1560000,
       status: "inactive",
     },
     {
       id: 6,
       name: "Anjali Gupta",
-      email: "anjali.gupta@oldproject.com",
+      role: "UI/UX Designer",
+      experience: "4 Years",
       onboardingDate: "2021-10-10",
       contractDuration: "2 Years",
       lastWorkingDay: "2023-10-10",
       daysLeft: -448,
       monthlyRate: 145000,
-      clientRate: 180000,
-      commission: 35000,
-      client: "Old Project Inc",
+      totalBilled: 3480000,
       status: "inactive",
     },
   ];
@@ -121,21 +115,48 @@ const TalentsHired = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "14%",
+      width: "12%",
       render: (text) => <span className="talent-name">{text}</span>,
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
-      width: "16%",
-      render: (email) => <span className="email-text">{email}</span>,
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      width: "14%",
+      render: (text) => <span className="role-text">{text}</span>,
+    },
+    {
+      title: "Experience",
+      dataIndex: "experience",
+      key: "experience",
+      width: "10%",
+      render: (text) => <span>{text}</span>,
+    },
+    {
+      title: "Monthly Rate",
+      dataIndex: "monthlyRate",
+      key: "monthlyRate",
+      width: "11%",
+      render: (rate) => (
+        <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
+      ),
+    },
+    {
+      title: "Total Billed",
+      dataIndex: "totalBilled",
+      key: "totalBilled",
+      width: "11%",
+      render: (amount) => (
+        <span className="billed-text" style={{ fontWeight: 600, color: "#014c75" }}>
+          ₹ {amount.toLocaleString("en-IN")}
+        </span>
+      ),
     },
     {
       title: "Onboarding Date",
       dataIndex: "onboardingDate",
       key: "onboardingDate",
-      width: "12%",
+      width: "11%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -150,14 +171,14 @@ const TalentsHired = () => {
       title: "Contract Duration",
       dataIndex: "contractDuration",
       key: "contractDuration",
-      width: "12%",
+      width: "10%",
       render: (duration) => <span className="duration-text">{duration}</span>,
     },
     {
       title: "Last Working Day",
       dataIndex: "lastWorkingDay",
       key: "lastWorkingDay",
-      width: "12%",
+      width: "11%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -178,15 +199,6 @@ const TalentsHired = () => {
         <span className={`days-left ${getDaysLeftClass(days)}`}>
           {days < 0 ? "Completed" : `${days} days`}
         </span>
-      ),
-    },
-    {
-      title: "Monthly Rate",
-      dataIndex: "monthlyRate",
-      key: "monthlyRate",
-      width: "12%",
-      render: (rate) => (
-        <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
       ),
     },
     {
@@ -257,7 +269,7 @@ const TalentsHired = () => {
               showSizeChanger: false,
               showTotal: (total) => `Total ${total} talents`,
             }}
-            scroll={{ x: 1400 }}
+            scroll={{ x: 1500 }}
           />
         ) : (
           <EmptyState>

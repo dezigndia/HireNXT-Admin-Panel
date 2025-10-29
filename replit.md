@@ -53,7 +53,6 @@ The application is a React-based single-page application (SPA) built with Create
           - **Role:** Job designation/position (180px)
           - **Top Skill:** Skill with proficiency level displayed as blue tag (160px)
           - **Monthly Rate:** Highlighted in teal (#00d9a9) for visibility (130px)
-          - **Total Billed:** Total revenue generated, positioned beside Monthly Rate for revenue tracking (130px)
           - **Experience:** Years and months of work experience (140px)
           - **Location:** City/region (120px)
           - **Jobs Applied:** Count displayed as centered cyan tag (120px)
@@ -63,7 +62,12 @@ The application is a React-based single-page application (SPA) built with Create
         - **Pagination:** Table pagination with page size options and total count display
         - **API Integration:** Ready for backend integration with dummy data (5 sample resources) for development and testing
     - **Talents Hired:** Partner-specific talent contract management with Active/Inactive tabs:
-        - **Table Columns (Partner perspective):** Name, Email, Onboarding Date, Contract Duration, Last Working Day, color-coded Days Left (green >90 days, orange ≤90 days, red ≤30 days, gray for completed), and Monthly Rate
+        - **Table Columns (Partner perspective):** Name, Role, Experience, Monthly Rate, Total Billed, Onboarding Date, Contract Duration, Last Working Day, and color-coded Days Left (green >90 days, orange ≤90 days, red ≤30 days, gray for completed)
+        - **Column Details:**
+          - Email column removed (not required in partner view)
+          - Role column added - displays talent's job designation
+          - Experience column added - shows years of experience
+          - Total Billed column added - displays total revenue generated from this talent (formatted with rupee symbol and thousand separators, bold dark blue text)
         - **Actions:** View Details, Raise Issue, Initiate Termination (Renew Contract removed - only customers can renew contracts)
         - **Design:** Consistent with brand aesthetics, professional segmented tabs with teal accent, clean table layout with hover effects
 - **Admin Dashboard:** Comprehensive management sections including User Management, Talent Profiles, Job Requirements, Approval Process, and Role Permissions.
