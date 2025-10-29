@@ -16,6 +16,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { PartnerDashboardWrapper } from "./PartnerDashboard.style";
+import PartnerOverview from "../PartnerOverview/PartnerOverview";
 import OngoingJobs from "../OngoingJobs/OngoingJobs";
 import TalentsHired from "../TalentsHired/TalentsHired";
 
@@ -107,16 +108,9 @@ const PartnerDashboard = () => {
             }}
           >
             <Routes>
-              {/* <Route path="*" element={<Overview />} /> */}
+              <Route path="*" element={<PartnerOverview />} />
               <Route path="/ongoing-jobs" element={<OngoingJobs />} />
               <Route path="/talent-hired" element={<TalentsHired />} />
-              {/* <Route path="/talent-profiles" element={<TalentProfiles />} />
-              <Route path="/job-requirments" element={<JobRequirments />} />
-              <Route
-                path="/job-requirments/new-job-post"
-                element={<PostNewJob />}
-              />
-              <Route path="/approval-process" element={<ApprovalProcess />} /> */}
             </Routes>
           </Layout>
         </Layout>
