@@ -19,6 +19,7 @@ import { PartnerDashboardWrapper } from "./PartnerDashboard.style";
 import PartnerOverview from "../PartnerOverview/PartnerOverview";
 import OngoingJobs from "../OngoingJobs/OngoingJobs";
 import TalentsHired from "../TalentsHired/TalentsHired";
+import SubmitProfiles from "../SubmitProfiles/SubmitProfiles";
 
 const sideBarMenu = [
   { key: "/partner", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -110,6 +111,7 @@ const PartnerDashboard = () => {
             <Routes>
               <Route path="*" element={<PartnerOverview />} />
               <Route path="/ongoing-jobs" element={<OngoingJobs />} />
+              <Route path="/submit-profiles/:jobId" element={<SubmitProfiles />} />
               <Route path="/talent-hired" element={<TalentsHired />} />
             </Routes>
           </Layout>

@@ -30,7 +30,16 @@ The application is a React-based single-page application (SPA) built with Create
     - **Hired Talents:** Manages active and inactive talent contracts in a tabbed interface. Displays detailed contract information, calculated end dates, color-coded 'Days Left', and actions like 'Renew Contract', 'Raise Issue', and 'Initiate Termination'.
 - **Partner Dashboard:** A comprehensive hub for partners featuring:
     - **Overview:** Partner-specific metrics (Total Earning, Bench Resources, Jobs Applied, Talents Hired), quick actions (Add Bench Pool, Deploy Resources, Free Consultation), and search functionality for opportunities and requirements.
-    - **Ongoing Jobs:** Two-column layout displaying available job opportunities. Left panel shows a scrollable list of job cards with company type, location, open positions, designation, employment type, salary, and skills. Right panel displays comprehensive job details including primary skills, good-to-have skills, project duration, work time, timezone, system provision status, and detailed job descriptions. Includes search functionality and uses dummy data for display with API integration intact.
+    - **Ongoing Jobs:** Two-column layout displaying available job opportunities with advanced filtering capabilities:
+        - **Search & Filters:** Full-text search by title, company, or designation, plus 7 comprehensive filters (Location, Company Type, Industry, Experience, Primary Skill, Contract Type, Working Mode) with active filter count display and clear all functionality.
+        - **Left Panel (Job List):** Scrollable list of job cards showing company type, location, open positions, designation with experience, employment type tags, highlighted salary (gradient badge), and primary skills. Selected job highlighted with teal border and background.
+        - **Right Panel (Job Details):** Comprehensive job details including job ID, interested candidates, location, open positions, designation, prominently displayed salary (large gradient badge), project duration, communication level, primary skills, good-to-have skills, start date, system provision status, work time, timezone, and detailed job description. Includes "Submit Profiles" button to navigate to profile submission page.
+        - **API Integration:** Uses `API_CONST.GET_JOB_REQUIREMENTS` endpoint with POST method, falls back to dummy data (5 sample jobs) when API is unavailable.
+    - **Submit Profiles:** Dedicated page for submitting candidate profiles to specific job opportunities:
+        - **Job Summary Card:** Displays job ID, title, type, highlighted salary, location, open positions, salary per month metric, project duration, communication level, and primary skills.
+        - **Action Buttons:** Two prominent buttons above the profiles table - "Add from Bench Pool" (to select from existing resources) and "Add New Resource" (to add new candidates).
+        - **Profiles Table:** Comprehensive table showing resume PDF icon, candidate name, role, top skills with proficiency levels, highlighted monthly rate, experience, notice period, and download resume action.
+        - **Navigation:** Back button to return to Ongoing Jobs, maintains design consistency with Customer Dashboard's Job Details page.
     - **Talents Hired:** Section for managing hired talent contracts (similar to Customer Dashboard implementation).
 - **Admin Dashboard:** Comprehensive management sections including User Management, Talent Profiles, Job Requirements, Approval Process, and Role Permissions.
 

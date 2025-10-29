@@ -10,6 +10,8 @@ import {
   Tag,
   Divider,
   Space,
+  Button,
+  Select,
 } from "antd";
 import {
   DollarOutlined,
@@ -19,12 +21,16 @@ import {
   UserOutlined,
   LaptopOutlined,
   ClockCircleOutlined,
+  FilterOutlined,
+  SendOutlined,
 } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 import { API_CONST } from "../../../const";
 import { OngoingJobsWrapper } from "./OngoingJobs.style";
 
 const { Search } = Input;
 const { Title, Text, Paragraph } = Typography;
+const { Option } = Select;
 
 const dummyJobs = [
   {
@@ -33,10 +39,13 @@ const dummyJobs = [
     company: "TechCorp Solutions",
     companyType: "Product",
     location: "Remote",
+    industry: "IT Services",
     openPositions: 3,
     designation: "Senior React Developer",
     experience: "5-7 years",
     employmentType: "Full Time",
+    contractType: "Contract",
+    workingMode: "Remote",
     salary: "₹15-20 LPA",
     skills: ["React", "TypeScript", "Node.js"],
     interested: 24,
@@ -62,10 +71,13 @@ const dummyJobs = [
     company: "Enterprise Systems Inc",
     companyType: "Service",
     location: "Bangalore",
+    industry: "Enterprise Software",
     openPositions: 2,
     designation: "Full Stack Java Developer",
     experience: "4-6 years",
     employmentType: "Contract",
+    contractType: "Contract",
+    workingMode: "Hybrid",
     salary: "₹12-18 LPA",
     skills: ["Java", "Spring Boot", "Angular"],
     interested: 18,
@@ -91,10 +103,13 @@ const dummyJobs = [
     company: "CloudNative Labs",
     companyType: "Startup",
     location: "Hyderabad",
+    industry: "Cloud Services",
     openPositions: 1,
     designation: "DevOps Engineer",
     experience: "3-5 years",
     employmentType: "Full Time",
+    contractType: "Permanent",
+    workingMode: "Office",
     salary: "₹10-15 LPA",
     skills: ["AWS", "Docker", "Kubernetes"],
     interested: 15,
@@ -120,10 +135,13 @@ const dummyJobs = [
     company: "DataDriven AI",
     companyType: "Product",
     location: "Pune",
+    industry: "Artificial Intelligence",
     openPositions: 4,
     designation: "Python Backend Developer",
     experience: "2-4 years",
     employmentType: "Full Time",
+    contractType: "Contract",
+    workingMode: "Remote",
     salary: "₹8-12 LPA",
     skills: ["Python", "Django", "PostgreSQL"],
     interested: 32,
@@ -149,10 +167,13 @@ const dummyJobs = [
     company: "MobileFirst Tech",
     companyType: "Startup",
     location: "Remote",
+    industry: "Mobile Technology",
     openPositions: 2,
     designation: "Mobile App Developer",
     experience: "3-5 years",
     employmentType: "Contract",
+    contractType: "Contract",
+    workingMode: "Remote",
     salary: "₹12-16 LPA",
     skills: ["React Native", "JavaScript", "iOS"],
     interested: 21,
@@ -175,9 +196,20 @@ const dummyJobs = [
 ];
 
 const OngoingJobs = () => {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [selectedJob, setSelectedJob] = useState(null);
   const [jobsData, setUsersData] = useState(dummyJobs);
+  
+  const [filters, setFilters] = useState({
+    location: null,
+    companyType: null,
+    industry: null,
+    experience: null,
+    primarySkill: null,
+    contractType: null,
+    workingMode: null,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -201,12 +233,50 @@ const OngoingJobs = () => {
     fetchData();
   }, []);
 
-  const filteredJobs = jobsData.filter(
-    (job) =>
+  const filteredJobs = jobsData.filter((job) => {
+    const matchesSearch =
       job.title?.toLowerCase().includes(search.toLowerCase()) ||
       job.company?.toLowerCase().includes(search.toLowerCase()) ||
-      job.designation?.toLowerCase().includes(search.toLowerCase())
-  );
+      job.designation?.toLowerCase().includes(search.toLowerCase());
+
+    const matchesLocation = !filters.location || job.location === filters.location;
+    const matchesCompanyType = !filters.companyType || job.companyType === filters.companyType;
+    const matchesIndustry = !filters.industry || job.industry === filters.industry;
+    const matchesExperience = !filters.experience || job.experience === filters.experience;
+    const matchesContractType = !filters.contractType || job.contractType === filters.contractType;
+    const matchesWorkingMode = !filters.workingMode || job.workingMode === filters.workingMode;
+    const matchesPrimarySkill = !filters.primarySkill || 
+      job.primarySkills?.some(skill => skill.toLowerCase().includes(filters.primarySkill.toLowerCase()));
+
+    return matchesSearch && matchesLocation && matchesCompanyType && matchesIndustry && 
+           matchesExperience && matchesContractType && matchesWorkingMode && matchesPrimarySkill;
+  });
+
+  const handleFilterChange = (filterName, value) => {
+    setFilters(prev => ({ ...prev, [filterName]: value }));
+  };
+
+  const clearAllFilters = () => {
+    setFilters({
+      location: null,
+      companyType: null,
+      industry: null,
+      experience: null,
+      primarySkill: null,
+      contractType: null,
+      workingMode: null,
+    });
+  };
+
+  const locations = [...new Set(jobsData.map(job => job.location))];
+  const companyTypes = [...new Set(jobsData.map(job => job.companyType))];
+  const industries = [...new Set(jobsData.map(job => job.industry))];
+  const experiences = [...new Set(jobsData.map(job => job.experience))];
+  const contractTypes = [...new Set(jobsData.map(job => job.contractType))];
+  const workingModes = [...new Set(jobsData.map(job => job.workingMode))];
+  const allSkills = [...new Set(jobsData.flatMap(job => job.primarySkills || []))];
+
+  const activeFilterCount = Object.values(filters).filter(v => v !== null).length;
 
   return (
     <OngoingJobsWrapper>
@@ -219,8 +289,106 @@ const OngoingJobs = () => {
               onChange={(e) => setSearch(e.target.value)}
               allowClear
               size="large"
-              style={{ width: "100%" }}
+              style={{ width: "100%", marginBottom: 16 }}
             />
+            
+            <div className="filters-container">
+              <div className="filter-title">
+                <FilterOutlined /> Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
+              </div>
+              <div className="filters-row">
+                <Select
+                  placeholder="Location"
+                  allowClear
+                  value={filters.location}
+                  onChange={(value) => handleFilterChange('location', value)}
+                  style={{ width: 150 }}
+                >
+                  {locations.map(loc => (
+                    <Option key={loc} value={loc}>{loc}</Option>
+                  ))}
+                </Select>
+
+                <Select
+                  placeholder="Company Type"
+                  allowClear
+                  value={filters.companyType}
+                  onChange={(value) => handleFilterChange('companyType', value)}
+                  style={{ width: 150 }}
+                >
+                  {companyTypes.map(type => (
+                    <Option key={type} value={type}>{type}</Option>
+                  ))}
+                </Select>
+
+                <Select
+                  placeholder="Industry"
+                  allowClear
+                  value={filters.industry}
+                  onChange={(value) => handleFilterChange('industry', value)}
+                  style={{ width: 180 }}
+                >
+                  {industries.map(ind => (
+                    <Option key={ind} value={ind}>{ind}</Option>
+                  ))}
+                </Select>
+
+                <Select
+                  placeholder="Experience"
+                  allowClear
+                  value={filters.experience}
+                  onChange={(value) => handleFilterChange('experience', value)}
+                  style={{ width: 150 }}
+                >
+                  {experiences.map(exp => (
+                    <Option key={exp} value={exp}>{exp}</Option>
+                  ))}
+                </Select>
+
+                <Select
+                  placeholder="Primary Skill"
+                  allowClear
+                  showSearch
+                  value={filters.primarySkill}
+                  onChange={(value) => handleFilterChange('primarySkill', value)}
+                  style={{ width: 180 }}
+                >
+                  {allSkills.map(skill => (
+                    <Option key={skill} value={skill}>{skill}</Option>
+                  ))}
+                </Select>
+
+                <Select
+                  placeholder="Contract Type"
+                  allowClear
+                  value={filters.contractType}
+                  onChange={(value) => handleFilterChange('contractType', value)}
+                  style={{ width: 150 }}
+                >
+                  {contractTypes.map(type => (
+                    <Option key={type} value={type}>{type}</Option>
+                  ))}
+                </Select>
+
+                <Select
+                  placeholder="Working Mode"
+                  allowClear
+                  value={filters.workingMode}
+                  onChange={(value) => handleFilterChange('workingMode', value)}
+                  style={{ width: 150 }}
+                >
+                  {workingModes.map(mode => (
+                    <Option key={mode} value={mode}>{mode}</Option>
+                  ))}
+                </Select>
+
+                {activeFilterCount > 0 && (
+                  <Button onClick={clearAllFilters} type="link">
+                    Clear All
+                  </Button>
+                )}
+              </div>
+            </div>
           </div>
         </Col>
       </Row>
@@ -280,14 +448,9 @@ const OngoingJobs = () => {
                       </Tag>
                     </Col>
                     <Col span={12}>
-                      <Badge
-                        color="blue"
-                        text={
-                          <span>
-                            <DollarOutlined /> {job.salary}
-                          </span>
-                        }
-                      />
+                      <div className="salary-badge">
+                        <DollarOutlined /> {job.salary}
+                      </div>
                     </Col>
                   </Row>
 
@@ -350,14 +513,9 @@ const OngoingJobs = () => {
                 
                 <Row gutter={16} className="badges-row">
                   <Col span={8}>
-                    <Badge
-                      color="green"
-                      text={
-                        <span>
-                          <DollarOutlined /> {selectedJob.salary}
-                        </span>
-                      }
-                    />
+                    <div className="salary-highlight">
+                      <DollarOutlined /> {selectedJob.salary}
+                    </div>
                   </Col>
                   <Col span={8}>
                     <Badge
@@ -467,6 +625,22 @@ const OngoingJobs = () => {
                         </li>
                       ))}
                     </ul>
+                  </Col>
+                </Row>
+
+                <Divider />
+
+                <Row justify="end">
+                  <Col>
+                    <Button
+                      type="primary"
+                      size="large"
+                      icon={<SendOutlined />}
+                      className="submit-profiles-btn"
+                      onClick={() => navigate(`/partner/submit-profiles/${selectedJob.id}`)}
+                    >
+                      Submit Profiles
+                    </Button>
                   </Col>
                 </Row>
               </>
