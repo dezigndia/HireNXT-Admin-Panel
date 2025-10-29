@@ -42,7 +42,13 @@ The application is a React-based single-page application (SPA) built with Create
         - **Job Summary Card:** Displays job ID, title, type, highlighted salary, location, open positions, salary per month metric, project duration, communication level, and primary skills.
         - **Action Buttons:** Two prominent buttons above the profiles table - "Add from Bench Pool" (to select from existing resources) and "Add New Resource" (to add new candidates).
         - **Add from Bench Pool Modal:** Professional modal with centered title, optimized search bar (14px font, improved placeholder "Search by name, role, or skill"), compact table with reduced font size (13px) and proper column widths for better content fit. Top Skills column displays skill data with proper tags showing skill name and proficiency level. Selected resources display with improved chip design (light teal background #e6fff9, teal border #00d9a9, proper padding). Primary action button (dark blue #014c75) for adding resources. Matches Admin module's design aesthetics.
-        - **Add New Resource Modal:** Comprehensive form modal identical to Admin's "Add Bench Resource" functionality, excluding Partner Organization field (auto-filled from logged-in partner). Includes file uploads for resume, Aadhar, PAN, and degree proof, with proper validation and form styling.
+        - **Add New Resource Modal:** Comprehensive form modal for adding new candidates with dynamic fields:
+          - **Basic Information:** Name, Role, Email, Phone, Location, Notice Period, Experience
+          - **Rates:** Monthly Rate, Hourly Rate
+          - **Technical Skills:** Dynamic skill fields with add/remove functionality (skill name + proficiency level)
+          - **Project Experience:** Dynamic project cards with add/remove functionality (title, client, duration, role, technologies, description)
+          - **Document Uploads:** Resume (required), Aadhar Card, PAN Card, Degree Proof
+          - Partner Organization field excluded (auto-filled from logged-in partner), Market Rate excluded (fetched from Admin)
         - **Profiles Table:** Comprehensive table showing resume PDF icon, candidate name, role, top skills with proficiency levels, highlighted monthly rate, experience, notice period, and download resume action.
         - **Navigation:** Back button to return to Ongoing Jobs, maintains design consistency with Customer Dashboard's Job Details page.
     - **Talent Details:** Dedicated talent profile page accessible from Partner module showing comprehensive talent information including professional summary, technical skills with proficiency levels, project experience, verification badges (Aadhar Card & PAN Card verified), contact details, rates, and availability. Features back button navigation and action buttons for scheduling interviews and downloading resumes. Shared component with Customer module for consistency.
@@ -64,11 +70,11 @@ The application is a React-based single-page application (SPA) built with Create
           - **Action:** Centered dropdown menu (80px) with View Details, Download Resume, Mark Active/Inactive, Edit, and Delete options
         - **Add New Resource:** Comprehensive modal for adding new bench pool resources with expanded data capture:
           - **Basic Information:** Name, Role, Email, Phone, Location, Notice Period, Experience (Years/Months)
-          - **Rates:** Monthly Rate, Hourly Rate, Market Rate
+          - **Rates:** Monthly Rate, Hourly Rate (Market Rate is fetched from Admin, not captured here)
           - **Availability:** Dropdown selection for immediate or future availability
           - **Professional Summary:** Multi-line text area for detailed professional background
-          - **Top Skills:** Comma-separated skills input
-          - **Project Experience:** Optional multi-line text area for project details
+          - **Technical Skills:** Dynamic form fields for multiple skills with skill name and proficiency level (Expert/Advanced/Intermediate/Beginner), add/remove functionality
+          - **Project Experience:** Dynamic form cards for multiple projects with fields for Project Title, Client, Duration, Role, Technologies, and Description, add/remove functionality
           - **Document Uploads:** Resume (required), Aadhar Card, PAN Card, Degree Proof
           - All fields structured to match data shown in Talent Details page for consistency
         - **Pagination:** Table pagination with page size options and total count display
