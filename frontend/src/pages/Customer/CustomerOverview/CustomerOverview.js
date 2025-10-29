@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, Col, Row, Typography, Input, Button, Alert } from "antd";
 import { OverviewWrapper } from "./CustomerOverview.style";
 import {
@@ -16,6 +17,7 @@ import {
 const { Title, Text, Paragraph } = Typography;
 
 const CustomerOverview = () => {
+  const navigate = useNavigate();
   const metricsData = [
     { count: 1, label: "Job Live", icon: <FolderOpenOutlined /> },
     { count: 2, label: "Interview Initiated", icon: <VideoCameraOutlined /> },
@@ -29,6 +31,7 @@ const CustomerOverview = () => {
       title: "Post jobs for free",
       description: "Post job briefs for your required roles and start receiving recommends & applications.",
       action: "Post a Job",
+      onClick: () => navigate("/customer/post-job"),
     },
     {
       icon: <UserAddOutlined />,
@@ -101,7 +104,11 @@ const CustomerOverview = () => {
                 </div>
                 <Title level={5} className="action-title">{action.title}</Title>
                 <Paragraph className="action-description">{action.description}</Paragraph>
-                <Button type="link" className="action-link">
+                <Button 
+                  type="link" 
+                  className="action-link"
+                  onClick={action.onClick}
+                >
                   {action.action} <ArrowRightOutlined />
                 </Button>
               </Card>

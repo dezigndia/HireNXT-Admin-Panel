@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Input,
   Select,
@@ -27,7 +28,7 @@ const mockTalents = [
     location: "Kolkata, India",
     experience: 5,
     role: "Full Stack Developer",
-    hourlyRate: "₹ 1,50,000",
+    monthlyRate: "₹ 1,50,000",
     skills: ["PHP", "NodeJs", "React", "HTML"],
     avatar: null,
   },
@@ -37,7 +38,7 @@ const mockTalents = [
     location: "Hyderabad, India",
     experience: 7,
     role: "Django Developer",
-    hourlyRate: "₹ 2,50,000",
+    monthlyRate: "₹ 2,50,000",
     skills: ["Python", "Java", "Angular", "HTML"],
     avatar: null,
   },
@@ -47,7 +48,7 @@ const mockTalents = [
     location: "Kolkata, India",
     experience: 10,
     role: "MERN Stack Developer",
-    hourlyRate: "₹ 3,50,000",
+    monthlyRate: "₹ 3,50,000",
     skills: ["React", "NodeJs", "MongoDB", "HTML"],
     avatar: null,
   },
@@ -57,7 +58,7 @@ const mockTalents = [
     location: "Kolkata, India",
     experience: 3,
     role: "Front End Developer",
-    hourlyRate: "₹ 1,20,000",
+    monthlyRate: "₹ 1,20,000",
     skills: ["React", "HTML", "JavaScript", "CSS"],
     avatar: null,
   },
@@ -67,7 +68,7 @@ const mockTalents = [
     location: "Bangalore, India",
     experience: 6,
     role: "Full Stack Developer",
-    hourlyRate: "₹ 1,80,000",
+    monthlyRate: "₹ 1,80,000",
     skills: ["NodeJs", "React", "MongoDB", "Express"],
     avatar: null,
   },
@@ -77,7 +78,7 @@ const mockTalents = [
     location: "Delhi, India",
     experience: 8,
     role: "Backend Developer",
-    hourlyRate: "₹ 2,00,000",
+    monthlyRate: "₹ 2,00,000",
     skills: ["Java", "Spring", "MySQL", "AWS"],
     avatar: null,
   },
@@ -87,7 +88,7 @@ const mockTalents = [
     location: "Mumbai, India",
     experience: 4,
     role: "UI/UX Developer",
-    hourlyRate: "₹ 1,40,000",
+    monthlyRate: "₹ 1,40,000",
     skills: ["Figma", "React", "CSS", "JavaScript"],
     avatar: null,
   },
@@ -97,13 +98,14 @@ const mockTalents = [
     location: "Pune, India",
     experience: 9,
     role: "DevOps Engineer",
-    hourlyRate: "₹ 2,80,000",
+    monthlyRate: "₹ 2,80,000",
     skills: ["Docker", "Kubernetes", "Jenkins", "AWS"],
     avatar: null,
   },
 ];
 
 const FindTalents = () => {
+  const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
   const [primaryRole, setPrimaryRole] = useState(null);
   const [seniority, setSeniority] = useState(null);
@@ -119,7 +121,7 @@ const FindTalents = () => {
   };
 
   const handleViewDetails = (talent) => {
-    console.log("View details:", talent);
+    navigate(`/customer/talent-details/${talent.id}`);
   };
 
   const handleScheduleInterview = (talent) => {
@@ -246,8 +248,8 @@ const FindTalents = () => {
               <div className="talent-details">
                 <p className="experience">Experience: {talent.experience} Years</p>
                 <h3 className="role">{talent.role}</h3>
-                <p className="rate-label">Hourly Rate</p>
-                <h3 className="rate">{talent.hourlyRate}</h3>
+                <p className="rate-label">Monthly Rate</p>
+                <h3 className="rate">{talent.monthlyRate}</h3>
               </div>
 
               <div className="skills-section">

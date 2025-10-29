@@ -243,6 +243,13 @@ const JobDetails = () => {
   const getActionMenu = (record) => (
     <Menu>
       <Menu.Item
+        key="interview"
+        icon={<VideoCameraOutlined />}
+        onClick={() => handleAction(record.id, "interviewing")}
+      >
+        Schedule Interview
+      </Menu.Item>
+      <Menu.Item
         key="hire"
         icon={<CheckCircleOutlined />}
         onClick={() => handleAction(record.id, "hired")}
@@ -280,10 +287,17 @@ const JobDetails = () => {
       dataIndex: "name",
       key: "name",
       width: 150,
-      render: (name) => (
-        <span style={{ color: "#1890ff", fontWeight: 500, cursor: "pointer" }}>
+      render: (name, record) => (
+        <a 
+          href="#"
+          style={{ color: "#1890ff", fontWeight: 500 }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/customer/talent-details/${record.id}`);
+          }}
+        >
           {name}
-        </span>
+        </a>
       ),
     },
     {
