@@ -10,77 +10,73 @@ export const OngoingJobsWrapper = styled.div`
     padding: 24px 16px 0 16px;
     width: 100%;
 
-    .ant-input-search {
-      .ant-input {
-        border-radius: 8px;
-        border: 1px solid #d9d9d9;
-        font-size: 14px;
+    .search-filters-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+
+      .search-input {
+        flex: 1;
+        min-width: 280px;
         
-        &:focus {
-          border-color: #00d9a9;
-          box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
-        }
-      }
-
-      .ant-input-search-button {
-        background: #00d9a9;
-        border-color: #00d9a9;
-        
-        &:hover {
-          background: #01c49b;
-          border-color: #01c49b;
-        }
-      }
-    }
-
-    .filters-container {
-      background: white;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-
-      .filter-title {
-        font-weight: 600;
-        color: #014c75;
-        margin-bottom: 12px;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-
-        .anticon {
-          color: #00d9a9;
-        }
-      }
-
-      .filters-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        align-items: center;
-
-        .ant-select {
-          .ant-select-selector {
-            border-radius: 6px;
-            
-            &:hover {
-              border-color: #00d9a9;
-            }
-          }
-
-          &.ant-select-focused .ant-select-selector {
+        .ant-input {
+          border-radius: 8px;
+          border: 1px solid #d9d9d9;
+          font-size: 14px;
+          
+          &:focus {
             border-color: #00d9a9;
             box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
           }
         }
 
-        .ant-btn-link {
-          color: #ff4d4f;
-          font-weight: 500;
+        .ant-input-search-button {
+          background: #00d9a9;
+          border-color: #00d9a9;
           
           &:hover {
-            color: #ff7875;
+            background: #01c49b;
+            border-color: #01c49b;
           }
+        }
+      }
+
+      .primary-filter {
+        width: 180px;
+
+        .ant-select-selector {
+          border-radius: 8px;
+          
+          &:hover {
+            border-color: #00d9a9;
+          }
+        }
+
+        &.ant-select-focused .ant-select-selector {
+          border-color: #00d9a9;
+          box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
+        }
+      }
+
+      .more-filters-btn {
+        border-color: #d9d9d9;
+        color: #595959;
+        border-radius: 8px;
+        font-weight: 500;
+        
+        &:hover {
+          border-color: #00d9a9;
+          color: #00d9a9;
+        }
+      }
+
+      .ant-btn-link {
+        color: #ff4d4f;
+        font-weight: 500;
+        
+        &:hover {
+          color: #ff7875;
         }
       }
     }
@@ -177,21 +173,10 @@ export const OngoingJobsWrapper = styled.div`
           font-size: 12px;
         }
 
-        .salary-badge {
-          background: linear-gradient(135deg, #00d9a9 0%, #01c49b 100%);
-          color: white;
-          padding: 4px 12px;
-          border-radius: 20px;
-          font-size: 13px;
-          font-weight: 600;
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-          box-shadow: 0 2px 4px rgba(0, 217, 169, 0.3);
-
-          .anticon {
-            font-size: 14px;
-          }
+        .salary-highlight {
+          color: #00d9a9;
+          font-weight: 700;
+          font-size: 14px;
         }
       }
 
@@ -220,6 +205,28 @@ export const OngoingJobsWrapper = styled.div`
 
       .ant-card-body {
         padding: 24px;
+      }
+
+      .submit-profiles-btn {
+        background: #00d9a9;
+        border-color: #00d9a9;
+        font-weight: 600;
+        height: 44px;
+        padding: 0 32px;
+        font-size: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 217, 169, 0.3);
+
+        &:hover {
+          background: #01c49b;
+          border-color: #01c49b;
+          box-shadow: 0 6px 16px rgba(0, 217, 169, 0.4);
+          transform: translateY(-2px);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
       }
 
       .job-id-row {
@@ -261,20 +268,16 @@ export const OngoingJobsWrapper = styled.div`
       .badges-row {
         margin-bottom: 12px;
 
-        .salary-highlight {
-          background: linear-gradient(135deg, #00d9a9 0%, #01c49b 100%);
-          color: white;
-          padding: 10px 16px;
-          border-radius: 8px;
-          font-size: 16px;
+        .salary-amount {
+          color: #00d9a9;
+          font-size: 20px;
           font-weight: 700;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
-          box-shadow: 0 4px 12px rgba(0, 217, 169, 0.3);
+          gap: 6px;
 
           .anticon {
-            font-size: 18px;
+            font-size: 20px;
           }
         }
 
@@ -323,42 +326,39 @@ export const OngoingJobsWrapper = styled.div`
       }
 
       .description-section {
-        .ant-typography-strong {
-          color: #014c75;
-          font-size: 14px;
-        }
+        .description-block {
+          margin-bottom: 20px;
 
-        ul {
-          margin-top: 8px;
-          padding-left: 20px;
-
-          li {
-            margin-bottom: 8px;
-            color: #595959;
-            line-height: 1.6;
+          .description-title {
+            color: #014c75;
+            font-size: 16px;
+            font-weight: 600;
+            display: block;
+            margin-bottom: 12px;
           }
-        }
-      }
 
-      .submit-profiles-btn {
-        background: #00d9a9;
-        border-color: #00d9a9;
-        font-weight: 600;
-        height: 44px;
-        padding: 0 32px;
-        font-size: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 217, 169, 0.3);
+          .description-text {
+            color: #595959;
+            line-height: 1.7;
+            margin-bottom: 0;
+            font-size: 14px;
+          }
 
-        &:hover {
-          background: #01c49b;
-          border-color: #01c49b;
-          box-shadow: 0 6px 16px rgba(0, 217, 169, 0.4);
-          transform: translateY(-2px);
-        }
+          .description-list {
+            margin: 0;
+            padding-left: 24px;
 
-        &:active {
-          transform: translateY(0);
+            li {
+              margin-bottom: 10px;
+              color: #595959;
+              line-height: 1.7;
+              font-size: 14px;
+
+              .ant-typography {
+                color: #595959;
+              }
+            }
+          }
         }
       }
 
@@ -371,14 +371,54 @@ export const OngoingJobsWrapper = styled.div`
     }
   }
 
+  .ant-drawer {
+    .ant-drawer-header {
+      background: #f8f9fd;
+      border-bottom: 1px solid #e8e8e8;
+
+      .ant-drawer-title {
+        color: #014c75;
+        font-weight: 600;
+      }
+    }
+
+    .ant-drawer-body {
+      .ant-select {
+        .ant-select-selector {
+          border-radius: 6px;
+          
+          &:hover {
+            border-color: #00d9a9;
+          }
+        }
+
+        &.ant-select-focused .ant-select-selector {
+          border-color: #00d9a9;
+          box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
+        }
+      }
+
+      .ant-typography-strong {
+        color: #014c75;
+        font-size: 14px;
+      }
+    }
+  }
+
   @media (max-width: 768px) {
     .search-section {
-      .filters-container {
-        .filters-row {
-          .ant-select {
-            width: 100% !important;
-            min-width: auto;
-          }
+      .search-filters-row {
+        .search-input {
+          width: 100%;
+          min-width: auto;
+        }
+
+        .primary-filter {
+          width: 100%;
+        }
+
+        .more-filters-btn {
+          width: 100%;
         }
       }
     }
