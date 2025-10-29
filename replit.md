@@ -11,7 +11,7 @@ The application is a React-based single-page application (SPA) built with Create
 
 **UI/UX Decisions:**
 - **Design System:** Ant Design is the primary UI library, providing a modern and consistent aesthetic.
-- **Color Schemes:** Professional layouts with clean white backgrounds, accented by teal (`#26c6b8`) for active states and highlights, and dark blue (`#004a7c`) for primary actions.
+- **Color Schemes:** Professional layouts with clean white backgrounds, accented by teal/green (`#00d9a9`, `#01c49b`) for active states, highlights, and interactive elements, and dark blue (`#014c75`) for primary text and titles. Background color `#f8f9fd` provides subtle contrast.
 - **Responsiveness:** Designed to be mobile-friendly with proper breakpoints and responsive layouts for tables and forms.
 - **Interaction Patterns:**
     - Card-based layouts for job listings and talent profiles.
@@ -28,7 +28,10 @@ The application is a React-based single-page application (SPA) built with Create
     - **Job Details:** Comprehensive view of a specific job, including a summary, primary skills, and a table of submitted profiles. Allows for candidate management (schedule interview, hire, reject).
     - **Post Job:** A 4-step wizard for creating new job postings, including skill requirements, basic details, preferences, and job responsibilities (with a rich text editor). Features step-by-step validation and state persistence.
     - **Hired Talents:** Manages active and inactive talent contracts in a tabbed interface. Displays detailed contract information, calculated end dates, color-coded 'Days Left', and actions like 'Renew Contract', 'Raise Issue', and 'Initiate Termination'.
-- **Partner Dashboard:** Designed for viewing ongoing jobs and hired talents (details not fully specified, but implies similar functionality to customer views relevant to partners).
+- **Partner Dashboard:** A comprehensive hub for partners featuring:
+    - **Overview:** Partner-specific metrics (Total Earning, Bench Resources, Jobs Applied, Talents Hired), quick actions (Add Bench Pool, Deploy Resources, Free Consultation), and search functionality for opportunities and requirements.
+    - **Ongoing Jobs:** Two-column layout displaying available job opportunities. Left panel shows a scrollable list of job cards with company type, location, open positions, designation, employment type, salary, and skills. Right panel displays comprehensive job details including primary skills, good-to-have skills, project duration, work time, timezone, system provision status, and detailed job descriptions. Includes search functionality and uses dummy data for display with API integration intact.
+    - **Talents Hired:** Section for managing hired talent contracts (similar to Customer Dashboard implementation).
 - **Admin Dashboard:** Comprehensive management sections including User Management, Talent Profiles, Job Requirements, Approval Process, and Role Permissions.
 
 **System Design Choices:**
