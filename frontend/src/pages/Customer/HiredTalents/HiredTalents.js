@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, Dropdown, Segmented, Empty } from "antd";
-import { BellOutlined, MoreOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import { MoreOutlined } from "@ant-design/icons";
 import {
   HiredTalentsContainer,
   PageHeader,
@@ -10,6 +11,7 @@ import {
 } from "./HiredTalents.style";
 
 const HiredTalents = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active Talents");
 
   const mockHiredTalents = [
@@ -122,8 +124,15 @@ const HiredTalents = () => {
       dataIndex: "name",
       key: "name",
       width: "14%",
-      render: (text) => (
-        <a href="#" className="talent-name">
+      render: (text, record) => (
+        <a 
+          href="#" 
+          className="talent-name"
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/customer/talent-details/${record.id}`);
+          }}
+        >
           {text}
         </a>
       ),
@@ -208,12 +217,6 @@ const HiredTalents = () => {
       align: "center",
       render: (_, record) => (
         <div className="action-buttons">
-          <button
-            className="icon-button notification-btn"
-            title="Notifications"
-          >
-            <BellOutlined />
-          </button>
           <Dropdown
             menu={{
               items: [
