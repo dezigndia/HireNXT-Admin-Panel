@@ -19,25 +19,36 @@ export const OngoingJobsWrapper = styled.div`
       .search-input {
         flex: 1;
         min-width: 280px;
-        
+
         .ant-input {
           border-radius: 8px;
           border: 1px solid #d9d9d9;
           font-size: 14px;
+          padding: 8px 12px;
+          height: 40px;
+          background: white;
+          
+          &:hover {
+            border-color: #00d9a9;
+          }
           
           &:focus {
             border-color: #00d9a9;
             box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
+            outline: none;
           }
         }
 
-        .ant-input-search-button {
-          background: #00d9a9;
-          border-color: #00d9a9;
+        .ant-input-prefix {
+          color: #8c8c8c;
+          margin-right: 8px;
+        }
+
+        .ant-input-clear-icon {
+          color: #8c8c8c;
           
           &:hover {
-            background: #01c49b;
-            border-color: #01c49b;
+            color: #595959;
           }
         }
       }
@@ -47,15 +58,21 @@ export const OngoingJobsWrapper = styled.div`
 
         .ant-select-selector {
           border-radius: 8px;
+          height: 40px !important;
           
           &:hover {
-            border-color: #00d9a9;
+            border-color: #00d9a9 !important;
           }
         }
 
+        .ant-select-selection-placeholder,
+        .ant-select-selection-item {
+          line-height: 38px !important;
+        }
+
         &.ant-select-focused .ant-select-selector {
-          border-color: #00d9a9;
-          box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
+          border-color: #00d9a9 !important;
+          box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1) !important;
         }
       }
 
@@ -64,16 +81,20 @@ export const OngoingJobsWrapper = styled.div`
         color: #595959;
         border-radius: 8px;
         font-weight: 500;
+        height: 40px;
+        padding: 0 20px;
         
         &:hover {
           border-color: #00d9a9;
           color: #00d9a9;
+          background: #e6fff9;
         }
       }
 
-      .ant-btn-link {
+      .clear-all-btn {
         color: #ff4d4f;
         font-weight: 500;
+        height: 40px;
         
         &:hover {
           color: #ff7875;
@@ -124,6 +145,7 @@ export const OngoingJobsWrapper = styled.div`
       border: 1px solid #e8e8e8;
       transition: all 0.3s ease;
       cursor: pointer;
+      background: white;
 
       &:hover {
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
@@ -202,42 +224,29 @@ export const OngoingJobsWrapper = styled.div`
       border-radius: 8px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
       border: 1px solid #e8e8e8;
+      background: white;
 
       .ant-card-body {
         padding: 24px;
       }
 
-      .submit-profiles-btn {
-        background: #00d9a9;
-        border-color: #00d9a9;
-        font-weight: 600;
-        height: 44px;
-        padding: 0 32px;
-        font-size: 15px;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 217, 169, 0.3);
+      .job-header-row {
+        margin-bottom: 0;
 
-        &:hover {
-          background: #01c49b;
-          border-color: #01c49b;
-          box-shadow: 0 6px 16px rgba(0, 217, 169, 0.4);
-          transform: translateY(-2px);
+        .label {
+          color: #014c75;
+          font-size: 14px;
+          margin-right: 8px;
         }
 
-        &:active {
-          transform: translateY(0);
-        }
-      }
-
-      .job-id-row {
-        margin-bottom: 12px;
-
-        .ant-typography {
+        .info-text {
           font-size: 14px;
           color: #595959;
+          display: block;
 
-          &.ant-typography-strong {
-            color: #014c75;
+          .anticon {
+            color: #00d9a9;
+            margin-right: 4px;
           }
         }
 
@@ -245,18 +254,41 @@ export const OngoingJobsWrapper = styled.div`
           border-radius: 4px;
         }
 
-        .anticon {
-          color: #00d9a9;
-          margin-right: 4px;
+        .submit-btn-col {
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+        }
+
+        .submit-profiles-btn {
+          background: #00d9a9;
+          border-color: #00d9a9;
+          font-weight: 600;
+          height: 44px;
+          padding: 0 32px;
+          font-size: 15px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 217, 169, 0.3);
+
+          &:hover {
+            background: #01c49b;
+            border-color: #01c49b;
+            box-shadow: 0 6px 16px rgba(0, 217, 169, 0.4);
+            transform: translateY(-2px);
+          }
+
+          &:active {
+            transform: translateY(0);
+          }
         }
       }
 
       .ant-divider {
-        margin: 12px 0;
+        margin: 16px 0;
       }
 
       .title-row {
-        margin-bottom: 12px;
+        margin-bottom: 16px;
 
         h4 {
           color: #014c75;
@@ -266,7 +298,7 @@ export const OngoingJobsWrapper = styled.div`
       }
 
       .badges-row {
-        margin-bottom: 12px;
+        margin-bottom: 16px;
 
         .salary-amount {
           color: #00d9a9;
@@ -294,7 +326,7 @@ export const OngoingJobsWrapper = styled.div`
       }
 
       .skills-section {
-        margin-bottom: 12px;
+        margin-bottom: 16px;
 
         .ant-typography-strong {
           color: #014c75;
@@ -308,7 +340,7 @@ export const OngoingJobsWrapper = styled.div`
       }
 
       .info-grid {
-        margin-bottom: 12px;
+        margin-bottom: 16px;
 
         .ant-typography {
           font-size: 14px;
@@ -326,39 +358,21 @@ export const OngoingJobsWrapper = styled.div`
       }
 
       .description-section {
-        .description-block {
-          margin-bottom: 20px;
+        .description-title {
+          color: #014c75;
+          font-size: 16px;
+          font-weight: 600;
+          display: block;
+          margin-bottom: 12px;
+        }
 
-          .description-title {
-            color: #014c75;
-            font-size: 16px;
-            font-weight: 600;
-            display: block;
-            margin-bottom: 12px;
-          }
-
-          .description-text {
-            color: #595959;
-            line-height: 1.7;
-            margin-bottom: 0;
-            font-size: 14px;
-          }
-
-          .description-list {
-            margin: 0;
-            padding-left: 24px;
-
-            li {
-              margin-bottom: 10px;
-              color: #595959;
-              line-height: 1.7;
-              font-size: 14px;
-
-              .ant-typography {
-                color: #595959;
-              }
-            }
-          }
+        .description-text {
+          color: #595959;
+          line-height: 1.8;
+          margin-bottom: 0;
+          font-size: 14px;
+          white-space: pre-line;
+          text-align: justify;
         }
       }
 
@@ -405,6 +419,19 @@ export const OngoingJobsWrapper = styled.div`
     }
   }
 
+  @media (max-width: 992px) {
+    .job-details-column {
+      .details-card {
+        .job-header-row {
+          .submit-btn-col {
+            justify-content: flex-start;
+            margin-top: 16px;
+          }
+        }
+      }
+    }
+  }
+
   @media (max-width: 768px) {
     .search-section {
       .search-filters-row {
@@ -414,7 +441,7 @@ export const OngoingJobsWrapper = styled.div`
         }
 
         .primary-filter {
-          width: 100%;
+          width: calc(50% - 6px);
         }
 
         .more-filters-btn {
@@ -426,6 +453,52 @@ export const OngoingJobsWrapper = styled.div`
     .jobs-list-column {
       .jobs-scroll-container {
         max-height: 50vh;
+      }
+    }
+
+    .job-details-column {
+      .details-card {
+        .badges-row {
+          .salary-amount {
+            font-size: 18px;
+          }
+        }
+
+        .job-header-row {
+          .ant-col {
+            margin-bottom: 8px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 576px) {
+    .search-section {
+      padding: 16px 12px 0 12px;
+
+      .search-filters-row {
+        .primary-filter {
+          width: 100%;
+        }
+      }
+    }
+
+    .content-section {
+      padding: 16px 12px;
+    }
+
+    .job-details-column {
+      .details-card {
+        .ant-card-body {
+          padding: 16px;
+        }
+
+        .job-header-row {
+          .submit-profiles-btn {
+            width: 100%;
+          }
+        }
       }
     }
   }

@@ -24,6 +24,7 @@ import {
   ClockCircleOutlined,
   FilterOutlined,
   SendOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { API_CONST } from "../../../const";
@@ -58,35 +59,7 @@ const dummyJobs = [
     systemProvided: true,
     workTime: "9 AM - 6 PM IST",
     timeZone: "IST",
-    description: {
-      overview: "We are seeking an experienced Senior React Developer to join our dynamic engineering team. The ideal candidate will lead the development of modern, scalable web applications using React.js and related technologies.",
-      requiredExperience: [
-        "5-7 years of professional experience in front-end development",
-        "Strong expertise in React.js, including hooks, context API, and component lifecycle",
-        "Advanced proficiency in TypeScript for type-safe application development",
-        "Experience with state management libraries like Redux or MobX",
-        "Solid understanding of modern JavaScript (ES6+) and web standards",
-        "Hands-on experience with Next.js for server-side rendering",
-        "Proficiency in responsive design and cross-browser compatibility"
-      ],
-      responsibilities: [
-        "Design and develop scalable, high-performance web applications using React.js",
-        "Collaborate with UX/UI designers to implement pixel-perfect user interfaces",
-        "Write clean, maintainable, and well-documented code following industry best practices",
-        "Lead code reviews and provide constructive feedback to team members",
-        "Mentor junior developers and contribute to team knowledge sharing",
-        "Optimize application performance and ensure excellent user experience",
-        "Participate in architectural decisions and technical planning sessions",
-        "Stay updated with emerging technologies and industry trends"
-      ],
-      qualifications: [
-        "Bachelor's degree in Computer Science or equivalent practical experience",
-        "Strong problem-solving skills and attention to detail",
-        "Excellent communication and teamwork abilities",
-        "Experience with agile development methodologies",
-        "Familiarity with Git version control and CI/CD pipelines"
-      ]
-    }
+    jobDescription: "We are seeking an experienced Senior React Developer to join our dynamic engineering team. The ideal candidate will lead the development of modern, scalable web applications using React.js and related technologies.\n\nRequired Experience:\n- 5-7 years of professional experience in front-end development\n- Strong expertise in React.js, including hooks, context API, and component lifecycle\n- Advanced proficiency in TypeScript for type-safe application development\n- Experience with state management libraries like Redux or MobX\n- Solid understanding of modern JavaScript (ES6+) and web standards\n- Hands-on experience with Next.js for server-side rendering\n- Proficiency in responsive design and cross-browser compatibility\n\nKey Responsibilities:\n- Design and develop scalable, high-performance web applications using React.js\n- Collaborate with UX/UI designers to implement pixel-perfect user interfaces\n- Write clean, maintainable, and well-documented code following industry best practices\n- Lead code reviews and provide constructive feedback to team members\n- Mentor junior developers and contribute to team knowledge sharing\n- Optimize application performance and ensure excellent user experience\n- Participate in architectural decisions and technical planning sessions\n- Stay updated with emerging technologies and industry trends\n\nQualifications:\n- Bachelor's degree in Computer Science or equivalent practical experience\n- Strong problem-solving skills and attention to detail\n- Excellent communication and teamwork abilities\n- Experience with agile development methodologies\n- Familiarity with Git version control and CI/CD pipelines"
   },
   {
     id: "JOB-2024-002",
@@ -112,35 +85,7 @@ const dummyJobs = [
     systemProvided: false,
     workTime: "10 AM - 7 PM IST",
     timeZone: "IST",
-    description: {
-      overview: "Join our enterprise software team as a Full Stack Java Developer to build robust, scalable applications for Fortune 500 clients. You'll work on cutting-edge microservices architecture using Java Spring Boot and Angular.",
-      requiredExperience: [
-        "4-6 years of full-stack development experience with Java technologies",
-        "Strong proficiency in Java 8+ and Spring Boot framework",
-        "Experience designing and implementing RESTful APIs",
-        "Solid understanding of microservices architecture and design patterns",
-        "Front-end development experience with Angular 12+",
-        "Working knowledge of SQL and NoSQL databases",
-        "Experience with containerization using Docker"
-      ],
-      responsibilities: [
-        "Design and develop enterprise-grade applications using Java Spring Boot",
-        "Build and maintain microservices for distributed systems",
-        "Create responsive front-end interfaces using Angular framework",
-        "Implement secure RESTful APIs and integrate third-party services",
-        "Write comprehensive unit tests and integration tests",
-        "Optimize database queries and application performance",
-        "Collaborate with DevOps team for deployment and monitoring",
-        "Participate in requirement analysis and technical documentation"
-      ],
-      qualifications: [
-        "Bachelor's degree in Computer Science, Engineering, or related field",
-        "Strong analytical and problem-solving capabilities",
-        "Experience with agile/scrum methodologies",
-        "Knowledge of design patterns and software architecture principles",
-        "Excellent verbal and written communication skills"
-      ]
-    }
+    jobDescription: "Join our enterprise software team as a Full Stack Java Developer to build robust, scalable applications for Fortune 500 clients. You'll work on cutting-edge microservices architecture using Java Spring Boot and Angular.\n\nRequired Experience:\n- 4-6 years of full-stack development experience with Java technologies\n- Strong proficiency in Java 8+ and Spring Boot framework\n- Experience designing and implementing RESTful APIs\n- Solid understanding of microservices architecture and design patterns\n- Front-end development experience with Angular 12+\n- Working knowledge of SQL and NoSQL databases\n- Experience with containerization using Docker\n\nKey Responsibilities:\n- Design and develop enterprise-grade applications using Java Spring Boot\n- Build and maintain microservices for distributed systems\n- Create responsive front-end interfaces using Angular framework\n- Implement secure RESTful APIs and integrate third-party services\n- Write comprehensive unit tests and integration tests\n- Optimize database queries and application performance\n- Collaborate with DevOps team for deployment and monitoring\n- Participate in requirement analysis and technical documentation\n\nQualifications:\n- Bachelor's degree in Computer Science, Engineering, or related field\n- Strong analytical and problem-solving capabilities\n- Experience with agile/scrum methodologies\n- Knowledge of design patterns and software architecture principles\n- Excellent verbal and written communication skills"
   },
   {
     id: "JOB-2024-003",
@@ -166,36 +111,7 @@ const dummyJobs = [
     systemProvided: true,
     workTime: "Flexible",
     timeZone: "IST",
-    description: {
-      overview: "We're looking for a skilled DevOps Engineer to join our cloud infrastructure team. You'll be responsible for building and maintaining our AWS-based infrastructure, implementing CI/CD pipelines, and ensuring system reliability.",
-      requiredExperience: [
-        "3-5 years of hands-on DevOps experience in production environments",
-        "Strong expertise in AWS cloud services (EC2, S3, RDS, Lambda, etc.)",
-        "Proficiency in containerization using Docker and orchestration with Kubernetes",
-        "Experience with Infrastructure as Code using Terraform or CloudFormation",
-        "Solid understanding of CI/CD pipelines using Jenkins or GitLab CI",
-        "Working knowledge of Linux system administration",
-        "Experience with monitoring and logging tools"
-      ],
-      responsibilities: [
-        "Design, implement, and manage scalable AWS cloud infrastructure",
-        "Build and maintain automated CI/CD pipelines for multiple applications",
-        "Manage Kubernetes clusters and containerized applications",
-        "Implement infrastructure as code using Terraform",
-        "Set up monitoring, alerting, and logging systems (Prometheus, Grafana, ELK)",
-        "Ensure high availability and disaster recovery procedures",
-        "Implement security best practices and compliance requirements",
-        "Collaborate with development teams to optimize deployment processes",
-        "Troubleshoot production issues and perform root cause analysis"
-      ],
-      qualifications: [
-        "Bachelor's degree in Computer Science or related technical field",
-        "Strong scripting skills (Python, Bash, or similar)",
-        "Understanding of networking concepts and security principles",
-        "Experience with version control systems (Git)",
-        "Excellent problem-solving and communication skills"
-      ]
-    }
+    jobDescription: "We're looking for a skilled DevOps Engineer to join our cloud infrastructure team. You'll be responsible for building and maintaining our AWS-based infrastructure, implementing CI/CD pipelines, and ensuring system reliability.\n\nRequired Experience:\n- 3-5 years of hands-on DevOps experience in production environments\n- Strong expertise in AWS cloud services (EC2, S3, RDS, Lambda, etc.)\n- Proficiency in containerization using Docker and orchestration with Kubernetes\n- Experience with Infrastructure as Code using Terraform or CloudFormation\n- Solid understanding of CI/CD pipelines using Jenkins or GitLab CI\n- Working knowledge of Linux system administration\n- Experience with monitoring and logging tools\n\nKey Responsibilities:\n- Design, implement, and manage scalable AWS cloud infrastructure\n- Build and maintain automated CI/CD pipelines for multiple applications\n- Manage Kubernetes clusters and containerized applications\n- Implement infrastructure as code using Terraform\n- Set up monitoring, alerting, and logging systems (Prometheus, Grafana, ELK)\n- Ensure high availability and disaster recovery procedures\n- Implement security best practices and compliance requirements\n- Collaborate with development teams to optimize deployment processes\n- Troubleshoot production issues and perform root cause analysis\n\nQualifications:\n- Bachelor's degree in Computer Science or related technical field\n- Strong scripting skills (Python, Bash, or similar)\n- Understanding of networking concepts and security principles\n- Experience with version control systems (Git)\n- Excellent problem-solving and communication skills"
   },
   {
     id: "JOB-2024-004",
@@ -221,36 +137,7 @@ const dummyJobs = [
     systemProvided: true,
     workTime: "9 AM - 6 PM IST",
     timeZone: "IST",
-    description: {
-      overview: "Join our AI-driven product team as a Python Backend Developer. You'll build scalable backend services that power our machine learning applications and data processing pipelines.",
-      requiredExperience: [
-        "2-4 years of backend development experience with Python",
-        "Strong proficiency in Django or Flask framework",
-        "Experience with FastAPI for building high-performance APIs",
-        "Solid understanding of RESTful API design principles",
-        "Working experience with PostgreSQL and database optimization",
-        "Knowledge of Redis for caching and session management",
-        "Familiarity with asynchronous task processing"
-      ],
-      responsibilities: [
-        "Develop and maintain robust backend services using Python and Django",
-        "Design and implement RESTful APIs for web and mobile applications",
-        "Work with data science team to integrate ML models into production",
-        "Optimize database queries and implement efficient data models",
-        "Implement caching strategies using Redis for improved performance",
-        "Build asynchronous task processing using Celery",
-        "Write comprehensive unit tests and API documentation",
-        "Ensure code quality through code reviews and best practices",
-        "Monitor application performance and troubleshoot production issues"
-      ],
-      qualifications: [
-        "Bachelor's degree in Computer Science or related field",
-        "Strong understanding of data structures and algorithms",
-        "Experience with Git version control",
-        "Knowledge of software testing methodologies",
-        "Good communication and teamwork skills"
-      ]
-    }
+    jobDescription: "Join our AI-driven product team as a Python Backend Developer. You'll build scalable backend services that power our machine learning applications and data processing pipelines.\n\nRequired Experience:\n- 2-4 years of backend development experience with Python\n- Strong proficiency in Django or Flask framework\n- Experience with FastAPI for building high-performance APIs\n- Solid understanding of RESTful API design principles\n- Working experience with PostgreSQL and database optimization\n- Knowledge of Redis for caching and session management\n- Familiarity with asynchronous task processing\n\nKey Responsibilities:\n- Develop and maintain robust backend services using Python and Django\n- Design and implement RESTful APIs for web and mobile applications\n- Work with data science team to integrate ML models into production\n- Optimize database queries and implement efficient data models\n- Implement caching strategies using Redis for improved performance\n- Build asynchronous task processing using Celery\n- Write comprehensive unit tests and API documentation\n- Ensure code quality through code reviews and best practices\n- Monitor application performance and troubleshoot production issues\n\nQualifications:\n- Bachelor's degree in Computer Science or related field\n- Strong understanding of data structures and algorithms\n- Experience with Git version control\n- Knowledge of software testing methodologies\n- Good communication and teamwork skills"
   },
   {
     id: "JOB-2024-005",
@@ -276,36 +163,7 @@ const dummyJobs = [
     systemProvided: false,
     workTime: "10 AM - 7 PM IST",
     timeZone: "IST",
-    description: {
-      overview: "We're seeking an experienced React Native Developer to build innovative mobile applications for both iOS and Android platforms. You'll work on consumer-facing apps with millions of users.",
-      requiredExperience: [
-        "3-5 years of mobile app development experience with React Native",
-        "Strong proficiency in JavaScript and TypeScript",
-        "Experience building and deploying apps to App Store and Play Store",
-        "Solid understanding of React Native architecture and native modules",
-        "Working knowledge of Redux or other state management solutions",
-        "Experience with RESTful APIs and third-party integrations",
-        "Familiarity with mobile app performance optimization"
-      ],
-      responsibilities: [
-        "Develop cross-platform mobile applications using React Native",
-        "Build reusable components and maintain code quality standards",
-        "Integrate with native modules when required (iOS/Android)",
-        "Implement push notifications, deep linking, and analytics",
-        "Optimize app performance and minimize bundle size",
-        "Write unit tests and ensure code coverage",
-        "Collaborate with designers to implement pixel-perfect UIs",
-        "Debug and fix issues across different devices and OS versions",
-        "Maintain app releases and handle App Store submissions"
-      ],
-      qualifications: [
-        "Bachelor's degree in Computer Science or equivalent experience",
-        "Strong problem-solving and debugging skills",
-        "Experience with Git and agile development processes",
-        "Understanding of mobile app security best practices",
-        "Excellent attention to detail and user experience"
-      ]
-    }
+    jobDescription: "We're seeking an experienced React Native Developer to build innovative mobile applications for both iOS and Android platforms. You'll work on consumer-facing apps with millions of users.\n\nRequired Experience:\n- 3-5 years of mobile app development experience with React Native\n- Strong proficiency in JavaScript and TypeScript\n- Experience building and deploying apps to App Store and Play Store\n- Solid understanding of React Native architecture and native modules\n- Working knowledge of Redux or other state management solutions\n- Experience with RESTful APIs and third-party integrations\n- Familiarity with mobile app performance optimization\n\nKey Responsibilities:\n- Develop cross-platform mobile applications using React Native\n- Build reusable components and maintain code quality standards\n- Integrate with native modules when required (iOS/Android)\n- Implement push notifications, deep linking, and analytics\n- Optimize app performance and minimize bundle size\n- Write unit tests and ensure code coverage\n- Collaborate with designers to implement pixel-perfect UIs\n- Debug and fix issues across different devices and OS versions\n- Maintain app releases and handle App Store submissions\n\nQualifications:\n- Bachelor's degree in Computer Science or equivalent experience\n- Strong problem-solving and debugging skills\n- Experience with Git and agile development processes\n- Understanding of mobile app security best practices\n- Excellent attention to detail and user experience"
   },
 ];
 
@@ -400,10 +258,11 @@ const OngoingJobs = () => {
         <Col span={24}>
           <div className="search-section">
             <div className="search-filters-row">
-              <Search
+              <Input
                 placeholder="Search jobs by title, company, or designation..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
+                prefix={<SearchOutlined />}
                 allowClear
                 size="large"
                 className="search-input"
@@ -446,7 +305,7 @@ const OngoingJobs = () => {
               </Button>
 
               {activeFilterCount > 0 && (
-                <Button onClick={clearAllFilters} type="link" size="large">
+                <Button onClick={clearAllFilters} type="link" size="large" className="clear-all-btn">
                   Clear All
                 </Button>
               )}
@@ -622,43 +481,44 @@ const OngoingJobs = () => {
           <Card className="details-card">
             {selectedJob ? (
               <>
-                <Row justify="end" style={{ marginBottom: 16 }}>
-                  <Col>
+                <Row gutter={16} className="job-header-row" align="middle">
+                  <Col xs={24} sm={16}>
+                    <Row gutter={[16, 8]}>
+                      <Col xs={12} sm={6}>
+                        <Text strong className="label">Job ID:</Text>
+                        <Tag color="blue">{selectedJob.id}</Tag>
+                      </Col>
+                      <Col xs={12} sm={6}>
+                        <Text className="info-text">
+                          <UserOutlined />
+                          {selectedJob.interested} Interested
+                        </Text>
+                      </Col>
+                      <Col xs={12} sm={6}>
+                        <Text className="info-text">
+                          <EnvironmentOutlined />
+                          {selectedJob.location}
+                        </Text>
+                      </Col>
+                      <Col xs={12} sm={6}>
+                        <Text className="info-text">
+                          <LaptopOutlined />
+                          {selectedJob.openPositions} Open
+                        </Text>
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col xs={24} sm={8} className="submit-btn-col">
                     <Button
                       type="primary"
                       size="large"
                       icon={<SendOutlined />}
                       className="submit-profiles-btn"
                       onClick={() => navigate(`/partner/submit-profiles/${selectedJob.id}`)}
+                      block
                     >
                       Submit Profiles
                     </Button>
-                  </Col>
-                </Row>
-
-                <Row gutter={16} className="job-id-row">
-                  <Col span={6}>
-                    <Text strong>
-                      Job ID: <Tag color="blue">{selectedJob.id}</Tag>
-                    </Text>
-                  </Col>
-                  <Col span={6}>
-                    <Text>
-                      <UserOutlined />
-                      {selectedJob.interested} Interested
-                    </Text>
-                  </Col>
-                  <Col span={6}>
-                    <Text>
-                      <EnvironmentOutlined />
-                      {selectedJob.location}
-                    </Text>
-                  </Col>
-                  <Col span={6}>
-                    <Text>
-                      <LaptopOutlined />
-                      {selectedJob.openPositions} Open
-                    </Text>
                   </Col>
                 </Row>
                 
@@ -778,49 +638,10 @@ const OngoingJobs = () => {
                 
                 <Row className="description-section">
                   <Col span={24}>
-                    {selectedJob.description && (
-                      <>
-                        <div className="description-block">
-                          <Text strong className="description-title">Overview</Text>
-                          <Paragraph className="description-text">
-                            {selectedJob.description.overview}
-                          </Paragraph>
-                        </div>
-
-                        <div className="description-block">
-                          <Text strong className="description-title">Required Experience</Text>
-                          <ul className="description-list">
-                            {selectedJob.description.requiredExperience?.map((item, idx) => (
-                              <li key={idx}>
-                                <Text>{item}</Text>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="description-block">
-                          <Text strong className="description-title">Key Responsibilities</Text>
-                          <ul className="description-list">
-                            {selectedJob.description.responsibilities?.map((item, idx) => (
-                              <li key={idx}>
-                                <Text>{item}</Text>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-
-                        <div className="description-block">
-                          <Text strong className="description-title">Qualifications</Text>
-                          <ul className="description-list">
-                            {selectedJob.description.qualifications?.map((item, idx) => (
-                              <li key={idx}>
-                                <Text>{item}</Text>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                      </>
-                    )}
+                    <Text strong className="description-title">Job Description</Text>
+                    <Paragraph className="description-text">
+                      {selectedJob.jobDescription}
+                    </Paragraph>
                   </Col>
                 </Row>
               </>
