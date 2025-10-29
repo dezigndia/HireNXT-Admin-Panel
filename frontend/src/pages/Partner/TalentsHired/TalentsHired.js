@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Dropdown, Segmented, Empty } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import {
@@ -10,6 +11,7 @@ import {
 } from "./TalentsHired.style";
 
 const TalentsHired = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active Talents");
 
   const mockHiredTalents = [
@@ -116,7 +118,18 @@ const TalentsHired = () => {
       dataIndex: "name",
       key: "name",
       width: "12%",
-      render: (text) => <span className="talent-name">{text}</span>,
+      render: (text, record) => (
+        <a
+          href="#"
+          style={{ color: "#1890ff", fontWeight: 500 }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/partner/talent-details/${record.id}`);
+          }}
+        >
+          {text}
+        </a>
+      ),
     },
     {
       title: "Role",
