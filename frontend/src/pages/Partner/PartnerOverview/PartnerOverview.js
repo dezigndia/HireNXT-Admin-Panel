@@ -1,5 +1,6 @@
 import React from "react";
 import { Card, Col, Row, Typography, Input, Button, Alert } from "antd";
+import { useNavigate } from "react-router-dom";
 import { OverviewWrapper } from "./PartnerOverview.style";
 import {
   SearchOutlined,
@@ -19,18 +20,20 @@ const { Title, Text, Paragraph } = Typography;
 const PartnerOverview = () => {
   const metricsData = [
     { count: "₹0", label: "Total Earning", icon: <DollarOutlined /> },
-    { count: 2, label: "Bench Resources", icon: <TeamOutlined /> },
+    { count: 2, label: "Bench Pool", icon: <TeamOutlined /> },
     { count: 5, label: "Jobs Applied", icon: <FileTextOutlined /> },
     { count: 0, label: "Talents Hired", icon: <UserAddOutlined /> },
   ];
+
+  const navigate = useNavigate();
 
   const quickActions = [
     {
       icon: <UsergroupAddOutlined />,
       title: "Add your Bench pool",
       description: "Post job briefs for your required roles and start receiving recommends & applications.",
-      action: "Post a Job",
-      onClick: () => console.log("Add Bench Pool"),
+      action: "Add Bench Pool",
+      onClick: () => navigate("/partner/bench-pool"),
     },
     {
       icon: <RocketOutlined />,

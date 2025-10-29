@@ -121,28 +121,21 @@ const TalentsHired = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "12%",
+      width: "14%",
       render: (text) => <span className="talent-name">{text}</span>,
     },
     {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      width: "14%",
+      width: "16%",
       render: (email) => <span className="email-text">{email}</span>,
-    },
-    {
-      title: "Client",
-      dataIndex: "client",
-      key: "client",
-      width: "12%",
-      render: (client) => <span className="client-text">{client}</span>,
     },
     {
       title: "Onboarding Date",
       dataIndex: "onboardingDate",
       key: "onboardingDate",
-      width: "10%",
+      width: "12%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -157,14 +150,14 @@ const TalentsHired = () => {
       title: "Contract Duration",
       dataIndex: "contractDuration",
       key: "contractDuration",
-      width: "10%",
+      width: "12%",
       render: (duration) => <span className="duration-text">{duration}</span>,
     },
     {
       title: "Last Working Day",
       dataIndex: "lastWorkingDay",
       key: "lastWorkingDay",
-      width: "10%",
+      width: "12%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -179,7 +172,7 @@ const TalentsHired = () => {
       title: "Days Left",
       dataIndex: "daysLeft",
       key: "daysLeft",
-      width: "8%",
+      width: "10%",
       align: "center",
       render: (days) => (
         <span className={`days-left ${getDaysLeftClass(days)}`}>
@@ -191,26 +184,15 @@ const TalentsHired = () => {
       title: "Monthly Rate",
       dataIndex: "monthlyRate",
       key: "monthlyRate",
-      width: "9%",
+      width: "12%",
       render: (rate) => (
         <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
       ),
     },
     {
-      title: "Commission",
-      dataIndex: "commission",
-      key: "commission",
-      width: "9%",
-      render: (commission) => (
-        <span className="commission-text">
-          ₹ {commission.toLocaleString("en-IN")}
-        </span>
-      ),
-    },
-    {
       title: "Action",
       key: "action",
-      width: "6%",
+      width: "12%",
       align: "center",
       render: (_, record) => (
         <div className="action-buttons">
@@ -221,11 +203,6 @@ const TalentsHired = () => {
                   key: "view",
                   label: "View Details",
                   onClick: () => handleMenuClick("View Details", record),
-                },
-                {
-                  key: "renew",
-                  label: "Renew Contract",
-                  onClick: () => handleMenuClick("Renew Contract", record),
                 },
                 {
                   key: "issue",

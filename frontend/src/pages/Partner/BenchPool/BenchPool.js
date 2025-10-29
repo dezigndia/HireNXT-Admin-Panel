@@ -416,17 +416,25 @@ const BenchPool = () => {
         <div className="actions-section">
           <div className="left-actions">
             <Input
-              prefix={<SearchOutlined />}
+              prefix={<SearchOutlined style={{ color: "#bfbfbf" }} />}
               placeholder="Search by name or role"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
               className="search-input"
+              size="large"
+              style={{ width: 320 }}
             />
             <Select
-              placeholder="Filter by Location"
-              style={{ width: 200 }}
+              placeholder={
+                <span>
+                  <FilterOutlined style={{ marginRight: 8 }} />
+                  Filter by Location
+                </span>
+              }
+              style={{ width: 220 }}
               className="filter-select"
               allowClear
+              size="large"
             >
               <Option value="bangalore">Bangalore</Option>
               <Option value="mumbai">Mumbai</Option>
@@ -455,12 +463,12 @@ const BenchPool = () => {
                 }}
                 trigger={["click"]}
               >
-                <Button className="change-status-btn">
+                <Button className="change-status-btn" size="large">
                   Change Status ({selectedRowKeys.length})
                 </Button>
               </Dropdown>
             )}
-            <Button className="add-resource-btn" onClick={handleOpenModal}>
+            <Button className="add-resource-btn" onClick={handleOpenModal} size="large">
               + Add New Resource
             </Button>
           </div>
