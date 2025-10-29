@@ -599,6 +599,30 @@ const BenchPool = () => {
             </Row>
             <Row gutter={16}>
               <Col span={12}>
+                <Form.Item label="Email" name="email">
+                  <Input placeholder="Enter email address" type="email" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Phone" name="phone">
+                  <Input placeholder="Enter phone number" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
+                <Form.Item label="Hourly Rate" name="hourlyRate">
+                  <Input placeholder="Enter Hourly Rate" prefix="₹" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item label="Market Rate" name="marketRate">
+                  <Input placeholder="Enter Market Rate" prefix="₹" />
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row gutter={16}>
+              <Col span={12}>
                 <Form.Item label="Location" name="location">
                   <Select placeholder="Select Location">
                     <Option value="Bangalore">Bangalore</Option>
@@ -610,7 +634,31 @@ const BenchPool = () => {
                   </Select>
                 </Form.Item>
               </Col>
+              <Col span={12}>
+                <Form.Item label="Availability" name="availability">
+                  <Select placeholder="Select Availability">
+                    <Option value="Immediately Available">Immediately Available</Option>
+                    <Option value="Available in 2 weeks">Available in 2 weeks</Option>
+                    <Option value="Available in 1 month">Available in 1 month</Option>
+                  </Select>
+                </Form.Item>
+              </Col>
             </Row>
+            
+            <Form.Item label="Professional Summary" name="summary">
+              <Input.TextArea 
+                rows={4} 
+                placeholder="Enter professional summary highlighting key skills, experience, and expertise..." 
+              />
+            </Form.Item>
+            
+            <Form.Item label="Project Experience (Optional)" name="projectExperience">
+              <Input.TextArea 
+                rows={6} 
+                placeholder="Enter project details including project titles, client names, duration, role, description, and technologies used. Separate multiple projects with blank lines." 
+              />
+            </Form.Item>
+            
             <Row gutter={16}>
               <Col span={8}>
                 <Form.Item label="Upload Aadhar Card">
