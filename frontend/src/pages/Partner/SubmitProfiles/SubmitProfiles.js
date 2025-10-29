@@ -1,18 +1,78 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Card, Table, Tag, Button, Dropdown, Menu, Tooltip } from "antd";
+import { Card, Table, Tag, Button, Tooltip, Modal, Input, Typography, Space } from "antd";
 import {
   ArrowLeftOutlined,
   FilePdfOutlined,
   DownloadOutlined,
-  PlusOutlined,
   TeamOutlined,
   UserAddOutlined,
   DollarOutlined,
   CalendarOutlined,
   MessageOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
 import { SubmitProfilesWrapper } from "./SubmitProfiles.style";
+
+const { Title, Text } = Typography;
+
+const mockBenchResources = [
+  {
+    id: "BR-001",
+    name: "Sanjay Kumar",
+    role: "Apigee Developer",
+    topSkills: [
+      { skill: "OpenAPISpec documentation", level: "Expert" },
+      { skill: "API monitoring (Splunk, Datadog)", level: "Expert" },
+    ],
+    monthlyRate: "₹55,000",
+    experience: "2.4 Year",
+  },
+  {
+    id: "BR-002",
+    name: "Gaurav Ambekar",
+    role: "Apigee Developer",
+    topSkills: [
+      { skill: "OpenAPISpec documentation", level: "Expert" },
+      { skill: "API monitoring (Splunk, Datadog)", level: "Expert" },
+    ],
+    monthlyRate: "₹55,000",
+    experience: "2.4 Year",
+  },
+  {
+    id: "BR-003",
+    name: "Priya Sharma",
+    role: "Full Stack Developer",
+    topSkills: [
+      { skill: "React.js", level: "Expert" },
+      { skill: "Node.js", level: "Advanced" },
+    ],
+    monthlyRate: "₹65,000",
+    experience: "3.5 Year",
+  },
+  {
+    id: "BR-004",
+    name: "Rahul Verma",
+    role: "DevOps Engineer",
+    topSkills: [
+      { skill: "AWS", level: "Expert" },
+      { skill: "Kubernetes", level: "Advanced" },
+    ],
+    monthlyRate: "₹70,000",
+    experience: "4.0 Year",
+  },
+  {
+    id: "BR-005",
+    name: "Anjali Patel",
+    role: "Python Developer",
+    topSkills: [
+      { skill: "Django", level: "Expert" },
+      { skill: "FastAPI", level: "Advanced" },
+    ],
+    monthlyRate: "₹60,000",
+    experience: "3.2 Year",
+  },
+];
 
 const mockJobDetails = {
   "JOB-2024-001": {
@@ -176,6 +236,9 @@ const SubmitProfiles = () => {
   const navigate = useNavigate();
   const jobData = mockJobDetails[jobId];
   const [profiles, setProfiles] = useState([]);
+  const [benchModalVisible, setBenchModalVisible] = useState(false);
+  const [selectedResources, setSelectedResources] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
     if (jobData) {
@@ -195,6 +258,105 @@ const SubmitProfiles = () => {
       </SubmitProfilesWrapper>
     );
   }
+
+  const handleBenchPoolClick = () => {
+    setBenchModalVisible(true);
+  };
+
+  const handleModalClose = () => {
+    setBenchModalVisible(false);
+    setSearchText("");
+  };
+
+  const handleResourceSelection = (record, selected) => {
+    if (selected) {
+      setSelectedResources([...selectedResources, record]);
+    } else {
+      setSelectedResources(selectedResources.filter((r) => r.id !== record.id));
+    }
+  };
+
+  const handleSelectAll = (selected, selectedRows) => {
+    if (selected) {
+      setSelectedResources(selectedRows);
+    } else {
+      setSelectedResources([]);
+    }
+  };
+
+  const handleRemoveSelected = (resourceId) => {
+    setSelectedResources(selectedResources.filter((r) => r.id !== resourceId));
+  };
+
+  const handleAddResources = () => {
+    console.log("Adding resources:", selectedResources);
+    setBenchModalVisible(false);
+    setSearchText("");
+    setSelectedResources([]);
+  };
+
+  const filteredBenchResources = mockBenchResources.filter(
+    (resource) =>
+      resource.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      resource.role.toLowerCase().includes(searchText.toLowerCase()) ||
+      resource.topSkills.some((s) =>
+        s.skill.toLowerCase().includes(searchText.toLowerCase())
+      )
+  );
+
+  const rowSelection = {
+    selectedRowKeys: selectedResources.map((r) => r.id),
+    onSelect: handleResourceSelection,
+    onSelectAll: handleSelectAll,
+  };
+
+  const benchColumns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      render: (text) => (
+        <Text strong style={{ color: "#014c75" }}>
+          {text}
+        </Text>
+      ),
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+      render: (text) => <Text style={{ color: "#014c75" }}>{text}</Text>,
+    },
+    {
+      title: "Top Skills",
+      dataIndex: "topSkills",
+      key: "topSkills",
+      render: (skills) => (
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+          {skills.map((skill, index) => (
+            <Tag key={index} color="cyan" style={{ marginBottom: 4 }}>
+              {skill.skill} - {skill.level}
+            </Tag>
+          ))}
+        </div>
+      ),
+    },
+    {
+      title: "Monthly Rate",
+      dataIndex: "monthlyRate",
+      key: "monthlyRate",
+      render: (text) => (
+        <Text strong style={{ color: "#00d9a9", fontSize: "15px" }}>
+          {text}
+        </Text>
+      ),
+    },
+    {
+      title: "Experience",
+      dataIndex: "experience",
+      key: "experience",
+    },
+  ];
 
   const columns = [
     {
@@ -357,7 +519,7 @@ const SubmitProfiles = () => {
               icon={<TeamOutlined />}
               size="large"
               className="bench-pool-btn"
-              onClick={() => console.log("Add from Bench Pool")}
+              onClick={handleBenchPoolClick}
             >
               Add from Bench Pool
             </Button>
@@ -386,6 +548,73 @@ const SubmitProfiles = () => {
           />
         </Card>
       </div>
+
+      <Modal
+        title={
+          <Title level={4} style={{ color: "#014c75", margin: 0 }}>
+            Add Resource from my resources
+          </Title>
+        }
+        open={benchModalVisible}
+        onCancel={handleModalClose}
+        width={920}
+        footer={null}
+        className="bench-pool-modal"
+      >
+        <div className="modal-content">
+          <Input
+            placeholder="Search Developer"
+            prefix={<SearchOutlined />}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            size="large"
+            className="modal-search"
+            allowClear
+          />
+
+          <Table
+            columns={benchColumns}
+            dataSource={filteredBenchResources}
+            rowKey="id"
+            rowSelection={rowSelection}
+            pagination={false}
+            scroll={{ y: 320 }}
+            className="bench-table"
+          />
+
+          {selectedResources.length > 0 && (
+            <div className="selected-section">
+              <Text strong style={{ color: "#014c75", fontSize: "14px" }}>
+                Resource Selected {selectedResources.length}
+              </Text>
+              <div className="selected-tags">
+                {selectedResources.map((resource) => (
+                  <Tag
+                    key={resource.id}
+                    closable
+                    onClose={() => handleRemoveSelected(resource.id)}
+                    className="selected-tag"
+                  >
+                    {resource.name}
+                  </Tag>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="modal-footer">
+            <Button
+              type="primary"
+              size="large"
+              onClick={handleAddResources}
+              disabled={selectedResources.length === 0}
+              className="add-resource-btn-modal"
+            >
+              Add Resource
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </SubmitProfilesWrapper>
   );
 };

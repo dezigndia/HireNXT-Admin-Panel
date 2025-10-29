@@ -206,6 +206,165 @@ export const SubmitProfilesWrapper = styled.div`
     }
   }
 
+  .bench-pool-modal {
+    .ant-modal-header {
+      border-bottom: 1px solid #f0f0f0;
+      padding: 20px 24px;
+    }
+
+    .ant-modal-body {
+      padding: 24px;
+    }
+
+    .modal-content {
+      .modal-search {
+        margin-bottom: 20px;
+        border-radius: 8px;
+
+        .ant-input-affix-wrapper {
+          border-radius: 8px;
+          border: 1px solid #d9d9d9;
+          padding: 8px 16px;
+          background: #fafafa;
+          
+          &:hover {
+            border-color: #00d9a9;
+            background: white;
+          }
+          
+          &:focus-within {
+            border-color: #00d9a9;
+            box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1);
+            background: white;
+          }
+
+          .ant-input {
+            font-size: 14px;
+            border: none;
+            box-shadow: none;
+            background: transparent;
+            
+            &:focus {
+              box-shadow: none;
+            }
+
+            &::placeholder {
+              color: #999;
+            }
+          }
+
+          .ant-input-prefix {
+            color: #999;
+            margin-right: 8px;
+          }
+        }
+      }
+
+      .bench-table {
+        margin-bottom: 20px;
+
+        .ant-table {
+          border: 1px solid #f0f0f0;
+          border-radius: 8px;
+          overflow: hidden;
+        }
+
+        .ant-table-thead > tr > th {
+          background: #fafafa;
+          font-weight: 600;
+          color: #014c75;
+          border-bottom: 2px solid #f0f0f0;
+          font-size: 14px;
+        }
+
+        .ant-table-tbody > tr {
+          &:hover > td {
+            background: #f5fbff;
+          }
+
+          &.ant-table-row-selected > td {
+            background: #e6fff9;
+          }
+        }
+
+        .ant-checkbox-wrapper {
+          .ant-checkbox-checked .ant-checkbox-inner {
+            background-color: #014c75;
+            border-color: #014c75;
+          }
+
+          .ant-checkbox-inner {
+            border-radius: 4px;
+          }
+        }
+      }
+
+      .selected-section {
+        background: #f8f9fd;
+        border: 1px solid #e8e8e8;
+        border-radius: 8px;
+        padding: 16px;
+        margin-bottom: 20px;
+
+        .selected-tags {
+          margin-top: 12px;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+
+          .selected-tag {
+            background: white;
+            border: 1px solid #014c75;
+            color: #014c75;
+            font-size: 13px;
+            padding: 4px 12px;
+            border-radius: 16px;
+            margin: 0;
+
+            .anticon-close {
+              color: #014c75;
+              
+              &:hover {
+                color: #ff4d4f;
+              }
+            }
+          }
+        }
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        padding-top: 16px;
+        border-top: 1px solid #f0f0f0;
+
+        .add-resource-btn-modal {
+          background: #014c75;
+          border-color: #014c75;
+          font-weight: 600;
+          height: 44px;
+          padding: 0 32px;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(1, 76, 117, 0.3);
+
+          &:hover:not(:disabled) {
+            background: #013a5a;
+            border-color: #013a5a;
+            box-shadow: 0 6px 16px rgba(1, 76, 117, 0.4);
+          }
+
+          &:disabled {
+            background: #d9d9d9;
+            border-color: #d9d9d9;
+            color: #8c8c8c;
+            box-shadow: none;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+
   @media (max-width: 768px) {
     padding: 16px;
 
@@ -233,6 +392,26 @@ export const SubmitProfilesWrapper = styled.div`
       .profiles-table-card {
         .ant-table {
           font-size: 12px;
+        }
+      }
+    }
+
+    .bench-pool-modal {
+      .ant-modal {
+        max-width: 100%;
+        margin: 0;
+        top: 0;
+      }
+
+      .modal-content {
+        .bench-table {
+          .ant-table {
+            font-size: 12px;
+          }
+        }
+
+        .selected-section {
+          padding: 12px;
         }
       }
     }
