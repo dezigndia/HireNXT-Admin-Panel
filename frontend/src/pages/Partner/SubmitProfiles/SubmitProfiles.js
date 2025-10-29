@@ -1,6 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Card, Table, Tag, Button, Tooltip, Modal, Input, Typography, Space } from "antd";
+import {
+  Card,
+  Table,
+  Tag,
+  Button,
+  Tooltip,
+  Modal,
+  Input,
+  Typography,
+  Form,
+  Upload,
+  Row,
+  Col,
+  Select,
+  Flex,
+} from "antd";
 import {
   ArrowLeftOutlined,
   FilePdfOutlined,
@@ -11,10 +26,14 @@ import {
   CalendarOutlined,
   MessageOutlined,
   SearchOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import { SubmitProfilesWrapper } from "./SubmitProfiles.style";
+import axios from "axios";
+import { API_CONST } from "../../../const";
 
 const { Title, Text } = Typography;
+const { Option } = Select;
 
 const mockBenchResources = [
   {
@@ -91,7 +110,8 @@ const mockJobDetails = {
       { skill: "Redux", level: "Expert" },
       { skill: "Next.js", level: "Advanced" },
     ],
-    description: "We are looking for an experienced Senior React Developer with 5 to 7 years of experience.",
+    description:
+      "We are looking for an experienced Senior React Developer with 5 to 7 years of experience.",
     submittedProfiles: [
       {
         id: 1,
@@ -139,7 +159,8 @@ const mockJobDetails = {
       { skill: "Microservices", level: "Expert" },
       { skill: "Angular", level: "Advanced" },
     ],
-    description: "Looking for a Full Stack Java Developer with 4 to 6 years of experience.",
+    description:
+      "Looking for a Full Stack Java Developer with 4 to 6 years of experience.",
     submittedProfiles: [
       {
         id: 3,
@@ -173,7 +194,8 @@ const mockJobDetails = {
       { skill: "Kubernetes", level: "Expert" },
       { skill: "Jenkins", level: "Advanced" },
     ],
-    description: "Looking for an experienced DevOps Engineer with 3 to 5 years of experience.",
+    description:
+      "Looking for an experienced DevOps Engineer with 3 to 5 years of experience.",
     submittedProfiles: [],
   },
   "JOB-2024-004": {
@@ -192,7 +214,8 @@ const mockJobDetails = {
       { skill: "FastAPI", level: "Expert" },
       { skill: "PostgreSQL", level: "Advanced" },
     ],
-    description: "Looking for a Python Backend Developer with 2 to 4 years of experience.",
+    description:
+      "Looking for a Python Backend Developer with 2 to 4 years of experience.",
     submittedProfiles: [
       {
         id: 4,
@@ -226,7 +249,8 @@ const mockJobDetails = {
       { skill: "TypeScript", level: "Expert" },
       { skill: "Redux", level: "Advanced" },
     ],
-    description: "Looking for a Mobile App Developer with 3 to 5 years of experience in React Native.",
+    description:
+      "Looking for a Mobile App Developer with 3 to 5 years of experience in React Native.",
     submittedProfiles: [],
   },
 };
@@ -237,8 +261,14 @@ const SubmitProfiles = () => {
   const jobData = mockJobDetails[jobId];
   const [profiles, setProfiles] = useState([]);
   const [benchModalVisible, setBenchModalVisible] = useState(false);
+  const [addResourceModalVisible, setAddResourceModalVisible] = useState(false);
   const [selectedResources, setSelectedResources] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [form] = Form.useForm();
+  const [resume, setResume] = useState(null);
+  const [aadhar, setAadhar] = useState(null);
+  const [pan, setPan] = useState(null);
+  const [degree, setDegree] = useState(null);
 
   useEffect(() => {
     if (jobData) {
@@ -251,7 +281,10 @@ const SubmitProfiles = () => {
       <SubmitProfilesWrapper>
         <div style={{ padding: "40px", textAlign: "center" }}>
           <h2>Job not found</h2>
-          <Button type="primary" onClick={() => navigate("/partner/ongoing-jobs")}>
+          <Button
+            type="primary"
+            onClick={() => navigate("/partner/ongoing-jobs")}
+          >
             Back to Ongoing Jobs
           </Button>
         </div>
@@ -263,9 +296,23 @@ const SubmitProfiles = () => {
     setBenchModalVisible(true);
   };
 
-  const handleModalClose = () => {
+  const handleAddResourceClick = () => {
+    setAddResourceModalVisible(true);
+  };
+
+  const handleBenchModalClose = () => {
     setBenchModalVisible(false);
     setSearchText("");
+    setSelectedResources([]);
+  };
+
+  const handleAddResourceModalClose = () => {
+    setAddResourceModalVisible(false);
+    form.resetFields();
+    setResume(null);
+    setAadhar(null);
+    setPan(null);
+    setDegree(null);
   };
 
   const handleResourceSelection = (record, selected) => {
@@ -293,6 +340,29 @@ const SubmitProfiles = () => {
     setBenchModalVisible(false);
     setSearchText("");
     setSelectedResources([]);
+  };
+
+  const handleSubmitNewResource = async (values) => {
+    const data = new FormData();
+    if (resume) data.append("resume", resume);
+    if (aadhar) data.append("Aadhar", aadhar);
+    if (pan) data.append("pan", pan);
+    if (degree) data.append("degree", degree);
+    if (values) data.append("data", JSON.stringify(values));
+
+    try {
+      const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log("Resource added successfully!");
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+
+    handleAddResourceModalClose();
   };
 
   const filteredBenchResources = mockBenchResources.filter(
@@ -325,7 +395,7 @@ const SubmitProfiles = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      render: (text) => <Text style={{ color: "#014c75" }}>{text}</Text>,
+      render: (text) => <Text style={{ color: "#595959" }}>{text}</Text>,
     },
     {
       title: "Top Skills",
@@ -528,13 +598,13 @@ const SubmitProfiles = () => {
               icon={<UserAddOutlined />}
               size="large"
               className="add-resource-btn"
-              onClick={() => console.log("Add New Resource")}
+              onClick={handleAddResourceClick}
             >
               Add New Resource
             </Button>
           </div>
         </div>
-        
+
         <Card className="profiles-table-card">
           <Table
             columns={columns}
@@ -543,28 +613,34 @@ const SubmitProfiles = () => {
             pagination={false}
             scroll={{ x: 1200 }}
             locale={{
-              emptyText: "No profiles submitted yet. Click 'Add from Bench Pool' or 'Add New Resource' to submit profiles.",
+              emptyText:
+                "No profiles submitted yet. Click 'Add from Bench Pool' or 'Add New Resource' to submit profiles.",
             }}
           />
         </Card>
       </div>
 
       <Modal
-        title={
-          <Title level={4} style={{ color: "#014c75", margin: 0 }}>
-            Add Resource from my resources
-          </Title>
-        }
         open={benchModalVisible}
-        onCancel={handleModalClose}
-        width={920}
+        onCancel={handleBenchModalClose}
         footer={null}
+        width={920}
         className="bench-pool-modal"
       >
+        <Flex
+          justify="center"
+          vertical
+          align="center"
+          style={{ borderBottom: "1px solid #e8e8e8", marginBottom: "24px", paddingBottom: "16px" }}
+        >
+          <Text style={{ fontSize: "28px", fontWeight: 600, color: "#014c75" }}>
+            Add Resource from my resources
+          </Text>
+        </Flex>
         <div className="modal-content">
           <Input
             placeholder="Search Developer"
-            prefix={<SearchOutlined />}
+            prefix={<SearchOutlined style={{ color: "#999" }} />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             size="large"
@@ -614,6 +690,197 @@ const SubmitProfiles = () => {
             </Button>
           </div>
         </div>
+      </Modal>
+
+      <Modal
+        open={addResourceModalVisible}
+        onCancel={handleAddResourceModalClose}
+        footer={null}
+        width={900}
+        className="add-resource-modal"
+      >
+        <Flex
+          justify="center"
+          vertical
+          align="center"
+          style={{
+            borderBottom: "1px solid #e8e8e8",
+            marginBottom: "24px",
+            paddingBottom: "16px",
+          }}
+        >
+          <Text style={{ fontSize: "28px", fontWeight: 600, color: "#014c75" }}>
+            Add Bench Resource
+          </Text>
+        </Flex>
+        <Form form={form} layout="vertical" onFinish={handleSubmitNewResource}>
+          <Form.Item label="Upload Resume">
+            <Upload
+              beforeUpload={(file) => {
+                setResume(file);
+                return false;
+              }}
+              showUploadList={false}
+            >
+              <Button icon={<UploadOutlined />}>Click to Upload</Button>
+            </Upload>
+            {resume && (
+              <div style={{ marginTop: "10px" }}>
+                {resume.name}{" "}
+                <Button onClick={() => setResume(null)} size="small">
+                  ✖
+                </Button>
+              </div>
+            )}
+          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label="Name"
+                name="name"
+                rules={[{ required: true, message: "Please enter the name!" }]}
+              >
+                <Input placeholder="Enter Name" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Role"
+                name="role"
+                rules={[{ required: true, message: "Please select a role!" }]}
+              >
+                <Select placeholder="Select Role">
+                  <Option value="Software Engineer">Software Engineer</Option>
+                  <Option value="Project Manager">Project Manager</Option>
+                  <Option value="Full Stack Developer">
+                    Full Stack Developer
+                  </Option>
+                  <Option value="DevOps Engineer">DevOps Engineer</Option>
+                  <Option value="Python Developer">Python Developer</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="Top Skills" name="skills">
+                <Input placeholder="Enter skills separated by commas" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Experience">
+                <Row gutter={8}>
+                  <Col span={12}>
+                    <Form.Item name="experienceYears" noStyle>
+                      <Input placeholder="Years" />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name="experienceMonths" noStyle>
+                      <Input placeholder="Months" />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="Monthly Rate" name="rate">
+                <Input placeholder="Enter Monthly Rate" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item label="Notice Period" name="notice">
+                <Input placeholder="Enter Notice Period" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item label="Location" name="location">
+                <Input placeholder="Enter Location" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item label="Upload Aadhar Card">
+                <Upload
+                  beforeUpload={(file) => {
+                    setAadhar(file);
+                    return false;
+                  }}
+                  showUploadList={false}
+                >
+                  <Button icon={<UploadOutlined />}>Upload Aadhar</Button>
+                </Upload>
+                {aadhar && (
+                  <div style={{ marginTop: "10px" }}>
+                    {aadhar.name}{" "}
+                    <Button onClick={() => setAadhar(null)} size="small">
+                      ✖
+                    </Button>
+                  </div>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Upload PAN Card">
+                <Upload
+                  beforeUpload={(file) => {
+                    setPan(file);
+                    return false;
+                  }}
+                  showUploadList={false}
+                >
+                  <Button icon={<UploadOutlined />}>Upload PAN</Button>
+                </Upload>
+                {pan && (
+                  <div style={{ marginTop: "10px" }}>
+                    {pan.name}{" "}
+                    <Button onClick={() => setPan(null)} size="small">
+                      ✖
+                    </Button>
+                  </div>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item label="Upload Degree Proof">
+                <Upload
+                  beforeUpload={(file) => {
+                    setDegree(file);
+                    return false;
+                  }}
+                  showUploadList={false}
+                >
+                  <Button icon={<UploadOutlined />}>Upload Degree</Button>
+                </Upload>
+                {degree && (
+                  <div style={{ marginTop: "10px" }}>
+                    {degree.name}{" "}
+                    <Button onClick={() => setDegree(null)} size="small">
+                      ✖
+                    </Button>
+                  </div>
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Form.Item>
+            <Flex justify="flex-end" gap={12}>
+              <Button onClick={handleAddResourceModalClose}>Cancel</Button>
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ background: "#00d9a9", borderColor: "#00d9a9" }}
+              >
+                Submit
+              </Button>
+            </Flex>
+          </Form.Item>
+        </Form>
       </Modal>
     </SubmitProfilesWrapper>
   );
