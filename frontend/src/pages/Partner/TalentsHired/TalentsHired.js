@@ -1,134 +1,295 @@
 import React, { useState } from "react";
-import { Tabs, Table, Button } from "antd";
+import { Table, Dropdown, Segmented, Empty } from "antd";
+import { MoreOutlined } from "@ant-design/icons";
+import {
+  TalentsHiredContainer,
+  PageHeader,
+  TabsContainer,
+  TableContainer,
+  EmptyState,
+} from "./TalentsHired.style";
 
-// Sample data
-const activeProfiles = [
-  {
-    key: "1",
-    name: "John Doe",
-    onboardedDate: "2024-05-01",
-    email: "john@example.com",
-    duration: "6 months",
-    monthlyRate: "$5000",
-    marketRate: "$5500",
-  },
-  {
-    key: "2",
-    name: "Alice Johnson",
-    onboardedDate: "2024-04-10",
-    email: "alice.johnson@example.com",
-    duration: "12 months",
-    monthlyRate: "$6200",
-    marketRate: "$6500",
-  },
-  {
-    key: "3",
-    name: "Bob Lee",
-    onboardedDate: "2024-06-05",
-    email: "bob.lee@example.com",
-    duration: "3 months",
-    monthlyRate: "$4700",
-    marketRate: "$5000",
-  },
-];
+const TalentsHired = () => {
+  const [activeTab, setActiveTab] = useState("Active Talents");
 
-const inactiveProfiles = [
-  {
-    key: "1",
-    name: "Jane Smith",
-    offboardedDate: "2024-03-15",
-    email: "jane@example.com",
-    lastDuration: "4 months",
-    lastMonthlyRate: "$4800",
-    reason: "Project Ended",
-  },
-  {
-    key: "2",
-    name: "Michael Brown",
-    offboardedDate: "2024-02-28",
-    email: "michael.brown@example.com",
-    lastDuration: "8 months",
-    lastMonthlyRate: "$5300",
-    reason: "Resigned",
-  },
-  {
-    key: "3",
-    name: "Sara Lee",
-    offboardedDate: "2024-01-20",
-    email: "sara.lee@example.com",
-    lastDuration: "5 months",
-    lastMonthlyRate: "$5100",
-    reason: "Contract Completed",
-  },
-];
+  const mockHiredTalents = [
+    {
+      id: 1,
+      name: "Rajesh Kumar",
+      email: "rajesh.kumar@techcorp.com",
+      onboardingDate: "2024-01-15",
+      contractDuration: "1 Year",
+      lastWorkingDay: "2025-01-15",
+      daysLeft: 80,
+      monthlyRate: 150000,
+      clientRate: 180000,
+      commission: 30000,
+      client: "TechCorp Solutions",
+      status: "active",
+    },
+    {
+      id: 2,
+      name: "Priya Sharma",
+      email: "priya.sharma@innovations.com",
+      onboardingDate: "2023-08-20",
+      contractDuration: "2 Years",
+      lastWorkingDay: "2025-08-20",
+      daysLeft: 267,
+      monthlyRate: 165000,
+      clientRate: 200000,
+      commission: 35000,
+      client: "Innovations Inc",
+      status: "active",
+    },
+    {
+      id: 3,
+      name: "Amit Patel",
+      email: "amit.patel@devstudio.com",
+      onboardingDate: "2024-03-10",
+      contractDuration: "18 Months",
+      lastWorkingDay: "2025-09-10",
+      daysLeft: 288,
+      monthlyRate: 140000,
+      clientRate: 175000,
+      commission: 35000,
+      client: "DevStudio Labs",
+      status: "active",
+    },
+    {
+      id: 4,
+      name: "Sneha Reddy",
+      email: "sneha.reddy@cloudservices.com",
+      onboardingDate: "2024-02-01",
+      contractDuration: "1 Year",
+      lastWorkingDay: "2025-02-01",
+      daysLeft: 97,
+      monthlyRate: 170000,
+      clientRate: 210000,
+      commission: 40000,
+      client: "Cloud Services Co",
+      status: "active",
+    },
+  ];
 
-const activeColumns = [
-  { title: "Name", dataIndex: "name", key: "name" },
-  { title: "Onboarded Date", dataIndex: "onboardedDate", key: "onboardedDate" },
-  { title: "Email", dataIndex: "email", key: "email" },
-  { title: "Duration", dataIndex: "duration", key: "duration" },
-  { title: "Monthly Rate", dataIndex: "monthlyRate", key: "monthlyRate" },
-  { title: "Market Rate", dataIndex: "marketRate", key: "marketRate" },
-  {
-    title: "Action",
-    key: "action",
-    render: () => (
-      <Button type="primary" size="small">
-        View
-      </Button>
-    ),
-  },
-];
+  const mockInactiveTalents = [
+    {
+      id: 5,
+      name: "Vikram Singh",
+      email: "vikram.singh@pastclient.com",
+      onboardingDate: "2022-06-15",
+      contractDuration: "1 Year",
+      lastWorkingDay: "2023-06-15",
+      daysLeft: -565,
+      monthlyRate: 130000,
+      clientRate: 160000,
+      commission: 30000,
+      client: "Past Client Ltd",
+      status: "inactive",
+    },
+    {
+      id: 6,
+      name: "Anjali Gupta",
+      email: "anjali.gupta@oldproject.com",
+      onboardingDate: "2021-10-10",
+      contractDuration: "2 Years",
+      lastWorkingDay: "2023-10-10",
+      daysLeft: -448,
+      monthlyRate: 145000,
+      clientRate: 180000,
+      commission: 35000,
+      client: "Old Project Inc",
+      status: "inactive",
+    },
+  ];
 
-const inactiveColumns = [
-  { title: "Name", dataIndex: "name", key: "name" },
-  {
-    title: "Offboarded Date",
-    dataIndex: "offboardedDate",
-    key: "offboardedDate",
-  },
-  { title: "Email", dataIndex: "email", key: "email" },
-  { title: "Last Duration", dataIndex: "lastDuration", key: "lastDuration" },
-  {
-    title: "Last Monthly Rate",
-    dataIndex: "lastMonthlyRate",
-    key: "lastMonthlyRate",
-  },
-  { title: "Reason", dataIndex: "reason", key: "reason" },
-  {
-    title: "Action",
-    key: "action",
-    render: () => (
-      <Button type="default" size="small">
-        Details
-      </Button>
-    ),
-  },
-];
+  const currentData =
+    activeTab === "Active Talents" ? mockHiredTalents : mockInactiveTalents;
 
-function TalentsHired() {
-  const [tab, setTab] = useState("1");
+  const handleMenuClick = (action, record) => {
+    console.log(`${action} for talent:`, record);
+  };
+
+  const getDaysLeftClass = (days) => {
+    if (days < 0) return "inactive";
+    if (days <= 30) return "critical";
+    if (days <= 90) return "warning";
+    return "safe";
+  };
+
+  const columns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+      width: "12%",
+      render: (text) => <span className="talent-name">{text}</span>,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      key: "email",
+      width: "14%",
+      render: (email) => <span className="email-text">{email}</span>,
+    },
+    {
+      title: "Client",
+      dataIndex: "client",
+      key: "client",
+      width: "12%",
+      render: (client) => <span className="client-text">{client}</span>,
+    },
+    {
+      title: "Onboarding Date",
+      dataIndex: "onboardingDate",
+      key: "onboardingDate",
+      width: "10%",
+      render: (date) => (
+        <span className="date-text">
+          {new Date(date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Contract Duration",
+      dataIndex: "contractDuration",
+      key: "contractDuration",
+      width: "10%",
+      render: (duration) => <span className="duration-text">{duration}</span>,
+    },
+    {
+      title: "Last Working Day",
+      dataIndex: "lastWorkingDay",
+      key: "lastWorkingDay",
+      width: "10%",
+      render: (date) => (
+        <span className="date-text">
+          {new Date(date).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Days Left",
+      dataIndex: "daysLeft",
+      key: "daysLeft",
+      width: "8%",
+      align: "center",
+      render: (days) => (
+        <span className={`days-left ${getDaysLeftClass(days)}`}>
+          {days < 0 ? "Completed" : `${days} days`}
+        </span>
+      ),
+    },
+    {
+      title: "Monthly Rate",
+      dataIndex: "monthlyRate",
+      key: "monthlyRate",
+      width: "9%",
+      render: (rate) => (
+        <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
+      ),
+    },
+    {
+      title: "Commission",
+      dataIndex: "commission",
+      key: "commission",
+      width: "9%",
+      render: (commission) => (
+        <span className="commission-text">
+          ₹ {commission.toLocaleString("en-IN")}
+        </span>
+      ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      width: "6%",
+      align: "center",
+      render: (_, record) => (
+        <div className="action-buttons">
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  key: "view",
+                  label: "View Details",
+                  onClick: () => handleMenuClick("View Details", record),
+                },
+                {
+                  key: "renew",
+                  label: "Renew Contract",
+                  onClick: () => handleMenuClick("Renew Contract", record),
+                },
+                {
+                  key: "issue",
+                  label: "Raise Issue",
+                  onClick: () => handleMenuClick("Raise Issue", record),
+                },
+                {
+                  key: "terminate",
+                  label: "Initiate Termination",
+                  onClick: () =>
+                    handleMenuClick("Initiate Termination", record),
+                  danger: true,
+                },
+              ],
+            }}
+            trigger={["click"]}
+          >
+            <button className="icon-button menu-btn">
+              <MoreOutlined />
+            </button>
+          </Dropdown>
+        </div>
+      ),
+    },
+  ];
 
   return (
-    <div>
-      <Tabs activeKey={tab} onChange={setTab}>
-        <Tabs.TabPane tab="Active Profiles" key="1">
+    <TalentsHiredContainer>
+      <PageHeader>
+        <h1>Talents Hired</h1>
+      </PageHeader>
+
+      <TabsContainer>
+        <Segmented
+          value={activeTab}
+          onChange={setActiveTab}
+          options={[
+            { label: "Active Talents", value: "Active Talents" },
+            { label: "Inactive Talents", value: "Inactive Talents" },
+          ]}
+        />
+      </TabsContainer>
+
+      <TableContainer>
+        {currentData.length > 0 ? (
           <Table
-            columns={activeColumns}
-            dataSource={activeProfiles}
-            pagination={false}
+            columns={columns}
+            dataSource={currentData}
+            rowKey="id"
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: false,
+              showTotal: (total) => `Total ${total} talents`,
+            }}
+            scroll={{ x: 1400 }}
           />
-        </Tabs.TabPane>
-        <Tabs.TabPane tab="Inactive Profiles" key="2">
-          <Table
-            columns={inactiveColumns}
-            dataSource={inactiveProfiles}
-            pagination={false}
-          />
-        </Tabs.TabPane>
-      </Tabs>
-    </div>
+        ) : (
+          <EmptyState>
+            <Empty description={`No ${activeTab.toLowerCase()} found`} />
+          </EmptyState>
+        )}
+      </TableContainer>
+    </TalentsHiredContainer>
   );
-}
+};
 
 export default TalentsHired;

@@ -235,10 +235,11 @@ const BenchPool = () => {
       title: "Resume",
       dataIndex: "resume",
       key: "resume",
-      width: 80,
+      width: 90,
+      align: "center",
       render: (resume) => (
         <FileTextOutlined
-          style={{ fontSize: "24px", color: "#014c75", cursor: "pointer" }}
+          style={{ fontSize: "22px", color: "#014c75", cursor: "pointer" }}
         />
       ),
     },
@@ -246,20 +247,20 @@ const BenchPool = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: 180,
+      width: 160,
       render: (name) => <Text strong>{name}</Text>,
     },
     {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      width: 200,
+      width: 180,
     },
     {
       title: "Top Skill",
       dataIndex: "topSkill",
       key: "topSkill",
-      width: 180,
+      width: 160,
       render: (skill) => (
         <Tag color="blue" style={{ fontSize: "13px" }}>
           {skill}
@@ -278,44 +279,6 @@ const BenchPool = () => {
       ),
     },
     {
-      title: "Experience",
-      dataIndex: "experience",
-      key: "experience",
-      width: 150,
-    },
-    {
-      title: "Location",
-      dataIndex: "location",
-      key: "location",
-      width: 130,
-    },
-    {
-      title: "Jobs Applied",
-      dataIndex: "jobsApplied",
-      key: "jobsApplied",
-      width: 120,
-      render: (count) => (
-        <div style={{ textAlign: "center" }}>
-          <Tag color="cyan" style={{ fontSize: "13px", fontWeight: "600" }}>
-            {count}
-          </Tag>
-        </div>
-      ),
-    },
-    {
-      title: "Past Hired",
-      dataIndex: "pastHired",
-      key: "pastHired",
-      width: 110,
-      render: (count) => (
-        <div style={{ textAlign: "center" }}>
-          <Tag color="green" style={{ fontSize: "13px", fontWeight: "600" }}>
-            {count}
-          </Tag>
-        </div>
-      ),
-    },
-    {
       title: "Total Billed",
       dataIndex: "totalBilled",
       key: "totalBilled",
@@ -323,10 +286,46 @@ const BenchPool = () => {
       render: (amount) => <Text strong>{amount}</Text>,
     },
     {
+      title: "Experience",
+      dataIndex: "experience",
+      key: "experience",
+      width: 140,
+    },
+    {
+      title: "Location",
+      dataIndex: "location",
+      key: "location",
+      width: 120,
+    },
+    {
+      title: "Jobs Applied",
+      dataIndex: "jobsApplied",
+      key: "jobsApplied",
+      width: 120,
+      align: "center",
+      render: (count) => (
+        <Tag color="cyan" style={{ fontSize: "13px", fontWeight: "600" }}>
+          {count}
+        </Tag>
+      ),
+    },
+    {
+      title: "Past Hired",
+      dataIndex: "pastHired",
+      key: "pastHired",
+      width: 110,
+      align: "center",
+      render: (count) => (
+        <Tag color="green" style={{ fontSize: "13px", fontWeight: "600" }}>
+          {count}
+        </Tag>
+      ),
+    },
+    {
       title: "Action",
       key: "action",
       width: 80,
-      fixed: "right",
+      align: "center",
       render: (_, record) => (
         <Dropdown menu={actionMenu(record)} trigger={["click"]}>
           <MoreOutlined
