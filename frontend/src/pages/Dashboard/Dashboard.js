@@ -15,10 +15,8 @@ import {
   UserOutlined,
   LockOutlined,
   DownOutlined,
-  BellOutlined,
-  SearchOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Button, Layout, Menu, theme, Dropdown, Space, Input, Badge, Avatar } from "antd";
+import { Breadcrumb, Button, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { DashboardWrapper } from "./Dashboard.style";
 // @ts-ignore
 import Logo from "./../../assets/logo.svg";
@@ -134,48 +132,18 @@ const Dashboard = () => {
         >
           <img src={Logo} alt="logo" />
           
-          <div style={{ 
-            display: "flex", 
-            justifyContent: "center",
-            flex: 1,
-            padding: "0 40px"
-          }}>
-            <Input
-              placeholder="Search by skills or job e.g. Java, UI Designer,etc"
-              prefix={<SearchOutlined style={{ color: "#999" }} />}
+          <Dropdown 
+            menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
+            placement="bottomRight"
+          >
+            <Avatar
               style={{
-                maxWidth: "500px",
-                width: "100%",
-                borderRadius: "6px",
+                backgroundColor: "#00d9a9",
+                cursor: "pointer",
               }}
-              size="large"
+              icon={<UserOutlined />}
             />
-          </div>
-          
-          <Space size="large">
-            <Badge count={5} size="small">
-              <BellOutlined
-                style={{
-                  fontSize: "20px",
-                  color: "white",
-                  cursor: "pointer",
-                }}
-              />
-            </Badge>
-            
-            <Dropdown 
-              menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
-              placement="bottomRight"
-            >
-              <Avatar
-                style={{
-                  backgroundColor: "#00d9a9",
-                  cursor: "pointer",
-                }}
-                icon={<UserOutlined />}
-              />
-            </Dropdown>
-          </Space>
+          </Dropdown>
         </Header>
         <Layout>
           <Sider
