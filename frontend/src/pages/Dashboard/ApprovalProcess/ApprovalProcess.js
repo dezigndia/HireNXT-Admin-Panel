@@ -572,11 +572,11 @@ const ApprovalProcess = () => {
   // Get columns based on active tab
   const getColumns = () => {
     switch (activeTab) {
-      case "Partners/Customers":
+      case "Users":
         return partnersColumns;
-      case "Talent Profiles":
+      case "Profiles":
         return talentsColumns;
-      case "Job Posts":
+      case "Jobs":
         return jobsColumns;
       default:
         return [];
