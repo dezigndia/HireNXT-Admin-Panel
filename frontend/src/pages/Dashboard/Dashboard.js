@@ -15,8 +15,10 @@ import {
   UserOutlined,
   LockOutlined,
   DownOutlined,
+  BellOutlined,
+  SearchOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Button, Layout, Menu, theme, Dropdown, Space } from "antd";
+import { Breadcrumb, Button, Layout, Menu, theme, Dropdown, Space, Input, Badge, Avatar } from "antd";
 import { DashboardWrapper } from "./Dashboard.style";
 // @ts-ignore
 import Logo from "./../../assets/logo.svg";
@@ -126,28 +128,54 @@ const Dashboard = () => {
             display: "flex",
             alignItems: "center",
             background: "#191919",
+            padding: "0 24px",
+            justifyContent: "space-between",
           }}
         >
           <img src={Logo} alt="logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={["2"]}
-            style={{
-              flex: 1,
-              minWidth: 0,
-              background: "#191919",
-            }}
-          />
-          <Dropdown 
-            menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
-            placement="bottomRight"
-          >
-            <Space style={{ cursor: 'pointer', color: 'white', marginRight: '20px' }}>
-              <UserOutlined style={{ fontSize: '18px' }} />
-              <DownOutlined style={{ fontSize: '12px' }} />
-            </Space>
-          </Dropdown>
+          
+          <div style={{ 
+            display: "flex", 
+            justifyContent: "center",
+            flex: 1,
+            padding: "0 40px"
+          }}>
+            <Input
+              placeholder="Search by skills or job e.g. Java, UI Designer,etc"
+              prefix={<SearchOutlined style={{ color: "#999" }} />}
+              style={{
+                maxWidth: "500px",
+                width: "100%",
+                borderRadius: "6px",
+              }}
+              size="large"
+            />
+          </div>
+          
+          <Space size="large">
+            <Badge count={5} size="small">
+              <BellOutlined
+                style={{
+                  fontSize: "20px",
+                  color: "white",
+                  cursor: "pointer",
+                }}
+              />
+            </Badge>
+            
+            <Dropdown 
+              menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
+              placement="bottomRight"
+            >
+              <Avatar
+                style={{
+                  backgroundColor: "#00d9a9",
+                  cursor: "pointer",
+                }}
+                icon={<UserOutlined />}
+              />
+            </Dropdown>
+          </Space>
         </Header>
         <Layout>
           <Sider
