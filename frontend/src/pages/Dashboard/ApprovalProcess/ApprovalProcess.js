@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Table,
   Button,
@@ -9,19 +10,21 @@ import {
   Space,
   message,
   Dropdown,
+  Avatar,
+  Typography,
+  Flex,
 } from "antd";
 import {
   SearchOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   MoreOutlined,
-  UserOutlined,
-  FileTextOutlined,
-  BankOutlined,
 } from "@ant-design/icons";
-import { ApprovalProcessWrapper } from "./ApprovalProcess.style";
+import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
+import MaskGroup from "../../../assets/Mask-Group.svg";
 
 const { TextArea } = Input;
+const { Text } = Typography;
 
 // Mock data for Partners/Customers
 const mockPartnersCustomers = [
@@ -164,7 +167,8 @@ const mockJobPosts = [
 ];
 
 const ApprovalProcess = () => {
-  const [activeTab, setActiveTab] = useState("partners");
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState("Partners/Customers");
   const [searchText, setSearchText] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
@@ -179,11 +183,11 @@ const ApprovalProcess = () => {
   // Get current data based on active tab
   const getCurrentData = () => {
     switch (activeTab) {
-      case "partners":
+      case "Partners/Customers":
         return partnersData;
-      case "talents":
+      case "Talent Profiles":
         return talentsData;
-      case "jobs":
+      case "Job Posts":
         return jobsData;
       default:
         return [];
@@ -204,13 +208,13 @@ const ApprovalProcess = () => {
   // Filter data based on search
   const filteredData = getCurrentData().filter((item) => {
     const searchLower = searchText.toLowerCase();
-    if (activeTab === "partners") {
+    if (activeTab === "Partners/Customers") {
       return (
         item.name.toLowerCase().includes(searchLower) ||
         item.contactPerson.toLowerCase().includes(searchLower) ||
         item.email.toLowerCase().includes(searchLower)
       );
-    } else if (activeTab === "talents") {
+    } else if (activeTab === "Talent Profiles") {
       return (
         item.name.toLowerCase().includes(searchLower) ||
         item.role.toLowerCase().includes(searchLower) ||
@@ -232,12 +236,12 @@ const ApprovalProcess = () => {
         item.key === key ? { ...item, status: "Approved" } : item
       );
 
-    if (activeTab === "partners") {
+    if (activeTab === "Partners/Customers") {
       setPartnersData(updateData(partnersData, record.key));
       message.success(
         `${record.type} "${record.name}" has been approved and is now active!`
       );
-    } else if (activeTab === "talents") {
+    } else if (activeTab === "Talent Profiles") {
       setTalentsData(updateData(talentsData, record.key));
       message.success(
         `Talent profile "${record.name}" has been approved and is now active!`
@@ -264,9 +268,9 @@ const ApprovalProcess = () => {
           : item
       );
 
-    if (activeTab === "partners") {
+    if (activeTab === "Partners/Customers") {
       setPartnersData(updateData(partnersData));
-    } else if (activeTab === "talents") {
+    } else if (activeTab === "Talent Profiles") {
       setTalentsData(updateData(talentsData));
     } else {
       setJobsData(updateData(jobsData));
@@ -292,12 +296,12 @@ const ApprovalProcess = () => {
           : item
       );
 
-    if (activeTab === "partners") {
+    if (activeTab === "Partners/Customers") {
       setPartnersData(updateData(partnersData, currentRejectRecord.key));
       message.error(
         `${currentRejectRecord.type} "${currentRejectRecord.name}" has been rejected`
       );
-    } else if (activeTab === "talents") {
+    } else if (activeTab === "Talent Profiles") {
       setTalentsData(updateData(talentsData, currentRejectRecord.key));
       message.error(
         `Talent profile "${currentRejectRecord.name}" has been rejected`
@@ -314,15 +318,51 @@ const ApprovalProcess = () => {
     setCurrentRejectRecord(null);
   };
 
+  // Handle view actions
+  const handleView = (record) => {
+    if (activeTab === "Partners/Customers") {
+      message.info(`Viewing ${record.type} profile: ${record.name}`);
+      // Navigate to partner/customer profile page
+    } else if (activeTab === "Talent Profiles") {
+      // Navigate to talent details page
+      navigate(`/home/talent-details/${record.key}`);
+    } else {
+      message.info(`Viewing job details: ${record.jobTitle}`);
+      // Navigate to job details page
+    }
+  };
+
+  // Create action menu for each row
+  const getActionMenu = (record) => ({
+    items: [
+      {
+        key: "view",
+        label: "View Details",
+        onClick: () => handleView(record),
+      },
+      ...(record.status === "Pending"
+        ? [
+            {
+              key: "approve",
+              label: "Approve",
+              onClick: () => handleApprove(record),
+            },
+            {
+              key: "reject",
+              label: "Reject",
+              onClick: () => handleRejectClick(record),
+            },
+          ]
+        : []),
+    ],
+  });
+
   // Columns for Partners/Customers
   const partnersColumns = [
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (name) => (
-        <span style={{ fontWeight: 600, color: "#014c75" }}>{name}</span>
-      ),
     },
     {
       title: "Type",
@@ -362,40 +402,27 @@ const ApprovalProcess = () => {
       dataIndex: "status",
       key: "status",
       render: (status) => (
-        <span className={`status-tag status-${status.toLowerCase()}`}>
+        <Tag
+          color={
+            status === "Approved"
+              ? "green"
+              : status === "Rejected"
+              ? "red"
+              : "orange"
+          }
+        >
           {status}
-        </span>
+        </Tag>
       ),
     },
     {
       title: "Action",
       key: "action",
-      align: "center",
-      render: (_, record) =>
-        record.status === "Pending" ? (
-          <div className="action-buttons">
-            <Button
-              className="approve-btn"
-              size="small"
-              icon={<CheckCircleOutlined />}
-              onClick={() => handleApprove(record)}
-            >
-              Approve
-            </Button>
-            <Button
-              className="reject-btn"
-              size="small"
-              icon={<CloseCircleOutlined />}
-              onClick={() => handleRejectClick(record)}
-            >
-              Reject
-            </Button>
-          </div>
-        ) : (
-          <Tag color={record.status === "Approved" ? "green" : "red"}>
-            {record.status}
-          </Tag>
-        ),
+      render: (_, record) => (
+        <Dropdown menu={getActionMenu(record)} trigger={["click"]}>
+          <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
+        </Dropdown>
+      ),
     },
   ];
 
@@ -405,9 +432,6 @@ const ApprovalProcess = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (name) => (
-        <span style={{ fontWeight: 600, color: "#014c75" }}>{name}</span>
-      ),
     },
     {
       title: "Role",
@@ -418,9 +442,6 @@ const ApprovalProcess = () => {
       title: "Skills",
       dataIndex: "skills",
       key: "skills",
-      render: (skills) => (
-        <span style={{ fontSize: "13px", color: "#666" }}>{skills}</span>
-      ),
     },
     {
       title: "Experience",
@@ -436,9 +457,6 @@ const ApprovalProcess = () => {
       title: "Monthly Rate",
       dataIndex: "monthlyRate",
       key: "monthlyRate",
-      render: (rate) => (
-        <span style={{ fontWeight: 600, color: "#00d9a9" }}>{rate}</span>
-      ),
     },
     {
       title: "Partner Org",
@@ -455,40 +473,27 @@ const ApprovalProcess = () => {
       dataIndex: "status",
       key: "status",
       render: (status) => (
-        <span className={`status-tag status-${status.toLowerCase()}`}>
+        <Tag
+          color={
+            status === "Approved"
+              ? "green"
+              : status === "Rejected"
+              ? "red"
+              : "orange"
+          }
+        >
           {status}
-        </span>
+        </Tag>
       ),
     },
     {
       title: "Action",
       key: "action",
-      align: "center",
-      render: (_, record) =>
-        record.status === "Pending" ? (
-          <div className="action-buttons">
-            <Button
-              className="approve-btn"
-              size="small"
-              icon={<CheckCircleOutlined />}
-              onClick={() => handleApprove(record)}
-            >
-              Approve
-            </Button>
-            <Button
-              className="reject-btn"
-              size="small"
-              icon={<CloseCircleOutlined />}
-              onClick={() => handleRejectClick(record)}
-            >
-              Reject
-            </Button>
-          </div>
-        ) : (
-          <Tag color={record.status === "Approved" ? "green" : "red"}>
-            {record.status}
-          </Tag>
-        ),
+      render: (_, record) => (
+        <Dropdown menu={getActionMenu(record)} trigger={["click"]}>
+          <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
+        </Dropdown>
+      ),
     },
   ];
 
@@ -498,9 +503,6 @@ const ApprovalProcess = () => {
       title: "Job Title",
       dataIndex: "jobTitle",
       key: "jobTitle",
-      render: (title) => (
-        <span style={{ fontWeight: 600, color: "#014c75" }}>{title}</span>
-      ),
     },
     {
       title: "Company",
@@ -521,23 +523,16 @@ const ApprovalProcess = () => {
       title: "Skills",
       dataIndex: "skills",
       key: "skills",
-      render: (skills) => (
-        <span style={{ fontSize: "13px", color: "#666" }}>{skills}</span>
-      ),
     },
     {
       title: "Budget Range",
       dataIndex: "budget",
       key: "budget",
-      render: (budget) => (
-        <span style={{ fontWeight: 600, color: "#00d9a9" }}>{budget}</span>
-      ),
     },
     {
       title: "Positions",
       dataIndex: "positions",
       key: "positions",
-      align: "center",
       render: (count) => <Tag color="blue">{count}</Tag>,
     },
     {
@@ -550,51 +545,38 @@ const ApprovalProcess = () => {
       dataIndex: "status",
       key: "status",
       render: (status) => (
-        <span className={`status-tag status-${status.toLowerCase()}`}>
+        <Tag
+          color={
+            status === "Approved"
+              ? "green"
+              : status === "Rejected"
+              ? "red"
+              : "orange"
+          }
+        >
           {status}
-        </span>
+        </Tag>
       ),
     },
     {
       title: "Action",
       key: "action",
-      align: "center",
-      render: (_, record) =>
-        record.status === "Pending" ? (
-          <div className="action-buttons">
-            <Button
-              className="approve-btn"
-              size="small"
-              icon={<CheckCircleOutlined />}
-              onClick={() => handleApprove(record)}
-            >
-              Approve
-            </Button>
-            <Button
-              className="reject-btn"
-              size="small"
-              icon={<CloseCircleOutlined />}
-              onClick={() => handleRejectClick(record)}
-            >
-              Reject
-            </Button>
-          </div>
-        ) : (
-          <Tag color={record.status === "Approved" ? "green" : "red"}>
-            {record.status}
-          </Tag>
-        ),
+      render: (_, record) => (
+        <Dropdown menu={getActionMenu(record)} trigger={["click"]}>
+          <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
+        </Dropdown>
+      ),
     },
   ];
 
   // Get columns based on active tab
   const getColumns = () => {
     switch (activeTab) {
-      case "partners":
+      case "Partners/Customers":
         return partnersColumns;
-      case "talents":
+      case "Talent Profiles":
         return talentsColumns;
-      case "jobs":
+      case "Job Posts":
         return jobsColumns;
       default:
         return [];
@@ -612,105 +594,84 @@ const ApprovalProcess = () => {
   };
 
   return (
-    <ApprovalProcessWrapper>
-      <div className="approval-container">
-        <h2 className="page-title">Approval Process</h2>
+    <UserManagementWrapper>
+      <div style={{ padding: "20px" }}>
+        <h2 className="title-header">Approval Process</h2>
 
         {/* Tabs Section */}
-        <div className="tabs-section">
-          <Button
-            className={
-              activeTab === "partners" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => {
-              setActiveTab("partners");
-              setSelectedRowKeys([]);
-              setSearchText("");
-            }}
-            icon={<BankOutlined />}
-          >
-            Partners/Customers
-            <span className="tab-count">{pendingCounts.partners}</span>
-          </Button>
-          <Button
-            className={
-              activeTab === "talents" ? "tab-button active" : "tab-button"
-            }
-            onClick={() => {
-              setActiveTab("talents");
-              setSelectedRowKeys([]);
-              setSearchText("");
-            }}
-            icon={<UserOutlined />}
-          >
-            Talent Profiles
-            <span className="tab-count">{pendingCounts.talents}</span>
-          </Button>
-          <Button
-            className={activeTab === "jobs" ? "tab-button active" : "tab-button"}
-            onClick={() => {
-              setActiveTab("jobs");
-              setSelectedRowKeys([]);
-              setSearchText("");
-            }}
-            icon={<FileTextOutlined />}
-          >
-            Job Posts
-            <span className="tab-count">{pendingCounts.jobs}</span>
-          </Button>
+        <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+          {[
+            { key: "Partners/Customers", count: pendingCounts.partners },
+            { key: "Talent Profiles", count: pendingCounts.talents },
+            { key: "Job Posts", count: pendingCounts.jobs },
+          ].map((tab) => (
+            <Button
+              key={tab.key}
+              className={
+                activeTab === tab.key ? "tab-button active-tab" : "tab-button"
+              }
+              type={activeTab === tab.key ? "primary" : "default"}
+              onClick={() => {
+                setActiveTab(tab.key);
+                setSelectedRowKeys([]);
+                setSearchText("");
+              }}
+            >
+              <Avatar
+                size={50}
+                className="icon-bg"
+                style={{
+                  backgroundColor: activeTab === tab.key ? "#ffffff" : "#E4F6FF",
+                }}
+                src={<img src={MaskGroup} alt="avatar" />}
+              />
+              &nbsp;{tab.count} {tab.key}
+            </Button>
+          ))}
         </div>
 
         {/* Search and Actions Section */}
-        <div className="actions-section">
-          <div className="left-actions">
-            <Input
-              prefix={<SearchOutlined style={{ color: "#bfbfbf" }} />}
-              placeholder={`Search ${
-                activeTab === "partners"
-                  ? "by name, contact person, or email"
-                  : activeTab === "talents"
-                  ? "by name, role, or skills"
-                  : "by job title, company, or skills"
-              }`}
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-              className="search-input"
-              size="large"
-              style={{ width: 420 }}
-            />
-          </div>
+        <Flex align="start" justify="space-between">
+          <Input
+            prefix={<SearchOutlined />}
+            placeholder={`Search ${
+              activeTab === "Partners/Customers"
+                ? "by name, contact person, or email"
+                : activeTab === "Talent Profiles"
+                ? "by name, role, or skills"
+                : "by job title, company, or skills"
+            }`}
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{ marginBottom: "20px", width: "300px" }}
+          />
 
-          <div className="right-actions">
-            {selectedRowKeys.length > 0 && (
-              <Button
-                className="bulk-action-btn"
-                icon={<CheckCircleOutlined />}
-                onClick={handleBulkApprove}
-              >
-                Bulk Approve
-                <span className="selected-count">{selectedRowKeys.length}</span>
-              </Button>
-            )}
-          </div>
-        </div>
+          {selectedRowKeys.length > 0 && (
+            <Button
+              type="primary"
+              icon={<CheckCircleOutlined />}
+              onClick={handleBulkApprove}
+              style={{
+                backgroundColor: "#52c41a",
+                borderColor: "#52c41a",
+              }}
+            >
+              Bulk Approve ({selectedRowKeys.length})
+            </Button>
+          )}
+        </Flex>
 
         {/* Table */}
         <Table
           rowSelection={rowSelection}
           columns={getColumns()}
           dataSource={filteredData}
-          pagination={{
-            pageSize: 10,
-            showSizeChanger: true,
-            showTotal: (total, range) =>
-              `${range[0]}-${range[1]} of ${total} items`,
-          }}
-          scroll={{ x: 1200 }}
+          pagination={{ pageSize: 10 }}
         />
 
         {/* Reject with Comment Modal */}
         <Modal
-          title={null}
+          title="Reject with Comment"
           open={rejectModalVisible}
           onCancel={() => {
             setRejectModalVisible(false);
@@ -720,8 +681,12 @@ const ApprovalProcess = () => {
           footer={null}
           width={500}
         >
-          <div className="modal-title">Reject with Comment</div>
-          <Form form={form} onFinish={handleRejectSubmit} className="reject-form">
+          <Form
+            form={form}
+            onFinish={handleRejectSubmit}
+            layout="vertical"
+            style={{ marginTop: "20px" }}
+          >
             <Form.Item
               label="Reason for Rejection"
               name="comment"
@@ -743,29 +708,31 @@ const ApprovalProcess = () => {
                 showCount
               />
             </Form.Item>
-            <div className="modal-footer">
-              <Button
-                onClick={() => {
-                  setRejectModalVisible(false);
-                  form.resetFields();
-                  setCurrentRejectRecord(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button
-                type="primary"
-                htmlType="submit"
-                danger
-                icon={<CloseCircleOutlined />}
-              >
-                Reject
-              </Button>
-            </div>
+            <Form.Item style={{ marginBottom: 0, textAlign: "right" }}>
+              <Space>
+                <Button
+                  onClick={() => {
+                    setRejectModalVisible(false);
+                    form.resetFields();
+                    setCurrentRejectRecord(null);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  danger
+                  icon={<CloseCircleOutlined />}
+                >
+                  Reject
+                </Button>
+              </Space>
+            </Form.Item>
           </Form>
         </Modal>
       </div>
-    </ApprovalProcessWrapper>
+    </UserManagementWrapper>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Layout, Menu, Dropdown, Space } from "antd";
+import { Layout, Menu, Dropdown, Space, Avatar } from "antd";
 import { Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import React from "react";
@@ -15,7 +15,6 @@ import {
   SettingOutlined,
   UserOutlined,
   LockOutlined,
-  DownOutlined,
 } from "@ant-design/icons";
 import { PartnerDashboardWrapper } from "./PartnerDashboard.style";
 import PartnerOverview from "../PartnerOverview/PartnerOverview";
@@ -24,6 +23,7 @@ import TalentsHired from "../TalentsHired/TalentsHired";
 import SubmitProfiles from "../SubmitProfiles/SubmitProfiles";
 import BenchPool from "../BenchPool/BenchPool";
 import TalentDetails from "../TalentDetails/TalentDetails";
+import Profile from "../Profile/Profile";
 
 const sideBarMenu = [
   { key: "/partner", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -102,27 +102,23 @@ const PartnerDashboard = () => {
             display: "flex",
             alignItems: "center",
             background: "#191919",
+            padding: "0 24px",
+            justifyContent: "space-between",
           }}
         >
           <img src={Logo} alt="logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={["2"]}
-            style={{
-              flex: 1,
-              minWidth: 0,
-              background: "#191919",
-            }}
-          />
+          
           <Dropdown 
             menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
             placement="bottomRight"
           >
-            <Space style={{ cursor: 'pointer', color: 'white', marginRight: '20px' }}>
-              <UserOutlined style={{ fontSize: '18px' }} />
-              <DownOutlined style={{ fontSize: '12px' }} />
-            </Space>
+            <Avatar
+              style={{
+                backgroundColor: "#00d9a9",
+                cursor: "pointer",
+              }}
+              icon={<UserOutlined />}
+            />
           </Dropdown>
         </Header>
         <Layout>
@@ -167,6 +163,7 @@ const PartnerDashboard = () => {
               <Route path="/submit-profiles/:jobId" element={<SubmitProfiles />} />
               <Route path="/talent-hired" element={<TalentsHired />} />
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </Layout>
         </Layout>

@@ -28,6 +28,7 @@ import TalentProfiles from "./TalentProfiles/TalentProfiles";
 import JobRequirments from "./JobRequirments/JobRequirments";
 import PostNewJob from "./JobRequirments/PostNewJob";
 import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
+import Profile from "./Profile/Profile";
 
 const { Header, Content, Sider } = Layout;
 
@@ -191,6 +192,7 @@ const Dashboard = () => {
                 element={<PostNewJob />}
               />
               <Route path="/approval-process" element={<ApprovalProcess />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </Layout>
         </Layout>
