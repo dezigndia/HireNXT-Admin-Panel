@@ -13,8 +13,10 @@ import {
   SettingOutlined,
   TeamOutlined,
   UserOutlined,
+  LockOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Button, Layout, Menu, theme } from "antd";
+import { Breadcrumb, Button, Layout, Menu, theme, Dropdown, Space } from "antd";
 import { DashboardWrapper } from "./Dashboard.style";
 // @ts-ignore
 import Logo from "./../../assets/logo.svg";
@@ -65,15 +67,54 @@ const sideBarMenu = [
 
 const sideBarMenu2 = [
   { key: 11, label: "Settings", icon: <SettingOutlined /> },
-  { key: 12, label: "Logout", icon: <LogoutOutlined /> },
+  { key: "/logout", label: "Logout", icon: <LogoutOutlined /> },
 ];
 
 const Dashboard = () => {
   const navigate = useNavigate();
 
   const handleClick = (e) => {
-    navigate(e.key);
+    if (e.key === "/logout") {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      navigate("/", { replace: true });
+    } else {
+      navigate(e.key);
+    }
   };
+
+  const profileMenuItems = [
+    {
+      key: 'profile',
+      label: 'View Profile',
+      icon: <UserOutlined />,
+    },
+    {
+      key: 'change-password',
+      label: 'Change Password',
+      icon: <LockOutlined />,
+    },
+    {
+      key: 'logout',
+      label: 'Logout',
+      icon: <LogoutOutlined />,
+    },
+  ];
+
+  const handleProfileMenuClick = ({ key }) => {
+    if (key === 'logout') {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      navigate("/", { replace: true });
+    } else if (key === 'profile') {
+      navigate("/home/profile");
+    } else if (key === 'change-password') {
+      navigate("/home/change-password");
+    }
+  };
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -84,6 +125,7 @@ const Dashboard = () => {
           style={{
             display: "flex",
             alignItems: "center",
+            background: "#191919",
           }}
         >
           <img src={Logo} alt="logo" />
@@ -91,12 +133,21 @@ const Dashboard = () => {
             theme="dark"
             mode="horizontal"
             defaultSelectedKeys={["2"]}
-            // items={items1}
             style={{
               flex: 1,
               minWidth: 0,
+              background: "#191919",
             }}
           />
+          <Dropdown 
+            menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
+            placement="bottomRight"
+          >
+            <Space style={{ cursor: 'pointer', color: 'white', marginRight: '20px' }}>
+              <UserOutlined style={{ fontSize: '18px' }} />
+              <DownOutlined style={{ fontSize: '12px' }} />
+            </Space>
+          </Dropdown>
         </Header>
         <Layout>
           <Sider
@@ -129,7 +180,7 @@ const Dashboard = () => {
           <Layout
             style={{
               padding: "0 24px 24px",
-              overflow: "scroll",
+              overflow: "auto",
               height: "90vh",
             }}
           >
