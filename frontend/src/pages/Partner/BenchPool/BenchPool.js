@@ -125,6 +125,7 @@ const BenchPool = () => {
   const [aadhar, setAadhar] = useState(null);
   const [pan, setPan] = useState(null);
   const [degree, setDegree] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
 
   // Filter data based on active tab and search
   const filteredData = benchData.filter((resource) => {
@@ -140,7 +141,11 @@ const BenchPool = () => {
   const totalJobsApplied = benchData.reduce((sum, r) => sum + r.jobsApplied, 0);
   const totalTalentsHired = benchData.reduce((sum, r) => sum + r.pastHired, 0);
 
-  const handleOpenModal = () => setIsModalVisible(true);
+  const handleOpenModal = () => {
+    setIsModalVisible(true);
+    setCurrentStep(0);
+  };
+  
   const handleCloseModal = () => {
     setIsModalVisible(false);
     form.resetFields();
@@ -148,6 +153,19 @@ const BenchPool = () => {
     setAadhar(null);
     setPan(null);
     setDegree(null);
+    setCurrentStep(0);
+  };
+
+  const handleNext = () => {
+    form.validateFields().then(() => {
+      setCurrentStep(1);
+    }).catch((error) => {
+      console.log("Validation failed:", error);
+    });
+  };
+
+  const handleBack = () => {
+    setCurrentStep(0);
   };
 
   const handleSubmit = async (values) => {
@@ -504,6 +522,7 @@ const BenchPool = () => {
           footer={null}
           width={900}
           className="add-resource-modal"
+          bodyStyle={{ maxHeight: "70vh", overflowY: "auto", padding: "24px" }}
         >
           <Flex
             justify="center"
@@ -512,10 +531,13 @@ const BenchPool = () => {
             style={{ borderBottom: "1px solid #e8e8e8", marginBottom: "24px", paddingBottom: "16px" }}
           >
             <Text style={{ fontSize: "28px", color: "#014c75", fontWeight: 600 }}>
-              Add Bench Resource
+              Add Bench Resource {currentStep === 0 ? "(Step 1/2)" : "(Step 2/2)"}
             </Text>
           </Flex>
           <Form form={form} layout="vertical" onFinish={handleSubmit}>
+            {/* Step 1: Basic Information */}
+            {currentStep === 0 && (
+              <>
             <Form.Item label="Upload Resume">
               <Upload
                 beforeUpload={(file) => {
@@ -857,12 +879,130 @@ const BenchPool = () => {
                 </Form.Item>
               </Col>
             </Row>
+            </>
+            )}
+
+            {/* Step 2: Optional Information */}
+            {currentStep === 1 && (
+              <>
+            <Form.Item label="Professional Summary (Optional)" name="summary">
+              <Input.TextArea 
+                rows={4} 
+                placeholder="Enter professional summary highlighting key skills, experience, and expertise..." 
+              />
+            </Form.Item>
+            
+            <Form.Item label="Project Experience (Optional)">
+              <Form.List name="projects">
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Card
+                        key={key}
+                        size="small"
+                        style={{ marginBottom: 16, background: '#fafafa' }}
+                        extra={
+                          <MinusCircleOutlined
+                            onClick={() => remove(name)}
+                            style={{ color: '#ff4d4f', fontSize: '16px' }}
+                          />
+                        }
+                      >
+                        <Row gutter={16}>
+                          <Col span={12}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'title']}
+                              label="Project Title"
+                            >
+                              <Input placeholder="e.g., E-commerce Platform Development" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={12}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'client']}
+                              label="Client"
+                            >
+                              <Input placeholder="e.g., Fortune 500 Company" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Row gutter={16}>
+                          <Col span={8}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'duration']}
+                              label="Duration"
+                            >
+                              <Input placeholder="e.g., 6 months" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'role']}
+                              label="Your Role"
+                            >
+                              <Input placeholder="e.g., Lead Developer" />
+                            </Form.Item>
+                          </Col>
+                          <Col span={8}>
+                            <Form.Item
+                              {...restField}
+                              name={[name, 'technologies']}
+                              label="Technologies"
+                            >
+                              <Input placeholder="e.g., React, Node.js, MongoDB" />
+                            </Form.Item>
+                          </Col>
+                        </Row>
+                        <Form.Item
+                          {...restField}
+                          name={[name, 'description']}
+                          label="Description"
+                        >
+                          <Input.TextArea
+                            rows={3}
+                            placeholder="Describe the project, your contributions, and achievements..."
+                          />
+                        </Form.Item>
+                      </Card>
+                    ))}
+                    <Form.Item>
+                      <Button
+                        type="dashed"
+                        onClick={() => add()}
+                        block
+                        icon={<PlusOutlined />}
+                      >
+                        Add Project
+                      </Button>
+                    </Form.Item>
+                  </>
+                )}
+              </Form.List>
+            </Form.Item>
+            </>
+            )}
+
+            {/* Action Buttons */}
             <Form.Item style={{ marginTop: "24px", marginBottom: 0 }}>
               <Space>
                 <Button onClick={handleCloseModal}>Cancel</Button>
-                <Button type="primary" htmlType="submit">
-                  Submit
-                </Button>
+                {currentStep === 0 && (
+                  <Button type="primary" onClick={handleNext}>
+                    Next
+                  </Button>
+                )}
+                {currentStep === 1 && (
+                  <>
+                    <Button onClick={handleBack}>Back</Button>
+                    <Button type="primary" htmlType="submit">
+                      Submit
+                    </Button>
+                  </>
+                )}
               </Space>
             </Form.Item>
           </Form>

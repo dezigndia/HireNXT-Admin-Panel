@@ -168,7 +168,7 @@ const mockJobPosts = [
 
 const ApprovalProcess = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Partners/Customers");
+  const [activeTab, setActiveTab] = useState("Users");
   const [searchText, setSearchText] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
@@ -183,11 +183,11 @@ const ApprovalProcess = () => {
   // Get current data based on active tab
   const getCurrentData = () => {
     switch (activeTab) {
-      case "Partners/Customers":
+      case "Users":
         return partnersData;
-      case "Talent Profiles":
+      case "Profiles":
         return talentsData;
-      case "Job Posts":
+      case "Jobs":
         return jobsData;
       default:
         return [];
@@ -208,13 +208,13 @@ const ApprovalProcess = () => {
   // Filter data based on search
   const filteredData = getCurrentData().filter((item) => {
     const searchLower = searchText.toLowerCase();
-    if (activeTab === "Partners/Customers") {
+    if (activeTab === "Users") {
       return (
         item.name.toLowerCase().includes(searchLower) ||
         item.contactPerson.toLowerCase().includes(searchLower) ||
         item.email.toLowerCase().includes(searchLower)
       );
-    } else if (activeTab === "Talent Profiles") {
+    } else if (activeTab === "Profiles") {
       return (
         item.name.toLowerCase().includes(searchLower) ||
         item.role.toLowerCase().includes(searchLower) ||
@@ -236,12 +236,12 @@ const ApprovalProcess = () => {
         item.key === key ? { ...item, status: "Approved" } : item
       );
 
-    if (activeTab === "Partners/Customers") {
+    if (activeTab === "Users") {
       setPartnersData(updateData(partnersData, record.key));
       message.success(
         `${record.type} "${record.name}" has been approved and is now active!`
       );
-    } else if (activeTab === "Talent Profiles") {
+    } else if (activeTab === "Profiles") {
       setTalentsData(updateData(talentsData, record.key));
       message.success(
         `Talent profile "${record.name}" has been approved and is now active!`
@@ -268,9 +268,9 @@ const ApprovalProcess = () => {
           : item
       );
 
-    if (activeTab === "Partners/Customers") {
+    if (activeTab === "Users") {
       setPartnersData(updateData(partnersData));
-    } else if (activeTab === "Talent Profiles") {
+    } else if (activeTab === "Profiles") {
       setTalentsData(updateData(talentsData));
     } else {
       setJobsData(updateData(jobsData));
@@ -296,12 +296,12 @@ const ApprovalProcess = () => {
           : item
       );
 
-    if (activeTab === "Partners/Customers") {
+    if (activeTab === "Users") {
       setPartnersData(updateData(partnersData, currentRejectRecord.key));
       message.error(
         `${currentRejectRecord.type} "${currentRejectRecord.name}" has been rejected`
       );
-    } else if (activeTab === "Talent Profiles") {
+    } else if (activeTab === "Profiles") {
       setTalentsData(updateData(talentsData, currentRejectRecord.key));
       message.error(
         `Talent profile "${currentRejectRecord.name}" has been rejected`
@@ -320,15 +320,15 @@ const ApprovalProcess = () => {
 
   // Handle view actions
   const handleView = (record) => {
-    if (activeTab === "Partners/Customers") {
+    if (activeTab === "Users") {
+      // For now, show info message since we don't have user details page
       message.info(`Viewing ${record.type} profile: ${record.name}`);
-      // Navigate to partner/customer profile page
-    } else if (activeTab === "Talent Profiles") {
-      // Navigate to talent details page
+    } else if (activeTab === "Profiles") {
+      // Navigate to talent details page (shared talent details component)
       navigate(`/home/talent-details/${record.key}`);
     } else {
+      // Navigate to job details page  
       message.info(`Viewing job details: ${record.jobTitle}`);
-      // Navigate to job details page
     }
   };
 
@@ -601,31 +601,27 @@ const ApprovalProcess = () => {
         {/* Tabs Section */}
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
           {[
-            { key: "Partners/Customers", count: pendingCounts.partners },
-            { key: "Talent Profiles", count: pendingCounts.talents },
-            { key: "Job Posts", count: pendingCounts.jobs },
+            { key: "Users", count: pendingCounts.partners },
+            { key: "Jobs", count: pendingCounts.jobs },
+            { key: "Profiles", count: pendingCounts.talents },
           ].map((tab) => (
             <Button
               key={tab.key}
-              className={
-                activeTab === tab.key ? "tab-button active-tab" : "tab-button"
-              }
-              type={activeTab === tab.key ? "primary" : "default"}
+              style={{
+                backgroundColor: activeTab === tab.key ? "#00d9a9" : "#fff",
+                color: activeTab === tab.key ? "#fff" : "#014c75",
+                border: activeTab === tab.key ? "1px solid #00d9a9" : "1px solid #d9d9d9",
+                fontWeight: activeTab === tab.key ? "600" : "500",
+                padding: "8px 20px",
+                height: "auto",
+              }}
               onClick={() => {
                 setActiveTab(tab.key);
                 setSelectedRowKeys([]);
                 setSearchText("");
               }}
             >
-              <Avatar
-                size={50}
-                className="icon-bg"
-                style={{
-                  backgroundColor: activeTab === tab.key ? "#ffffff" : "#E4F6FF",
-                }}
-                src={<img src={MaskGroup} alt="avatar" />}
-              />
-              &nbsp;{tab.count} {tab.key}
+              {tab.key} ({tab.count})
             </Button>
           ))}
         </div>
@@ -635,9 +631,9 @@ const ApprovalProcess = () => {
           <Input
             prefix={<SearchOutlined />}
             placeholder={`Search ${
-              activeTab === "Partners/Customers"
+              activeTab === "Users"
                 ? "by name, contact person, or email"
-                : activeTab === "Talent Profiles"
+                : activeTab === "Profiles"
                 ? "by name, role, or skills"
                 : "by job title, company, or skills"
             }`}
