@@ -120,10 +120,6 @@ const SubmittedProfiles = () => {
                 icon: <FilePdfOutlined />,
               },
               {
-                key: "shortlist",
-                label: "Shortlist",
-              },
-              {
                 key: "interview",
                 label: "Schedule Interview",
               },

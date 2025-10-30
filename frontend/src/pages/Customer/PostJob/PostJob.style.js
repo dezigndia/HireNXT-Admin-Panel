@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const PostJobWrapper = styled.div`
-  background: #f5f5f5;
+  background: #f8f9fd;
   min-height: 100vh;
 
   .post-job-header {
@@ -10,9 +10,9 @@ export const PostJobWrapper = styled.div`
     border-bottom: 1px solid #e8e8e8;
 
     h2 {
-      font-size: 24px;
-      font-weight: 600;
-      color: #1a1a1a;
+      font-size: 28px;
+      font-weight: 700;
+      color: #014c75;
       margin: 0;
     }
   }
@@ -45,8 +45,8 @@ export const PostJobWrapper = styled.div`
     }
 
     .ant-steps-item-process .ant-steps-item-icon {
-      background-color: #26c6b8;
-      border-color: #26c6b8;
+      background-color: #00d9a9;
+      border-color: #00d9a9;
       
       .ant-steps-icon {
         color: white;
@@ -54,8 +54,8 @@ export const PostJobWrapper = styled.div`
     }
 
     .ant-steps-item-finish .ant-steps-item-icon {
-      background-color: #26c6b8;
-      border-color: #26c6b8;
+      background-color: #00d9a9;
+      border-color: #00d9a9;
       
       .ant-steps-icon {
         color: white;
@@ -63,7 +63,7 @@ export const PostJobWrapper = styled.div`
     }
 
     .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
-      background-color: #26c6b8;
+      background-color: #00d9a9;
     }
 
     .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-tail::after {
