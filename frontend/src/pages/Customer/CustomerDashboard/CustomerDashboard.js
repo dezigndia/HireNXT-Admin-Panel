@@ -1,4 +1,4 @@
-import { Layout, Menu } from "antd";
+import { Layout, Menu, Dropdown, Space } from "antd";
 import { Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import React, { useEffect } from "react";
@@ -12,6 +12,8 @@ import {
   SettingOutlined,
   UserOutlined,
   SearchOutlined,
+  LockOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import { CustomerDashboardWrapper } from "./CustomerDashboard.style";
 import CustomerOverview from "../CustomerOverview/CustomerOverview";
@@ -49,7 +51,7 @@ const sideBarMenu = [
 
 const sideBarMenu2 = [
   { key: 11, label: "Settings", icon: <SettingOutlined /> },
-  { key: 12, label: "Logout", icon: <LogoutOutlined /> },
+  { key: "/logout", label: "Logout", icon: <LogoutOutlined /> },
 ];
 
 const CustomerDashboard = () => {
@@ -66,7 +68,7 @@ const CustomerDashboard = () => {
   }, [navigate]);
 
   const handleClick = (e) => {
-    if (e.key === 12) {
+    if (e.key === "/logout") {
       localStorage.removeItem("authToken");
       localStorage.removeItem("userRole");
       localStorage.removeItem("userName");
@@ -75,6 +77,37 @@ const CustomerDashboard = () => {
       navigate("/customer/settings");
     } else {
       navigate(e.key);
+    }
+  };
+
+  const profileMenuItems = [
+    {
+      key: 'profile',
+      label: 'View Profile',
+      icon: <UserOutlined />,
+    },
+    {
+      key: 'change-password',
+      label: 'Change Password',
+      icon: <LockOutlined />,
+    },
+    {
+      key: 'logout',
+      label: 'Logout',
+      icon: <LogoutOutlined />,
+    },
+  ];
+
+  const handleProfileMenuClick = ({ key }) => {
+    if (key === 'logout') {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      navigate("/", { replace: true });
+    } else if (key === 'profile') {
+      navigate("/customer/profile");
+    } else if (key === 'change-password') {
+      navigate("/customer/change-password");
     }
   };
 
@@ -96,6 +129,7 @@ const CustomerDashboard = () => {
           style={{
             display: "flex",
             alignItems: "center",
+            background: "#191919",
           }}
         >
           <img src={Logo} alt="logo" />
@@ -106,8 +140,18 @@ const CustomerDashboard = () => {
             style={{
               flex: 1,
               minWidth: 0,
+              background: "#191919",
             }}
           />
+          <Dropdown 
+            menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
+            placement="bottomRight"
+          >
+            <Space style={{ cursor: 'pointer', color: 'white', marginRight: '20px' }}>
+              <UserOutlined style={{ fontSize: '18px' }} />
+              <DownOutlined style={{ fontSize: '12px' }} />
+            </Space>
+          </Dropdown>
         </Header>
         <Layout>
           <Sider
@@ -139,7 +183,7 @@ const CustomerDashboard = () => {
           <Layout
             style={{
               padding: "0 24px 24px",
-              overflow: "scroll",
+              overflow: "auto",
               height: "90vh",
             }}
           >
