@@ -1,4 +1,4 @@
-import { Layout, Menu, Dropdown, Space } from "antd";
+import { Layout, Menu, Dropdown, Space, Avatar } from "antd";
 import { Header } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import React, { useEffect } from "react";
@@ -13,7 +13,6 @@ import {
   UserOutlined,
   SearchOutlined,
   LockOutlined,
-  DownOutlined,
 } from "@ant-design/icons";
 import { CustomerDashboardWrapper } from "./CustomerDashboard.style";
 import CustomerOverview from "../CustomerOverview/CustomerOverview";
@@ -24,6 +23,7 @@ import JobDetails from "../JobDetails/JobDetails";
 import PostJob from "../PostJob/PostJob";
 import HiredTalents from "../HiredTalents/HiredTalents";
 import TalentDetails from "../TalentDetails/TalentDetails";
+import Profile from "../Profile/Profile";
 
 const sideBarMenu = [
   { key: "/customer", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -130,27 +130,23 @@ const CustomerDashboard = () => {
             display: "flex",
             alignItems: "center",
             background: "#191919",
+            padding: "0 24px",
+            justifyContent: "space-between",
           }}
         >
           <img src={Logo} alt="logo" />
-          <Menu
-            theme="dark"
-            mode="horizontal"
-            defaultSelectedKeys={["2"]}
-            style={{
-              flex: 1,
-              minWidth: 0,
-              background: "#191919",
-            }}
-          />
+          
           <Dropdown 
             menu={{ items: profileMenuItems, onClick: handleProfileMenuClick }}
             placement="bottomRight"
           >
-            <Space style={{ cursor: 'pointer', color: 'white', marginRight: '20px' }}>
-              <UserOutlined style={{ fontSize: '18px' }} />
-              <DownOutlined style={{ fontSize: '12px' }} />
-            </Space>
+            <Avatar
+              style={{
+                backgroundColor: "#00d9a9",
+                cursor: "pointer",
+              }}
+              icon={<UserOutlined />}
+            />
           </Dropdown>
         </Header>
         <Layout>
@@ -196,6 +192,7 @@ const CustomerDashboard = () => {
               <Route path="/submitted-profiles" element={<SubmittedProfiles />} />
               <Route path="/hired-talents" element={<HiredTalents />} />
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </Layout>
         </Layout>
