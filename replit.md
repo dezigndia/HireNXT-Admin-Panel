@@ -27,11 +27,17 @@ The application is a React-based single-page application (SPA) built with Create
       - **8 Key Metrics Cards** (2 rows × 4 cards) displaying Total Talents Hired (150), Total Partners Joined (500), Total Customers Onboarded (100), Total Profiles Submitted (750), Total Estimated Revenue (₹ 20 cr), Total Estimated Payout Amount (₹ 10 cr), Average Revenue per Customer (₹ 50 lac), and Average Cost per Talent (₹ 2 lac). Each card features large bold numbers in primary blue (#014c75), descriptive labels, and color-coded icons.
       - **Approvals Pending Section** with "View All" link, displaying 4 actionable items: New Customer onboarded (100), New Partners onboarded (205), New Talent Profiles Created (178), and Profiles Submitted for Jobs (52). Each item features an icon, count, description, and right arrow for navigation.
       - **Top Customers Hiring Talents Table** with "View All" link, showing top 5 customers with columns for Customer Name (with building icon), Talents Hired count, and Per Talent Average (highlighted in primary blue).
-      - **Enhanced Header** with centered search bar ("Search by skills or job e.g. Java, UI Designer,etc"), notification bell icon with badge count (5), and profile avatar dropdown in teal (#00d9a9).
+      - **Clean Header** with logo on the left and profile avatar dropdown in teal (#00d9a9) on the right. Search bar and notification icon removed as not currently needed.
     - **User Management:** Comprehensive user database management
     - **Talent Profiles:** Talent profile database management
     - **Job Requirements:** Job posting and requirement management
-    - **Approval Process:** Review and approve pending items (customers, partners, profiles)
+    - **Approval Process:** Comprehensive three-tab approval system for managing pending approvals:
+      - **Partners/Customers Tab:** Displays pending partner and customer registrations with columns for Name, Type (Partner/Customer tag), Contact Person, Email, Phone, Location, Registered On, and Status. Includes Approve/Reject actions for individual items and bulk approve functionality for selected items.
+      - **Talent Profiles Tab:** Shows pending talent profile submissions with columns for Name, Role, Skills, Experience, Location, Monthly Rate, Partner Organization, Submitted On, and Status. Features Approve/Reject actions and bulk approve capability.
+      - **Job Posts Tab:** Lists pending job postings with columns for Job Title, Company, Location, Experience, Skills, Budget Range, Positions, Posted On, and Status. Supports individual and bulk approve operations.
+      - **Reject with Comment:** When rejecting any item, a modal requires a detailed comment (minimum 10 characters) explaining the rejection reason. Bulk reject is not supported to ensure thoughtful individual rejections.
+      - **Status Management:** Upon approval, items become active (Partner/Customer profile, Talent profile, or Job Description). Each tab displays pending count badges for quick visibility.
+      - **Design Aesthetics:** Tabs use teal/green (#00d9a9) for active state, matching the overall app design. Tables feature dark blue (#014c75) headers with white text, and action buttons use green (#52c41a) for approve and red (#ff4d4f) for reject.
     - **Role Permissions:** Configure role-based access control
 
 **System Design Choices:**
