@@ -7,99 +7,33 @@ The HireNXT Admin Panel is a React-based application designed to manage the Hire
 None specified yet
 
 ## System Architecture
-The application is a React-based single-page application (SPA) built with Create React App. It utilizes Ant Design for its UI components, ensuring a consistent and professional look and feel. Styling is managed using Styled Components. React Router DOM handles client-side routing, enabling navigation between different sections like Customer Dashboard, Job Details, and Post Job wizard.
+The application is a React-based single-page application (SPA) built with Create React App. It utilizes Ant Design for its UI components and Styled Components for styling. React Router DOM handles client-side routing.
 
 **UI/UX Decisions:**
-- **Design System:** Ant Design is the primary UI library, providing a modern and consistent aesthetic.
-- **Color Schemes:** Professional layouts with clean white backgrounds, accented by teal/green (`#00d9a9`, `#01c49b`) for active states, highlights, and interactive elements, and dark blue (`#014c75`) for primary text and titles. Background color `#f8f9fd` provides subtle contrast.
-- **Responsiveness:** Designed to be mobile-friendly with proper breakpoints and responsive layouts for tables and forms.
-- **Interaction Patterns:**
-    - Card-based layouts for job listings and talent profiles.
-    - Tabbed navigation for filtering content (e.g., Active/Inactive Talents).
-    - Multi-step forms with progress indicators for complex processes like 'Post Job'.
-    - Interactive tables with filtering, sorting, and action menus.
+- **Design System:** Ant Design provides a modern and consistent aesthetic.
+- **Color Schemes:** Professional layouts with clean white backgrounds, accented by teal/green (`#00d9a9`, `#01c49b`) for active states and highlights, and dark blue (`#014c75`) for primary text. Header background is `#191919`.
+- **Responsiveness:** Designed to be mobile-friendly with responsive layouts for tables and forms.
+- **Interaction Patterns:** Card-based layouts, tabbed navigation, multi-step forms with progress indicators, and interactive tables with filtering, sorting, and action menus.
+- **Header Navigation:** Consistent header with profile dropdown for "View Profile", "Change Password", and "Logout".
 
 **Technical Implementations & Feature Specifications:**
-- **Authentication:** Role-based access control with a `ProtectedRoute` component ensures only authorized users access specific routes. Mock authentication is available for development, allowing testing with dummy credentials for Admin, User, Customer, and Partner roles.
-- **Verification Badges:** Both Customer and Partner modules display Aadhar Card and PAN Card verification badges on Talent Details pages as green success tags with checkmark icons, confirming background verification status.
-
-- **Customer Dashboard:** A central hub for customers featuring:
-    - **Overview:** Metrics cards (Job Live, Profile Received, Talent Hired) and quick actions.
-    - **Find Talents:** Advanced search and filtering capabilities for talent profiles (by role, seniority, skills, location, work mode). Displays talent profiles as responsive cards.
-    - **My Jobs:** Card-based display of job postings with status filters (All, Ongoing, Closed) and job-specific metrics. Clickable job titles lead to detailed views.
-    - **Job Details:** Comprehensive view of a specific job, including a summary, primary skills, and a table of submitted profiles. Allows for candidate management (schedule interview, hire, reject).
-    - **Post Job:** A 4-step wizard for creating new job postings, including skill requirements, basic details, preferences, and job responsibilities (with a rich text editor). Features step-by-step validation and state persistence.
-    - **Hired Talents:** Manages active and inactive talent contracts in a tabbed interface. Displays detailed contract information, calculated end dates, color-coded 'Days Left', and actions like 'Renew Contract', 'Raise Issue', and 'Initiate Termination'.
-- **Partner Dashboard:** A comprehensive hub for partners featuring:
-    - **Overview:** Partner-specific metrics (Total Earning, Bench Pool, Jobs Applied, Talents Hired), quick actions with "Add Bench Pool" button (redirects to /partner/bench-pool), Deploy Resources, and Free Consultation. Professional search functionality for opportunities and requirements.
-    - **Ongoing Jobs:** Two-column layout displaying available job opportunities with streamlined search and filtering:
-        - **Search & Filters:** Clean, professional search bar with search icon prefix, plus 2 primary filters (Location, Primary Skill) visible inline, with 5 additional filters (Company Type, Industry, Experience, Contract Type, Working Mode) accessible through "More Filters" drawer. Active filter count display and "Clear All" functionality.
-        - **Left Panel (Job List):** Scrollable list of job cards showing company type, location, open positions, designation with experience, employment type tags, and highlighted salary (teal text). Selected job highlighted with teal border and background.
-        - **Right Panel (Job Details):** Top section with "Submit Profiles" button inline with properly aligned job metadata using Space component (Job ID, interested candidates, location, open positions all in one row with consistent spacing). Displays designation, highlighted salary (teal text), project duration, communication level, primary skills, good-to-have skills, start date, system provision status, work time, timezone, and complete job description as formatted text string (matching data structure from Post Job feature).
-        - **API Integration:** Uses `API_CONST.GET_JOB_REQUIREMENTS` endpoint with POST method, falls back to dummy data (5 sample jobs) when API is unavailable.
-        - **Navigation:** Name columns in all Partner tables (Bench Pool, Talents Hired, Submit Profiles bench pool modal) link to Talent Details page for comprehensive talent information viewing.
-    - **Submit Profiles:** Dedicated page for submitting candidate profiles to specific job opportunities:
-        - **Job Summary Card:** Displays job ID, title, type, highlighted salary, location, open positions, salary per month metric, project duration, communication level, and primary skills.
-        - **Action Buttons:** Two prominent buttons above the profiles table - "Add from Bench Pool" (to select from existing resources) and "Add New Resource" (to add new candidates).
-        - **Add from Bench Pool Modal:** Professional modal with centered title, optimized search bar (14px font, improved placeholder "Search by name, role, or skill"), compact table with reduced font size (13px) and proper column widths for better content fit. Top Skills column displays skill data with proper tags showing skill name and proficiency level. Selected resources display with improved chip design (light teal background #e6fff9, teal border #00d9a9, proper padding). Primary action button (dark blue #014c75) for adding resources. Matches Admin module's design aesthetics.
-        - **Add New Resource Modal:** Comprehensive form modal for adding new candidates with dynamic fields:
-          - **Basic Information:** Name, Role, Email, Phone, Location, Notice Period, Experience
-          - **Rates:** Monthly Rate, Hourly Rate
-          - **Technical Skills:** Dynamic skill fields with add/remove functionality (skill name + proficiency level)
-          - **Project Experience:** Dynamic project cards with add/remove functionality (title, client, duration, role, technologies, description)
-          - **Document Uploads:** Resume (required), Aadhar Card, PAN Card, Degree Proof
-          - Partner Organization field excluded (auto-filled from logged-in partner), Market Rate excluded (fetched from Admin)
-        - **Profiles Table:** Comprehensive table showing resume PDF icon, candidate name, role, top skills with proficiency levels, highlighted monthly rate, experience, notice period, and download resume action.
-        - **Navigation:** Back button to return to Ongoing Jobs, maintains design consistency with Customer Dashboard's Job Details page.
-    - **Talent Details:** Dedicated talent profile page accessible from Partner module showing comprehensive talent information including professional summary, technical skills with proficiency levels, project experience, verification badges (Aadhar Card & PAN Card verified), contact details, rates, and availability. Features back button navigation and action buttons for scheduling interviews and downloading resumes. Shared component with Customer module for consistency.
-    - **Bench Pool:** Comprehensive resource management page for partners:
-        - **Top Metrics:** Three metric cards displaying Active Resources, Jobs Applied (total across all resources), and Talents Hired (total past hires). Each card features an icon with colored background, large metric number, and descriptive label with hover effects.
-        - **Tabs:** Active and Inactive tabs for filtering resources by status, showing resource count in each tab with teal accent (#00d9a9) for active tab.
-        - **Search & Filters:** Professional large-sized search bar (320px width) with styled search icon prefix and filter dropdown for Location (220px width with FilterOutlined icon). Both components have improved alignment and consistent size="large" for better UX. Search filters resources by name or role in real-time.
-        - **Bulk Actions:** "Change Status" button appears when resources are selected, allowing bulk status changes between Active and Inactive. Dropdown menu with action options.
-        - **Data Table:** Comprehensive table with checkbox selection for bulk actions and the following columns (optimized order):
-          - **Resume:** Centered PDF icon (90px width) for resume download/view
-          - **Name:** Resource full name in bold (160px)
-          - **Role:** Job designation/position (180px)
-          - **Top Skill:** Skill with proficiency level displayed as blue tag (160px)
-          - **Monthly Rate:** Highlighted in teal (#00d9a9) for visibility (130px)
-          - **Experience:** Years and months of work experience (140px)
-          - **Location:** City/region (120px)
-          - **Jobs Applied:** Count displayed as centered cyan tag (120px)
-          - **Past Hired:** Count displayed as centered green tag (110px)
-          - **Action:** Centered dropdown menu (80px) with View Details, Download Resume, Mark Active/Inactive, Edit, and Delete options
-        - **Add New Resource:** Comprehensive modal for adding new bench pool resources with expanded data capture:
-          - **Basic Information:** Name, Role, Email, Phone, Location, Notice Period, Experience (Years/Months)
-          - **Rates:** Monthly Rate, Hourly Rate (Market Rate is fetched from Admin, not captured here)
-          - **Availability:** Dropdown selection for immediate or future availability
-          - **Professional Summary:** Multi-line text area for detailed professional background
-          - **Technical Skills:** Dynamic form fields for multiple skills with skill name and proficiency level (Expert/Advanced/Intermediate/Beginner), add/remove functionality
-          - **Project Experience:** Dynamic form cards for multiple projects with fields for Project Title, Client, Duration, Role, Technologies, and Description, add/remove functionality
-          - **Document Uploads:** Resume (required), Aadhar Card, PAN Card, Degree Proof
-          - All fields structured to match data shown in Talent Details page for consistency
-        - **Pagination:** Table pagination with page size options and total count display
-        - **API Integration:** Ready for backend integration with dummy data (5 sample resources) for development and testing
-    - **Talents Hired:** Partner-specific talent contract management with Active/Inactive tabs:
-        - **Table Columns (Partner perspective):** Name, Role, Experience, Monthly Rate, Total Billed, Onboarding Date, Contract Duration, Last Working Day, and color-coded Days Left (green >90 days, orange ≤90 days, red ≤30 days, gray for completed)
-        - **Column Details:**
-          - Email column removed (not required in partner view)
-          - Role column added - displays talent's job designation
-          - Experience column added - shows years of experience
-          - Total Billed column added - displays total revenue generated from this talent (formatted with rupee symbol and thousand separators, bold dark blue text)
-        - **Actions:** View Details, Raise Issue, Initiate Termination (Renew Contract removed - only customers can renew contracts)
-        - **Design:** Consistent with brand aesthetics, professional segmented tabs with teal accent, clean table layout with hover effects
-- **Admin Dashboard:** Comprehensive management sections including User Management, Talent Profiles, Job Requirements, Approval Process, and Role Permissions.
+- **Authentication:** Role-based access control with `ProtectedRoute` and mock authentication for development.
+- **Logout Functionality:** Clears `localStorage` and redirects to the login page from both sidebar and header dropdown.
+- **Verification Badges:** Displays Aadhar Card and PAN Card verification status on Talent Details pages.
+- **Customer Dashboard:** Features overview metrics, talent search, "My Jobs" section, detailed "Job Details" view with candidate management, a 4-step "Post Job" wizard, and "Hired Talents" management with contract details and actions.
+- **Partner Dashboard:** Includes an overview with partner-specific metrics and quick actions. "Ongoing Jobs" displays opportunities with advanced search/filters, a job list, and detailed job view for profile submission. "Submit Profiles" allows adding candidates from a "Bench Pool" or as "New Resources" via comprehensive modals. "Talent Details" provides a shared view of talent profiles. "Bench Pool" offers comprehensive resource management with metric cards, active/inactive tabs, search/filters, bulk actions, and a detailed table. "Talents Hired" manages partner-specific talent contracts with detailed table columns and actions.
+- **Admin Dashboard:** Provides comprehensive management sections for User Management, Talent Profiles, Job Requirements, Approval Process, and Role Permissions.
 
 **System Design Choices:**
-- **Frontend-only Repository:** The current repository focuses solely on the React frontend.
-- **External Backend:** The application is designed to communicate with an external RESTful API.
-- **Environment Configuration:** Uses `.env` files for environment-specific variables, such as API endpoints and mock authentication toggles.
+- **Frontend-only Repository:** Focuses solely on the React frontend.
+- **External Backend:** Communicates with an external RESTful API.
+- **Environment Configuration:** Uses `.env` files for environment-specific variables.
 
 ## External Dependencies
-- **Backend API:** An external RESTful API hosted on Azure. The primary endpoint is `https://hirenxt-api-gwhpfddbfnc9d5dc.westus2-01.azurewebsites.net`.
-- **Axios:** Used for making HTTP requests to the backend API.
-- **Ant Design (antd):** A UI library providing a rich set of components for building the user interface.
-- **React Router DOM:** For declarative routing in React applications.
-- **Styled Components:** For writing component-scoped CSS.
-- **React Quill:** A rich text editor used in the 'Post Job' feature for job responsibilities.
-- **serve:** A static file server used for deploying the built React application.
+- **Backend API:** An external RESTful API hosted on Azure: `https://hirenxt-api-gwhpfddbfnc9d5dc.westus2-01.azurewebsites.net`.
+- **Axios:** For HTTP requests.
+- **Ant Design (antd):** UI library.
+- **React Router DOM:** For client-side routing.
+- **Styled Components:** For component-scoped CSS.
+- **React Quill:** Rich text editor.
+- **serve:** Static file server.
