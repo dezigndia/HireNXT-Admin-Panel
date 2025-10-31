@@ -17,6 +17,42 @@ export const PageHeader = styled.div`
   }
 `;
 
+export const MetricsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 28px;
+`;
+
+export const MetricCard = styled.div`
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .metric-label {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .metric-value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #014c75;
+    line-height: 1.2;
+  }
+
+  .metric-subtitle {
+    font-size: 12px;
+    color: #999;
+    margin-top: 4px;
+  }
+`;
+
 export const TabsContainer = styled.div`
   margin-bottom: 28px;
   border-bottom: 1px solid #e8e8e8;

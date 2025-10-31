@@ -5,6 +5,8 @@ import { MoreOutlined } from "@ant-design/icons";
 import {
   TalentsHiredContainer,
   PageHeader,
+  MetricsContainer,
+  MetricCard,
   TabsContainer,
   TableContainer,
   EmptyState,
@@ -14,7 +16,8 @@ const TalentsHired = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active Talents");
 
-  const mockHiredTalents = [
+  // Single source of truth for all talents data
+  const allTalents = [
     {
       id: 1,
       name: "Rajesh Kumar",
@@ -67,9 +70,6 @@ const TalentsHired = () => {
       totalBilled: 1530000,
       status: "active",
     },
-  ];
-
-  const mockInactiveTalents = [
     {
       id: 5,
       name: "Vikram Singh",
@@ -98,8 +98,49 @@ const TalentsHired = () => {
     },
   ];
 
+  // Derive active and inactive talents from the single source
+  const activeTalents = allTalents.filter((talent) => talent.status === "active");
+  const inactiveTalents = allTalents.filter((talent) => talent.status === "inactive");
+
   const currentData =
-    activeTab === "Active Talents" ? mockHiredTalents : mockInactiveTalents;
+    activeTab === "Active Talents" ? activeTalents : inactiveTalents;
+
+  // Calculate metrics for active talents only
+  const calculateMetrics = () => {
+    // Use the derived activeTalents array
+    
+    const activeMonthlyBilling = activeTalents.reduce(
+      (sum, talent) => sum + talent.monthlyRate,
+      0
+    );
+    const totalBilled = activeTalents.reduce(
+      (sum, talent) => sum + talent.totalBilled,
+      0
+    );
+    const avgPerTalent =
+      activeTalents.length > 0
+        ? activeMonthlyBilling / activeTalents.length
+        : 0;
+
+    return {
+      activeMonthlyBilling,
+      totalBilled,
+      avgPerTalent,
+      activeTalentsCount: activeTalents.length,
+    };
+  };
+
+  const metrics = calculateMetrics();
+
+  const formatCurrency = (amount) => {
+    if (amount >= 10000000) {
+      return `₹${(amount / 10000000).toFixed(2)} Cr`;
+    } else if (amount >= 100000) {
+      return `₹${(amount / 100000).toFixed(2)} Lac`;
+    } else {
+      return `₹${amount.toLocaleString("en-IN")}`;
+    }
+  };
 
   const handleMenuClick = (action, record) => {
     console.log(`${action} for talent:`, record);
@@ -259,6 +300,32 @@ const TalentsHired = () => {
       <PageHeader>
         <h1>Talents Hired</h1>
       </PageHeader>
+
+      <MetricsContainer>
+        <MetricCard>
+          <div className="metric-label">Active Monthly Billing</div>
+          <div className="metric-value">
+            {formatCurrency(metrics.activeMonthlyBilling)}
+          </div>
+          <div className="metric-subtitle">
+            From {metrics.activeTalentsCount} active talents
+          </div>
+        </MetricCard>
+        <MetricCard>
+          <div className="metric-label">Total Billed</div>
+          <div className="metric-value">
+            {formatCurrency(metrics.totalBilled)}
+          </div>
+          <div className="metric-subtitle">Cumulative billing amount</div>
+        </MetricCard>
+        <MetricCard>
+          <div className="metric-label">Avg per Talent</div>
+          <div className="metric-value">
+            {formatCurrency(metrics.avgPerTalent)}
+          </div>
+          <div className="metric-subtitle">Average monthly rate</div>
+        </MetricCard>
+      </MetricsContainer>
 
       <TabsContainer>
         <Segmented
