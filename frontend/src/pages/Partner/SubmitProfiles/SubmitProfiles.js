@@ -271,6 +271,7 @@ const SubmitProfiles = () => {
   const [aadhar, setAadhar] = useState(null);
   const [pan, setPan] = useState(null);
   const [degree, setDegree] = useState(null);
+  const [currentStep, setCurrentStep] = useState(0);
 
   useEffect(() => {
     if (jobData) {
@@ -300,6 +301,7 @@ const SubmitProfiles = () => {
 
   const handleAddResourceClick = () => {
     setAddResourceModalVisible(true);
+    setCurrentStep(0);
   };
 
   const handleBenchModalClose = () => {
@@ -315,6 +317,19 @@ const SubmitProfiles = () => {
     setAadhar(null);
     setPan(null);
     setDegree(null);
+    setCurrentStep(0);
+  };
+
+  const handleNext = () => {
+    form.validateFields().then(() => {
+      setCurrentStep(1);
+    }).catch((error) => {
+      console.log("Validation failed:", error);
+    });
+  };
+
+  const handleBack = () => {
+    setCurrentStep(0);
   };
 
   const handleResourceSelection = (record, selected) => {
@@ -730,6 +745,7 @@ const SubmitProfiles = () => {
         footer={null}
         width={900}
         className="add-resource-modal"
+        bodyStyle={{ maxHeight: "70vh", overflowY: "auto", padding: "24px" }}
       >
         <Flex
           justify="center"
@@ -742,10 +758,13 @@ const SubmitProfiles = () => {
           }}
         >
           <Text style={{ fontSize: "28px", fontWeight: 600, color: "#014c75" }}>
-            Add Bench Resource
+            Add Bench Resource {currentStep === 0 ? "(Step 1/2)" : "(Step 2/2)"}
           </Text>
         </Flex>
         <Form form={form} layout="vertical" onFinish={handleSubmitNewResource}>
+          {/* Step 1: Basic Information */}
+          {currentStep === 0 && (
+            <>
           <Form.Item label="Upload Resume">
             <Upload
               beforeUpload={(file) => {
@@ -917,8 +936,13 @@ const SubmitProfiles = () => {
               </Form.Item>
             </Col>
           </Row>
-          
-          <Form.Item label="Professional Summary" name="summary">
+          </>
+          )}
+
+          {/* Step 2: Optional Information */}
+          {currentStep === 1 && (
+            <>
+          <Form.Item label="Professional Summary (Optional)" name="summary">
             <Input.TextArea 
               rows={4} 
               placeholder="Enter professional summary highlighting key skills, experience, and expertise..." 
@@ -1082,16 +1106,30 @@ const SubmitProfiles = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item>
+          </>
+          )}
+
+          {/* Action Buttons */}
+          <Form.Item style={{ marginTop: "24px", marginBottom: 0 }}>
             <Flex justify="flex-end" gap={12}>
               <Button onClick={handleAddResourceModalClose}>Cancel</Button>
-              <Button
-                type="primary"
-                htmlType="submit"
-                style={{ background: "#00d9a9", borderColor: "#00d9a9" }}
-              >
-                Submit
-              </Button>
+              {currentStep === 0 && (
+                <Button type="primary" onClick={handleNext}>
+                  Next
+                </Button>
+              )}
+              {currentStep === 1 && (
+                <>
+                  <Button onClick={handleBack}>Back</Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    style={{ background: "#00d9a9", borderColor: "#00d9a9" }}
+                  >
+                    Submit
+                  </Button>
+                </>
+              )}
             </Flex>
           </Form.Item>
         </Form>
