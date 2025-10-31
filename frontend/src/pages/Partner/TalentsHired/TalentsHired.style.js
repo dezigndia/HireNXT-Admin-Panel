@@ -54,55 +54,37 @@ export const MetricCard = styled.div`
 `;
 
 export const TabsContainer = styled.div`
-  margin-bottom: 28px;
-  border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
 
-  .ant-segmented {
-    background: transparent;
-    padding: 0;
-    border: none;
-  }
-
-  .ant-segmented-group {
-    background: transparent;
-    border: none;
-  }
-
-  .ant-segmented-item {
-    background: transparent;
-    border: none;
-    color: #999;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 12px 0;
-    margin-right: 40px;
-    border-radius: 0;
-    position: relative;
-
-    &::after {
-      content: "";
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: transparent;
-      transition: background 0.3s;
-    }
-  }
-
-  .ant-segmented-item-selected {
-    background: transparent;
-    color: #00d9a9;
+  .tab-button {
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 8px;
     font-weight: 600;
+    font-size: 15px;
+    border: 2px solid #d9d9d9;
+    background: white;
+    color: #595959;
+    transition: all 0.3s ease;
 
-    &::after {
-      background: #00d9a9;
+    &:hover {
+      border-color: #00d9a9;
+      color: #00d9a9;
     }
-  }
 
-  .ant-segmented-thumb {
-    display: none;
+    &.active {
+      background: #00d9a9;
+      border-color: #00d9a9;
+      color: white;
+
+      &:hover {
+        background: #01c49b;
+        border-color: #01c49b;
+        color: white;
+      }
+    }
   }
 `;
 

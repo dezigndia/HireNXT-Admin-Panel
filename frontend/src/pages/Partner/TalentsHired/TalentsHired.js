@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Dropdown, Segmented, Empty } from "antd";
+import { Table, Dropdown, Button, Empty } from "antd";
 import { MoreOutlined } from "@ant-design/icons";
 import {
   TalentsHiredContainer,
@@ -328,14 +328,18 @@ const TalentsHired = () => {
       </MetricsContainer>
 
       <TabsContainer>
-        <Segmented
-          value={activeTab}
-          onChange={setActiveTab}
-          options={[
-            { label: "Active Talents", value: "Active Talents" },
-            { label: "Inactive Talents", value: "Inactive Talents" },
-          ]}
-        />
+        <Button
+          className={activeTab === "Active Talents" ? "tab-button active" : "tab-button"}
+          onClick={() => setActiveTab("Active Talents")}
+        >
+          Active ({activeTalents.length})
+        </Button>
+        <Button
+          className={activeTab === "Inactive Talents" ? "tab-button active" : "tab-button"}
+          onClick={() => setActiveTab("Inactive Talents")}
+        >
+          Inactive ({inactiveTalents.length})
+        </Button>
       </TabsContainer>
 
       <TableContainer>
