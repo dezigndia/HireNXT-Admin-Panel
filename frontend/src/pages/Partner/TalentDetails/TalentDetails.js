@@ -209,9 +209,6 @@ const TalentDetails = () => {
           </div>
 
           <div className="action-section">
-            <Button type="primary" icon={<VideoCameraOutlined />} block>
-              Schedule Interview
-            </Button>
             <Button icon={<DownloadOutlined />} block>
               Download Resume
             </Button>
