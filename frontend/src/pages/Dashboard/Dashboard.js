@@ -29,6 +29,7 @@ import JobRequirments from "./JobRequirments/JobRequirments";
 import PostNewJob from "./JobRequirments/PostNewJob";
 import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
 import TalentsHired from "./TalentsHired/TalentsHired";
+import AddHiringRecord from "./TalentsHired/AddHiringRecord/AddHiringRecord";
 import Profile from "./Profile/Profile";
 
 const { Header, Content, Sider } = Layout;
@@ -198,6 +199,10 @@ const Dashboard = () => {
                 element={<PostNewJob />}
               />
               <Route path="/talents-hired" element={<TalentsHired />} />
+              <Route
+                path="/talents-hired/add-hiring-record"
+                element={<AddHiringRecord />}
+              />
               <Route path="/approval-process" element={<ApprovalProcess />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>

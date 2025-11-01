@@ -8,12 +8,15 @@ export const TalentsHiredContainer = styled.div`
 
 export const PageHeader = styled.div`
   margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   h1 {
     font-size: 28px;
     font-weight: 600;
     color: #014c75;
-    margin: 0 0 20px 0;
+    margin: 0;
   }
 `;
 
