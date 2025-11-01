@@ -199,5 +199,10 @@ export const FindTalentsWrapper = styled.div`
       font-weight: 500;
       color: #262626;
     }
+
+    .ant-select-focused .ant-select-selector {
+      border-color: #d9d9d9 !important;
+      box-shadow: none !important;
+    }
   }
 `;
