@@ -15,6 +15,11 @@ The application is a React-based single-page application (SPA) built with Create
 - **Responsiveness:** Designed to be mobile-friendly with responsive layouts for tables and forms.
 - **Interaction Patterns:** Card-based layouts, tabbed navigation, multi-step forms with progress indicators, and interactive tables with filtering, sorting, and action menus.
 - **Header Navigation:** Consistent header with profile dropdown for "View Profile", "Change Password", and "Logout".
+- **Standardized UI Patterns (Admin Dashboard):**
+  - **Tab Design:** Consistent `TabsContainer` styling across Roles & Permissions, User Management, Talent Profiles, Job Requirements, and Talents Hired with teal (#00d9a9) active state, hover effects, and rounded corners.
+  - **Action Buttons:** All "Add" buttons (Add New Role, Add New Permission, Add New User, Add New Profile, Add New Job, Add Hiring Record) share unified styling with #00d9a9 background, PlusOutlined icon, and 40px height.
+  - **Metrics Cards:** Avatar-based `MetricsContainer` design pattern used consistently across all Admin pages with color-coded icons (blue, orange, green backgrounds) and large bold numbers in primary blue (#014c75).
+  - **Button Placement:** Action buttons positioned above tables (after tabs) for consistent UX across all Admin modules.
 
 **Technical Implementations & Feature Specifications:**
 - **Authentication:** Role-based access control with `ProtectedRoute` and mock authentication for development.
@@ -28,9 +33,9 @@ The application is a React-based single-page application (SPA) built with Create
       - **Approvals Pending Section** with "View All" link, displaying 4 actionable items: New Customer onboarded (100), New Partners onboarded (205), New Talent Profiles Created (178), and Profiles Submitted for Jobs (52). Each item features an icon, count, description, and right arrow for navigation.
       - **Top Customers Hiring Talents Table** with "View All" link, showing top 5 customers with columns for Customer Name (with building icon), Talents Hired count, and Per Talent Average (highlighted in primary blue).
       - **Clean Header** with logo on the left and profile avatar dropdown in teal (#00d9a9) on the right. Search bar and notification icon removed as not currently needed.
-    - **User Management:** Comprehensive user database management
-    - **Talent Profiles:** Talent profile database management
-    - **Job Requirements:** Job posting and requirement management
+    - **User Management:** Comprehensive user database management with Avatar-based metrics cards (Total Users, Admins, Customers, Partners), consistent TabsContainer design, and unified Add New User button styling
+    - **Talent Profiles:** Talent profile database management with Avatar-based metrics cards (Active Resources, Job Applications, Talents Hired), consistent TabsContainer design, and unified Add New Profile button styling
+    - **Job Requirements:** Job posting and requirement management with Avatar-based metrics cards (Active Jobs, Profiles Submitted, Jobs Fulfilled), consistent TabsContainer design, and unified Add New Job button styling. Includes data transformation layer to map legacy API types ("User to Review", "Job to Review", "Profile to Review") to new tab labels ("Active Jobs", "Profiles Submitted", "Jobs Fulfilled") for backward compatibility
     - **Talents Hired:** Comprehensive talent contract management with:
       - **Metrics Cards** displaying Total Active Talents, Total Revenue Generated, and Average Contract Value using Avatar icons matching Bench Pool design
       - **Active/Inactive Tabs** with dynamic counts for contract status filtering
