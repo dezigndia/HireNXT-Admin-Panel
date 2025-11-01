@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Dropdown, Button, Empty } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import { Table, Dropdown, Button, Empty, Card, Avatar } from "antd";
+import { MoreOutlined, DollarOutlined, TrophyOutlined, LineChartOutlined } from "@ant-design/icons";
 import {
   TalentsHiredContainer,
   PageHeader,
   MetricsContainer,
-  MetricCard,
   TabsContainer,
   TableContainer,
   EmptyState,
@@ -302,29 +301,48 @@ const TalentsHired = () => {
       </PageHeader>
 
       <MetricsContainer>
-        <MetricCard>
-          <div className="metric-label">Active Monthly Billing</div>
-          <div className="metric-value">
-            {formatCurrency(metrics.activeMonthlyBilling)}
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<DollarOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#e6fff9" }}
+            />
+            <div className="metric-info">
+              <h3>{formatCurrency(metrics.activeMonthlyBilling)}</h3>
+              <p>Active Monthly Billing</p>
+            </div>
           </div>
-          <div className="metric-subtitle">
-            From {metrics.activeTalentsCount} active talents
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<TrophyOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#f6ffed" }}
+            />
+            <div className="metric-info">
+              <h3>{formatCurrency(metrics.totalBilled)}</h3>
+              <p>Total Billed</p>
+            </div>
           </div>
-        </MetricCard>
-        <MetricCard>
-          <div className="metric-label">Total Billed</div>
-          <div className="metric-value">
-            {formatCurrency(metrics.totalBilled)}
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<LineChartOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#fff7e6" }}
+            />
+            <div className="metric-info">
+              <h3>{formatCurrency(metrics.avgPerTalent)}</h3>
+              <p>Avg per Talent</p>
+            </div>
           </div>
-          <div className="metric-subtitle">Cumulative billing amount</div>
-        </MetricCard>
-        <MetricCard>
-          <div className="metric-label">Avg per Talent</div>
-          <div className="metric-value">
-            {formatCurrency(metrics.avgPerTalent)}
-          </div>
-          <div className="metric-subtitle">Average monthly rate</div>
-        </MetricCard>
+        </Card>
       </MetricsContainer>
 
       <TabsContainer>
