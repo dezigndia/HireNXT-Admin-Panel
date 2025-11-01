@@ -31,6 +31,11 @@ The application is a React-based single-page application (SPA) built with Create
     - **User Management:** Comprehensive user database management
     - **Talent Profiles:** Talent profile database management
     - **Job Requirements:** Job posting and requirement management
+    - **Talents Hired:** Comprehensive talent contract management with:
+      - **Metrics Cards** displaying Total Active Talents, Total Revenue Generated, and Average Contract Value using Avatar icons matching Bench Pool design
+      - **Active/Inactive Tabs** with dynamic counts for contract status filtering
+      - **Detailed Table** showing Name, Role, Experience, Onboarding Date, Contract Duration, Last Working Day, Days Left, Monthly Salary (₹X,XXX / Month format), Total Billed, and Actions
+      - **Non-navigating Implementation** - No talent detail navigation as it's not currently needed for Admin role
     - **Approval Process:** Comprehensive three-tab approval system for managing pending approvals:
       - **Partners/Customers Tab:** Displays pending partner and customer registrations with columns for Name, Type (Partner/Customer tag), Contact Person, Email, Phone, Location, Registered On, and Status. Includes Approve/Reject actions for individual items and bulk approve functionality for selected items.
       - **Talent Profiles Tab:** Shows pending talent profile submissions with columns for Name, Role, Skills, Experience, Location, Monthly Rate, Partner Organization, Submitted On, and Status. Features Approve/Reject actions and bulk approve capability.
