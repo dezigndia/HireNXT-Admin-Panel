@@ -12,7 +12,8 @@ import {
   Dropdown,
   Menu,
 } from "antd";
-import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined, PlusOutlined } from "@ant-design/icons";
+import { RolePermissionWrapper, TabsContainer } from "./RolePermission.style";
 
 const { Text, Title } = Typography;
 
@@ -156,22 +157,23 @@ const RolePermission = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Roles and Permissions</h2>
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+    <RolePermissionWrapper>
+      <h2 className="title-header">Roles and Permissions</h2>
+      
+      <TabsContainer>
         <Button
-          type={activeTab === "Roles" ? "primary" : "default"}
+          className={activeTab === "Roles" ? "tab-button active" : "tab-button"}
           onClick={() => setActiveTab("Roles")}
         >
           Roles
         </Button>
         <Button
-          type={activeTab === "Permissions" ? "primary" : "default"}
+          className={activeTab === "Permissions" ? "tab-button active" : "tab-button"}
           onClick={() => setActiveTab("Permissions")}
         >
           Permissions
         </Button>
-      </div>
+      </TabsContainer>
 
       {activeTab === "Roles" ? (
         <>
@@ -184,8 +186,16 @@ const RolePermission = () => {
             />
             <Button
               type="primary"
+              icon={<PlusOutlined />}
               onClick={handleOpenRoleModal}
-              style={{ marginBottom: "10px", backgroundColor: "#01D9A9" }}
+              style={{ 
+                marginBottom: "10px", 
+                backgroundColor: "#00d9a9",
+                borderColor: "#00d9a9",
+                height: "40px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
             >
               Add New Role
             </Button>
@@ -208,8 +218,16 @@ const RolePermission = () => {
             />
             <Button
               type="primary"
+              icon={<PlusOutlined />}
               onClick={handleOpenPermissionModal}
-              style={{ marginBottom: "10px", backgroundColor: "#01D9A9" }}
+              style={{ 
+                marginBottom: "10px", 
+                backgroundColor: "#00d9a9",
+                borderColor: "#00d9a9",
+                height: "40px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
             >
               Add New Permission
             </Button>
@@ -321,7 +339,7 @@ const RolePermission = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </RolePermissionWrapper>
   );
 };
 

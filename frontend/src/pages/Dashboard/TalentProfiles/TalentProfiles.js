@@ -15,13 +15,18 @@ import {
   Col,
   Dropdown,
   Menu,
+  Card,
 } from "antd";
 import {
   UploadOutlined,
   SearchOutlined,
   MoreOutlined,
+  PlusOutlined,
+  UserAddOutlined,
+  FileTextOutlined,
+  TrophyOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
+import { UserManagementWrapper, MetricsContainer } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 import axios from "axios";
 import { API_CONST } from "../../../const";
@@ -148,12 +153,61 @@ const TalentProfiles = () => {
   };
 
 
+  const activeResourceCount = usersData.filter((user) => user.type === "Active Resource").length;
+  const jobAppliedCount = usersData.filter((user) => user.type === "Job Applied").length;
+  const talentsHiredCount = usersData.filter((user) => user.type === "Talents Hired").length;
+
   return (
     <UserManagementWrapper>
-      <div style={{ padding: "20px" }}>
-        <h2 className="title-header">Talent Profile</h2>
-        <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          {["Active Resource", "Job Applied", "Talents Hired"].map((tab) => (
+      <h2 className="title-header">Talent Profile</h2>
+      
+      <MetricsContainer>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<UserAddOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#e6f7ff" }}
+            />
+            <div className="metric-info">
+              <h3>{activeResourceCount}</h3>
+              <p>Active Resources</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<FileTextOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#fff7e6" }}
+            />
+            <div className="metric-info">
+              <h3>{jobAppliedCount}</h3>
+              <p>Job Applications</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<TrophyOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#f6ffed" }}
+            />
+            <div className="metric-info">
+              <h3>{talentsHiredCount}</h3>
+              <p>Talents Hired</p>
+            </div>
+          </div>
+        </Card>
+      </MetricsContainer>
+
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        {["Active Resource", "Job Applied", "Talents Hired"].map((tab) => (
             <Button
               key={tab}
               className={
@@ -182,8 +236,16 @@ const TalentProfiles = () => {
             style={{ marginBottom: "20px", width: "300px" }}
           />
           <Button
-            style={{ backgroundColor: "#01D9A9" }}
+            type="primary"
+            icon={<PlusOutlined />}
             onClick={handleOpenModal}
+            style={{ 
+              backgroundColor: "#00d9a9",
+              borderColor: "#00d9a9",
+              height: "40px",
+              fontSize: "14px",
+              fontWeight: 500,
+            }}
           >
             Add New Profile
           </Button>
@@ -366,7 +428,6 @@ const TalentProfiles = () => {
             </Form.Item>
           </Form>
         </Modal>
-      </div>
     </UserManagementWrapper>
   );
 };

@@ -10,6 +10,7 @@ import {
   Typography,
   Dropdown,
   Menu,
+  Card,
 } from "antd";
 import {
   MoreOutlined,
@@ -17,8 +18,10 @@ import {
   ShoppingOutlined,
   SnippetsOutlined,
   WechatOutlined,
+  PlusOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper } from "./../UserManagement/UserManagement.style";
+import { UserManagementWrapper, MetricsContainer } from "./../UserManagement/UserManagement.style";
 // import MaskGroup from "../Mask-Group.svg";
 import { API_CONST } from "../../../const";
 import { Link } from "react-router-dom";
@@ -46,7 +49,7 @@ const usersData = Array.from({ length: 25 }, (_, index) => ({
 
 const JobRequirments = () => {
   const [usersData, setUsersData] = useState([{}]);
-  const [activeTab, setActiveTab] = useState("User to Review");
+  const [activeTab, setActiveTab] = useState("Active Jobs");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null); // State to track selected role
@@ -98,7 +101,17 @@ const JobRequirments = () => {
         }
         const result = await response.json();
         console.log(result);
-        setUsersData(result.Response);
+        
+        // Transform legacy type values to new tab labels for consistency
+        const transformedData = (result.Response || []).map(item => ({
+          ...item,
+          type: item.type === "User to Review" ? "Active Jobs" :
+                item.type === "Job to Review" ? "Profiles Submitted" :
+                item.type === "Profile to Review" ? "Jobs Fulfilled" :
+                item.type
+        }));
+        
+        setUsersData(transformedData);
       } catch (error) {
         console.log(error.message); // Store error message in state
       }
@@ -134,12 +147,61 @@ const JobRequirments = () => {
     }),
   };
 
+  const activeJobsCount = usersData.filter((user) => user.type === "Active Jobs").length;
+  const profilesSubmittedCount = usersData.filter((user) => user.type === "Profiles Submitted").length;
+  const jobsFulfilledCount = usersData.filter((user) => user.type === "Jobs Fulfilled").length;
+
   return (
     <UserManagementWrapper>
-      <div style={{ padding: "20px" }}>
-        <h2 className="title-header">Job Requirements</h2>
-        <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-          <Button
+      <h2 className="title-header">Job Requirements</h2>
+      
+      <MetricsContainer>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<ShoppingOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#e6f7ff" }}
+            />
+            <div className="metric-info">
+              <h3>{activeJobsCount}</h3>
+              <p>Active Jobs</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<WechatOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#fff7e6" }}
+            />
+            <div className="metric-info">
+              <h3>{profilesSubmittedCount}</h3>
+              <p>Profiles Submitted</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<CheckCircleOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#f6ffed" }}
+            />
+            <div className="metric-info">
+              <h3>{jobsFulfilledCount}</h3>
+              <p>Jobs Fulfilled</p>
+            </div>
+          </div>
+        </Card>
+      </MetricsContainer>
+
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+        <Button
             className={
               activeTab === "Active Jobs"
                 ? "tab-button active-tab"
@@ -221,7 +283,19 @@ const JobRequirments = () => {
             style={{ marginBottom: "20px", width: "300px" }}
           />
           <Link to="/home/job-requirments/new-job-post">
-            <Button style={{ backgroundColor: "#01D9A9" }}>Add New Job</Button>
+            <Button 
+              type="primary"
+              icon={<PlusOutlined />}
+              style={{ 
+                backgroundColor: "#00d9a9",
+                borderColor: "#00d9a9",
+                height: "40px",
+                fontSize: "14px",
+                fontWeight: 500,
+              }}
+            >
+              Add New Job
+            </Button>
           </Link>
         </Flex>
         {selectedRole !== "Admin" ? (
@@ -249,7 +323,6 @@ const JobRequirments = () => {
             />
           </>
         )}
-      </div>
     </UserManagementWrapper>
   );
 };
