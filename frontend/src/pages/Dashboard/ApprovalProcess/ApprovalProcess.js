@@ -13,18 +13,21 @@ import {
   Avatar,
   Typography,
   Flex,
+  Select,
 } from "antd";
 import {
   SearchOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   MoreOutlined,
+  FilterOutlined,
 } from "@ant-design/icons";
 import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 
 const { TextArea } = Input;
 const { Text } = Typography;
+const { Option } = Select;
 
 // Mock data for Partners/Customers
 const mockPartnersCustomers = [
@@ -170,6 +173,10 @@ const ApprovalProcess = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Users");
   const [searchText, setSearchText] = useState("");
+  const [filterType, setFilterType] = useState(null);
+  const [filterLocation, setFilterLocation] = useState(null);
+  const [filterRole, setFilterRole] = useState(null);
+  const [filterExperience, setFilterExperience] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [currentRejectRecord, setCurrentRejectRecord] = useState(null);
@@ -205,28 +212,46 @@ const ApprovalProcess = () => {
 
   const pendingCounts = getPendingCounts();
 
-  // Filter data based on search
+  // Filter data based on search and filters
   const filteredData = getCurrentData().filter((item) => {
     const searchLower = searchText.toLowerCase();
+    
+    // Apply search filter
+    let matchesSearch = false;
     if (activeTab === "Users") {
-      return (
+      matchesSearch = (
         item.name.toLowerCase().includes(searchLower) ||
         item.contactPerson.toLowerCase().includes(searchLower) ||
         item.email.toLowerCase().includes(searchLower)
       );
     } else if (activeTab === "Profiles") {
-      return (
+      matchesSearch = (
         item.name.toLowerCase().includes(searchLower) ||
         item.role.toLowerCase().includes(searchLower) ||
         item.skills.toLowerCase().includes(searchLower)
       );
     } else {
-      return (
+      matchesSearch = (
         item.jobTitle.toLowerCase().includes(searchLower) ||
         item.company.toLowerCase().includes(searchLower) ||
         item.skills.toLowerCase().includes(searchLower)
       );
     }
+
+    // Apply dropdown filters
+    let matchesFilters = true;
+    if (activeTab === "Users") {
+      matchesFilters = (!filterType || item.type === filterType) &&
+                       (!filterLocation || item.location === filterLocation);
+    } else if (activeTab === "Profiles") {
+      matchesFilters = (!filterRole || item.role === filterRole) &&
+                       (!filterLocation || item.location === filterLocation);
+    } else {
+      matchesFilters = (!filterLocation || item.location === filterLocation) &&
+                       (!filterExperience || item.experience === filterExperience);
+    }
+
+    return matchesSearch && matchesFilters;
   });
 
   // Handle single approve
@@ -619,6 +644,10 @@ const ApprovalProcess = () => {
                 setActiveTab(tab.key);
                 setSelectedRowKeys([]);
                 setSearchText("");
+                setFilterType(null);
+                setFilterLocation(null);
+                setFilterRole(null);
+                setFilterExperience(null);
               }}
             >
               {tab.key} ({tab.count})
@@ -627,20 +656,137 @@ const ApprovalProcess = () => {
         </div>
 
         {/* Search and Actions Section */}
-        <Flex align="start" justify="space-between">
-          <Input
-            prefix={<SearchOutlined />}
-            placeholder={`Search ${
-              activeTab === "Users"
-                ? "by name, contact person, or email"
-                : activeTab === "Profiles"
-                ? "by name, role, or skills"
-                : "by job title, company, or skills"
-            }`}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{ marginBottom: "20px", width: "300px" }}
-          />
+        <Flex align="start" justify="space-between" style={{ marginBottom: "20px" }}>
+          <Flex gap="middle">
+            <Input
+              prefix={<SearchOutlined />}
+              placeholder={`Search ${
+                activeTab === "Users"
+                  ? "by name, contact person, or email"
+                  : activeTab === "Profiles"
+                  ? "by name, role, or skills"
+                  : "by job title, company, or skills"
+              }`}
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{ width: "300px" }}
+              allowClear
+            />
+
+            {/* Dynamic Filters based on active tab */}
+            {activeTab === "Users" && (
+              <>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Type
+                    </span>
+                  }
+                  value={filterType}
+                  onChange={setFilterType}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="Partner">Partner</Option>
+                  <Option value="Customer">Customer</Option>
+                </Select>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Location
+                    </span>
+                  }
+                  value={filterLocation}
+                  onChange={setFilterLocation}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="Bangalore">Bangalore</Option>
+                  <Option value="Mumbai">Mumbai</Option>
+                  <Option value="Pune">Pune</Option>
+                  <Option value="Hyderabad">Hyderabad</Option>
+                </Select>
+              </>
+            )}
+
+            {activeTab === "Profiles" && (
+              <>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Role
+                    </span>
+                  }
+                  value={filterRole}
+                  onChange={setFilterRole}
+                  style={{ width: 220 }}
+                  allowClear
+                >
+                  <Option value="Senior React Developer">Senior React Developer</Option>
+                  <Option value="Full Stack Developer">Full Stack Developer</Option>
+                  <Option value="DevOps Engineer">DevOps Engineer</Option>
+                  <Option value="UI/UX Designer">UI/UX Designer</Option>
+                </Select>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Location
+                    </span>
+                  }
+                  value={filterLocation}
+                  onChange={setFilterLocation}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="Bangalore">Bangalore</Option>
+                  <Option value="Delhi">Delhi</Option>
+                  <Option value="Chennai">Chennai</Option>
+                  <Option value="Mumbai">Mumbai</Option>
+                </Select>
+              </>
+            )}
+
+            {activeTab === "Jobs" && (
+              <>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Location
+                    </span>
+                  }
+                  value={filterLocation}
+                  onChange={setFilterLocation}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="Bangalore">Bangalore</Option>
+                  <Option value="Hyderabad">Hyderabad</Option>
+                  <Option value="Mumbai">Mumbai</Option>
+                </Select>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Experience
+                    </span>
+                  }
+                  value={filterExperience}
+                  onChange={setFilterExperience}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="4+ years">4+ years</Option>
+                  <Option value="5+ years">5+ years</Option>
+                  <Option value="6+ years">6+ years</Option>
+                </Select>
+              </>
+            )}
+          </Flex>
 
           {selectedRowKeys.length > 0 && (
             <Button

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Table, Dropdown, Button, Empty, Card, Avatar } from "antd";
-import { MoreOutlined, DollarOutlined, TrophyOutlined, LineChartOutlined, PlusOutlined } from "@ant-design/icons";
+import { Table, Dropdown, Button, Empty, Card, Avatar, Input, Select, Flex } from "antd";
+import { MoreOutlined, DollarOutlined, TrophyOutlined, LineChartOutlined, PlusOutlined, SearchOutlined, FilterOutlined } from "@ant-design/icons";
 import {
   TalentsHiredContainer,
   PageHeader,
@@ -11,9 +11,15 @@ import {
   EmptyState,
 } from "./TalentsHired.style";
 
+const { Option } = Select;
+
 const TalentsHired = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active Talents");
+  const [searchText, setSearchText] = useState("");
+  const [filterRole, setFilterRole] = useState(null);
+  const [filterLocation, setFilterLocation] = useState(null);
+  const [filterExperience, setFilterExperience] = useState(null);
 
   // Single source of truth for all talents data
   const allTalents = [
@@ -22,6 +28,7 @@ const TalentsHired = () => {
       name: "Rajesh Kumar",
       role: "Senior Full Stack Developer",
       experience: "8 Years",
+      location: "Bangalore",
       onboardingDate: "2024-01-15",
       contractDuration: "1 Year",
       lastWorkingDay: "2025-01-15",
@@ -35,6 +42,7 @@ const TalentsHired = () => {
       name: "Priya Sharma",
       role: "React Native Developer",
       experience: "6 Years",
+      location: "Mumbai",
       onboardingDate: "2023-08-20",
       contractDuration: "2 Years",
       lastWorkingDay: "2025-08-20",
@@ -48,6 +56,7 @@ const TalentsHired = () => {
       name: "Amit Patel",
       role: "Backend Developer",
       experience: "5 Years",
+      location: "Pune",
       onboardingDate: "2024-03-10",
       contractDuration: "18 Months",
       lastWorkingDay: "2025-09-10",
@@ -61,6 +70,7 @@ const TalentsHired = () => {
       name: "Sneha Reddy",
       role: "Cloud Architect",
       experience: "10 Years",
+      location: "Hyderabad",
       onboardingDate: "2024-02-01",
       contractDuration: "1 Year",
       lastWorkingDay: "2025-02-01",
@@ -74,6 +84,7 @@ const TalentsHired = () => {
       name: "Vikram Singh",
       role: "DevOps Engineer",
       experience: "7 Years",
+      location: "Delhi",
       onboardingDate: "2022-06-15",
       contractDuration: "1 Year",
       lastWorkingDay: "2023-06-15",
@@ -87,6 +98,7 @@ const TalentsHired = () => {
       name: "Anjali Gupta",
       role: "UI/UX Designer",
       experience: "4 Years",
+      location: "Bangalore",
       onboardingDate: "2021-10-10",
       contractDuration: "2 Years",
       lastWorkingDay: "2023-10-10",
@@ -101,8 +113,22 @@ const TalentsHired = () => {
   const activeTalents = allTalents.filter((talent) => talent.status === "active");
   const inactiveTalents = allTalents.filter((talent) => talent.status === "inactive");
 
-  const currentData =
-    activeTab === "Active Talents" ? activeTalents : inactiveTalents;
+  // Get base data based on active tab
+  const baseData = activeTab === "Active Talents" ? activeTalents : inactiveTalents;
+
+  // Apply search and filters
+  const currentData = baseData.filter((talent) => {
+    const matchesSearch = 
+      searchText === "" ||
+      talent.name.toLowerCase().includes(searchText.toLowerCase()) ||
+      talent.role.toLowerCase().includes(searchText.toLowerCase());
+    
+    const matchesRole = !filterRole || talent.role === filterRole;
+    const matchesLocation = !filterLocation || talent.location === filterLocation;
+    const matchesExperience = !filterExperience || talent.experience.includes(filterExperience);
+
+    return matchesSearch && matchesRole && matchesLocation && matchesExperience;
+  });
 
   // Calculate metrics for active talents only
   const calculateMetrics = () => {
@@ -360,12 +386,73 @@ const TalentsHired = () => {
         </Button>
       </TabsContainer>
 
-      <div style={{ 
-        display: "flex", 
-        justifyContent: "flex-end", 
-        marginBottom: "20px",
-        marginTop: "20px"
-      }}>
+      <Flex align="start" justify="space-between" style={{ marginBottom: "20px" }}>
+        <Flex gap="middle">
+          <Input
+            prefix={<SearchOutlined />}
+            placeholder="Search by name or role"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            style={{ width: 300 }}
+            allowClear
+          />
+          <Select
+            placeholder={
+              <span>
+                <FilterOutlined style={{ marginRight: 8 }} />
+                Filter by Role
+              </span>
+            }
+            value={filterRole}
+            onChange={setFilterRole}
+            style={{ width: 220 }}
+            allowClear
+          >
+            <Option value="Senior Full Stack Developer">Senior Full Stack Developer</Option>
+            <Option value="React Native Developer">React Native Developer</Option>
+            <Option value="Backend Developer">Backend Developer</Option>
+            <Option value="Cloud Architect">Cloud Architect</Option>
+            <Option value="DevOps Engineer">DevOps Engineer</Option>
+            <Option value="UI/UX Designer">UI/UX Designer</Option>
+          </Select>
+          <Select
+            placeholder={
+              <span>
+                <FilterOutlined style={{ marginRight: 8 }} />
+                Filter by Location
+              </span>
+            }
+            value={filterLocation}
+            onChange={setFilterLocation}
+            style={{ width: 200 }}
+            allowClear
+          >
+            <Option value="Bangalore">Bangalore</Option>
+            <Option value="Mumbai">Mumbai</Option>
+            <Option value="Pune">Pune</Option>
+            <Option value="Hyderabad">Hyderabad</Option>
+            <Option value="Delhi">Delhi</Option>
+          </Select>
+          <Select
+            placeholder={
+              <span>
+                <FilterOutlined style={{ marginRight: 8 }} />
+                Filter by Experience
+              </span>
+            }
+            value={filterExperience}
+            onChange={setFilterExperience}
+            style={{ width: 200 }}
+            allowClear
+          >
+            <Option value="4 Years">4 Years</Option>
+            <Option value="5 Years">5 Years</Option>
+            <Option value="6 Years">6 Years</Option>
+            <Option value="7 Years">7 Years</Option>
+            <Option value="8 Years">8 Years</Option>
+            <Option value="10 Years">10 Years</Option>
+          </Select>
+        </Flex>
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -380,7 +467,7 @@ const TalentsHired = () => {
         >
           Add Hiring Record
         </Button>
-      </div>
+      </Flex>
 
       <TableContainer>
         {currentData.length > 0 ? (
