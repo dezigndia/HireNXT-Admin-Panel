@@ -220,14 +220,6 @@ const TalentDetails = () => {
 
         <div className="details-row">
           <div className="detail-item">
-            <h4>Email Address</h4>
-            <p>{talent.email}</p>
-          </div>
-          <div className="detail-item">
-            <h4>Phone Number</h4>
-            <p>{talent.phone}</p>
-          </div>
-          <div className="detail-item">
             <h4>Hourly Rate</h4>
             <p className="highlight">{talent.hourlyRate}</p>
           </div>
