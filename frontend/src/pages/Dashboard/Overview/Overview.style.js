@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const OverviewWrapper = styled.div`
-  padding: 20px 0;
+  padding: 40px 48px;
   background-color: #f8f9fd;
 
   .page-title {

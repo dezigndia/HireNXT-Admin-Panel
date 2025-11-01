@@ -21,7 +21,7 @@ import {
   PlusOutlined,
   CheckCircleOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper, MetricsContainer } from "./../UserManagement/UserManagement.style";
+import { UserManagementWrapper, MetricsContainer, TabsContainer } from "./../UserManagement/UserManagement.style";
 // import MaskGroup from "../Mask-Group.svg";
 import { API_CONST } from "../../../const";
 import { Link } from "react-router-dom";
@@ -200,81 +200,17 @@ const JobRequirments = () => {
         </Card>
       </MetricsContainer>
 
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-        <Button
-            className={
-              activeTab === "Active Jobs"
-                ? "tab-button active-tab"
-                : "tab-button"
-            }
-            type={activeTab === "Active Jobs" ? "primary" : "default"}
-            onClick={() => setActiveTab("Active Jobs")}
-          >
-            <Avatar
-              size={50}
-              className="icon-bg"
-              style={{
-                backgroundColor:
-                  activeTab === "Active Jobs" ? "#ffffff" : "#E4F6FF",
-              }}
-              icon={<ShoppingOutlined style={{ color: "#014C75" }} />}
-            />
-            &nbsp;
-            {
-              usersData.filter((user) => user.type === "Active Jobs").length
-            }{" "}
-            Active Jobs
-          </Button>
+      <TabsContainer>
+        {["Active Jobs", "Profiles Submitted", "Jobs Fulfilled"].map((tab) => (
           <Button
-            className={
-              activeTab === "Profiles Submitted"
-                ? "tab-button active-tab"
-                : "tab-button"
-            }
-            type={activeTab === "Profiles Submitted" ? "primary" : "default"}
-            onClick={() => setActiveTab("Profiles Submitted")}
+            key={tab}
+            className={activeTab === tab ? "tab-button active" : "tab-button"}
+            onClick={() => setActiveTab(tab)}
           >
-            <Avatar
-              size={50}
-              className="icon-bg"
-              style={{
-                backgroundColor:
-                  activeTab === "Profiles Submitted" ? "#ffffff" : "#E4F6FF",
-              }}
-              icon={<WechatOutlined style={{ color: "#014C75" }} />}
-            />
-            &nbsp;
-            {
-              usersData.filter((user) => user.type === "Profiles Submitted")
-                .length
-            }{" "}
-            Profile Submitted
+            {tab}
           </Button>
-          <Button
-            className={
-              activeTab === "Jobs Fulfilled"
-                ? "tab-button active-tab"
-                : "tab-button"
-            }
-            type={activeTab === "Jobs Fulfilled" ? "primary" : "default"}
-            onClick={() => setActiveTab("Jobs Fulfilled")}
-          >
-            <Avatar
-              size={50}
-              className="icon-bg"
-              style={{
-                backgroundColor:
-                  activeTab === "Jobs Fulfilled" ? "#ffffff" : "#E4F6FF",
-              }}
-              icon={<SnippetsOutlined style={{ color: "#014C75" }} />}
-            />
-            &nbsp;
-            {
-              usersData.filter((user) => user.type === "Jobs Fulfilled").length
-            }{" "}
-            Jobs Fulfilled
-          </Button>
-        </div>
+        ))}
+      </TabsContainer>
         <Flex align="start" justify="space-between">
           <Input
             prefix={<SearchOutlined />}

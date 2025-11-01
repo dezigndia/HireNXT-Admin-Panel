@@ -15,32 +15,6 @@ export const UserManagementWrapper = styled.div`
     margin-bottom: 28px;
   }
 
-  .tab-button {
-    font-weight: 800;
-    font-size: 30px;
-    width: 357px;
-    height: 88px;
-    border-radius: 10px;
-    border-width: 3px;
-    background: white;
-    box-shadow: 0px 0px 5px 0px #0000000d;
-    display: flex;
-    justify-content: start;
-    align-items: center;
-  }
-
-  .icon-bg {
-    background-color: #ffffff;
-    padding: 8px;
-  }
-
-  .active-tab,
-  .ant-btn-primary:not(:disabled):not(.ant-btn-disabled):hover {
-    border: 3px solid #014c75;
-    color: #014c75;
-    background: linear-gradient(180deg, #00ffb2 0%, #01d9a9 100%);
-  }
-
   .ant-table-thead .ant-table-cell {
     border-bottom: 1px solid #6c6c6c;
   }
@@ -107,6 +81,41 @@ export const MetricsContainer = styled.div`
           margin: 0;
           font-weight: 500;
         }
+      }
+    }
+  }
+`;
+
+export const TabsContainer = styled.div`
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  .tab-button {
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    border: 2px solid #d9d9d9;
+    background: white;
+    color: #595959;
+    transition: all 0.3s ease;
+
+    &:hover {
+      border-color: #00d9a9;
+      color: #00d9a9;
+    }
+
+    &.active {
+      background: #00d9a9;
+      border-color: #00d9a9;
+      color: white;
+
+      &:hover {
+        background: #01c49b;
+        border-color: #01c49b;
+        color: white;
       }
     }
   }

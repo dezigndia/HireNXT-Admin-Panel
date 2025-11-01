@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ApprovalProcessWrapper = styled.div`
   .approval-container {
-    padding: 24px;
+    padding: 40px 48px;
     background: #f8f9fd;
     min-height: 100vh;
   }
