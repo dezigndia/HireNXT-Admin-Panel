@@ -13,9 +13,10 @@ import {
   message,
   Dropdown,
   Menu,
+  Card,
 } from "antd";
-import { MoreOutlined, SearchOutlined } from "@ant-design/icons";
-import { UserManagementWrapper } from "./UserManagement.style";
+import { MoreOutlined, SearchOutlined, PlusOutlined, UserOutlined, TeamOutlined, ShopOutlined } from "@ant-design/icons";
+import { UserManagementWrapper, MetricsContainer } from "./UserManagement.style";
 import MaskGroup from "./../../../assets/Mask-Group.svg";
 import { API_CONST } from "../../../const";
 const { Text, Link, Title } = Typography;
@@ -146,11 +147,75 @@ const UserManagement = () => {
     handleCloseModal();
   };
 
+  const totalUsers = usersData.length;
+  const adminCount = usersData.filter((user) => user.type === "Admin").length;
+  const customerCount = usersData.filter((user) => user.type === "Customer").length;
+  const partnerCount = usersData.filter((user) => user.type === "Partner").length;
+
   return (
     <UserManagementWrapper>
-      <div style={{ padding: "20px" }}>
-        <h2 className="title-header">User Management</h2>
-        <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <h2 className="title-header">User Management</h2>
+      
+      <MetricsContainer>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<TeamOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#e6f7ff" }}
+            />
+            <div className="metric-info">
+              <h3>{totalUsers}</h3>
+              <p>Total Users</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<UserOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#fff7e6" }}
+            />
+            <div className="metric-info">
+              <h3>{adminCount}</h3>
+              <p>Total Admins</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<ShopOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#f6ffed" }}
+            />
+            <div className="metric-info">
+              <h3>{customerCount}</h3>
+              <p>Total Customers</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={64}
+              icon={<TeamOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#e6fff9" }}
+            />
+            <div className="metric-info">
+              <h3>{partnerCount}</h3>
+              <p>Total Partners</p>
+            </div>
+          </div>
+        </Card>
+      </MetricsContainer>
+
+      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
         {["Admin", "Customer", "Partner"].map((tab) => (
             <Button
               key={tab}
@@ -180,8 +245,16 @@ const UserManagement = () => {
             style={{ marginBottom: "20px", width: "300px" }}
           />
           <Button
-            style={{ backgroundColor: "#01D9A9" }}
+            type="primary"
+            icon={<PlusOutlined />}
             onClick={handleOpenModal}
+            style={{ 
+              backgroundColor: "#00d9a9",
+              borderColor: "#00d9a9",
+              height: "40px",
+              fontSize: "14px",
+              fontWeight: 500,
+            }}
           >
             Add New User
           </Button>
@@ -332,7 +405,6 @@ const UserManagement = () => {
             </Form.Item>
           </Form>
         </Modal>
-      </div>
     </UserManagementWrapper>
   );
 };

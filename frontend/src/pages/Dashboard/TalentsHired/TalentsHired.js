@@ -298,20 +298,6 @@ const TalentsHired = () => {
     <TalentsHiredContainer>
       <PageHeader>
         <h1>Talents Hired</h1>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => navigate("/home/talents-hired/add-hiring-record")}
-          style={{
-            backgroundColor: "#00d9a9",
-            borderColor: "#00d9a9",
-            height: "40px",
-            fontSize: "14px",
-            fontWeight: 500,
-          }}
-        >
-          Add Hiring Record
-        </Button>
       </PageHeader>
 
       <MetricsContainer>
@@ -373,6 +359,28 @@ const TalentsHired = () => {
           Inactive ({inactiveTalents.length})
         </Button>
       </TabsContainer>
+
+      <div style={{ 
+        display: "flex", 
+        justifyContent: "flex-end", 
+        marginBottom: "20px",
+        marginTop: "20px"
+      }}>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => navigate("/home/talents-hired/add-hiring-record")}
+          style={{
+            backgroundColor: "#00d9a9",
+            borderColor: "#00d9a9",
+            height: "40px",
+            fontSize: "14px",
+            fontWeight: 500,
+          }}
+        >
+          Add Hiring Record
+        </Button>
+      </div>
 
       <TableContainer>
         {currentData.length > 0 ? (
