@@ -26,7 +26,7 @@ import {
   FileTextOutlined,
   TrophyOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper, MetricsContainer } from "../UserManagement/UserManagement.style";
+import { UserManagementWrapper, MetricsContainer, TabsContainer } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 import axios from "axios";
 import { API_CONST } from "../../../const";
@@ -206,28 +206,17 @@ const TalentProfiles = () => {
         </Card>
       </MetricsContainer>
 
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <TabsContainer>
         {["Active Resource", "Job Applied", "Talents Hired"].map((tab) => (
-            <Button
-              key={tab}
-              className={
-                activeTab === tab ? "tab-button active-tab" : "tab-button"
-              }
-              type={activeTab === tab ? "primary" : "default"}
-              onClick={() => setActiveTab(tab)}
-            >
-              <Avatar
-                size={50}
-                className="icon-bg"
-                style={{
-                  backgroundColor: activeTab === tab ? "#ffffff" : "#E4F6FF",
-                }}
-                src={<img src={MaskGroup} alt="avatar" />}
-              />
-              &nbsp;{usersData.filter((user) => user.type === tab).length} {tab}
-            </Button>
-          ))}
-        </div>
+          <Button
+            key={tab}
+            className={activeTab === tab ? "tab-button active" : "tab-button"}
+            onClick={() => setActiveTab(tab)}
+          >
+            {tab}
+          </Button>
+        ))}
+      </TabsContainer>
         <Flex align="start" justify="space-between">
           <Input
             prefix={<SearchOutlined />}
