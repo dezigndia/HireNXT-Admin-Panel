@@ -40,6 +40,13 @@ The application is a React-based single-page application (SPA) built with Create
     - **Talents Hired:** Comprehensive talent contract management with:
       - **Metrics Cards** displaying Total Active Talents, Total Revenue Generated, and Average Contract Value using Avatar icons matching Bench Pool design
       - **Active/Inactive Tabs** with dynamic counts for contract status filtering
+      - **Search & Filter Functionality:** Advanced filtering capabilities with:
+        - **Search Bar** (300px width): Searches by talent name or role with real-time filtering
+        - **Filter by Role:** Dropdown with 6 role options (React Developer, Full Stack Developer, Backend Developer, etc.) using exact match
+        - **Filter by Location:** Dropdown with 5 location options (Bangalore, Mumbai, Pune, Hyderabad, Delhi) using exact match
+        - **Filter by Experience:** Dropdown with 6 experience options (4, 5, 6, 7, 8, 10 Years) using substring match
+        - **Combined Filtering:** All filters work independently and in combination with search
+        - **Visual Design:** FilterOutlined icon in filter placeholders, allowClear option on all dropdowns, Flex layout with gap="middle"
       - **Detailed Table** showing Name, Role, Experience, Onboarding Date, Contract Duration, Last Working Day, Days Left, Monthly Salary (₹X,XXX / Month format), Total Billed, and Actions
       - **Non-navigating Implementation** - No talent detail navigation as it's not currently needed for Admin role
       - **Add Hiring Record:** 2-step wizard for creating new hiring records:
@@ -49,11 +56,14 @@ The application is a React-based single-page application (SPA) built with Create
         - **Design Consistency:** Uses brand colors (#014c75, #00d9a9) with step progress indicator matching overall app aesthetics
     - **Approval Process:** Comprehensive three-tab approval system for managing pending approvals:
       - **Partners/Customers Tab:** Displays pending partner and customer registrations with columns for Name, Type (Partner/Customer tag), Contact Person, Email, Phone, Location, Registered On, and Status. Includes Approve/Reject actions for individual items and bulk approve functionality for selected items.
+        - **Search & Filter:** Search by name, contact person, or email. Filter by Type (Partner/Customer) and Location (exact match). All filters use allowClear and reset when switching tabs.
       - **Talent Profiles Tab:** Shows pending talent profile submissions with columns for Name, Role, Skills, Experience, Location, Monthly Rate, Partner Organization, Submitted On, and Status. Features Approve/Reject actions and bulk approve capability.
+        - **Search & Filter:** Search by name, role, or skills. Filter by Role (exact match) and Location (exact match). Filters dynamically reset on tab change.
       - **Job Posts Tab:** Lists pending job postings with columns for Job Title, Company, Location, Experience, Skills, Budget Range, Positions, Posted On, and Status. Supports individual and bulk approve operations.
+        - **Search & Filter:** Search by job title, company, or skills. Filter by Location (exact match) and Experience ("4+ years", "5+ years", "6+ years" format with exact match). Tab-specific filters clear when switching tabs.
       - **Reject with Comment:** When rejecting any item, a modal requires a detailed comment (minimum 10 characters) explaining the rejection reason. Bulk reject is not supported to ensure thoughtful individual rejections.
       - **Status Management:** Upon approval, items become active (Partner/Customer profile, Talent profile, or Job Description). Each tab displays pending count badges for quick visibility.
-      - **Design Aesthetics:** Tabs use teal/green (#00d9a9) for active state, matching the overall app design. Tables feature dark blue (#014c75) headers with white text, and action buttons use green (#52c41a) for approve and red (#ff4d4f) for reject.
+      - **Design Aesthetics:** Tabs use teal/green (#00d9a9) for active state, matching the overall app design. Tables feature dark blue (#014c75) headers with white text, and action buttons use green (#52c41a) for approve and red (#ff4d4f) for reject. All search bars (300px width) and filter dropdowns (200px width) feature consistent FilterOutlined icons and Flex layout.
     - **Role Permissions:** Configure role-based access control
 
 **System Design Choices:**
