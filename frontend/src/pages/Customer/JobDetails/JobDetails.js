@@ -389,7 +389,6 @@ const JobDetails = () => {
           <h2 className="job-title">{jobData.title}</h2>
           <div className="job-meta">
             <Tag color="blue">{jobData.type}</Tag>
-            <span className="salary">{jobData.salary}</span>
             <Tag color="cyan">{jobData.location}</Tag>
             <Tag color="green">Open Position: {jobData.openPositions}</Tag>
           </div>
