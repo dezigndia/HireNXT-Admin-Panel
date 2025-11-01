@@ -28,6 +28,7 @@ import TalentProfiles from "./TalentProfiles/TalentProfiles";
 import JobRequirments from "./JobRequirments/JobRequirments";
 import PostNewJob from "./JobRequirments/PostNewJob";
 import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
+import TalentsHired from "./TalentsHired/TalentsHired";
 import Profile from "./Profile/Profile";
 
 const { Header, Content, Sider } = Layout;
@@ -58,6 +59,11 @@ const sideBarMenu = [
     key: "/home/job-requirments",
     label: "Job Requirements",
     icon: <FileDoneOutlined />,
+  },
+  {
+    key: "/home/talents-hired",
+    label: "Talents Hired",
+    icon: <TeamOutlined />,
   },
   {
     key: "/home/approval-process",
@@ -191,6 +197,7 @@ const Dashboard = () => {
                 path="/job-requirments/new-job-post"
                 element={<PostNewJob />}
               />
+              <Route path="/talents-hired" element={<TalentsHired />} />
               <Route path="/approval-process" element={<ApprovalProcess />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
