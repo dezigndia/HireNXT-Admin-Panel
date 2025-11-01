@@ -44,7 +44,7 @@ const sideBarMenu = [
   },
   {
     key: "/customer/hired-talents",
-    label: "Hired Talents",
+    label: "Talents Hired",
     icon: <UserOutlined />,
   },
 ];
