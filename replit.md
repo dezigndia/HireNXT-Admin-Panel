@@ -16,10 +16,11 @@ The application is a React-based single-page application (SPA) built with Create
 - **Interaction Patterns:** Card-based layouts, tabbed navigation, multi-step forms with progress indicators, and interactive tables with filtering, sorting, and action menus.
 - **Header Navigation:** Consistent header with profile dropdown for "View Profile", "Change Password", and "Logout".
 - **Standardized UI Patterns (Admin Dashboard):**
-  - **Tab Design:** Consistent `TabsContainer` styling across Roles & Permissions, User Management, Talent Profiles, Job Requirements, and Talents Hired with teal (#00d9a9) active state, hover effects, and rounded corners.
+  - **Tab Design:** Consistent `TabsContainer` styling across all Admin modules (Roles & Permissions, User Management, Talent Profiles, Job Requirements, and Talents Hired). Simple, clean button-style tabs with 48px height, teal (#00d9a9) active state, hover effects, and rounded corners for uniform navigation experience.
   - **Action Buttons:** All "Add" buttons (Add New Role, Add New Permission, Add New User, Add New Profile, Add New Job, Add Hiring Record) share unified styling with #00d9a9 background, PlusOutlined icon, and 40px height.
   - **Metrics Cards:** Avatar-based `MetricsContainer` design pattern used consistently across all Admin pages with color-coded icons (blue, orange, green backgrounds) and large bold numbers in primary blue (#014c75).
   - **Button Placement:** Action buttons positioned above tables (after tabs) for consistent UX across all Admin modules.
+  - **Page Padding:** Standardized padding of 40px 48px across all Admin pages (Dashboard Overview, Roles & Permissions, User Management, Talent Profiles, Job Requirements, Talents Hired, and Approval Process) ensuring consistent spacing from the side panel menu.
 
 **Technical Implementations & Feature Specifications:**
 - **Authentication:** Role-based access control with `ProtectedRoute` and mock authentication for development.
