@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Dropdown, Button, Empty, Card, Avatar } from "antd";
-import { MoreOutlined, DollarOutlined, TrophyOutlined, LineChartOutlined } from "@ant-design/icons";
+import { MoreOutlined, DollarOutlined, TrophyOutlined, LineChartOutlined, PlusOutlined } from "@ant-design/icons";
 import {
   TalentsHiredContainer,
   PageHeader,
@@ -11,6 +12,7 @@ import {
 } from "./TalentsHired.style";
 
 const TalentsHired = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active Talents");
 
   // Single source of truth for all talents data
@@ -296,6 +298,20 @@ const TalentsHired = () => {
     <TalentsHiredContainer>
       <PageHeader>
         <h1>Talents Hired</h1>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={() => navigate("/home/talents-hired/add-hiring-record")}
+          style={{
+            backgroundColor: "#00d9a9",
+            borderColor: "#00d9a9",
+            height: "40px",
+            fontSize: "14px",
+            fontWeight: 500,
+          }}
+        >
+          Add Hiring Record
+        </Button>
       </PageHeader>
 
       <MetricsContainer>
