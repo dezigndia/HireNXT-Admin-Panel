@@ -79,8 +79,8 @@ export const OngoingJobsWrapper = styled.div`
         }
 
         &.ant-select-focused .ant-select-selector {
-          border-color: #00d9a9 !important;
-          box-shadow: 0 0 0 2px rgba(0, 217, 169, 0.1) !important;
+          border-color: #d9d9d9 !important;
+          box-shadow: none !important;
         }
       }
 
