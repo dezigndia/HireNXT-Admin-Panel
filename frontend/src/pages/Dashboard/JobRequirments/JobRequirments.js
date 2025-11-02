@@ -24,7 +24,7 @@ import {
 import { UserManagementWrapper, MetricsContainer, TabsContainer } from "./../UserManagement/UserManagement.style";
 // import MaskGroup from "../Mask-Group.svg";
 import { API_CONST } from "../../../const";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const { Text, Title } = Typography;
 const { Option } = Select;
 
@@ -148,9 +148,22 @@ const JobRequirments = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null); // State to track selected role
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const columns = [
-    { title: "Job Id", dataIndex: "id", key: "id" },
+    { 
+      title: "Job Id", 
+      dataIndex: "id", 
+      key: "id",
+      render: (id) => (
+        <a
+          onClick={() => navigate(`/admin/home/job-requirments/job-details/${id}`)}
+          style={{ color: "#1890ff", cursor: "pointer", fontWeight: 500 }}
+        >
+          {id}
+        </a>
+      ),
+    },
     { title: "Job Requirement Title", dataIndex: "role", key: "role" },
     { title: "Location", dataIndex: "location", key: "location" },
     { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
