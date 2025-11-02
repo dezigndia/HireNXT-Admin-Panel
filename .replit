@@ -41,6 +41,10 @@ externalPort = 3000
 localPort = 44663
 externalPort = 3001
 
+[[ports]]
+localPort = 44891
+externalPort = 3002
+
 [deployment]
 deploymentTarget = "autoscale"
 run = ["bash", "-c", "cd frontend && npx serve -s build -l 5000"]

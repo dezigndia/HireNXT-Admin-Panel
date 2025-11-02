@@ -33,25 +33,6 @@ import { Link, useNavigate } from "react-router-dom";
 const { Text, Title } = Typography;
 const { Option } = Select;
 
-const usersData = Array.from({ length: 25 }, (_, index) => ({
-  key: index.toString(),
-  name: `User ${index + 1}`,
-  email: `user${index + 1}@example.com`,
-  contact: `+91-90000000${index}`,
-  organization: "Sample Organization",
-  designation: "Software Engineer",
-  experience: "3 years 2 months",
-  cost: "₹1,50,000",
-  createdOn: "12-Oct-24 | 11:30",
-  modifiedOn: "12-Oct-24 | 14:30",
-  type:
-    index % 3 === 0
-      ? "User to Review"
-      : index % 3 === 1
-      ? "Job to Review"
-      : "Profile to Review",
-}));
-
 const JobRequirments = () => {
   // Mock data for submitted profiles (for Profiles Submitted tab)
   const mockSubmittedProfiles = [
