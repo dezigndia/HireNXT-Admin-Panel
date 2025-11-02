@@ -23,7 +23,97 @@ const { Text, Link, Title } = Typography;
 const { Option } = Select;
 
 const UserManagement = () => {
-  const [usersData, setUsersData] = useState([{}]);
+  // Mock data for initial display
+  const mockUserData = [
+    {
+      key: "1",
+      name: "Infosys Limited",
+      email: "contact@infosys.com",
+      contact: "+91-9988776655",
+      organization: "Infosys Limited",
+      designation: "HR Manager",
+      createdOn: "10-Oct-24",
+      modifiedOn: "15-Oct-24",
+      type: "Customer",
+    },
+    {
+      key: "2",
+      name: "Wipro Technologies",
+      email: "hr@wipro.com",
+      contact: "+91-9988776656",
+      organization: "Wipro Technologies",
+      designation: "Talent Acquisition Lead",
+      createdOn: "12-Oct-24",
+      modifiedOn: "18-Oct-24",
+      type: "Customer",
+    },
+    {
+      key: "3",
+      name: "TCS Ltd",
+      email: "recruitment@tcs.com",
+      contact: "+91-9988776657",
+      organization: "TCS Ltd",
+      designation: "Recruitment Head",
+      createdOn: "14-Oct-24",
+      modifiedOn: "20-Oct-24",
+      type: "Customer",
+    },
+    {
+      key: "4",
+      name: "TechCorp Solutions",
+      email: "admin@techcorp.com",
+      contact: "+91-9988776658",
+      organization: "TechCorp Solutions",
+      designation: "CEO",
+      createdOn: "08-Oct-24",
+      modifiedOn: "16-Oct-24",
+      type: "Partner",
+    },
+    {
+      key: "5",
+      name: "Digital Partners Inc",
+      email: "contact@digitalpartners.com",
+      contact: "+91-9988776659",
+      organization: "Digital Partners Inc",
+      designation: "Managing Director",
+      createdOn: "11-Oct-24",
+      modifiedOn: "19-Oct-24",
+      type: "Partner",
+    },
+    {
+      key: "6",
+      name: "Innovate Tech",
+      email: "info@innovatetech.com",
+      contact: "+91-9988776660",
+      organization: "Innovate Tech",
+      designation: "Director",
+      createdOn: "13-Oct-24",
+      modifiedOn: "21-Oct-24",
+      type: "Partner",
+    },
+    {
+      key: "7",
+      name: "Admin User",
+      email: "admin@hirenxt.com",
+      contact: "+91-9988776661",
+      role: "Super Admin",
+      createdOn: "01-Oct-24",
+      modifiedOn: "22-Oct-24",
+      type: "Admin",
+    },
+    {
+      key: "8",
+      name: "John Doe",
+      email: "john.doe@hirenxt.com",
+      contact: "+91-9988776662",
+      role: "Admin",
+      createdOn: "05-Oct-24",
+      modifiedOn: "23-Oct-24",
+      type: "Admin",
+    },
+  ];
+
+  const [usersData, setUsersData] = useState(mockUserData);
   const [activeTab, setActiveTab] = useState("Customer");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -85,6 +175,7 @@ const UserManagement = () => {
         setUsersData(result.Response);
       } catch (error) {
         console.log(error.message); // Store error message in state
+        // Keep mock data on error
       }
     };
     fetchData();

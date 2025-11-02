@@ -87,7 +87,83 @@ const TalentProfiles = () => {
   const [Aadhar, setAadhar] = useState(null);
   const [pan, setPan] = useState(null);
   const [degree, setDegree] = useState(null);
-  const [usersData, setUsersData] = useState([{}]);
+  // Mock data for initial display
+  const mockTalentData = [
+    {
+      key: "1",
+      name: "Rajesh Kumar",
+      email: "rajesh.kumar@gmail.com",
+      contact: "+91-9876543210",
+      organization: "TechCorp Solutions",
+      rate: "₹1,80,000",
+      experience: "5 Years",
+      createdOn: "15-Oct-24",
+      status: "Active",
+      backgroundVerified: "Yes",
+    },
+    {
+      key: "2",
+      name: "Priya Sharma",
+      email: "priya.sharma@gmail.com",
+      contact: "+91-9876543211",
+      organization: "Digital Partners Inc",
+      rate: "₹1,50,000",
+      experience: "4 Years",
+      createdOn: "18-Oct-24",
+      status: "Active",
+      backgroundVerified: "Yes",
+    },
+    {
+      key: "3",
+      name: "Amit Patel",
+      email: "amit.patel@gmail.com",
+      contact: "+91-9876543212",
+      organization: "Innovate Tech",
+      rate: "₹2,00,000",
+      experience: "6 Years",
+      createdOn: "20-Oct-24",
+      status: "Inactive",
+      backgroundVerified: "No",
+    },
+    {
+      key: "4",
+      name: "Sneha Reddy",
+      email: "sneha.reddy@gmail.com",
+      contact: "+91-9876543213",
+      organization: "CodeCraft Ltd",
+      rate: "₹1,70,000",
+      experience: "5 Years",
+      createdOn: "22-Oct-24",
+      status: "Active",
+      backgroundVerified: "Yes",
+    },
+    {
+      key: "5",
+      name: "Vikram Singh",
+      email: "vikram.singh@gmail.com",
+      contact: "+91-9876543214",
+      organization: "WebWorks Pro",
+      rate: "₹1,60,000",
+      experience: "4 Years",
+      createdOn: "25-Oct-24",
+      status: "Inactive",
+      backgroundVerified: "Yes",
+    },
+    {
+      key: "6",
+      name: "Anjali Gupta",
+      email: "anjali.gupta@gmail.com",
+      contact: "+91-9876543215",
+      organization: "DataSystems Inc",
+      rate: "₹1,90,000",
+      experience: "7 Years",
+      createdOn: "28-Oct-24",
+      status: "Active",
+      backgroundVerified: "No",
+    },
+  ];
+
+  const [usersData, setUsersData] = useState(mockTalentData);
 
   const filteredData = usersData.filter((user) => user.status === activeTab);
 
@@ -117,6 +193,7 @@ const TalentProfiles = () => {
         setUsersData(result.Response);
       } catch (error) {
         console.log(error.message); // Store error message in state
+        // Keep mock data on error
       }
     };
     fetchData();
