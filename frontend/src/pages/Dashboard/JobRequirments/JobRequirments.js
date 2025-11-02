@@ -48,7 +48,101 @@ const usersData = Array.from({ length: 25 }, (_, index) => ({
 }));
 
 const JobRequirments = () => {
-  const [usersData, setUsersData] = useState([{}]);
+  // Mock data for initial display
+  const mockJobData = [
+    {
+      key: "1",
+      id: "JOB001",
+      role: "Senior React Developer",
+      location: "Bangalore",
+      engagement_type: "Full Time",
+      requirement_count: 3,
+      experience: "5+ years",
+      engagement_months: "12 months",
+      start_date: "01-Nov-24",
+      budget: "₹1,80,000 - ₹2,20,000",
+      created_on: "15-Oct-24",
+      type: "Active Jobs",
+      name: "Senior React Developer",
+    },
+    {
+      key: "2",
+      id: "JOB002",
+      role: "Full Stack Developer",
+      location: "Mumbai",
+      engagement_type: "Contract",
+      requirement_count: 2,
+      experience: "4+ years",
+      engagement_months: "6 months",
+      start_date: "05-Nov-24",
+      budget: "₹1,50,000 - ₹1,90,000",
+      created_on: "18-Oct-24",
+      type: "Active Jobs",
+      name: "Full Stack Developer",
+    },
+    {
+      key: "3",
+      id: "JOB003",
+      role: "Backend Developer",
+      location: "Hyderabad",
+      engagement_type: "Full Time",
+      requirement_count: 4,
+      experience: "6+ years",
+      engagement_months: "12 months",
+      start_date: "10-Nov-24",
+      budget: "₹2,00,000 - ₹2,50,000",
+      created_on: "20-Oct-24",
+      type: "Profiles Submitted",
+      name: "Backend Developer",
+    },
+    {
+      key: "4",
+      id: "JOB004",
+      role: "DevOps Engineer",
+      location: "Pune",
+      engagement_type: "Full Time",
+      requirement_count: 2,
+      experience: "5+ years",
+      engagement_months: "12 months",
+      start_date: "15-Nov-24",
+      budget: "₹1,70,000 - ₹2,10,000",
+      created_on: "22-Oct-24",
+      type: "Profiles Submitted",
+      name: "DevOps Engineer",
+    },
+    {
+      key: "5",
+      id: "JOB005",
+      role: "UI/UX Designer",
+      location: "Delhi",
+      engagement_type: "Contract",
+      requirement_count: 1,
+      experience: "4+ years",
+      engagement_months: "6 months",
+      start_date: "20-Nov-24",
+      budget: "₹1,20,000 - ₹1,50,000",
+      created_on: "25-Oct-24",
+      type: "Jobs Fulfilled",
+      name: "UI/UX Designer",
+    },
+    {
+      key: "6",
+      id: "JOB006",
+      role: "QA Engineer",
+      location: "Bangalore",
+      engagement_type: "Full Time",
+      requirement_count: 3,
+      experience: "3+ years",
+      engagement_months: "12 months",
+      start_date: "01-Dec-24",
+      budget: "₹1,00,000 - ₹1,30,000",
+      created_on: "28-Oct-24",
+      type: "Jobs Fulfilled",
+      name: "QA Engineer",
+    },
+  ];
+
+  const [usersData, setUsersData] = useState(mockJobData);
   const [activeTab, setActiveTab] = useState("Active Jobs");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -114,6 +208,7 @@ const JobRequirments = () => {
         setUsersData(transformedData);
       } catch (error) {
         console.log(error.message); // Store error message in state
+        // Keep mock data on error
       }
     };
     fetchData();
