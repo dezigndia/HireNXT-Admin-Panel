@@ -34,8 +34,13 @@ The application is a React-based single-page application (SPA) built with Create
       - **Approvals Pending Section** with "View All" link, displaying 4 actionable items: New Customer onboarded (100), New Partners onboarded (205), New Talent Profiles Created (178), and Profiles Submitted for Jobs (52). Each item features an icon, count, description, and right arrow for navigation.
       - **Top Customers Hiring Talents Table** with "View All" link, showing top 5 customers with columns for Customer Name (with building icon), Talents Hired count, and Per Talent Average (highlighted in primary blue).
       - **Clean Header** with logo on the left and profile avatar dropdown in teal (#00d9a9) on the right. Search bar and notification icon removed as not currently needed.
-    - **User Management:** Comprehensive user database management with Avatar-based metrics cards (Total Users, Admins, Customers, Partners), consistent TabsContainer design, and unified Add New User button styling
-    - **Talent Profiles:** Talent profile database management with Avatar-based metrics cards (Active Resources, Job Applications, Talents Hired), consistent TabsContainer design, and unified Add New Profile button styling
+    - **User Management:** Comprehensive user database management with Avatar-based metrics cards (Total Users, Admins, Customers, Partners), consistent TabsContainer design with tabs ordered as Customer, Partner, Admin, and unified Add New User button styling
+    - **Talent Profiles:** Talent profile database management with:
+      - **Metrics Cards:** Total Profiles, Active Profiles, and Inactive Profiles using Avatar-based design
+      - **Active/Inactive Tabs:** Clean button-style tabs for filtering profiles by status
+      - **Table Columns:** Name, Email ID, Contact No, Organization, Rate, Experience, Created on, Background Verified, and Action
+      - **Action Menu:** View Document, Edit, Mark Inactive, and Delete options accessed via dropdown menu with MoreOutlined icon
+      - **Unified Add New Profile button styling** with teal (#00d9a9) background
     - **Job Requirements:** Job posting and requirement management with Avatar-based metrics cards (Active Jobs, Profiles Submitted, Jobs Fulfilled), consistent TabsContainer design, and unified Add New Job button styling. Includes data transformation layer to map legacy API types ("User to Review", "Job to Review", "Profile to Review") to new tab labels ("Active Jobs", "Profiles Submitted", "Jobs Fulfilled") for backward compatibility
     - **Talents Hired:** Comprehensive talent contract management with:
       - **Metrics Cards** displaying Total Active Talents, Total Revenue Generated, and Average Contract Value using Avatar icons matching Bench Pool design

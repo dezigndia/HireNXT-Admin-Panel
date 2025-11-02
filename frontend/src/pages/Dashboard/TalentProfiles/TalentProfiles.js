@@ -44,26 +44,19 @@ const usersData = Array.from({ length: 25 }, (_, index) => ({
   cost: "₹1,50,000",
   createdOn: "12-Oct-24 | 11:30",
   modifiedOn: "12-Oct-24 | 14:30",
-  type:
-    index % 3 === 0
-      ? "Active Resource"
-      : index % 3 === 1
-      ? "Job Applied"
-      : "Talents Hired",
+  status: index % 2 === 0 ? "Active" : "Inactive",
+  backgroundVerified: index % 3 === 0 ? "Yes" : "No",
 }));
 
 const adminColumns = [
   { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email Id", dataIndex: "email", key: "email" },
-    { title: "Contact No", dataIndex: "contact", key: "contact" },
-    { title: "Organization", dataIndex: "organization", key: "organization" },
-    { title: "Rate", dataIndex: "rate", key: "rate" },
-    { title: "Experience", dataIndex: "experience", key: "experience" },
-    { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
-    { title: "Degree", dataIndex: "degree", key: "degree" },
-    { title: "Pan", dataIndex: "pan", key: "pan" },
-    { title: "Aadhar", dataIndex: "Aadhar", key: "Aadhar" },
-    { title: "Action", key: "action", render: () => <Button>Edit</Button> },
+  { title: "Email Id", dataIndex: "email", key: "email" },
+  { title: "Contact No", dataIndex: "contact", key: "contact" },
+  { title: "Organization", dataIndex: "organization", key: "organization" },
+  { title: "Rate", dataIndex: "rate", key: "rate" },
+  { title: "Experience", dataIndex: "experience", key: "experience" },
+  { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
+  { title: "Background Verified", dataIndex: "backgroundVerified", key: "backgroundVerified" },
   {
     title: "Action",
     key: "action",
@@ -71,10 +64,10 @@ const adminColumns = [
       <Dropdown
         overlay={
           <Menu>
-            <Menu.Item key="1">Edit</Menu.Item>
-            <Menu.Item key="2">Delete</Menu.Item>
-            <Menu.Item key="3">View Details</Menu.Item>
-            <Menu.Item key="4">Reset Password</Menu.Item>
+            <Menu.Item key="1">View Document</Menu.Item>
+            <Menu.Item key="2">Edit</Menu.Item>
+            <Menu.Item key="3">Mark Inactive</Menu.Item>
+            <Menu.Item key="4">Delete</Menu.Item>
           </Menu>
         }
         trigger={["click"]}
@@ -86,7 +79,7 @@ const adminColumns = [
 ];
 
 const TalentProfiles = () => {
-  const [activeTab, setActiveTab] = useState("Active Resource");
+  const [activeTab, setActiveTab] = useState("Active");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -96,7 +89,7 @@ const TalentProfiles = () => {
   const [degree, setDegree] = useState(null);
   const [usersData, setUsersData] = useState([{}]);
 
-  const filteredData = usersData.filter((user) => user.type === activeTab);
+  const filteredData = usersData.filter((user) => user.status === activeTab);
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => {
@@ -153,9 +146,9 @@ const TalentProfiles = () => {
   };
 
 
-  const activeResourceCount = usersData.filter((user) => user.type === "Active Resource").length;
-  const jobAppliedCount = usersData.filter((user) => user.type === "Job Applied").length;
-  const talentsHiredCount = usersData.filter((user) => user.type === "Talents Hired").length;
+  const activeCount = usersData.filter((user) => user.status === "Active").length;
+  const inactiveCount = usersData.filter((user) => user.status === "Inactive").length;
+  const totalCount = usersData.length;
 
   return (
     <UserManagementWrapper>
@@ -171,8 +164,8 @@ const TalentProfiles = () => {
               style={{ backgroundColor: "#e6f7ff" }}
             />
             <div className="metric-info">
-              <h3>{activeResourceCount}</h3>
-              <p>Active Resources</p>
+              <h3>{totalCount}</h3>
+              <p>Total Profiles</p>
             </div>
           </div>
         </Card>
@@ -185,8 +178,8 @@ const TalentProfiles = () => {
               style={{ backgroundColor: "#fff7e6" }}
             />
             <div className="metric-info">
-              <h3>{jobAppliedCount}</h3>
-              <p>Job Applications</p>
+              <h3>{activeCount}</h3>
+              <p>Active Profiles</p>
             </div>
           </div>
         </Card>
@@ -199,15 +192,15 @@ const TalentProfiles = () => {
               style={{ backgroundColor: "#f6ffed" }}
             />
             <div className="metric-info">
-              <h3>{talentsHiredCount}</h3>
-              <p>Talents Hired</p>
+              <h3>{inactiveCount}</h3>
+              <p>Inactive Profiles</p>
             </div>
           </div>
         </Card>
       </MetricsContainer>
 
       <TabsContainer>
-        {["Active Resource", "Job Applied", "Talents Hired"].map((tab) => (
+        {["Active", "Inactive"].map((tab) => (
           <Button
             key={tab}
             className={activeTab === tab ? "tab-button active" : "tab-button"}
