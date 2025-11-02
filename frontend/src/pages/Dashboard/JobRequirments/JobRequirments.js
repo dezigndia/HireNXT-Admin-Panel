@@ -169,7 +169,7 @@ const JobRequirments = () => {
       key: "id",
       render: (id) => (
         <a
-          onClick={() => navigate(`/admin/home/job-requirments/job-details/${id}`)}
+          onClick={() => navigate(`/home/job-requirments/job-details/${id}`)}
           style={{ color: "#1890ff", cursor: "pointer", fontWeight: 500 }}
         >
           {id}
@@ -213,7 +213,7 @@ const JobRequirments = () => {
       key: "id",
       render: (id) => (
         <a
-          onClick={() => navigate(`/admin/home/job-requirments/job-details/${id}`)}
+          onClick={() => navigate(`/home/job-requirments/job-details/${id}`)}
           style={{ color: "#1890ff", cursor: "pointer", fontWeight: 500 }}
         >
           {id}
@@ -261,7 +261,7 @@ const JobRequirments = () => {
       key: "id",
       render: (id) => (
         <a
-          onClick={() => navigate(`/admin/home/job-requirments/job-details/${id}`)}
+          onClick={() => navigate(`/home/job-requirments/job-details/${id}`)}
           style={{ color: "#1890ff", cursor: "pointer", fontWeight: 500 }}
         >
           {id}
