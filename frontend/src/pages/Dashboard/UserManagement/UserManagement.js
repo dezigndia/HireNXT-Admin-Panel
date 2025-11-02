@@ -216,7 +216,7 @@ const UserManagement = () => {
       </MetricsContainer>
 
       <TabsContainer>
-        {["Admin", "Customer", "Partner"].map((tab) => (
+        {["Customer", "Partner", "Admin"].map((tab) => (
           <Button
             key={tab}
             className={activeTab === tab ? "tab-button active" : "tab-button"}
