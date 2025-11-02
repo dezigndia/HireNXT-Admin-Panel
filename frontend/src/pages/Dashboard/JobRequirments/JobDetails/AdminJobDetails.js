@@ -160,7 +160,7 @@ const AdminJobDetails = () => {
       <JobDetailsWrapper>
         <div style={{ padding: "40px", textAlign: "center" }}>
           <h2>Job not found</h2>
-          <Button type="primary" onClick={() => navigate("/admin/job-requirements")}>
+          <Button type="primary" onClick={() => navigate("/home/job-requirments")}>
             Back to Job Requirements
           </Button>
         </div>
@@ -273,7 +273,7 @@ const AdminJobDetails = () => {
         <Button
           type="text"
           icon={<ArrowLeftOutlined />}
-          onClick={() => navigate("/admin/job-requirements")}
+          onClick={() => navigate("/home/job-requirments")}
           className="back-button"
         >
           Back to Job Requirements
