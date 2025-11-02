@@ -41,7 +41,22 @@ The application is a React-based single-page application (SPA) built with Create
       - **Table Columns:** Name, Email ID, Contact No, Organization, Rate, Experience, Created on, Background Verified, and Action
       - **Action Menu:** View Document, Edit, Mark Inactive, and Delete options accessed via dropdown menu with MoreOutlined icon
       - **Unified Add New Profile button styling** with teal (#00d9a9) background
-    - **Job Requirements:** Job posting and requirement management with Avatar-based metrics cards (Active Jobs, Profiles Submitted, Jobs Fulfilled), consistent TabsContainer design, and unified Add New Job button styling. Includes data transformation layer to map legacy API types ("User to Review", "Job to Review", "Profile to Review") to new tab labels ("Active Jobs", "Profiles Submitted", "Jobs Fulfilled") for backward compatibility
+    - **Job Requirements:** Comprehensive job posting and requirement management with:
+      - **Metrics Cards:** Avatar-based design displaying Active Jobs, Profiles Submitted, and Jobs Fulfilled counts
+      - **Three-Tab Navigation:** Active Jobs, Profiles Submitted, and Jobs Fulfilled with tab-specific table columns
+        - **Active Jobs Tab:** Displays all active job postings with columns for Job ID (clickable link), Title, Location, Type, Positions, Experience, Duration, Start Date, Salary, Created On, and Action dropdown
+        - **Profiles Submitted Tab:** Shows jobs with submitted profiles, featuring Job ID (clickable), Title, Location, Type, Positions, Profiles Submitted count (Tag with TeamOutlined icon), Budget, Created On, and "View Profiles" button
+        - **Jobs Fulfilled Tab:** Lists completed jobs with hired talents, showing Job ID (clickable), Title, Location, Type, Positions, Talents Hired count (Tag with CheckCircleOutlined icon), Budget, Start Date, and "View Hired" button
+      - **Job Details Page:** Detailed view accessible by clicking Job IDs, featuring:
+        - **Job Summary Card:** Job ID, title, type, location, open positions with colored tags
+        - **Metrics Section:** Three metric boxes displaying Monthly Budget, Project Duration, and Required Experience with color-coded icons
+        - **Primary Skills:** Tag-based display of required skills
+        - **Job Description:** Full job description text
+        - **Submitted Profiles Table:** Comprehensive table showing Resume (PDF icon), Name, Role, Top Skills (tags), Monthly Rate, Experience, Partner Organization, Submitted On, Status (tag), and Download action
+        - **Edit Job Modal:** Form with fields for Job Role, Engagement Type, Monthly Budget, Location, Open Positions, Experience, Project Duration, Start Date, and Job Description
+        - **Back Navigation:** "Back to Job Requirements" button returns to main listing
+      - **Data Transformation:** Legacy API type mapping ("User to Review" → "Active Jobs", "Job to Review" → "Profiles Submitted", "Profile to Review" → "Jobs Fulfilled")
+      - **Unified Styling:** Add New Job button with teal (#00d9a9) background, consistent 40px height
     - **Talents Hired:** Comprehensive talent contract management with:
       - **Metrics Cards** displaying Total Active Talents, Total Revenue Generated, and Average Contract Value using Avatar icons matching Bench Pool design
       - **Active/Inactive Tabs** with dynamic counts for contract status filtering
