@@ -36,14 +36,86 @@ const { Option } = Select;
 const JobRequirments = () => {
   // Mock data for submitted profiles (for Profiles Submitted tab)
   const mockSubmittedProfiles = [
-    { key: "0", profileId: "PRF001", name: "Akshay Joshi", email: "akshay.joshi@techpro.com", contact: "+91-9876543210", jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.2 years", skills: "React, Redux, TypeScript", expectedSalary: "₹1,75,000", submittedOn: "25-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" },
-    { key: "1", profileId: "PRF002", name: "Priya Sharma", email: "priya.sharma@webdev.com", contact: "+91-9876543211", jobId: "JOB001", jobTitle: "Senior React Developer", experience: "6.0 years", skills: "React, TypeScript, Next.js", expectedSalary: "₹1,90,000", submittedOn: "26-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" },
-    { key: "2", profileId: "PRF003", name: "Rajesh Kumar", email: "rajesh.kumar@techpro.com", contact: "+91-9876543212", jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.5 years", skills: "Node.js, React, PostgreSQL", expectedSalary: "₹1,60,000", submittedOn: "27-Oct-24", status: "Interview Scheduled", partnerOrg: "Innovate Tech" },
-    { key: "3", profileId: "PRF004", name: "Vineet Malhotra", email: "vineet.m@datatech.com", contact: "+91-9876543213", jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.5 years", skills: "Java, Spring Boot, MySQL", expectedSalary: "₹2,10,000", submittedOn: "24-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" },
-    { key: "4", profileId: "PRF005", name: "Amit Patel", email: "amit.patel@cloudops.com", contact: "+91-9876543214", jobId: "JOB003", jobTitle: "Backend Developer", experience: "7.0 years", skills: "Java, Microservices, AWS", expectedSalary: "₹2,20,000", submittedOn: "23-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" },
-    { key: "5", profileId: "PRF006", name: "Neha Gupta", email: "neha.gupta@backend.com", contact: "+91-9876543215", jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.2 years", skills: "Node.js, React, MongoDB", expectedSalary: "₹1,55,000", submittedOn: "22-Oct-24", status: "Rejected", partnerOrg: "Innovate Tech" },
-    { key: "6", profileId: "PRF007", name: "Karthik Reddy", email: "karthik.r@frontend.com", contact: "+91-9876543216", jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.5 years", skills: "React, Redux, GraphQL", expectedSalary: "₹1,80,000", submittedOn: "21-Oct-24", status: "Interview Scheduled", partnerOrg: "TechCorp Solutions" },
-    { key: "7", profileId: "PRF008", name: "Sneha Patel", email: "sneha.patel@backend.pro", contact: "+91-9876543217", jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.0 years", skills: "Java, Spring Boot, Microservices", expectedSalary: "₹2,05,000", submittedOn: "20-Oct-24", status: "Under Review", partnerOrg: "Digital Partners Inc" },
+    { 
+      key: "0", profileId: "PRF001", name: "Akshay Joshi", email: "akshay.joshi@techpro.com", contact: "+91-9876543210", 
+      jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.2 years", 
+      skills: [
+        { skill: "React", level: "Expert" },
+        { skill: "Redux", level: "Advanced" },
+        { skill: "TypeScript", level: "Intermediate" }
+      ], 
+      expectedSalary: "₹1,75,000", submittedOn: "25-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" 
+    },
+    { 
+      key: "1", profileId: "PRF002", name: "Priya Sharma", email: "priya.sharma@webdev.com", contact: "+91-9876543211", 
+      jobId: "JOB001", jobTitle: "Senior React Developer", experience: "6.0 years", 
+      skills: [
+        { skill: "React", level: "Expert" },
+        { skill: "TypeScript", level: "Advanced" },
+        { skill: "Next.js", level: "Intermediate" }
+      ], 
+      expectedSalary: "₹1,90,000", submittedOn: "26-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" 
+    },
+    { 
+      key: "2", profileId: "PRF003", name: "Rajesh Kumar", email: "rajesh.kumar@techpro.com", contact: "+91-9876543212", 
+      jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.5 years", 
+      skills: [
+        { skill: "Node.js", level: "Advanced" },
+        { skill: "React", level: "Intermediate" },
+        { skill: "PostgreSQL", level: "Intermediate" }
+      ], 
+      expectedSalary: "₹1,60,000", submittedOn: "27-Oct-24", status: "Interview Scheduled", partnerOrg: "Innovate Tech" 
+    },
+    { 
+      key: "3", profileId: "PRF004", name: "Vineet Malhotra", email: "vineet.m@datatech.com", contact: "+91-9876543213", 
+      jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.5 years", 
+      skills: [
+        { skill: "Java", level: "Expert" },
+        { skill: "Spring Boot", level: "Advanced" },
+        { skill: "MySQL", level: "Intermediate" }
+      ], 
+      expectedSalary: "₹2,10,000", submittedOn: "24-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" 
+    },
+    { 
+      key: "4", profileId: "PRF005", name: "Amit Patel", email: "amit.patel@cloudops.com", contact: "+91-9876543214", 
+      jobId: "JOB003", jobTitle: "Backend Developer", experience: "7.0 years", 
+      skills: [
+        { skill: "Java", level: "Expert" },
+        { skill: "Microservices", level: "Expert" },
+        { skill: "AWS", level: "Advanced" }
+      ], 
+      expectedSalary: "₹2,20,000", submittedOn: "23-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" 
+    },
+    { 
+      key: "5", profileId: "PRF006", name: "Neha Gupta", email: "neha.gupta@backend.com", contact: "+91-9876543215", 
+      jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.2 years", 
+      skills: [
+        { skill: "Node.js", level: "Advanced" },
+        { skill: "React", level: "Intermediate" },
+        { skill: "MongoDB", level: "Beginner" }
+      ], 
+      expectedSalary: "₹1,55,000", submittedOn: "22-Oct-24", status: "Rejected", partnerOrg: "Innovate Tech" 
+    },
+    { 
+      key: "6", profileId: "PRF007", name: "Karthik Reddy", email: "karthik.r@frontend.com", contact: "+91-9876543216", 
+      jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.5 years", 
+      skills: [
+        { skill: "React", level: "Expert" },
+        { skill: "Redux", level: "Advanced" },
+        { skill: "GraphQL", level: "Advanced" }
+      ], 
+      expectedSalary: "₹1,80,000", submittedOn: "21-Oct-24", status: "Interview Scheduled", partnerOrg: "TechCorp Solutions" 
+    },
+    { 
+      key: "7", profileId: "PRF008", name: "Sneha Patel", email: "sneha.patel@backend.pro", contact: "+91-9876543217", 
+      jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.0 years", 
+      skills: [
+        { skill: "Java", level: "Expert" },
+        { skill: "Spring Boot", level: "Advanced" },
+        { skill: "Microservices", level: "Advanced" }
+      ], 
+      expectedSalary: "₹2,05,000", submittedOn: "20-Oct-24", status: "Under Review", partnerOrg: "Digital Partners Inc" 
+    },
   ];
 
   // Mock data for initial display (jobs)
@@ -238,7 +310,25 @@ const JobRequirments = () => {
       width: 200,
     },
     { title: "Experience", dataIndex: "experience", key: "experience", width: 120 },
-    { title: "Skills", dataIndex: "skills", key: "skills", width: 250 },
+    { 
+      title: "Skills", 
+      dataIndex: "skills", 
+      key: "skills", 
+      width: 350,
+      render: (skills) => (
+        <>
+          {Array.isArray(skills) ? (
+            skills.map((skillObj, index) => (
+              <Tag key={index} color="blue" style={{ marginBottom: 4 }}>
+                {skillObj.skill} - {skillObj.level}
+              </Tag>
+            ))
+          ) : (
+            <span>{skills}</span>
+          )}
+        </>
+      ),
+    },
     { title: "Partner Organization", dataIndex: "partnerOrg", key: "partnerOrg", width: 180 },
     { title: "Expected Salary", dataIndex: "expectedSalary", key: "expectedSalary", width: 150 },
     { title: "Submitted On", dataIndex: "submittedOn", key: "submittedOn", width: 120 },
@@ -393,8 +483,9 @@ const JobRequirments = () => {
           profile.profileId?.toLowerCase().includes(searchText.toLowerCase()) ||
           profile.jobTitle?.toLowerCase().includes(searchText.toLowerCase());
 
-        const matchesJob = selectedJob === "all" || profile.jobId === selectedJob;
-        const matchesStatus = selectedStatus === "all" || profile.status === selectedStatus;
+        // Treat undefined, null, and "all" as unfiltered state
+        const matchesJob = !selectedJob || selectedJob === "all" || profile.jobId === selectedJob;
+        const matchesStatus = !selectedStatus || selectedStatus === "all" || profile.status === selectedStatus;
 
         return matchesSearch && matchesJob && matchesStatus;
       });
@@ -570,7 +661,7 @@ const JobRequirments = () => {
           columns={getColumns()}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
-          scroll={activeTab === "Profiles Submitted" ? { x: 2200 } : undefined}
+          scroll={activeTab === "Profiles Submitted" ? { x: 2300 } : undefined}
         />
     </UserManagementWrapper>
   );
