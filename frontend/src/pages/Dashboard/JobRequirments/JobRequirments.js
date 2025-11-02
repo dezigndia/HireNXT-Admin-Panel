@@ -53,7 +53,19 @@ const usersData = Array.from({ length: 25 }, (_, index) => ({
 }));
 
 const JobRequirments = () => {
-  // Mock data for initial display
+  // Mock data for submitted profiles (for Profiles Submitted tab)
+  const mockSubmittedProfiles = [
+    { key: "0", profileId: "PRF001", name: "Akshay Joshi", email: "akshay.joshi@techpro.com", contact: "+91-9876543210", jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.2 years", skills: "React, Redux, TypeScript", expectedSalary: "₹1,75,000", submittedOn: "25-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" },
+    { key: "1", profileId: "PRF002", name: "Priya Sharma", email: "priya.sharma@webdev.com", contact: "+91-9876543211", jobId: "JOB001", jobTitle: "Senior React Developer", experience: "6.0 years", skills: "React, TypeScript, Next.js", expectedSalary: "₹1,90,000", submittedOn: "26-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" },
+    { key: "2", profileId: "PRF003", name: "Rajesh Kumar", email: "rajesh.kumar@techpro.com", contact: "+91-9876543212", jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.5 years", skills: "Node.js, React, PostgreSQL", expectedSalary: "₹1,60,000", submittedOn: "27-Oct-24", status: "Interview Scheduled", partnerOrg: "Innovate Tech" },
+    { key: "3", profileId: "PRF004", name: "Vineet Malhotra", email: "vineet.m@datatech.com", contact: "+91-9876543213", jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.5 years", skills: "Java, Spring Boot, MySQL", expectedSalary: "₹2,10,000", submittedOn: "24-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" },
+    { key: "4", profileId: "PRF005", name: "Amit Patel", email: "amit.patel@cloudops.com", contact: "+91-9876543214", jobId: "JOB003", jobTitle: "Backend Developer", experience: "7.0 years", skills: "Java, Microservices, AWS", expectedSalary: "₹2,20,000", submittedOn: "23-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" },
+    { key: "5", profileId: "PRF006", name: "Neha Gupta", email: "neha.gupta@backend.com", contact: "+91-9876543215", jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.2 years", skills: "Node.js, React, MongoDB", expectedSalary: "₹1,55,000", submittedOn: "22-Oct-24", status: "Rejected", partnerOrg: "Innovate Tech" },
+    { key: "6", profileId: "PRF007", name: "Karthik Reddy", email: "karthik.r@frontend.com", contact: "+91-9876543216", jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.5 years", skills: "React, Redux, GraphQL", expectedSalary: "₹1,80,000", submittedOn: "21-Oct-24", status: "Interview Scheduled", partnerOrg: "TechCorp Solutions" },
+    { key: "7", profileId: "PRF008", name: "Sneha Patel", email: "sneha.patel@backend.pro", contact: "+91-9876543217", jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.0 years", skills: "Java, Spring Boot, Microservices", expectedSalary: "₹2,05,000", submittedOn: "20-Oct-24", status: "Under Review", partnerOrg: "Digital Partners Inc" },
+  ];
+
+  // Mock data for initial display (jobs)
   const mockJobData = [
     {
       key: "1",
@@ -154,8 +166,11 @@ const JobRequirments = () => {
   ];
 
   const [usersData, setUsersData] = useState(mockJobData);
+  const [submittedProfiles, setSubmittedProfiles] = useState(mockSubmittedProfiles);
   const [activeTab, setActiveTab] = useState("Active Jobs");
   const [searchText, setSearchText] = useState("");
+  const [selectedJob, setSelectedJob] = useState("all");
+  const [selectedStatus, setSelectedStatus] = useState("all");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null); // State to track selected role
   const [form] = Form.useForm();
@@ -205,12 +220,27 @@ const JobRequirments = () => {
     },
   ];
 
-  // Profiles Submitted columns
+  // Profiles Submitted columns (showing all submitted profiles)
   const profilesSubmittedColumns = [
+    { title: "Profile ID", dataIndex: "profileId", key: "profileId", width: 120 },
     { 
-      title: "Job Id", 
-      dataIndex: "id", 
-      key: "id",
+      title: "Name", 
+      dataIndex: "name", 
+      key: "name", 
+      width: 150,
+      render: (text) => (
+        <span style={{ color: "#1890ff", fontWeight: 500 }}>
+          {text}
+        </span>
+      ),
+    },
+    { title: "Email", dataIndex: "email", key: "email", width: 220 },
+    { title: "Contact", dataIndex: "contact", key: "contact", width: 150 },
+    { 
+      title: "Job ID", 
+      dataIndex: "jobId", 
+      key: "jobId", 
+      width: 100,
       render: (id) => (
         <a
           onClick={() => navigate(`/home/job-requirments/job-details/${id}`)}
@@ -220,35 +250,63 @@ const JobRequirments = () => {
         </a>
       ),
     },
-    { title: "Job Title", dataIndex: "role", key: "role" },
-    { title: "Location", dataIndex: "location", key: "location" },
-    { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
-    { title: "Positions", dataIndex: "requirement_count", key: "requirement_count" },
     { 
-      title: "Profiles Submitted", 
-      dataIndex: "profiles_submitted", 
-      key: "profiles_submitted",
-      render: (count) => (
-        <Tag color="blue" icon={<TeamOutlined />}>
-          {count} Profiles
-        </Tag>
-      ),
+      title: "Job Title", 
+      dataIndex: "jobTitle", 
+      key: "jobTitle", 
+      width: 200,
     },
-    { title: "Budget", dataIndex: "budget", key: "budget" },
-    { title: "Created On", dataIndex: "created_on", key: "created_on" },
+    { title: "Experience", dataIndex: "experience", key: "experience", width: 120 },
+    { title: "Skills", dataIndex: "skills", key: "skills", width: 250 },
+    { title: "Partner Organization", dataIndex: "partnerOrg", key: "partnerOrg", width: 180 },
+    { title: "Expected Salary", dataIndex: "expectedSalary", key: "expectedSalary", width: 150 },
+    { title: "Submitted On", dataIndex: "submittedOn", key: "submittedOn", width: 120 },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: 150,
+      render: (status) => {
+        let color = "default";
+        if (status === "Under Review") color = "blue";
+        if (status === "Shortlisted") color = "green";
+        if (status === "Interview Scheduled") color = "cyan";
+        if (status === "Rejected") color = "red";
+        return <Tag color={color}>{status}</Tag>;
+      },
+    },
     {
       title: "Action",
       key: "action",
-      render: () => (
-        <Tooltip title="View Submitted Profiles">
-          <Button 
-            type="primary" 
-            size="small"
-            style={{ backgroundColor: "#00d9a9", borderColor: "#00d9a9" }}
-          >
-            View Profiles
-          </Button>
-        </Tooltip>
+      width: 80,
+      render: (_, record) => (
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: "view",
+                label: "View Profile",
+              },
+              {
+                key: "resume",
+                label: "View Resume",
+                icon: <FilePdfOutlined />,
+              },
+              {
+                key: "interview",
+                label: "Schedule Interview",
+              },
+              {
+                key: "reject",
+                label: "Reject",
+                danger: true,
+              },
+            ],
+          }}
+          trigger={["click"]}
+        >
+          <MoreOutlined style={{ cursor: "pointer" }} />
+        </Dropdown>
       ),
     },
   ];
@@ -344,11 +402,32 @@ const JobRequirments = () => {
     fetchData();
   }, []);
 
-  const filteredData = usersData
-    .filter((user) => user.type === activeTab)
-    .filter((user) =>
-      user.name.toLowerCase().includes(searchText.toLowerCase())
-    );
+  // Filter data based on active tab
+  const getFilteredData = () => {
+    if (activeTab === "Profiles Submitted") {
+      // Filter submitted profiles
+      return submittedProfiles.filter((profile) => {
+        const matchesSearch =
+          profile.name?.toLowerCase().includes(searchText.toLowerCase()) ||
+          profile.profileId?.toLowerCase().includes(searchText.toLowerCase()) ||
+          profile.jobTitle?.toLowerCase().includes(searchText.toLowerCase());
+
+        const matchesJob = selectedJob === "all" || profile.jobId === selectedJob;
+        const matchesStatus = selectedStatus === "all" || profile.status === selectedStatus;
+
+        return matchesSearch && matchesJob && matchesStatus;
+      });
+    } else {
+      // Filter jobs (Active Jobs and Jobs Fulfilled)
+      return usersData
+        .filter((user) => user.type === activeTab)
+        .filter((user) =>
+          user.name?.toLowerCase().includes(searchText.toLowerCase())
+        );
+    }
+  };
+
+  const filteredData = getFilteredData();
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => {
@@ -373,7 +452,7 @@ const JobRequirments = () => {
   };
 
   const activeJobsCount = usersData.filter((user) => user.type === "Active Jobs").length;
-  const profilesSubmittedCount = usersData.filter((user) => user.type === "Profiles Submitted").length;
+  const profilesSubmittedCount = submittedProfiles.length; // Count of all submitted profiles
   const jobsFulfilledCount = usersData.filter((user) => user.type === "Jobs Fulfilled").length;
 
   return (
@@ -436,29 +515,72 @@ const JobRequirments = () => {
           </Button>
         ))}
       </TabsContainer>
-        <Flex align="start" justify="space-between">
-          <Input
-            prefix={<SearchOutlined />}
-            placeholder="Search resources using Name"
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{ marginBottom: "20px", width: "300px" }}
-          />
-          <Link to="/home/job-requirments/new-job-post">
-            <Button 
-              type="primary"
-              icon={<PlusOutlined />}
-              style={{ 
-                backgroundColor: "#00d9a9",
-                borderColor: "#00d9a9",
-                height: "40px",
-                fontSize: "14px",
-                fontWeight: 500,
-              }}
-            >
-              Add New Job
-            </Button>
-          </Link>
-        </Flex>
+        
+        {activeTab === "Profiles Submitted" ? (
+          <div style={{ marginBottom: "20px" }}>
+            <Flex align="start" justify="space-between" style={{ marginBottom: "16px" }}>
+              <Flex gap="middle">
+                <Input
+                  prefix={<SearchOutlined />}
+                  placeholder="Search by name, profile ID, or job title"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  style={{ width: "300px" }}
+                  allowClear
+                />
+                <Select
+                  placeholder="Filter by Job"
+                  value={selectedJob}
+                  onChange={setSelectedJob}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="all">All Jobs</Option>
+                  <Option value="JOB001">JOB001 - Senior React Developer</Option>
+                  <Option value="JOB002">JOB002 - Full Stack Developer</Option>
+                  <Option value="JOB003">JOB003 - Backend Developer</Option>
+                </Select>
+                <Select
+                  placeholder="Filter by Status"
+                  value={selectedStatus}
+                  onChange={setSelectedStatus}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="all">All Status</Option>
+                  <Option value="Under Review">Under Review</Option>
+                  <Option value="Shortlisted">Shortlisted</Option>
+                  <Option value="Interview Scheduled">Interview Scheduled</Option>
+                  <Option value="Rejected">Rejected</Option>
+                </Select>
+              </Flex>
+            </Flex>
+          </div>
+        ) : (
+          <Flex align="start" justify="space-between">
+            <Input
+              prefix={<SearchOutlined />}
+              placeholder="Search resources using Name"
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{ marginBottom: "20px", width: "300px" }}
+            />
+            <Link to="/home/job-requirments/new-job-post">
+              <Button 
+                type="primary"
+                icon={<PlusOutlined />}
+                style={{ 
+                  backgroundColor: "#00d9a9",
+                  borderColor: "#00d9a9",
+                  height: "40px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                Add New Job
+              </Button>
+            </Link>
+          </Flex>
+        )}
         <Table
           rowSelection={{
             type: "checkbox",
@@ -467,6 +589,7 @@ const JobRequirments = () => {
           columns={getColumns()}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
+          scroll={activeTab === "Profiles Submitted" ? { x: 2200 } : undefined}
         />
     </UserManagementWrapper>
   );
