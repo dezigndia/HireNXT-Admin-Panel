@@ -27,8 +27,8 @@ const UserManagement = () => {
   const mockUserData = [
     {
       key: "1",
-      name: "Infosys Limited",
-      email: "contact@infosys.com",
+      name: "Ramesh Kumar",
+      email: "ramesh.kumar@infosys.com",
       contact: "+91-9988776655",
       organization: "Infosys Limited",
       designation: "HR Manager",
@@ -38,8 +38,8 @@ const UserManagement = () => {
     },
     {
       key: "2",
-      name: "Wipro Technologies",
-      email: "hr@wipro.com",
+      name: "Anita Desai",
+      email: "anita.desai@wipro.com",
       contact: "+91-9988776656",
       organization: "Wipro Technologies",
       designation: "Talent Acquisition Lead",
@@ -49,8 +49,8 @@ const UserManagement = () => {
     },
     {
       key: "3",
-      name: "TCS Ltd",
-      email: "recruitment@tcs.com",
+      name: "Suresh Patel",
+      email: "suresh.patel@tcs.com",
       contact: "+91-9988776657",
       organization: "TCS Ltd",
       designation: "Recruitment Head",
@@ -60,8 +60,8 @@ const UserManagement = () => {
     },
     {
       key: "4",
-      name: "TechCorp Solutions",
-      email: "admin@techcorp.com",
+      name: "Vikram Singh",
+      email: "vikram.singh@techcorp.com",
       contact: "+91-9988776658",
       organization: "TechCorp Solutions",
       designation: "CEO",
@@ -71,8 +71,8 @@ const UserManagement = () => {
     },
     {
       key: "5",
-      name: "Digital Partners Inc",
-      email: "contact@digitalpartners.com",
+      name: "Priya Sharma",
+      email: "priya.sharma@digitalpartners.com",
       contact: "+91-9988776659",
       organization: "Digital Partners Inc",
       designation: "Managing Director",
@@ -82,8 +82,8 @@ const UserManagement = () => {
     },
     {
       key: "6",
-      name: "Innovate Tech",
-      email: "info@innovatetech.com",
+      name: "Amit Gupta",
+      email: "amit.gupta@innovatetech.com",
       contact: "+91-9988776660",
       organization: "Innovate Tech",
       designation: "Director",
