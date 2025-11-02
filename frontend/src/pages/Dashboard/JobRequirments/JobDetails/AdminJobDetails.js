@@ -12,6 +12,9 @@ import {
   EditOutlined,
   EnvironmentOutlined,
   TeamOutlined,
+  VideoCameraOutlined,
+  CheckCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import { JobDetailsWrapper } from "./AdminJobDetails.style";
 
@@ -38,25 +41,35 @@ const mockAdminJobDetails = {
         id: 1,
         name: "Akshay Joshi",
         role: "React Developer",
-        skills: "React, Redux, TypeScript",
+        skills: [
+          { skill: "React.js", level: "Expert" },
+          { skill: "Redux", level: "Advanced" },
+          { skill: "TypeScript", level: "Advanced" },
+        ],
         experience: "5.2 Years",
-        monthlyRate: "₹1,75,000",
+        monthlyRate: "₹ 1,75,000",
         partnerOrg: "TechCorp Solutions",
         submittedOn: "18-Oct-24",
         noticePeriod: "30 Days",
-        status: "Under Review",
+        status: "submitted",
+        resumeUrl: "#",
       },
       {
         id: 2,
         name: "Priya Sharma",
         role: "Senior React Developer",
-        skills: "React, TypeScript, Next.js",
+        skills: [
+          { skill: "React.js", level: "Expert" },
+          { skill: "TypeScript", level: "Expert" },
+          { skill: "Next.js", level: "Advanced" },
+        ],
         experience: "6.0 Years",
-        monthlyRate: "₹1,90,000",
+        monthlyRate: "₹ 1,90,000",
         partnerOrg: "Digital Partners Inc",
         submittedOn: "19-Oct-24",
         noticePeriod: "15 Days",
-        status: "Shortlisted",
+        status: "interviewing",
+        resumeUrl: "#",
       },
     ],
   },
@@ -78,13 +91,18 @@ const mockAdminJobDetails = {
         id: 3,
         name: "Rajesh Kumar",
         role: "Full Stack Developer",
-        skills: "Node.js, React, PostgreSQL",
+        skills: [
+          { skill: "Node.js", level: "Expert" },
+          { skill: "React", level: "Advanced" },
+          { skill: "PostgreSQL", level: "Advanced" },
+        ],
         experience: "4.5 Years",
-        monthlyRate: "₹1,60,000",
+        monthlyRate: "₹ 1,60,000",
         partnerOrg: "Innovate Tech",
         submittedOn: "20-Oct-24",
         noticePeriod: "45 Days",
-        status: "Under Review",
+        status: "submitted",
+        resumeUrl: "#",
       },
     ],
   },
@@ -106,25 +124,35 @@ const mockAdminJobDetails = {
         id: 4,
         name: "Vineet Malhotra",
         role: "Backend Developer",
-        skills: "Java, Spring Boot, MySQL",
+        skills: [
+          { skill: "Java", level: "Expert" },
+          { skill: "Spring Boot", level: "Expert" },
+          { skill: "MySQL", level: "Advanced" },
+        ],
         experience: "6.5 Years",
-        monthlyRate: "₹2,10,000",
+        monthlyRate: "₹ 2,10,000",
         partnerOrg: "TechCorp Solutions",
         submittedOn: "21-Oct-24",
         noticePeriod: "60 Days",
-        status: "Shortlisted",
+        status: "interviewing",
+        resumeUrl: "#",
       },
       {
         id: 5,
         name: "Amit Patel",
         role: "Senior Backend Developer",
-        skills: "Java, Microservices, AWS",
+        skills: [
+          { skill: "Java", level: "Expert" },
+          { skill: "Microservices", level: "Expert" },
+          { skill: "AWS", level: "Advanced" },
+        ],
         experience: "7.0 Years",
-        monthlyRate: "₹2,20,000",
+        monthlyRate: "₹ 2,20,000",
         partnerOrg: "Digital Partners Inc",
         submittedOn: "22-Oct-24",
         noticePeriod: "30 Days",
-        status: "Under Review",
+        status: "submitted",
+        resumeUrl: "#",
       },
     ],
   },
@@ -178,16 +206,53 @@ const AdminJobDetails = () => {
     setIsEditModalVisible(false);
   };
 
+  const handleAction = (profileId, action) => {
+    console.log(`Action: ${action} for profile ID: ${profileId}`);
+    setProfiles(
+      profiles.map((profile) =>
+        profile.id === profileId ? { ...profile, status: action } : profile
+      )
+    );
+  };
+
+  const getActionMenu = (record) => (
+    <Menu>
+      <Menu.Item
+        key="interview"
+        icon={<VideoCameraOutlined />}
+        onClick={() => handleAction(record.id, "interviewing")}
+      >
+        Schedule Interview
+      </Menu.Item>
+      <Menu.Item
+        key="hire"
+        icon={<CheckCircleOutlined />}
+        onClick={() => handleAction(record.id, "hired")}
+      >
+        Hire
+      </Menu.Item>
+      <Menu.Item
+        key="reject"
+        icon={<CloseCircleOutlined />}
+        danger
+        onClick={() => handleAction(record.id, "rejected")}
+      >
+        Reject
+      </Menu.Item>
+    </Menu>
+  );
+
   const columns = [
     {
       title: "Resume",
+      dataIndex: "resumeUrl",
       key: "resume",
       width: 80,
-      render: () => (
+      render: (url) => (
         <Tooltip title="View Resume">
           <FilePdfOutlined
             style={{ fontSize: 24, color: "#ff4d4f", cursor: "pointer" }}
-            onClick={() => console.log("Open resume")}
+            onClick={() => window.open(url, "_blank")}
           />
         </Tooltip>
       ),
@@ -197,7 +262,7 @@ const AdminJobDetails = () => {
       dataIndex: "name",
       key: "name",
       width: 150,
-      render: (name) => <span style={{ fontWeight: 500 }}>{name}</span>,
+      render: (name) => <span style={{ fontWeight: 500, color: "#1890ff" }}>{name}</span>,
     },
     {
       title: "Role",
@@ -209,12 +274,12 @@ const AdminJobDetails = () => {
       title: "Top Skills",
       dataIndex: "skills",
       key: "skills",
-      width: 250,
+      width: 300,
       render: (skills) => (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
-          {skills.split(", ").map((skill, index) => (
-            <Tag key={index} color="cyan">
-              {skill}
+          {skills.map((skill, index) => (
+            <Tag key={index} color="cyan" style={{ margin: "2px 0" }}>
+              {skill.skill} - {skill.level}
             </Tag>
           ))}
         </div>
@@ -234,35 +299,36 @@ const AdminJobDetails = () => {
       width: 100,
     },
     {
-      title: "Partner Organization",
-      dataIndex: "partnerOrg",
-      key: "partnerOrg",
-      width: 180,
-    },
-    {
-      title: "Submitted On",
-      dataIndex: "submittedOn",
-      key: "submittedOn",
+      title: "Notice Period",
+      dataIndex: "noticePeriod",
+      key: "noticePeriod",
       width: 120,
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: 120,
-      render: (status) => {
-        const color = status === "Shortlisted" ? "green" : "blue";
-        return <Tag color={color}>{status}</Tag>;
-      },
     },
     {
       title: "Action",
       key: "action",
-      width: 100,
-      render: () => (
-        <Tooltip title="Download Resume">
-          <Button icon={<DownloadOutlined />} size="small" />
-        </Tooltip>
+      width: 150,
+      render: (_, record) => (
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <Tooltip title="Schedule Interview">
+            <Button
+              type="primary"
+              icon={<VideoCameraOutlined />}
+              size="small"
+              onClick={() => handleAction(record.id, "interviewing")}
+            />
+          </Tooltip>
+          <Tooltip title="Download Resume">
+            <Button
+              icon={<DownloadOutlined />}
+              size="small"
+              onClick={() => window.open(record.resumeUrl, "_blank")}
+            />
+          </Tooltip>
+          <Dropdown overlay={getActionMenu(record)} trigger={["click"]}>
+            <Button icon={<MoreOutlined />} size="small" />
+          </Dropdown>
+        </div>
       ),
     },
   ];
