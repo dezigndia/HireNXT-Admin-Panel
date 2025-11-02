@@ -11,6 +11,8 @@ import {
   Dropdown,
   Menu,
   Card,
+  Tag,
+  Tooltip,
 } from "antd";
 import {
   MoreOutlined,
@@ -20,6 +22,9 @@ import {
   WechatOutlined,
   PlusOutlined,
   CheckCircleOutlined,
+  FilePdfOutlined,
+  DownloadOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import { UserManagementWrapper, MetricsContainer, TabsContainer } from "./../UserManagement/UserManagement.style";
 // import MaskGroup from "../Mask-Group.svg";
@@ -64,6 +69,7 @@ const JobRequirments = () => {
       created_on: "15-Oct-24",
       type: "Active Jobs",
       name: "Senior React Developer",
+      profiles_submitted: 5,
     },
     {
       key: "2",
@@ -79,6 +85,7 @@ const JobRequirments = () => {
       created_on: "18-Oct-24",
       type: "Active Jobs",
       name: "Full Stack Developer",
+      profiles_submitted: 3,
     },
     {
       key: "3",
@@ -94,6 +101,7 @@ const JobRequirments = () => {
       created_on: "20-Oct-24",
       type: "Profiles Submitted",
       name: "Backend Developer",
+      profiles_submitted: 8,
     },
     {
       key: "4",
@@ -109,6 +117,7 @@ const JobRequirments = () => {
       created_on: "22-Oct-24",
       type: "Profiles Submitted",
       name: "DevOps Engineer",
+      profiles_submitted: 6,
     },
     {
       key: "5",
@@ -124,6 +133,7 @@ const JobRequirments = () => {
       created_on: "25-Oct-24",
       type: "Jobs Fulfilled",
       name: "UI/UX Designer",
+      hired_count: 1,
     },
     {
       key: "6",
@@ -139,6 +149,7 @@ const JobRequirments = () => {
       created_on: "28-Oct-24",
       type: "Jobs Fulfilled",
       name: "QA Engineer",
+      hired_count: 2,
     },
   ];
 
@@ -150,7 +161,8 @@ const JobRequirments = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
 
-  const columns = [
+  // Active Jobs columns
+  const activeJobsColumns = [
     { 
       title: "Job Id", 
       dataIndex: "id", 
@@ -168,7 +180,7 @@ const JobRequirments = () => {
     { title: "Location", dataIndex: "location", key: "location" },
     { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
     { title: "Positions", dataIndex: "requirement_count", key: "requirement_count" },
-    { title: "Experience", dataIndex: "createdOn", key: "createdOn" },
+    { title: "Experience", dataIndex: "experience", key: "experience" },
     { title: "Duration", dataIndex: "engagement_months", key: "engagement_months" },
     { title: "Start Date", dataIndex: "start_date", key: "start_date" },
     { title: "Salary(INR)", dataIndex: "budget", key: "budget" },
@@ -183,7 +195,6 @@ const JobRequirments = () => {
               <Menu.Item key="1">Edit</Menu.Item>
               <Menu.Item key="2">Delete</Menu.Item>
               <Menu.Item key="3">View Details</Menu.Item>
-              <Menu.Item key="4">Reset Password</Menu.Item>
             </Menu>
           }
           trigger={["click"]}
@@ -193,6 +204,112 @@ const JobRequirments = () => {
       ),
     },
   ];
+
+  // Profiles Submitted columns
+  const profilesSubmittedColumns = [
+    { 
+      title: "Job Id", 
+      dataIndex: "id", 
+      key: "id",
+      render: (id) => (
+        <a
+          onClick={() => navigate(`/admin/home/job-requirments/job-details/${id}`)}
+          style={{ color: "#1890ff", cursor: "pointer", fontWeight: 500 }}
+        >
+          {id}
+        </a>
+      ),
+    },
+    { title: "Job Title", dataIndex: "role", key: "role" },
+    { title: "Location", dataIndex: "location", key: "location" },
+    { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
+    { title: "Positions", dataIndex: "requirement_count", key: "requirement_count" },
+    { 
+      title: "Profiles Submitted", 
+      dataIndex: "profiles_submitted", 
+      key: "profiles_submitted",
+      render: (count) => (
+        <Tag color="blue" icon={<TeamOutlined />}>
+          {count} Profiles
+        </Tag>
+      ),
+    },
+    { title: "Budget", dataIndex: "budget", key: "budget" },
+    { title: "Created On", dataIndex: "created_on", key: "created_on" },
+    {
+      title: "Action",
+      key: "action",
+      render: () => (
+        <Tooltip title="View Submitted Profiles">
+          <Button 
+            type="primary" 
+            size="small"
+            style={{ backgroundColor: "#00d9a9", borderColor: "#00d9a9" }}
+          >
+            View Profiles
+          </Button>
+        </Tooltip>
+      ),
+    },
+  ];
+
+  // Jobs Fulfilled columns
+  const jobsFulfilledColumns = [
+    { 
+      title: "Job Id", 
+      dataIndex: "id", 
+      key: "id",
+      render: (id) => (
+        <a
+          onClick={() => navigate(`/admin/home/job-requirments/job-details/${id}`)}
+          style={{ color: "#1890ff", cursor: "pointer", fontWeight: 500 }}
+        >
+          {id}
+        </a>
+      ),
+    },
+    { title: "Job Title", dataIndex: "role", key: "role" },
+    { title: "Location", dataIndex: "location", key: "location" },
+    { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
+    { title: "Positions", dataIndex: "requirement_count", key: "requirement_count" },
+    { 
+      title: "Talents Hired", 
+      dataIndex: "hired_count", 
+      key: "hired_count",
+      render: (count) => (
+        <Tag color="green" icon={<CheckCircleOutlined />}>
+          {count} Hired
+        </Tag>
+      ),
+    },
+    { title: "Budget", dataIndex: "budget", key: "budget" },
+    { title: "Start Date", dataIndex: "start_date", key: "start_date" },
+    {
+      title: "Action",
+      key: "action",
+      render: () => (
+        <Tooltip title="View Hired Talents">
+          <Button 
+            type="primary" 
+            size="small"
+            style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
+          >
+            View Hired
+          </Button>
+        </Tooltip>
+      ),
+    },
+  ];
+
+  // Get columns based on active tab
+  const getColumns = () => {
+    if (activeTab === "Profiles Submitted") {
+      return profilesSubmittedColumns;
+    } else if (activeTab === "Jobs Fulfilled") {
+      return jobsFulfilledColumns;
+    }
+    return activeJobsColumns;
+  };
 
 
   useEffect(() => {
@@ -342,31 +459,15 @@ const JobRequirments = () => {
             </Button>
           </Link>
         </Flex>
-        {selectedRole !== "Admin" ? (
-          <>
-            <Table
-              rowSelection={{
-                type: "checkbox",
-                ...rowSelection,
-              }}
-              columns={columns}
-              dataSource={filteredData}
-              pagination={{ pageSize: 5 }}
-            />
-          </>
-        ) : (
-          <>
-            <Table
-              rowSelection={{
-                type: "checkbox",
-                ...rowSelection,
-              }}
-              columns={columns}
-              dataSource={filteredData}
-              pagination={{ pageSize: 5 }}
-            />
-          </>
-        )}
+        <Table
+          rowSelection={{
+            type: "checkbox",
+            ...rowSelection,
+          }}
+          columns={getColumns()}
+          dataSource={filteredData}
+          pagination={{ pageSize: 5 }}
+        />
     </UserManagementWrapper>
   );
 };
