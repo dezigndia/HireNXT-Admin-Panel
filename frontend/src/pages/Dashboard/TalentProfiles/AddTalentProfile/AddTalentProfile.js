@@ -25,6 +25,7 @@ const AddTalentProfile = () => {
     availability: "",
     summary: "",
     projects: [],
+    resume: null,
     aadhar: null,
     pan: null,
     degree: null,
