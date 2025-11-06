@@ -25,6 +25,7 @@ import Overview from "./Overview/Overview";
 import RolePermission from "./RolePermission/RolePermission";
 import UserManagement from "./UserManagement/UserManagement";
 import TalentProfiles from "./TalentProfiles/TalentProfiles";
+import AddTalentProfile from "./TalentProfiles/AddTalentProfile/AddTalentProfile";
 import JobRequirments from "./JobRequirments/JobRequirments";
 import PostNewJob from "./JobRequirments/PostNewJob";
 import AdminJobDetails from "./JobRequirments/JobDetails";
@@ -194,6 +195,10 @@ const Dashboard = () => {
               <Route path="/role-permission" element={<RolePermission />} />
               <Route path="/user-management" element={<UserManagement />} />
               <Route path="/talent-profiles" element={<TalentProfiles />} />
+              <Route
+                path="/talent-profiles/add-new-profile"
+                element={<AddTalentProfile />}
+              />
               <Route path="/job-requirments" element={<JobRequirments />} />
               <Route
                 path="/job-requirments/new-job-post"
