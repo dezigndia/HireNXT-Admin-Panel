@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Steps } from "antd";
 import { AddTalentProfileWrapper } from "./AddTalentProfile.style";
 import BasicInformation from "./BasicInformation";
-import DocumentUploads from "./DocumentUploads";
+import AdditionalInformation from "./AdditionalInformation";
 
 const { Step } = Steps;
 
@@ -14,13 +14,17 @@ const AddTalentProfile = () => {
     partnerOrganization: "",
     name: "",
     role: "",
-    skills: "",
+    skills: [],
     experienceYears: "",
     experienceMonths: "",
     rate: "",
     notice: "",
+    email: "",
+    phone: "",
     location: "",
-    resume: null,
+    availability: "",
+    summary: "",
+    projects: [],
     aadhar: null,
     pan: null,
     degree: null,
@@ -32,8 +36,8 @@ const AddTalentProfile = () => {
       component: BasicInformation,
     },
     {
-      title: "Document Uploads",
-      component: DocumentUploads,
+      title: "Additional Information",
+      component: AdditionalInformation,
     },
   ];
 
