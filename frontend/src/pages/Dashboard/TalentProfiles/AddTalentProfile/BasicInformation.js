@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Form, Input, Button, Row, Col, Select } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { FormStepWrapper } from "./AddTalentProfile.style";
