@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Row, Col, Select } from "antd";
+import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { FormStepWrapper } from "./AddTalentProfile.style";
 
 const { Option } = Select;
@@ -108,20 +109,6 @@ const BasicInformation = ({ initialData, onNext, isFirstStep }) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item 
-              label="Top Skills" 
-              name="skills"
-              rules={[
-                { required: true, message: "Please enter skills!" },
-              ]}
-            >
-              <Input placeholder="e.g., React, Node.js, TypeScript" />
-            </Form.Item>
-          </Col>
-        </Row>
-
-        <Row gutter={16}>
-          <Col span={12}>
             <Form.Item label="Experience">
               <Row gutter={8}>
                 <Col span={12}>
@@ -149,20 +136,72 @@ const BasicInformation = ({ initialData, onNext, isFirstStep }) => {
               </Row>
             </Form.Item>
           </Col>
+        </Row>
+
+        <Form.Item label="Technical Skills">
+          <Form.List name="skills">
+            {(fields, { add, remove }) => (
+              <>
+                {fields.map(({ key, name, ...restField }) => (
+                  <Row key={key} gutter={16} style={{ marginBottom: 8 }}>
+                    <Col span={11}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'skill']}
+                        rules={[{ required: true, message: 'Please enter skill name' }]}
+                      >
+                        <Input placeholder="Skill Name (e.g., React, Python)" />
+                      </Form.Item>
+                    </Col>
+                    <Col span={11}>
+                      <Form.Item
+                        {...restField}
+                        name={[name, 'level']}
+                        rules={[{ required: true, message: 'Please select proficiency' }]}
+                      >
+                        <Select placeholder="Proficiency Level">
+                          <Option value="Expert">Expert</Option>
+                          <Option value="Advanced">Advanced</Option>
+                          <Option value="Intermediate">Intermediate</Option>
+                          <Option value="Beginner">Beginner</Option>
+                        </Select>
+                      </Form.Item>
+                    </Col>
+                    <Col span={2}>
+                      <MinusCircleOutlined
+                        onClick={() => remove(name)}
+                        style={{ color: '#ff4d4f', fontSize: '18px', marginTop: '8px' }}
+                      />
+                    </Col>
+                  </Row>
+                ))}
+                <Form.Item>
+                  <Button
+                    type="dashed"
+                    onClick={() => add()}
+                    block
+                    icon={<PlusOutlined />}
+                  >
+                    Add Skill
+                  </Button>
+                </Form.Item>
+              </>
+            )}
+          </Form.List>
+        </Form.Item>
+
+        <Row gutter={16}>
           <Col span={12}>
             <Form.Item 
-              label="Monthly Rate (₹)" 
+              label="Monthly Rate" 
               name="rate"
               rules={[
                 { required: true, message: "Please enter monthly rate!" },
               ]}
             >
-              <Input placeholder="e.g., 150000" type="number" />
+              <Input placeholder="Enter Monthly Rate" prefix="₹" />
             </Form.Item>
           </Col>
-        </Row>
-
-        <Row gutter={16}>
           <Col span={12}>
             <Form.Item 
               label="Notice Period" 
@@ -174,15 +213,66 @@ const BasicInformation = ({ initialData, onNext, isFirstStep }) => {
               <Input placeholder="e.g., 30 days" />
             </Form.Item>
           </Col>
+        </Row>
+
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item 
+              label="Email" 
+              name="email"
+              rules={[
+                { required: true, message: "Please enter email!" },
+                { type: "email", message: "Please enter valid email!" },
+              ]}
+            >
+              <Input placeholder="Enter email address" type="email" />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item 
+              label="Phone" 
+              name="phone"
+              rules={[
+                { required: true, message: "Please enter phone number!" },
+              ]}
+            >
+              <Input placeholder="Enter phone number" />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={16}>
           <Col span={12}>
             <Form.Item 
               label="Location" 
               name="location"
               rules={[
-                { required: true, message: "Please enter location!" },
+                { required: true, message: "Please select location!" },
               ]}
             >
-              <Input placeholder="e.g., Bangalore, Karnataka" />
+              <Select placeholder="Select Location">
+                <Option value="Bangalore">Bangalore</Option>
+                <Option value="Mumbai">Mumbai</Option>
+                <Option value="Pune">Pune</Option>
+                <Option value="Hyderabad">Hyderabad</Option>
+                <Option value="Delhi">Delhi</Option>
+                <Option value="Chennai">Chennai</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item 
+              label="Availability" 
+              name="availability"
+              rules={[
+                { required: true, message: "Please select availability!" },
+              ]}
+            >
+              <Select placeholder="Select Availability">
+                <Option value="Immediately Available">Immediately Available</Option>
+                <Option value="Available in 2 weeks">Available in 2 weeks</Option>
+                <Option value="Available in 1 month">Available in 1 month</Option>
+              </Select>
             </Form.Item>
           </Col>
         </Row>
