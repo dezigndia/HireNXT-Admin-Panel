@@ -5,6 +5,7 @@ import { FormStepWrapper } from "./AddTalentProfile.style";
 
 const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) => {
   const [form] = Form.useForm();
+  const [resume, setResume] = useState(initialData.resume || null);
   const [aadhar, setAadhar] = useState(initialData.aadhar || null);
   const [pan, setPan] = useState(initialData.pan || null);
   const [degree, setDegree] = useState(initialData.degree || null);
@@ -15,6 +16,7 @@ const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) =>
       .then((values) => {
         const finalData = {
           ...values,
+          resume,
           aadhar,
           pan,
           degree,
@@ -30,6 +32,7 @@ const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) =>
     const formValues = form.getFieldsValue();
     const documentData = {
       ...formValues,
+      resume,
       aadhar,
       pan,
       degree,
@@ -46,6 +49,30 @@ const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) =>
         layout="vertical"
         initialValues={initialData}
       >
+        <div className="upload-section" style={{ marginBottom: 24 }}>
+          <label className="upload-label">Upload Resume *</label>
+          <Upload
+            beforeUpload={(file) => {
+              setResume(file);
+              return false;
+            }}
+            showUploadList={false}
+            accept=".pdf,.doc,.docx"
+          >
+            <Button icon={<UploadOutlined />}>
+              {resume ? "Change Resume" : "Click to Upload Resume"}
+            </Button>
+          </Upload>
+          {resume && (
+            <div className="file-info">
+              <span className="file-name">{resume.name}</span>
+              <span className="remove-btn" onClick={() => setResume(null)}>
+                Remove
+              </span>
+            </div>
+          )}
+        </div>
+
         <Form.Item label="Professional Summary (Optional)" name="summary">
           <Input.TextArea 
             rows={4} 
@@ -228,7 +255,7 @@ const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) =>
 
         <div style={{ marginTop: 16, padding: 16, background: "#f8f9fd", borderRadius: 4 }}>
           <p style={{ margin: 0, color: "#666", fontSize: 14 }}>
-            <strong>Note:</strong> Professional Summary, Project Experience, and Document uploads are optional but recommended for better profile completeness.
+            <strong>Note:</strong> Resume upload is mandatory. Professional Summary, Project Experience, and other document uploads (Aadhar, PAN, Degree) are optional but recommended for better profile completeness.
           </p>
         </div>
 
@@ -239,6 +266,7 @@ const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) =>
           <Button 
             type="primary" 
             onClick={handleSubmit}
+            disabled={!resume}
           >
             Submit
           </Button>
