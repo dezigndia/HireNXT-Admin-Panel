@@ -77,14 +77,14 @@ const sideBarMenu = [
     icon: <FileTextOutlined />,
   },
   {
-    key: "/home/approval-process",
-    label: "Approval Process",
-    icon: <FieldTimeOutlined />,
-  },
-  {
     key: "/home/finance",
     label: "Finance",
     icon: <DollarOutlined />,
+  },
+  {
+    key: "/home/approval-process",
+    label: "Approval Process",
+    icon: <FieldTimeOutlined />,
   },
 ];
 
