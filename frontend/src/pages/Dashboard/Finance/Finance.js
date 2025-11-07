@@ -10,6 +10,8 @@ import {
   message,
   Empty,
   Descriptions,
+  Form,
+  InputNumber,
 } from "antd";
 import {
   SearchOutlined,
@@ -22,6 +24,8 @@ import {
   CloseOutlined,
   EditOutlined,
   SendOutlined,
+  SyncOutlined,
+  LineChartOutlined,
 } from "@ant-design/icons";
 import {
   FinanceContainer,
@@ -51,10 +55,12 @@ const Finance = () => {
   const [receivables, setReceivables] = useState([
     {
       id: 1,
+      talentId: "T001",
       talentName: "Rahul Kumar",
       role: "Full Stack Developer",
       partner: "TechCorp Solutions",
       customer: "Amazon Inc",
+      jobId: "JOB-2024-101",
       month: "December",
       year: "2024",
       workingDays: 22,
@@ -68,10 +74,12 @@ const Finance = () => {
     },
     {
       id: 2,
+      talentId: "T002",
       talentName: "Priya Sharma",
       role: "React Native Developer",
       partner: "Digital Partners Inc",
       customer: "Google LLC",
+      jobId: "JOB-2024-102",
       month: "December",
       year: "2024",
       workingDays: 20,
@@ -85,10 +93,12 @@ const Finance = () => {
     },
     {
       id: 3,
+      talentId: "T003",
       talentName: "Amit Patel",
       role: "Backend Developer",
       partner: "Innovate Tech",
       customer: "Microsoft Corporation",
+      jobId: "JOB-2024-103",
       month: "November",
       year: "2024",
       workingDays: 22,
@@ -97,15 +107,17 @@ const Finance = () => {
       gst: 25200,
       totalAmount: 165200,
       timesheetStatus: "Approved",
-      invoiceStatus: "Overdue",
+      invoiceStatus: "Paid",
       dueDate: "2024-12-05",
     },
     {
       id: 4,
+      talentId: "T004",
       talentName: "Sneha Reddy",
       role: "UI/UX Designer",
       partner: "CodeCraft Ltd",
       customer: "Adobe Systems",
+      jobId: "JOB-2024-104",
       month: "December",
       year: "2024",
       workingDays: 21,
@@ -172,9 +184,10 @@ const Finance = () => {
       amount: 112000,
       gst: 20160,
       totalAmount: 132160,
-      status: "Approved",
+      status: "Paid",
       submittedOn: "2024-11-28",
       approvedOn: "2024-12-02",
+      paidOn: "2024-12-05",
     },
     {
       id: 4,
@@ -196,59 +209,140 @@ const Finance = () => {
     },
   ]);
 
-  // Mock data for Invoice History
-  const [invoiceHistory, setInvoiceHistory] = useState([
+  // Mock data for Invoice Reconciliation
+  const [reconciliation, setReconciliation] = useState([
     {
       id: 1,
-      invoiceNumber: "INV-CLI-2024-001",
-      type: "Client Invoice",
+      talentId: "T001",
       talentName: "Rahul Kumar",
-      party: "Amazon Inc",
-      month: "November",
+      partner: "TechCorp Solutions",
+      recordId: "PAY-2024-001",
+      partnerInvoiceId: "INV-TCP-1234",
+      jobId: "JOB-2024-101",
+      customer: "Amazon Inc",
+      customerInvoiceId: "CLI-2024-101",
+      receivableStatus: "Pending",
+      payableStatus: "Submitted",
+      month: "December",
       year: "2024",
-      amount: 150000,
-      gst: 27000,
-      totalAmount: 177000,
-      issuedDate: "2024-12-01",
-      dueDate: "2024-12-15",
-      paidDate: "2024-12-12",
-      status: "Paid",
     },
     {
       id: 2,
-      invoiceNumber: "INV-CLI-2024-002",
-      type: "Client Invoice",
+      talentId: "T002",
       talentName: "Priya Sharma",
-      party: "Google LLC",
-      month: "November",
+      partner: "Digital Partners Inc",
+      recordId: "PAY-2024-002",
+      partnerInvoiceId: "INV-DPI-5678",
+      jobId: "JOB-2024-102",
+      customer: "Google LLC",
+      customerInvoiceId: "CLI-2024-102",
+      receivableStatus: "Sent",
+      payableStatus: "Submitted",
+      month: "December",
       year: "2024",
-      amount: 165000,
-      gst: 29700,
-      totalAmount: 194700,
-      issuedDate: "2024-12-01",
-      dueDate: "2024-12-15",
-      paidDate: "2024-12-14",
-      status: "Paid",
     },
     {
       id: 3,
-      invoiceNumber: "INV-PAR-2024-001",
-      type: "Partner Invoice",
+      talentId: "T003",
       talentName: "Amit Patel",
-      party: "Innovate Tech",
+      partner: "Innovate Tech",
+      recordId: "PAY-2024-003",
+      partnerInvoiceId: "INV-INN-9012",
+      jobId: "JOB-2024-103",
+      customer: "Microsoft Corporation",
+      customerInvoiceId: "CLI-2024-103",
+      receivableStatus: "Paid",
+      payableStatus: "Paid",
       month: "November",
       year: "2024",
-      amount: 112000,
-      gst: 20160,
-      totalAmount: 132160,
-      issuedDate: "2024-12-02",
-      dueDate: "2024-12-16",
-      paidDate: "2024-12-15",
-      status: "Paid",
+    },
+    {
+      id: 4,
+      talentId: "T004",
+      talentName: "Sneha Reddy",
+      partner: "CodeCraft Ltd",
+      recordId: "PAY-2024-004",
+      partnerInvoiceId: "INV-COD-3456",
+      jobId: "JOB-2024-104",
+      customer: "Adobe Systems",
+      customerInvoiceId: "CLI-2024-104",
+      receivableStatus: "Pending",
+      payableStatus: "Submitted",
+      month: "December",
+      year: "2024",
     },
   ]);
 
-  // Get filtered data based on search and filters
+  // Mock data for Revenue Analysis
+  // Revenue calculation: Receivable is 10% above talent cost, Payable is 5% deduction from talent cost
+  const [revenueAnalysis, setRevenueAnalysis] = useState([
+    {
+      id: 1,
+      talentId: "T001",
+      talentName: "Rahul Kumar",
+      partner: "TechCorp Solutions",
+      jobId: "JOB-2024-101",
+      customer: "Amazon Inc",
+      talentCost: 150000,
+      amountReceivable: 165000, // 10% above talent cost
+      gstIn: 29700, // 18% GST
+      amountPayable: 142500, // 5% deduction from talent cost
+      gstOut: 25650, // 18% GST
+      revenue: 22500, // Difference between receivable and payable
+      month: "December",
+      year: "2024",
+    },
+    {
+      id: 2,
+      talentId: "T002",
+      talentName: "Priya Sharma",
+      partner: "Digital Partners Inc",
+      jobId: "JOB-2024-102",
+      customer: "Google LLC",
+      talentCost: 165000,
+      amountReceivable: 181500, // 10% above
+      gstIn: 32670,
+      amountPayable: 156750, // 5% deduction
+      gstOut: 28215,
+      revenue: 24750,
+      month: "December",
+      year: "2024",
+    },
+    {
+      id: 3,
+      talentId: "T003",
+      talentName: "Amit Patel",
+      partner: "Innovate Tech",
+      jobId: "JOB-2024-103",
+      customer: "Microsoft Corporation",
+      talentCost: 140000,
+      amountReceivable: 154000,
+      gstIn: 27720,
+      amountPayable: 133000,
+      gstOut: 23940,
+      revenue: 21000,
+      month: "November",
+      year: "2024",
+    },
+    {
+      id: 4,
+      talentId: "T004",
+      talentName: "Sneha Reddy",
+      partner: "CodeCraft Ltd",
+      jobId: "JOB-2024-104",
+      customer: "Adobe Systems",
+      talentCost: 120000,
+      amountReceivable: 132000,
+      gstIn: 23760,
+      amountPayable: 114000,
+      gstOut: 20520,
+      revenue: 18000,
+      month: "December",
+      year: "2024",
+    },
+  ]);
+
+  // Get filtered data functions
   const getFilteredReceivables = () => {
     let filtered = [...receivables];
 
@@ -257,25 +351,15 @@ const Finance = () => {
         (r) =>
           r.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
           r.customer.toLowerCase().includes(searchText.toLowerCase()) ||
-          r.partner.toLowerCase().includes(searchText.toLowerCase())
+          r.partner.toLowerCase().includes(searchText.toLowerCase()) ||
+          r.talentId.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
-    if (filterPartner) {
-      filtered = filtered.filter((r) => r.partner === filterPartner);
-    }
-
-    if (filterCustomer) {
-      filtered = filtered.filter((r) => r.customer === filterCustomer);
-    }
-
-    if (filterMonth) {
-      filtered = filtered.filter((r) => r.month === filterMonth);
-    }
-
-    if (filterStatus) {
-      filtered = filtered.filter((r) => r.invoiceStatus === filterStatus);
-    }
+    if (filterPartner) filtered = filtered.filter((r) => r.partner === filterPartner);
+    if (filterCustomer) filtered = filtered.filter((r) => r.customer === filterCustomer);
+    if (filterMonth) filtered = filtered.filter((r) => r.month === filterMonth);
+    if (filterStatus) filtered = filtered.filter((r) => r.invoiceStatus === filterStatus);
 
     return filtered;
   };
@@ -288,49 +372,64 @@ const Finance = () => {
         (p) =>
           p.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
           p.partner.toLowerCase().includes(searchText.toLowerCase()) ||
-          p.invoiceId.toLowerCase().includes(searchText.toLowerCase())
+          p.invoiceId.toLowerCase().includes(searchText.toLowerCase()) ||
+          p.talentId.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
-    if (filterPartner) {
-      filtered = filtered.filter((p) => p.partner === filterPartner);
-    }
-
-    if (filterMonth) {
-      filtered = filtered.filter((p) => p.month === filterMonth);
-    }
-
-    if (filterStatus) {
-      filtered = filtered.filter((p) => p.status === filterStatus);
-    }
+    if (filterPartner) filtered = filtered.filter((p) => p.partner === filterPartner);
+    if (filterMonth) filtered = filtered.filter((p) => p.month === filterMonth);
+    if (filterStatus) filtered = filtered.filter((p) => p.status === filterStatus);
 
     return filtered;
   };
 
-  const getFilteredInvoiceHistory = () => {
-    let filtered = [...invoiceHistory];
+  const getFilteredReconciliation = () => {
+    let filtered = [...reconciliation];
 
     if (searchText) {
       filtered = filtered.filter(
-        (i) =>
-          i.invoiceNumber.toLowerCase().includes(searchText.toLowerCase()) ||
-          i.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
-          i.party.toLowerCase().includes(searchText.toLowerCase())
+        (r) =>
+          r.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
+          r.partner.toLowerCase().includes(searchText.toLowerCase()) ||
+          r.customer.toLowerCase().includes(searchText.toLowerCase()) ||
+          r.talentId.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
-    if (filterMonth) {
-      filtered = filtered.filter((i) => i.month === filterMonth);
-    }
-
+    if (filterPartner) filtered = filtered.filter((r) => r.partner === filterPartner);
+    if (filterCustomer) filtered = filtered.filter((r) => r.customer === filterCustomer);
+    if (filterMonth) filtered = filtered.filter((r) => r.month === filterMonth);
     if (filterStatus) {
-      filtered = filtered.filter((i) => i.status === filterStatus);
+      filtered = filtered.filter(
+        (r) => r.receivableStatus === filterStatus || r.payableStatus === filterStatus
+      );
     }
 
     return filtered;
   };
 
-  // Calculate metrics for Client Billing
+  const getFilteredRevenueAnalysis = () => {
+    let filtered = [...revenueAnalysis];
+
+    if (searchText) {
+      filtered = filtered.filter(
+        (r) =>
+          r.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
+          r.partner.toLowerCase().includes(searchText.toLowerCase()) ||
+          r.customer.toLowerCase().includes(searchText.toLowerCase()) ||
+          r.talentId.toLowerCase().includes(searchText.toLowerCase())
+      );
+    }
+
+    if (filterPartner) filtered = filtered.filter((r) => r.partner === filterPartner);
+    if (filterCustomer) filtered = filtered.filter((r) => r.customer === filterCustomer);
+    if (filterMonth) filtered = filtered.filter((r) => r.month === filterMonth);
+
+    return filtered;
+  };
+
+  // Calculate metrics
   const getReceivableMetrics = () => {
     const today = new Date();
     const totalAmount = receivables.reduce((sum, r) => sum + r.totalAmount, 0);
@@ -338,17 +437,20 @@ const Finance = () => {
       .filter((r) => r.invoiceStatus !== "Paid" && new Date(r.dueDate) >= today)
       .reduce((sum, r) => sum + r.totalAmount, 0);
     const overdueAmount = receivables
-      .filter((r) => r.invoiceStatus === "Overdue" || (r.invoiceStatus !== "Paid" && new Date(r.dueDate) < today))
+      .filter(
+        (r) =>
+          r.invoiceStatus === "Overdue" ||
+          (r.invoiceStatus !== "Paid" && new Date(r.dueDate) < today)
+      )
       .reduce((sum, r) => sum + r.totalAmount, 0);
     const totalInvoices = receivables.length;
 
     return { totalAmount, currentReceivable, overdueAmount, totalInvoices };
   };
 
-  // Calculate metrics for Partner Payables
   const getPayableMetrics = () => {
     const totalPaid = payables
-      .filter((p) => p.status === "Approved" || p.status === "Paid")
+      .filter((p) => p.status === "Paid")
       .reduce((sum, p) => sum + p.totalAmount, 0);
     const currentPayable = payables
       .filter((p) => p.status === "Submitted")
@@ -361,6 +463,35 @@ const Finance = () => {
     return { totalPaid, currentPayable, overduePayable, totalInvoices };
   };
 
+  const getReconciliationMetrics = () => {
+    const totalInvoicePaid = reconciliation.filter(
+      (r) => r.receivableStatus === "Paid"
+    ).length;
+    const totalBillsPaid = reconciliation.filter((r) => r.payableStatus === "Paid").length;
+    const receivablePending = reconciliation.filter(
+      (r) => r.receivableStatus !== "Paid"
+    ).length;
+    const payablePending = reconciliation.filter((r) => r.payableStatus !== "Paid").length;
+
+    return { totalInvoicePaid, totalBillsPaid, receivablePending, payablePending };
+  };
+
+  const getRevenueMetrics = () => {
+    const totalRevenue = revenueAnalysis.reduce((sum, r) => sum + r.revenue, 0);
+    const totalReceivable = revenueAnalysis.reduce((sum, r) => sum + r.amountReceivable, 0);
+    const totalPayable = revenueAnalysis.reduce((sum, r) => sum + r.amountPayable, 0);
+    const totalGSTIn = revenueAnalysis.reduce((sum, r) => sum + r.gstIn, 0);
+    const totalGSTOut = revenueAnalysis.reduce((sum, r) => sum + r.gstOut, 0);
+
+    return {
+      totalRevenue,
+      totalReceivable,
+      totalPayable,
+      totalGSTIn,
+      totalGSTOut,
+    };
+  };
+
   // Action handlers for Client Billing
   const handleViewBreakup = (record) => {
     Modal.info({
@@ -368,23 +499,41 @@ const Finance = () => {
       width: 600,
       content: (
         <Descriptions bordered column={1} size="small" style={{ marginTop: 16 }}>
+          <Descriptions.Item label="Talent ID">{record.talentId}</Descriptions.Item>
           <Descriptions.Item label="Talent">{record.talentName}</Descriptions.Item>
           <Descriptions.Item label="Role">{record.role}</Descriptions.Item>
           <Descriptions.Item label="Partner">{record.partner}</Descriptions.Item>
           <Descriptions.Item label="Customer">{record.customer}</Descriptions.Item>
-          <Descriptions.Item label="Month">{record.month} {record.year}</Descriptions.Item>
+          <Descriptions.Item label="Job ID">{record.jobId}</Descriptions.Item>
+          <Descriptions.Item label="Month">
+            {record.month} {record.year}
+          </Descriptions.Item>
           <Descriptions.Item label="Working Days">{record.workingDays}</Descriptions.Item>
           <Descriptions.Item label="Billable Hours">{record.billableHours}</Descriptions.Item>
-          <Descriptions.Item label="Base Amount">₹ {record.amount.toLocaleString("en-IN")}</Descriptions.Item>
-          <Descriptions.Item label="GST (18%)">₹ {record.gst.toLocaleString("en-IN")}</Descriptions.Item>
-          <Descriptions.Item label="Total Amount"><strong>₹ {record.totalAmount.toLocaleString("en-IN")}</strong></Descriptions.Item>
+          <Descriptions.Item label="Base Amount">
+            ₹ {record.amount.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="GST (18%)">
+            ₹ {record.gst.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="Total Amount">
+            <strong>₹ {record.totalAmount.toLocaleString("en-IN")}</strong>
+          </Descriptions.Item>
           <Descriptions.Item label="Timesheet Status">
             <Tag color={record.timesheetStatus === "Approved" ? "green" : "orange"}>
               {record.timesheetStatus}
             </Tag>
           </Descriptions.Item>
           <Descriptions.Item label="Invoice Status">
-            <Tag color={record.invoiceStatus === "Paid" ? "green" : record.invoiceStatus === "Overdue" ? "red" : "orange"}>
+            <Tag
+              color={
+                record.invoiceStatus === "Paid"
+                  ? "green"
+                  : record.invoiceStatus === "Overdue"
+                  ? "red"
+                  : "orange"
+              }
+            >
               {record.invoiceStatus}
             </Tag>
           </Descriptions.Item>
@@ -426,18 +575,29 @@ const Finance = () => {
           <Descriptions.Item label="Talent Name">{record.talentName}</Descriptions.Item>
           <Descriptions.Item label="Partner">{record.partner}</Descriptions.Item>
           <Descriptions.Item label="Job ID">{record.jobId}</Descriptions.Item>
-          <Descriptions.Item label="Month">{record.month} {record.year}</Descriptions.Item>
+          <Descriptions.Item label="Month">
+            {record.month} {record.year}
+          </Descriptions.Item>
           <Descriptions.Item label="Days">{record.days}</Descriptions.Item>
           <Descriptions.Item label="Hours">{record.hours}</Descriptions.Item>
-          <Descriptions.Item label="Amount">₹ {record.amount.toLocaleString("en-IN")}</Descriptions.Item>
-          <Descriptions.Item label="GST">₹ {record.gst.toLocaleString("en-IN")}</Descriptions.Item>
-          <Descriptions.Item label="Total Amount"><strong>₹ {record.totalAmount.toLocaleString("en-IN")}</strong></Descriptions.Item>
+          <Descriptions.Item label="Amount">
+            ₹ {record.amount.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="GST">
+            ₹ {record.gst.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="Total Amount">
+            <strong>₹ {record.totalAmount.toLocaleString("en-IN")}</strong>
+          </Descriptions.Item>
           <Descriptions.Item label="Submitted On">{record.submittedOn}</Descriptions.Item>
           {record.approvedOn && (
             <Descriptions.Item label="Approved On">{record.approvedOn}</Descriptions.Item>
           )}
+          {record.paidOn && (
+            <Descriptions.Item label="Paid On">{record.paidOn}</Descriptions.Item>
+          )}
           <Descriptions.Item label="Status">
-            <Tag color={record.status === "Approved" ? "green" : "orange"}>
+            <Tag color={record.status === "Paid" ? "green" : "orange"}>
               {record.status}
             </Tag>
           </Descriptions.Item>
@@ -463,7 +623,12 @@ const Finance = () => {
       onOk: () => {
         const updated = payables.map((p) =>
           p.id === record.id
-            ? { ...p, status: "Approved", approvedOn: new Date().toISOString().split("T")[0] }
+            ? {
+                ...p,
+                status: "Paid",
+                approvedOn: new Date().toISOString().split("T")[0],
+                paidOn: new Date().toISOString().split("T")[0],
+              }
             : p
         );
         setPayables(updated);
@@ -492,34 +657,189 @@ const Finance = () => {
     });
   };
 
+  // Action handlers for Invoice Reconciliation
+  const handleViewReconciliationBreakup = (record) => {
+    Modal.info({
+      title: `Reconciliation Details - ${record.talentName}`,
+      width: 700,
+      content: (
+        <Descriptions bordered column={1} size="small" style={{ marginTop: 16 }}>
+          <Descriptions.Item label="Talent ID">{record.talentId}</Descriptions.Item>
+          <Descriptions.Item label="Talent Name">{record.talentName}</Descriptions.Item>
+          <Descriptions.Item label="Partner">{record.partner}</Descriptions.Item>
+          <Descriptions.Item label="Customer">{record.customer}</Descriptions.Item>
+          <Descriptions.Item label="Job ID">{record.jobId}</Descriptions.Item>
+          <Descriptions.Item label="Record ID">{record.recordId}</Descriptions.Item>
+          <Descriptions.Item label="Partner Invoice ID">
+            {record.partnerInvoiceId}
+          </Descriptions.Item>
+          <Descriptions.Item label="Customer Invoice ID">
+            {record.customerInvoiceId}
+          </Descriptions.Item>
+          <Descriptions.Item label="Month">
+            {record.month} {record.year}
+          </Descriptions.Item>
+          <Descriptions.Item label="Receivable Status">
+            <Tag
+              color={
+                record.receivableStatus === "Paid"
+                  ? "green"
+                  : record.receivableStatus === "Sent"
+                  ? "blue"
+                  : "orange"
+              }
+            >
+              {record.receivableStatus}
+            </Tag>
+          </Descriptions.Item>
+          <Descriptions.Item label="Payable Status">
+            <Tag
+              color={
+                record.payableStatus === "Paid"
+                  ? "green"
+                  : record.payableStatus === "Submitted"
+                  ? "orange"
+                  : "default"
+              }
+            >
+              {record.payableStatus}
+            </Tag>
+          </Descriptions.Item>
+        </Descriptions>
+      ),
+    });
+  };
+
+  const handleModifyFee = (record) => {
+    Modal.info({
+      title: `Modify Fee - ${record.talentName}`,
+      content: "Fee modification feature - Implementation pending",
+    });
+  };
+
+  const handleUpdateReceivable = (record) => {
+    Modal.confirm({
+      title: "Update Receivable Status",
+      content: `Mark receivable as paid for ${record.talentName}?`,
+      okText: "Update",
+      okButtonProps: { style: { background: "#00d9a9", borderColor: "#00d9a9" } },
+      onOk: () => {
+        const updated = reconciliation.map((r) =>
+          r.id === record.id ? { ...r, receivableStatus: "Paid" } : r
+        );
+        setReconciliation(updated);
+        message.success(`Receivable status updated for ${record.talentName}`);
+      },
+    });
+  };
+
+  const handleUpdatePayable = (record) => {
+    Modal.confirm({
+      title: "Update Payable Status",
+      content: `Mark payable as paid for ${record.talentName}?`,
+      okText: "Update",
+      okButtonProps: { style: { background: "#00d9a9", borderColor: "#00d9a9" } },
+      onOk: () => {
+        const updated = reconciliation.map((r) =>
+          r.id === record.id ? { ...r, payableStatus: "Paid" } : r
+        );
+        setReconciliation(updated);
+        message.success(`Payable status updated for ${record.talentName}`);
+      },
+    });
+  };
+
+  // Action handlers for Revenue Analysis
+  const handleViewTransaction = (record) => {
+    Modal.info({
+      title: `Transaction Details - ${record.talentName}`,
+      width: 700,
+      content: (
+        <Descriptions bordered column={1} size="small" style={{ marginTop: 16 }}>
+          <Descriptions.Item label="Talent ID">{record.talentId}</Descriptions.Item>
+          <Descriptions.Item label="Talent Name">{record.talentName}</Descriptions.Item>
+          <Descriptions.Item label="Partner">{record.partner}</Descriptions.Item>
+          <Descriptions.Item label="Customer">{record.customer}</Descriptions.Item>
+          <Descriptions.Item label="Job ID">{record.jobId}</Descriptions.Item>
+          <Descriptions.Item label="Month">
+            {record.month} {record.year}
+          </Descriptions.Item>
+          <Descriptions.Item label="Talent Cost (Base)">
+            ₹ {record.talentCost.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="Amount Receivable (10% markup)">
+            ₹ {record.amountReceivable.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="GST IN (18%)">
+            ₹ {record.gstIn.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="Total Receivable">
+            <strong>
+              ₹ {(record.amountReceivable + record.gstIn).toLocaleString("en-IN")}
+            </strong>
+          </Descriptions.Item>
+          <Descriptions.Item label="Amount Payable (5% deduction)">
+            ₹ {record.amountPayable.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="GST OUT (18%)">
+            ₹ {record.gstOut.toLocaleString("en-IN")}
+          </Descriptions.Item>
+          <Descriptions.Item label="Total Payable">
+            <strong>
+              ₹ {(record.amountPayable + record.gstOut).toLocaleString("en-IN")}
+            </strong>
+          </Descriptions.Item>
+          <Descriptions.Item label="Net Revenue">
+            <strong style={{ color: "#52c41a", fontSize: "16px" }}>
+              ₹ {record.revenue.toLocaleString("en-IN")}
+            </strong>
+          </Descriptions.Item>
+          <Descriptions.Item label="Profit Margin">
+            {((record.revenue / record.amountReceivable) * 100).toFixed(2)}%
+          </Descriptions.Item>
+        </Descriptions>
+      ),
+    });
+  };
+
+  const handleModifyRecord = (record) => {
+    message.info(`Modify record for ${record.talentName} - Implementation pending`);
+  };
+
   // Columns for Client Billing
   const receivableColumns = [
+    {
+      title: "Talent ID",
+      dataIndex: "talentId",
+      key: "talentId",
+      width: 90,
+    },
     {
       title: "Talent Name",
       dataIndex: "talentName",
       key: "talentName",
-      width: 150,
+      width: 140,
       ellipsis: true,
     },
     {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      width: 140,
+      width: 130,
       ellipsis: true,
     },
     {
       title: "Partner",
       dataIndex: "partner",
       key: "partner",
-      width: 140,
+      width: 130,
       ellipsis: true,
     },
     {
       title: "Customer",
       dataIndex: "customer",
       key: "customer",
-      width: 140,
+      width: 130,
       ellipsis: true,
     },
     {
@@ -582,7 +902,7 @@ const Finance = () => {
       title: "Invoice",
       dataIndex: "invoiceStatus",
       key: "invoiceStatus",
-      width: 100,
+      width: 90,
       render: (status) => (
         <Tag
           color={
@@ -618,7 +938,8 @@ const Finance = () => {
                 label: "Create Invoice",
                 icon: <SendOutlined />,
                 onClick: () => handleCreateInvoice(record),
-                disabled: record.invoiceStatus === "Sent" || record.invoiceStatus === "Paid",
+                disabled:
+                  record.invoiceStatus === "Sent" || record.invoiceStatus === "Paid",
               },
             ],
           }}
@@ -656,14 +977,14 @@ const Finance = () => {
       title: "Talent Name",
       dataIndex: "talentName",
       key: "talentName",
-      width: 140,
+      width: 130,
       ellipsis: true,
     },
     {
       title: "Partner",
       dataIndex: "partner",
       key: "partner",
-      width: 140,
+      width: 130,
       ellipsis: true,
     },
     {
@@ -717,11 +1038,11 @@ const Finance = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 100,
+      width: 90,
       render: (status) => (
         <Tag
           color={
-            status === "Approved"
+            status === "Paid"
               ? "green"
               : status === "Rejected"
               ? "red"
@@ -788,90 +1109,81 @@ const Finance = () => {
     },
   ];
 
-  // Columns for Invoice History
-  const invoiceHistoryColumns = [
+  // Columns for Invoice Reconciliation
+  const reconciliationColumns = [
     {
-      title: "Invoice Number",
-      dataIndex: "invoiceNumber",
-      key: "invoiceNumber",
-      width: 150,
-      ellipsis: true,
+      title: "Talent ID",
+      dataIndex: "talentId",
+      key: "talentId",
+      width: 90,
     },
     {
-      title: "Type",
-      dataIndex: "type",
-      key: "type",
-      width: 130,
-      render: (type) => (
-        <Tag color={type === "Client Invoice" ? "blue" : "purple"}>{type}</Tag>
-      ),
-    },
-    {
-      title: "Talent",
+      title: "Talent Name",
       dataIndex: "talentName",
       key: "talentName",
-      width: 140,
+      width: 130,
       ellipsis: true,
     },
     {
-      title: "Party",
-      dataIndex: "party",
-      key: "party",
-      width: 150,
+      title: "Partner",
+      dataIndex: "partner",
+      key: "partner",
+      width: 130,
       ellipsis: true,
     },
     {
-      title: "Month",
-      dataIndex: "month",
-      key: "month",
-      width: 90,
-      render: (text, record) => `${text.substring(0, 3)} '${record.year.toString().substring(2)}`,
-    },
-    {
-      title: "Amount",
-      dataIndex: "amount",
-      key: "amount",
+      title: "Record ID",
+      dataIndex: "recordId",
+      key: "recordId",
       width: 110,
       ellipsis: true,
-      render: (amount) => `₹ ${amount.toLocaleString("en-IN")}`,
     },
     {
-      title: "GST",
-      dataIndex: "gst",
-      key: "gst",
-      width: 90,
+      title: "Partner Invoice ID",
+      dataIndex: "partnerInvoiceId",
+      key: "partnerInvoiceId",
+      width: 130,
       ellipsis: true,
-      render: (gst) => `₹ ${gst.toLocaleString("en-IN")}`,
     },
     {
-      title: "Total",
-      dataIndex: "totalAmount",
-      key: "totalAmount",
-      width: 120,
+      title: "Job ID",
+      dataIndex: "jobId",
+      key: "jobId",
+      width: 100,
       ellipsis: true,
-      render: (total) => (
-        <span style={{ fontWeight: 600, color: "#014c75" }}>
-          ₹ {total.toLocaleString("en-IN")}
-        </span>
+    },
+    {
+      title: "Customer",
+      dataIndex: "customer",
+      key: "customer",
+      width: 130,
+      ellipsis: true,
+    },
+    {
+      title: "Customer Invoice ID",
+      dataIndex: "customerInvoiceId",
+      key: "customerInvoiceId",
+      width: 130,
+      ellipsis: true,
+    },
+    {
+      title: "Receivable",
+      dataIndex: "receivableStatus",
+      key: "receivableStatus",
+      width: 100,
+      render: (status) => (
+        <Tag
+          color={status === "Paid" ? "green" : status === "Sent" ? "blue" : "orange"}
+        >
+          {status}
+        </Tag>
       ),
     },
     {
-      title: "Issued",
-      dataIndex: "issuedDate",
-      key: "issuedDate",
+      title: "Payable",
+      dataIndex: "payableStatus",
+      key: "payableStatus",
       width: 100,
-    },
-    {
-      title: "Paid",
-      dataIndex: "paidDate",
-      key: "paidDate",
-      width: 100,
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      width: 90,
       render: (status) => (
         <Tag color={status === "Paid" ? "green" : "orange"}>{status}</Tag>
       ),
@@ -885,16 +1197,140 @@ const Finance = () => {
           menu={{
             items: [
               {
-                key: "view",
-                label: "View",
+                key: "viewBreakup",
+                label: "View Breakup",
                 icon: <EyeOutlined />,
-                onClick: () => message.info(`Viewing ${record.invoiceNumber}`),
+                onClick: () => handleViewReconciliationBreakup(record),
               },
               {
-                key: "download",
-                label: "Download",
-                icon: <DownloadOutlined />,
-                onClick: () => message.info(`Downloading ${record.invoiceNumber}`),
+                key: "modifyFee",
+                label: "Modify Fee",
+                icon: <EditOutlined />,
+                onClick: () => handleModifyFee(record),
+              },
+              {
+                key: "updateReceivable",
+                label: "Update Receivable",
+                icon: <SyncOutlined />,
+                onClick: () => handleUpdateReceivable(record),
+                disabled: record.receivableStatus === "Paid",
+              },
+              {
+                key: "updatePayable",
+                label: "Update Payable",
+                icon: <SyncOutlined />,
+                onClick: () => handleUpdatePayable(record),
+                disabled: record.payableStatus === "Paid",
+              },
+            ],
+          }}
+          trigger={["click"]}
+        >
+          <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
+        </Dropdown>
+      ),
+    },
+  ];
+
+  // Columns for Revenue Analysis
+  const revenueAnalysisColumns = [
+    {
+      title: "Talent ID",
+      dataIndex: "talentId",
+      key: "talentId",
+      width: 90,
+    },
+    {
+      title: "Talent Name",
+      dataIndex: "talentName",
+      key: "talentName",
+      width: 130,
+      ellipsis: true,
+    },
+    {
+      title: "Partner",
+      dataIndex: "partner",
+      key: "partner",
+      width: 130,
+      ellipsis: true,
+    },
+    {
+      title: "Job ID",
+      dataIndex: "jobId",
+      key: "jobId",
+      width: 100,
+      ellipsis: true,
+    },
+    {
+      title: "Customer",
+      dataIndex: "customer",
+      key: "customer",
+      width: 130,
+      ellipsis: true,
+    },
+    {
+      title: "Revenue",
+      dataIndex: "revenue",
+      key: "revenue",
+      width: 110,
+      ellipsis: true,
+      render: (revenue) => (
+        <span style={{ fontWeight: 700, color: "#52c41a" }}>
+          ₹ {revenue.toLocaleString("en-IN")}
+        </span>
+      ),
+    },
+    {
+      title: "Receivable",
+      dataIndex: "amountReceivable",
+      key: "amountReceivable",
+      width: 110,
+      ellipsis: true,
+      render: (amount) => `₹ ${amount.toLocaleString("en-IN")}`,
+    },
+    {
+      title: "GST IN",
+      dataIndex: "gstIn",
+      key: "gstIn",
+      width: 90,
+      ellipsis: true,
+      render: (gst) => `₹ ${gst.toLocaleString("en-IN")}`,
+    },
+    {
+      title: "Payable",
+      dataIndex: "amountPayable",
+      key: "amountPayable",
+      width: 110,
+      ellipsis: true,
+      render: (amount) => `₹ ${amount.toLocaleString("en-IN")}`,
+    },
+    {
+      title: "GST OUT",
+      dataIndex: "gstOut",
+      key: "gstOut",
+      width: 90,
+      ellipsis: true,
+      render: (gst) => `₹ ${gst.toLocaleString("en-IN")}`,
+    },
+    {
+      title: "Action",
+      key: "action",
+      width: 80,
+      render: (_, record) => (
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: "viewTransaction",
+                label: "View Transaction",
+                icon: <LineChartOutlined />,
+                onClick: () => handleViewTransaction(record),
+              },
+              {
+                key: "modifyRecord",
+                label: "Modify Record",
+                icon: <EditOutlined />,
+                onClick: () => handleModifyRecord(record),
               },
             ],
           }}
@@ -914,11 +1350,15 @@ const Finance = () => {
         <MetricsSection>
           <MetricCard>
             <div className="metric-label">Total Amount</div>
-            <div className="metric-value">₹ {(metrics.totalAmount / 100000).toFixed(2)}L</div>
+            <div className="metric-value">
+              ₹ {(metrics.totalAmount / 100000).toFixed(2)}L
+            </div>
           </MetricCard>
           <MetricCard>
             <div className="metric-label">Current Receivable</div>
-            <div className="metric-value">₹ {(metrics.currentReceivable / 100000).toFixed(2)}L</div>
+            <div className="metric-value">
+              ₹ {(metrics.currentReceivable / 100000).toFixed(2)}L
+            </div>
           </MetricCard>
           <MetricCard>
             <div className="metric-label">Overdue Amount</div>
@@ -940,11 +1380,15 @@ const Finance = () => {
         <MetricsSection>
           <MetricCard>
             <div className="metric-label">Total Paid</div>
-            <div className="metric-value">₹ {(metrics.totalPaid / 100000).toFixed(2)}L</div>
+            <div className="metric-value">
+              ₹ {(metrics.totalPaid / 100000).toFixed(2)}L
+            </div>
           </MetricCard>
           <MetricCard>
             <div className="metric-label">Current Payable</div>
-            <div className="metric-value">₹ {(metrics.currentPayable / 100000).toFixed(2)}L</div>
+            <div className="metric-value">
+              ₹ {(metrics.currentPayable / 100000).toFixed(2)}L
+            </div>
           </MetricCard>
           <MetricCard>
             <div className="metric-label">Overdue Payable</div>
@@ -960,31 +1404,56 @@ const Finance = () => {
       );
     }
 
-    if (activeTab === "Invoice History") {
-      const totalRevenue = invoiceHistory
-        .filter((i) => i.status === "Paid")
-        .reduce((sum, i) => sum + i.totalAmount, 0);
-      const totalGST = invoiceHistory
-        .filter((i) => i.status === "Paid")
-        .reduce((sum, i) => sum + i.gst, 0);
+    if (activeTab === "Invoice Reconciliation") {
+      const metrics = getReconciliationMetrics();
       return (
         <MetricsSection>
           <MetricCard>
-            <div className="metric-label">Total Revenue</div>
-            <div className="metric-value">₹ {(totalRevenue / 100000).toFixed(2)}L</div>
+            <div className="metric-label">Total Invoice Paid</div>
+            <div className="metric-value">{metrics.totalInvoicePaid}</div>
           </MetricCard>
           <MetricCard>
-            <div className="metric-label">Total GST Collected</div>
-            <div className="metric-value">₹ {(totalGST / 100000).toFixed(2)}L</div>
+            <div className="metric-label">Total Bills Paid</div>
+            <div className="metric-value">{metrics.totalBillsPaid}</div>
           </MetricCard>
           <MetricCard>
-            <div className="metric-label">Total Invoices</div>
-            <div className="metric-value">{invoiceHistory.length}</div>
+            <div className="metric-label">Receivable Invoice Pending</div>
+            <div className="metric-value" style={{ color: "#ff4d4f" }}>
+              {metrics.receivablePending}
+            </div>
           </MetricCard>
           <MetricCard>
-            <div className="metric-label">Paid Invoices</div>
-            <div className="metric-value">
-              {invoiceHistory.filter((i) => i.status === "Paid").length}
+            <div className="metric-label">Payable Pending</div>
+            <div className="metric-value" style={{ color: "#ff4d4f" }}>
+              {metrics.payablePending}
+            </div>
+          </MetricCard>
+        </MetricsSection>
+      );
+    }
+
+    if (activeTab === "Revenue Analysis") {
+      const metrics = getReconciliationMetrics();
+      return (
+        <MetricsSection>
+          <MetricCard>
+            <div className="metric-label">Total Invoice Paid</div>
+            <div className="metric-value">{metrics.totalInvoicePaid}</div>
+          </MetricCard>
+          <MetricCard>
+            <div className="metric-label">Total Bills Paid</div>
+            <div className="metric-value">{metrics.totalBillsPaid}</div>
+          </MetricCard>
+          <MetricCard>
+            <div className="metric-label">Receivable Invoice Pending</div>
+            <div className="metric-value" style={{ color: "#ff4d4f" }}>
+              {metrics.receivablePending}
+            </div>
+          </MetricCard>
+          <MetricCard>
+            <div className="metric-label">Payable Pending</div>
+            <div className="metric-value" style={{ color: "#ff4d4f" }}>
+              {metrics.payablePending}
             </div>
           </MetricCard>
         </MetricsSection>
@@ -992,20 +1461,28 @@ const Finance = () => {
     }
 
     if (activeTab === "Financial Insights") {
-      const totalReceivable = receivables.reduce((sum, r) => sum + r.totalAmount, 0);
-      const totalPayable = payables.reduce((sum, p) => sum + p.totalAmount, 0);
-      const netCashFlow = totalReceivable - totalPayable;
-      const gstLiability = receivables.reduce((sum, r) => sum + r.gst, 0);
+      const receivableMetrics = getReceivableMetrics();
+      const payableMetrics = getPayableMetrics();
+      const revenueMetrics = getRevenueMetrics();
+      const netCashFlow =
+        receivableMetrics.totalAmount - payableMetrics.totalPaid;
 
       return (
         <MetricsSection>
           <MetricCard>
             <div className="metric-label">Total Receivable</div>
-            <div className="metric-value">₹ {(totalReceivable / 100000).toFixed(2)}L</div>
+            <div className="metric-value">
+              ₹ {(receivableMetrics.totalAmount / 100000).toFixed(2)}L
+            </div>
           </MetricCard>
           <MetricCard>
             <div className="metric-label">Total Payable</div>
-            <div className="metric-value">₹ {(totalPayable / 100000).toFixed(2)}L</div>
+            <div className="metric-value">
+              ₹{" "}
+              {(payableMetrics.totalPaid / 100000 +
+                payableMetrics.currentPayable / 100000).toFixed(2)}
+              L
+            </div>
           </MetricCard>
           <MetricCard>
             <div className="metric-label">Net Cash Flow</div>
@@ -1017,8 +1494,10 @@ const Finance = () => {
             </div>
           </MetricCard>
           <MetricCard>
-            <div className="metric-label">GST Liability</div>
-            <div className="metric-value">₹ {(gstLiability / 100000).toFixed(2)}L</div>
+            <div className="metric-label">Total Net Revenue</div>
+            <div className="metric-value" style={{ color: "#52c41a" }}>
+              ₹ {(revenueMetrics.totalRevenue / 100000).toFixed(2)}L
+            </div>
           </MetricCard>
         </MetricsSection>
       );
@@ -1037,13 +1516,13 @@ const Finance = () => {
       <TopSection>
         <FiltersRow>
           <Input
-            placeholder="Search by name, customer, or partner..."
+            placeholder="Search by name, ID, customer, or partner..."
             prefix={<SearchOutlined />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             allowClear
           />
-          {activeTab !== "Invoice History" && (
+          {activeTab !== "Revenue Analysis" && (
             <Select
               placeholder="Filter by Partner"
               value={filterPartner}
@@ -1057,7 +1536,9 @@ const Finance = () => {
               <Option value="CodeCraft Ltd">CodeCraft Ltd</Option>
             </Select>
           )}
-          {activeTab === "Client Billing" && (
+          {(activeTab === "Client Billing" ||
+            activeTab === "Invoice Reconciliation" ||
+            activeTab === "Revenue Analysis") && (
             <Select
               placeholder="Filter by Customer"
               value={filterCustomer}
@@ -1080,39 +1561,42 @@ const Finance = () => {
           >
             <Option value="January">January</Option>
             <Option value="February">February</Option>
-            <Option value="March">March</Option>
             <Option value="November">November</Option>
             <Option value="December">December</Option>
           </Select>
-          <Select
-            placeholder="Filter by Status"
-            value={filterStatus}
-            onChange={setFilterStatus}
-            allowClear
-            style={{ minWidth: 150 }}
-          >
-            {activeTab === "Client Billing" && (
-              <>
-                <Option value="Pending">Pending</Option>
-                <Option value="Sent">Sent</Option>
-                <Option value="Paid">Paid</Option>
-                <Option value="Overdue">Overdue</Option>
-              </>
-            )}
-            {activeTab === "Partner Payables" && (
-              <>
-                <Option value="Submitted">Submitted</Option>
-                <Option value="Approved">Approved</Option>
-                <Option value="Rejected">Rejected</Option>
-              </>
-            )}
-            {activeTab === "Invoice History" && (
-              <>
-                <Option value="Paid">Paid</Option>
-                <Option value="Pending">Pending</Option>
-              </>
-            )}
-          </Select>
+          {activeTab !== "Revenue Analysis" && (
+            <Select
+              placeholder="Filter by Status"
+              value={filterStatus}
+              onChange={setFilterStatus}
+              allowClear
+              style={{ minWidth: 150 }}
+            >
+              {activeTab === "Client Billing" && (
+                <>
+                  <Option value="Pending">Pending</Option>
+                  <Option value="Sent">Sent</Option>
+                  <Option value="Paid">Paid</Option>
+                  <Option value="Overdue">Overdue</Option>
+                </>
+              )}
+              {activeTab === "Partner Payables" && (
+                <>
+                  <Option value="Submitted">Submitted</Option>
+                  <Option value="Paid">Paid</Option>
+                  <Option value="Rejected">Rejected</Option>
+                </>
+              )}
+              {activeTab === "Invoice Reconciliation" && (
+                <>
+                  <Option value="Pending">Pending</Option>
+                  <Option value="Sent">Sent</Option>
+                  <Option value="Submitted">Submitted</Option>
+                  <Option value="Paid">Paid</Option>
+                </>
+              )}
+            </Select>
+          )}
         </FiltersRow>
       </TopSection>
     );
@@ -1133,7 +1617,7 @@ const Finance = () => {
                 pageSize: 10,
                 showTotal: (total) => `Total ${total} records`,
               }}
-              scroll={{ x: 1500 }}
+              scroll={{ x: 1600 }}
             />
           ) : (
             <EmptyState>
@@ -1168,24 +1652,48 @@ const Finance = () => {
       );
     }
 
-    if (activeTab === "Invoice History") {
-      const data = getFilteredInvoiceHistory();
+    if (activeTab === "Invoice Reconciliation") {
+      const data = getFilteredReconciliation();
       return (
         <TableContainer>
           {data.length > 0 ? (
             <Table
-              columns={invoiceHistoryColumns}
+              columns={reconciliationColumns}
               dataSource={data}
               rowKey="id"
               pagination={{
                 pageSize: 10,
-                showTotal: (total) => `Total ${total} invoices`,
+                showTotal: (total) => `Total ${total} records`,
               }}
               scroll={{ x: 1400 }}
             />
           ) : (
             <EmptyState>
-              <Empty description="No invoice history found" />
+              <Empty description="No reconciliation records found" />
+            </EmptyState>
+          )}
+        </TableContainer>
+      );
+    }
+
+    if (activeTab === "Revenue Analysis") {
+      const data = getFilteredRevenueAnalysis();
+      return (
+        <TableContainer>
+          {data.length > 0 ? (
+            <Table
+              columns={revenueAnalysisColumns}
+              dataSource={data}
+              rowKey="id"
+              pagination={{
+                pageSize: 10,
+                showTotal: (total) => `Total ${total} records`,
+              }}
+              scroll={{ x: 1300 }}
+            />
+          ) : (
+            <EmptyState>
+              <Empty description="No revenue records found" />
             </EmptyState>
           )}
         </TableContainer>
@@ -1193,22 +1701,31 @@ const Finance = () => {
     }
 
     if (activeTab === "Financial Insights") {
+      const receivableMetrics = getReceivableMetrics();
+      const payableMetrics = getPayableMetrics();
+      const reconciliationMetrics = getReconciliationMetrics();
+      const revenueMetrics = getRevenueMetrics();
+
       return (
         <InsightsGrid>
           <InsightCard>
             <h3>Top Customers by Revenue</h3>
             <div className="insight-content">
               <div className="insight-row">
-                <span className="label">Amazon Inc</span>
-                <span className="value">₹ 3.54L</span>
-              </div>
-              <div className="insight-row">
                 <span className="label">Google LLC</span>
                 <span className="value">₹ 3.89L</span>
               </div>
               <div className="insight-row">
+                <span className="label">Amazon Inc</span>
+                <span className="label">₹ 3.54L</span>
+              </div>
+              <div className="insight-row">
                 <span className="label">Microsoft Corporation</span>
                 <span className="value">₹ 3.30L</span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Adobe Systems</span>
+                <span className="value">₹ 2.83L</span>
               </div>
             </div>
           </InsightCard>
@@ -1228,45 +1745,145 @@ const Finance = () => {
                 <span className="label">Innovate Tech</span>
                 <span className="value">₹ 2.64L</span>
               </div>
+              <div className="insight-row">
+                <span className="label">CodeCraft Ltd</span>
+                <span className="value">₹ 2.27L</span>
+              </div>
             </div>
           </InsightCard>
 
           <InsightCard>
-            <h3>Monthly Trends</h3>
+            <h3>Revenue vs Costs</h3>
+            <div className="insight-content">
+              <div className="insight-row">
+                <span className="label">Total Revenue Generated</span>
+                <span className="value" style={{ color: "#52c41a" }}>
+                  ₹ {(revenueMetrics.totalRevenue / 100000).toFixed(2)}L
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Total Receivables</span>
+                <span className="value">
+                  ₹ {(revenueMetrics.totalReceivable / 100000).toFixed(2)}L
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Total Payables</span>
+                <span className="value">
+                  ₹ {(revenueMetrics.totalPayable / 100000).toFixed(2)}L
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Profit Margin</span>
+                <span className="value" style={{ color: "#52c41a" }}>
+                  {(
+                    (revenueMetrics.totalRevenue /
+                      revenueMetrics.totalReceivable) *
+                    100
+                  ).toFixed(2)}
+                  %
+                </span>
+              </div>
+            </div>
+          </InsightCard>
+
+          <InsightCard>
+            <h3>Payment Status Summary</h3>
+            <div className="insight-content">
+              <div className="insight-row">
+                <span className="label">Invoices Fully Paid</span>
+                <span className="value" style={{ color: "#52c41a" }}>
+                  {reconciliationMetrics.totalInvoicePaid}
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Bills Fully Paid</span>
+                <span className="value" style={{ color: "#52c41a" }}>
+                  {reconciliationMetrics.totalBillsPaid}
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Pending Receivables</span>
+                <span className="value" style={{ color: "#ff4d4f" }}>
+                  {reconciliationMetrics.receivablePending}
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Pending Payables</span>
+                <span className="value" style={{ color: "#ff4d4f" }}>
+                  {reconciliationMetrics.payablePending}
+                </span>
+              </div>
+            </div>
+          </InsightCard>
+
+          <InsightCard>
+            <h3>GST Analysis</h3>
+            <div className="insight-content">
+              <div className="insight-row">
+                <span className="label">Total GST IN (Collected)</span>
+                <span className="value">
+                  ₹ {(revenueMetrics.totalGSTIn / 100000).toFixed(2)}L
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Total GST OUT (Paid)</span>
+                <span className="value">
+                  ₹ {(revenueMetrics.totalGSTOut / 100000).toFixed(2)}L
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">Net GST Liability</span>
+                <span
+                  className="value"
+                  style={{
+                    color:
+                      revenueMetrics.totalGSTIn - revenueMetrics.totalGSTOut > 0
+                        ? "#ff4d4f"
+                        : "#52c41a",
+                  }}
+                >
+                  ₹{" "}
+                  {(
+                    (revenueMetrics.totalGSTIn - revenueMetrics.totalGSTOut) /
+                    100000
+                  ).toFixed(2)}
+                  L
+                </span>
+              </div>
+              <div className="insight-row">
+                <span className="label">GST Recovery Rate</span>
+                <span className="value">
+                  {(
+                    (revenueMetrics.totalGSTOut / revenueMetrics.totalGSTIn) *
+                    100
+                  ).toFixed(2)}
+                  %
+                </span>
+              </div>
+            </div>
+          </InsightCard>
+
+          <InsightCard>
+            <h3>Monthly Performance</h3>
             <div className="insight-content">
               <div className="insight-row">
                 <span className="label">November 2024</span>
-                <span className="value">₹ 5.04L</span>
+                <span className="value">₹ 1.65L</span>
               </div>
               <div className="insight-row">
                 <span className="label">December 2024</span>
-                <span className="value">₹ 6.77L</span>
+                <span className="value">₹ 5.14L</span>
               </div>
               <div className="insight-row">
-                <span className="label">Growth</span>
+                <span className="label">Growth (MoM)</span>
                 <span className="value" style={{ color: "#52c41a" }}>
-                  +34.3%
+                  +211.5%
                 </span>
               </div>
-            </div>
-          </InsightCard>
-
-          <InsightCard>
-            <h3>Aging Analysis</h3>
-            <div className="insight-content">
               <div className="insight-row">
-                <span className="label">0-30 Days</span>
-                <span className="value">₹ 3.72L</span>
-              </div>
-              <div className="insight-row">
-                <span className="label">31-60 Days</span>
-                <span className="value">₹ 0.00L</span>
-              </div>
-              <div className="insight-row">
-                <span className="label">60+ Days (Overdue)</span>
-                <span className="value" style={{ color: "#ff4d4f" }}>
-                  ₹ 1.65L
-                </span>
+                <span className="label">Average per Talent</span>
+                <span className="value">₹ 1.70L</span>
               </div>
             </div>
           </InsightCard>
@@ -1281,7 +1898,7 @@ const Finance = () => {
     <FinanceContainer>
       <PageHeader>
         <h1>Finance Management</h1>
-        <p>Manage billing, payments, and financial operations</p>
+        <p>Manage billing, payments, reconciliation, and financial operations</p>
       </PageHeader>
 
       {renderMetrics()}
@@ -1294,19 +1911,33 @@ const Finance = () => {
           Client Billing
         </Button>
         <Button
-          className={`tab-button ${activeTab === "Partner Payables" ? "active" : ""}`}
+          className={`tab-button ${
+            activeTab === "Partner Payables" ? "active" : ""
+          }`}
           onClick={() => setActiveTab("Partner Payables")}
         >
           Partner Payables
         </Button>
         <Button
-          className={`tab-button ${activeTab === "Invoice History" ? "active" : ""}`}
-          onClick={() => setActiveTab("Invoice History")}
+          className={`tab-button ${
+            activeTab === "Invoice Reconciliation" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("Invoice Reconciliation")}
         >
-          Invoice History
+          Invoice Reconciliation
         </Button>
         <Button
-          className={`tab-button ${activeTab === "Financial Insights" ? "active" : ""}`}
+          className={`tab-button ${
+            activeTab === "Revenue Analysis" ? "active" : ""
+          }`}
+          onClick={() => setActiveTab("Revenue Analysis")}
+        >
+          Revenue Analysis
+        </Button>
+        <Button
+          className={`tab-button ${
+            activeTab === "Financial Insights" ? "active" : ""
+          }`}
           onClick={() => setActiveTab("Financial Insights")}
         >
           Financial Insights
