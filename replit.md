@@ -25,6 +25,15 @@ The application is a React-based single-page application (SPA) built with Create
 - **Admin Dashboard:** Comprehensive management hub featuring:
     - **Dashboard Overview:** Modernized home page with key metrics cards (Total Talents Hired, Total Partners, Total Customers, Total Profiles Submitted, Estimated Revenue/Payout, Avg. Revenue per Customer, Avg. Cost per Talent), approvals pending section, and top customers hiring talents table.
     - **User Management:** Comprehensive user database management with metrics cards and consistent UI for customer, partner, and admin users.
+    - **Timesheet Management:** Upload and manage timesheets for onboarded talents with features including:
+      - Three-tab navigation: Pending Upload, Submitted, Approved
+      - Metrics dashboard: Pending Upload count, Submitted count, Approved count, Total Amount
+      - Automated timesheet calculations: working days (excluding weekends), billable hours (working days × 8), calculated amount based on monthly rate
+      - CSV/Excel file upload using Ant Design Dragger component (.csv, .xlsx, .xls formats)
+      - Search and filter by talent name, client, role, and partner organization
+      - Dynamic action menus: Upload Timesheet (pending), Approve/Share (submitted), Share/Download (approved)
+      - Upload modal with talent details and drag-and-drop file upload
+      - Table columns: Talent Name, Role, Partner Organization, Client Name, Month, Working Days, Billable Hours, Amount, Status, Action
     - **Talent Profiles:** Talent profile database management with metrics, active/inactive tabs, detailed table columns, and action menus (View Document, Edit, Mark Inactive, Delete).
       - **Add New Profile:** 2-step wizard for adding talent profiles (matching Partner module's structure):
         - **Step 1 - Basic Information:** Partner Organization (dropdown from 8 organizations), Name, Role (dropdown with 11 options), Technical Skills (dynamic Form.List with skill name and proficiency level: Expert/Advanced/Intermediate/Beginner), Experience (Years + Months), Monthly Rate, Notice Period, Email, Phone, Location (dropdown), Availability (dropdown)
