@@ -777,41 +777,42 @@ Submitted On: ${record.submittedOn}
     },
   ];
 
-  // Columns for Timesheets - fixed layout with 75% total width to accommodate padding
+  // Columns for Timesheets - pixel widths for consistent layout
   const timesheetColumns = [
     {
       title: "Talent Name",
       dataIndex: "talentName",
       key: "talentName",
-      width: "11%",
+      width: 150,
       ellipsis: true,
     },
     {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      width: "9%",
+      width: 140,
       ellipsis: true,
     },
     {
       title: "Partner",
       dataIndex: "partnerOrg",
       key: "partnerOrg",
-      width: "9%",
+      width: 140,
       ellipsis: true,
     },
     {
       title: "Client",
       dataIndex: "clientName",
       key: "clientName",
-      width: "8%",
+      width: 130,
       ellipsis: true,
     },
     {
       title: "Month",
       dataIndex: "month",
       key: "month",
-      width: "7%",
+      width: 90,
+      ellipsis: true,
       render: (text, record) => (
         <span>
           {text.substring(0, 3)} '{record.year.toString().substring(2)}
@@ -822,24 +823,25 @@ Submitted On: ${record.submittedOn}
       title: "Days",
       dataIndex: "workingDays",
       key: "workingDays",
-      width: "6%",
+      width: 60,
       render: (days) => <span style={{ fontWeight: 500 }}>{days}</span>,
     },
     {
       title: "Hrs",
       dataIndex: "billableHours",
       key: "billableHours",
-      width: "5%",
+      width: 60,
       render: (hours) => <span style={{ fontWeight: 500 }}>{hours}</span>,
     },
     {
       title: "Amount",
       dataIndex: "calculatedAmount",
       key: "calculatedAmount",
-      width: "9%",
+      width: 120,
+      ellipsis: true,
       render: (amount) => (
         <span style={{ fontWeight: 600, color: "#014c75" }}>
-          ₹{Math.round(amount / 1000)}K
+          ₹ {Math.round(amount).toLocaleString("en-IN")}
         </span>
       ),
     },
@@ -847,13 +849,14 @@ Submitted On: ${record.submittedOn}
       title: "Submitted",
       dataIndex: "submittedOn",
       key: "submittedOn",
-      width: "7%",
+      width: 100,
+      ellipsis: true,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: "6%",
+      width: 100,
       render: (status) => (
         <Tag
           color={
@@ -871,7 +874,7 @@ Submitted On: ${record.submittedOn}
     {
       title: "Action",
       key: "action",
-      width: "8%",
+      width: 80,
       render: (_, record) => (
         <div style={{ textAlign: "center" }}>
           <Dropdown menu={getActionMenu(record)} trigger={["click"]}>
