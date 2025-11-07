@@ -9,8 +9,8 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   DollarOutlined,
+  InboxOutlined,
 } from "@ant-design/icons";
-import { useCSVReader } from 'react-papaparse';
 import {
   TimesheetContainer,
   PageHeader,
@@ -24,6 +24,7 @@ import {
 } from "./Timesheet.style";
 
 const { Option } = Select;
+const { Dragger } = Upload;
 
 const Timesheet = () => {
   const [activeTab, setActiveTab] = useState("Pending Upload");
@@ -32,7 +33,6 @@ const Timesheet = () => {
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
-  const { CSVReader } = useCSVReader();
 
   const getCurrentMonthDays = () => {
     const now = new Date();
@@ -503,36 +503,29 @@ const Timesheet = () => {
                 <label style={{ display: "block", marginBottom: 12, color: "#014c75", fontWeight: 500 }}>
                   Upload Timesheet File (Excel/CSV)
                 </label>
-                <CSVReader
-                  onUploadAccepted={(results) => {
-                    setUploadedFile(results);
-                    message.success("File uploaded successfully");
+                <Dragger
+                  accept=".csv,.xlsx,.xls"
+                  maxCount={1}
+                  beforeUpload={(file) => {
+                    setUploadedFile(file);
+                    message.success(`${file.name} file selected successfully`);
+                    return false;
                   }}
+                  onRemove={() => {
+                    setUploadedFile(null);
+                  }}
+                  fileList={uploadedFile ? [uploadedFile] : []}
                 >
-                  {({ getRootProps, acceptedFile }) => (
-                    <>
-                      <div {...getRootProps()} className={`upload-area ${acceptedFile ? 'active' : ''}`}>
-                        <div className="upload-icon">
-                          <UploadOutlined />
-                        </div>
-                        <div className="upload-text">
-                          {acceptedFile ? "File Selected" : "Click or drag file to upload"}
-                        </div>
-                        <div className="upload-hint">
-                          Supported formats: .csv, .xlsx, .xls
-                        </div>
-                      </div>
-                      {acceptedFile && (
-                        <div className="file-info">
-                          <span className="file-name">{acceptedFile.name}</span>
-                          <span className="remove-btn" onClick={() => setUploadedFile(null)}>
-                            Remove
-                          </span>
-                        </div>
-                      )}
-                    </>
-                  )}
-                </CSVReader>
+                  <p className="ant-upload-drag-icon">
+                    <InboxOutlined style={{ color: "#00d9a9", fontSize: 48 }} />
+                  </p>
+                  <p className="ant-upload-text" style={{ color: "#014c75", fontWeight: 500 }}>
+                    Click or drag file to this area to upload
+                  </p>
+                  <p className="ant-upload-hint" style={{ color: "#999" }}>
+                    Supported formats: .csv, .xlsx, .xls
+                  </p>
+                </Dragger>
               </div>
 
               <div style={{ marginTop: 16, padding: 12, background: "#e7f6f2", borderRadius: 6, fontSize: 13 }}>
