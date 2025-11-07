@@ -318,12 +318,83 @@ const Timesheet = () => {
       okText: "Approve",
       okButtonProps: { style: { background: "#00d9a9", borderColor: "#00d9a9" } },
       onOk: () => {
+        const updatedTimesheets = timesheets.map(t => 
+          t.id === record.id ? { ...t, status: "approved", approvedDate: new Date().toISOString().split('T')[0] } : t
+        );
+        setTimesheets(updatedTimesheets);
         message.success(`Timesheet approved for ${record.talentName}`);
       },
     });
   };
 
+  const handleModify = (record) => {
+    setSelectedTalent(record);
+    setLeaveDates(record.leaveTaken.dates);
+    setPaidLeaveCount(record.paidLeave || 0);
+    setUploadModalVisible(true);
+  };
+
+  const handleReject = (record) => {
+    Modal.confirm({
+      title: "Reject Timesheet",
+      content: (
+        <div>
+          <p>Reject timesheet for {record.talentName} ({record.month})?</p>
+          <Input.TextArea
+            id="reject-reason"
+            placeholder="Enter reason for rejection"
+            rows={3}
+            style={{ marginTop: 12 }}
+          />
+        </div>
+      ),
+      okText: "Reject",
+      okType: "danger",
+      onOk: () => {
+        const updatedTimesheets = timesheets.map(t => 
+          t.id === record.id ? { ...t, status: "rejected" } : t
+        );
+        setTimesheets(updatedTimesheets);
+        message.warning(`Timesheet rejected for ${record.talentName}`);
+      },
+    });
+  };
+
+  const handleDelete = (record) => {
+    Modal.confirm({
+      title: "Delete Timesheet",
+      content: `Are you sure you want to delete timesheet for ${record.talentName} (${record.month})? This action cannot be undone.`,
+      okText: "Delete",
+      okType: "danger",
+      onOk: () => {
+        const updatedTimesheets = timesheets.filter(t => t.id !== record.id);
+        setTimesheets(updatedTimesheets);
+        message.success(`Timesheet deleted for ${record.talentName}`);
+      },
+    });
+  };
+
   const getActionMenu = (record) => {
+    const adminItems = [
+      {
+        key: "modify",
+        label: "Modify",
+        onClick: () => handleModify(record),
+      },
+      {
+        key: "reject",
+        label: "Reject",
+        onClick: () => handleReject(record),
+        danger: true,
+      },
+      {
+        key: "delete",
+        label: "Delete",
+        onClick: () => handleDelete(record),
+        danger: true,
+      },
+    ];
+
     const baseItems = [
       {
         key: "download",
@@ -340,6 +411,7 @@ const Timesheet = () => {
           onClick: () => handleUploadClick(record),
         },
         ...baseItems,
+        ...adminItems,
       ];
     } else if (record.status === "submitted") {
       return [
@@ -354,6 +426,7 @@ const Timesheet = () => {
           onClick: () => handleShare(record),
         },
         ...baseItems,
+        ...adminItems,
       ];
     } else {
       return [
@@ -363,6 +436,7 @@ const Timesheet = () => {
           onClick: () => handleShare(record),
         },
         ...baseItems,
+        ...adminItems,
       ];
     }
   };
@@ -613,14 +687,16 @@ const Timesheet = () => {
         </Flex>
       </TopSection>
 
-      <TabsContainer>
-        <Segmented
-          value={activeTab}
-          onChange={setActiveTab}
-          options={["Pending Upload", "Submitted", "Approved"]}
-          block
-        />
-      </TabsContainer>
+      {!showPastTimesheets && (
+        <TabsContainer>
+          <Segmented
+            value={activeTab}
+            onChange={setActiveTab}
+            options={["Pending Upload", "Submitted", "Approved"]}
+            block
+          />
+        </TabsContainer>
+      )}
 
       <TableContainer>
         {currentData.length > 0 ? (
@@ -655,6 +731,7 @@ const Timesheet = () => {
         okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
         width={700}
       >
+        <div style={{ maxHeight: "60vh", overflowY: "auto", paddingRight: 8 }}>
         <UploadModal>
           {selectedTalent && (
             <div>
@@ -675,13 +752,27 @@ const Timesheet = () => {
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
                   <div>
                     <label style={{ display: "block", marginBottom: 8, fontSize: 13 }}>
-                      Leave Dates (e.g., 2024-12-15, 2024-12-20)
+                      Leave Dates (e.g., 5, 10, 15)
                     </label>
-                    <Input.TextArea
-                      placeholder="Enter leave dates separated by commas"
-                      rows={3}
+                    <Input
+                      placeholder="Enter date numbers separated by commas"
                       onChange={(e) => {
-                        const dates = e.target.value.split(',').map(d => d.trim()).filter(d => d);
+                        const dateNumbers = e.target.value.split(',').map(d => d.trim()).filter(d => d && !isNaN(Number(d)));
+                        const dates = dateNumbers.map(day => {
+                          const dayNum = parseInt(day, 10);
+                          const monthIndex = selectedTalent.month === "January" ? 0 : 
+                                            selectedTalent.month === "February" ? 1 :
+                                            selectedTalent.month === "March" ? 2 :
+                                            selectedTalent.month === "April" ? 3 :
+                                            selectedTalent.month === "May" ? 4 :
+                                            selectedTalent.month === "June" ? 5 :
+                                            selectedTalent.month === "July" ? 6 :
+                                            selectedTalent.month === "August" ? 7 :
+                                            selectedTalent.month === "September" ? 8 :
+                                            selectedTalent.month === "October" ? 9 :
+                                            selectedTalent.month === "November" ? 10 : 11;
+                          return `${selectedTalent.year}-${String(monthIndex + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+                        });
                         setLeaveDates(dates);
                       }}
                       style={{ width: "100%" }}
@@ -715,14 +806,16 @@ const Timesheet = () => {
                 <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
                   Calculated Working Days & Amount
                 </label>
-                <div style={{ padding: "12px 16px", background: "#f0f9ff", borderRadius: 6 }}>
-                  <div><strong>Total Leave Days:</strong> {leaveDates.length} days</div>
-                  <div><strong>Paid Leave Days:</strong> {paidLeaveCount} days</div>
-                  <div><strong>Unpaid Leave Days:</strong> {leaveDates.length - paidLeaveCount} days</div>
-                  <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px dashed #ccc" }}>
-                    <div><strong>Billable Working Days:</strong> {selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount)} days</div>
-                    <div><strong>Billable Hours:</strong> {(selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount)) * 8} hrs</div>
-                    <div style={{ color: "#00d9a9", fontSize: 16, marginTop: 4 }}><strong>Calculated Amount:</strong> ₹ {Math.round((selectedTalent.monthlyRate / selectedTalent.actualWorkingDays) * (selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount))).toLocaleString("en-IN")}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <div style={{ padding: "12px 16px", background: "#f0f9ff", borderRadius: 6 }}>
+                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Total Leave Days:</strong> {leaveDates.length} days</div>
+                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Paid Leave Days:</strong> {paidLeaveCount} days</div>
+                    <div style={{ fontSize: 13 }}><strong>Unpaid Leave Days:</strong> {leaveDates.length - paidLeaveCount} days</div>
+                  </div>
+                  <div style={{ padding: "12px 16px", background: "#e7f6f2", borderRadius: 6 }}>
+                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Billable Working Days:</strong> {selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount)} days</div>
+                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Billable Hours:</strong> {(selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount)) * 8} hrs</div>
+                    <div style={{ color: "#00d9a9", fontSize: 15, fontWeight: 600 }}><strong>Amount:</strong> ₹ {Math.round((selectedTalent.monthlyRate / selectedTalent.actualWorkingDays) * (selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount))).toLocaleString("en-IN")}</div>
                   </div>
                 </div>
               </div>
@@ -762,6 +855,7 @@ const Timesheet = () => {
             </div>
           )}
         </UploadModal>
+        </div>
       </Modal>
     </TimesheetContainer>
   );
