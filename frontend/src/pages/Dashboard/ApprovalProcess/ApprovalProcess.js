@@ -823,7 +823,7 @@ Submitted On: ${record.submittedOn}
       title: "Days",
       dataIndex: "workingDays",
       key: "workingDays",
-      width: 60,
+      width: 75,
       render: (days) => <span style={{ fontWeight: 500 }}>{days}</span>,
     },
     {
