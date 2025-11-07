@@ -39,6 +39,7 @@ const Timesheet = () => {
   const [selectedTalent, setSelectedTalent] = useState(null);
   const [uploadedFile, setUploadedFile] = useState(null);
   const [leaveDates, setLeaveDates] = useState([]);
+  const [leaveDateInput, setLeaveDateInput] = useState("");
   const [paidLeaveCount, setPaidLeaveCount] = useState(0);
   const [timesheets, setTimesheets] = useState([]);
 
@@ -256,6 +257,9 @@ const Timesheet = () => {
     setSelectedTalent(record);
     setUploadModalVisible(true);
     setUploadedFile(null);
+    setLeaveDateInput("");
+    setLeaveDates([]);
+    setPaidLeaveCount(0);
   };
 
   const handleUploadSubmit = () => {
@@ -292,6 +296,7 @@ const Timesheet = () => {
     setSelectedTalent(null);
     setUploadedFile(null);
     setLeaveDates([]);
+    setLeaveDateInput("");
     setPaidLeaveCount(0);
   };
 
@@ -331,6 +336,14 @@ const Timesheet = () => {
     setSelectedTalent(record);
     setLeaveDates(record.leaveTaken.dates);
     setPaidLeaveCount(record.paidLeave || 0);
+    
+    // Extract date numbers from the existing dates
+    const dateNumbers = record.leaveTaken.dates.map(dateStr => {
+      const date = new Date(dateStr);
+      return date.getDate();
+    }).join(', ');
+    setLeaveDateInput(dateNumbers);
+    
     setUploadModalVisible(true);
   };
 
@@ -529,6 +542,7 @@ const Timesheet = () => {
           {record.status === "pending" && "Pending"}
           {record.status === "submitted" && "Submitted"}
           {record.status === "approved" && "Approved"}
+          {record.status === "rejected" && "Rejected"}
         </span>
       ),
     },
@@ -724,6 +738,7 @@ const Timesheet = () => {
           setSelectedTalent(null);
           setUploadedFile(null);
           setLeaveDates([]);
+          setLeaveDateInput("");
           setPaidLeaveCount(0);
         }}
         onOk={handleUploadSubmit}
@@ -756,8 +771,12 @@ const Timesheet = () => {
                     </label>
                     <Input
                       placeholder="Enter date numbers separated by commas"
+                      value={leaveDateInput}
                       onChange={(e) => {
-                        const dateNumbers = e.target.value.split(',').map(d => d.trim()).filter(d => d && !isNaN(Number(d)));
+                        const inputValue = e.target.value;
+                        setLeaveDateInput(inputValue);
+                        
+                        const dateNumbers = inputValue.split(',').map(d => d.trim()).filter(d => d && !isNaN(Number(d)));
                         const dates = dateNumbers.map(day => {
                           const dayNum = parseInt(day, 10);
                           const monthIndex = selectedTalent.month === "January" ? 0 : 
