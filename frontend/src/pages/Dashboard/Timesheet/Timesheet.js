@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Dropdown, Button, Empty, Segmented, Input, Select, Modal, message, Flex } from "antd";
+import { Table, Dropdown, Button, Empty, Input, Select, Modal, message, Flex } from "antd";
 import {
   MoreOutlined,
   SearchOutlined,
@@ -672,12 +672,18 @@ const Timesheet = () => {
 
       {!showPastTimesheets && (
         <TabsContainer>
-          <Segmented
-            value={activeTab}
-            onChange={setActiveTab}
-            options={["Pending Upload", "Approved"]}
-            block
-          />
+          <Button
+            className={`tab-button ${activeTab === "Pending Upload" ? "active" : ""}`}
+            onClick={() => setActiveTab("Pending Upload")}
+          >
+            Pending Upload
+          </Button>
+          <Button
+            className={`tab-button ${activeTab === "Approved" ? "active" : ""}`}
+            onClick={() => setActiveTab("Approved")}
+          >
+            Approved
+          </Button>
         </TabsContainer>
       )}
 

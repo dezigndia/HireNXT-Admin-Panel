@@ -93,33 +93,36 @@ export const TopSection = styled.div`
 `;
 
 export const TabsContainer = styled.div`
-  background: white;
-  border-radius: 8px;
-  padding: 16px 24px 0;
+  display: flex;
+  gap: 12px;
   margin-bottom: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 
-  .ant-segmented {
-    background: #f8f9fd;
-    padding: 4px;
-    border-radius: 6px;
+  .tab-button {
+    height: 48px;
+    padding: 0 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    border: 2px solid #d9d9d9;
+    background: white;
+    color: #595959;
+    transition: all 0.3s ease;
 
-    .ant-segmented-item {
-      border-radius: 4px;
-      padding: 8px 24px;
-      font-weight: 500;
-      color: #666;
-      transition: all 0.3s ease;
-
-      &:hover {
-        color: #014c75;
-      }
+    &:hover {
+      border-color: #00d9a9;
+      color: #00d9a9;
     }
 
-    .ant-segmented-item-selected {
-      background: white;
-      color: #014c75;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    &.active {
+      background: #00d9a9;
+      border-color: #00d9a9;
+      color: white;
+
+      &:hover {
+        background: #01c49b;
+        border-color: #01c49b;
+        color: white;
+      }
     }
   }
 `;

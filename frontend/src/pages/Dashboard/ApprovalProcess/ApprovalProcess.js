@@ -777,72 +777,83 @@ Submitted On: ${record.submittedOn}
     },
   ];
 
-  // Columns for Timesheets
+  // Columns for Timesheets - fixed layout with 75% total width to accommodate padding
   const timesheetColumns = [
     {
       title: "Talent Name",
       dataIndex: "talentName",
       key: "talentName",
+      width: "11%",
+      ellipsis: true,
     },
     {
       title: "Role",
       dataIndex: "role",
       key: "role",
+      width: "9%",
+      ellipsis: true,
     },
     {
       title: "Partner",
       dataIndex: "partnerOrg",
       key: "partnerOrg",
+      width: "9%",
+      ellipsis: true,
     },
     {
-      title: "Client Name",
+      title: "Client",
       dataIndex: "clientName",
       key: "clientName",
+      width: "8%",
+      ellipsis: true,
     },
     {
       title: "Month",
       dataIndex: "month",
       key: "month",
+      width: "7%",
       render: (text, record) => (
         <span>
-          {text} {record.year}
-          <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
-            ({record.actualWorkingDays} days)
-          </div>
+          {text.substring(0, 3)} '{record.year.toString().substring(2)}
         </span>
       ),
     },
     {
-      title: "Working Days",
+      title: "Days",
       dataIndex: "workingDays",
       key: "workingDays",
-      render: (days) => <span style={{ fontWeight: 500 }}>{days} days</span>,
+      width: "6%",
+      render: (days) => <span style={{ fontWeight: 500 }}>{days}</span>,
     },
     {
-      title: "Billable Hours",
+      title: "Hrs",
       dataIndex: "billableHours",
       key: "billableHours",
-      render: (hours) => <span style={{ fontWeight: 500 }}>{hours} hrs</span>,
+      width: "5%",
+      render: (hours) => <span style={{ fontWeight: 500 }}>{hours}</span>,
     },
     {
       title: "Amount",
       dataIndex: "calculatedAmount",
       key: "calculatedAmount",
+      width: "9%",
       render: (amount) => (
         <span style={{ fontWeight: 600, color: "#014c75" }}>
-          ₹ {Math.round(amount).toLocaleString("en-IN")}
+          ₹{Math.round(amount / 1000)}K
         </span>
       ),
     },
     {
-      title: "Submitted On",
+      title: "Submitted",
       dataIndex: "submittedOn",
       key: "submittedOn",
+      width: "7%",
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      width: "6%",
       render: (status) => (
         <Tag
           color={
@@ -860,10 +871,13 @@ Submitted On: ${record.submittedOn}
     {
       title: "Action",
       key: "action",
+      width: "8%",
       render: (_, record) => (
-        <Dropdown menu={getActionMenu(record)} trigger={["click"]}>
-          <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
-        </Dropdown>
+        <div style={{ textAlign: "center" }}>
+          <Dropdown menu={getActionMenu(record)} trigger={["click"]}>
+            <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
+          </Dropdown>
+        </div>
       ),
     },
   ];
@@ -1135,7 +1149,7 @@ Submitted On: ${record.submittedOn}
           columns={getColumns()}
           dataSource={filteredData}
           pagination={{ pageSize: 10 }}
-          scroll={{ x: 1500 }}
+          tableLayout="fixed"
         />
 
         {/* Reject with Comment Modal */}
