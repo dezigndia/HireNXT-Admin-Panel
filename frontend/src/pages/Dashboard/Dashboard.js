@@ -15,6 +15,7 @@ import {
   UserOutlined,
   LockOutlined,
   DownOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Button, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { DashboardWrapper } from "./Dashboard.style";
@@ -32,6 +33,7 @@ import AdminJobDetails from "./JobRequirments/JobDetails";
 import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
 import TalentsHired from "./TalentsHired/TalentsHired";
 import AddHiringRecord from "./TalentsHired/AddHiringRecord/AddHiringRecord";
+import Timesheet from "./Timesheet/Timesheet";
 import Profile from "./Profile/Profile";
 
 const { Header, Content, Sider } = Layout;
@@ -67,6 +69,11 @@ const sideBarMenu = [
     key: "/home/talents-hired",
     label: "Talents Hired",
     icon: <TeamOutlined />,
+  },
+  {
+    key: "/home/timesheet",
+    label: "Timesheet",
+    icon: <FileTextOutlined />,
   },
   {
     key: "/home/approval-process",
@@ -213,6 +220,7 @@ const Dashboard = () => {
                 path="/talents-hired/add-hiring-record"
                 element={<AddHiringRecord />}
               />
+              <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/approval-process" element={<ApprovalProcess />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
