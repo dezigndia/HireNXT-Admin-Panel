@@ -26,20 +26,20 @@ The application is a React-based single-page application (SPA) built with Create
     - **Dashboard Overview:** Modernized home page with key metrics cards (Total Talents Hired, Total Partners, Total Customers, Total Profiles Submitted, Estimated Revenue/Payout, Avg. Revenue per Customer, Avg. Cost per Talent), approvals pending section, and top customers hiring talents table.
     - **User Management:** Comprehensive user database management with metrics cards and consistent UI for customer, partner, and admin users.
     - **Timesheet Management:** Upload and manage timesheets for onboarded talents with features including:
-      - Three-tab navigation: Pending Upload, Submitted, Approved (hidden in historical view)
-      - Historical view mode: When "View All History" is active, tabs are hidden and all records are shown with status in the Status column
-      - Metrics dashboard: Pending Upload count, Submitted count, Approved count, Total Amount (compact cards with 14-16px padding)
+      - Two-tab navigation: Pending Upload, Approved (Submitted timesheets moved to Approval Process)
+      - Historical view mode: When "View All History" is active, tabs are hidden and only Approved records are shown
+      - Metrics dashboard: Pending Upload count, Approved count, Total Amount (compact cards with 14-16px padding)
       - Automated timesheet calculations: working days (actualWorkingDays - unpaidLeaveDays), billable hours (working days × 8), calculated amount based on monthly rate
       - CSV/Excel file upload using Ant Design Dragger component (.csv, .xlsx, .xls formats)
       - Consistent search bar (Flex layout, 300px width, SearchOutlined prefix icon)
-      - Historical view toggle: "View All History" button with Year, Month, and Partner dropdown filters
+      - Historical view toggle: "View All History" button with Year, Month, and Partner dropdown filters - shows only approved timesheets with View and Download actions
       - Advanced leave management in upload modal:
         - Simplified leave dates input: just enter date numbers (e.g., "5, 10, 15") instead of full dates
         - Paid leave count input (clamped to not exceed total leave days)
         - Real-time calculation preview in side-by-side layout: Leave breakdown (left) and Billable calculations (right)
         - Formula: unpaidLeaveDays = totalLeave - paidLeave; workingDays = actualWorkingDays - unpaidLeaveDays
         - Modal has inner scroll (maxHeight: 60vh) for better UX
-      - Admin action menus: All statuses include Modify, Reject (danger), and Delete (danger) options in addition to status-specific actions
+      - Status-specific action menus: Pending (Upload, Delete), Approved (View, Modify, Reject, Delete)
       - Upload modal with talent details, drag-and-drop file upload, and leave management
       - Table columns: Talent Name, Role, Partner, Client Name, Month (shows "Month YYYY (XX days)" format with actual working days), Leave Taken (count with date tooltips), Working Days, Billable Hours, Amount, Status, Action
       - State-based data persistence: Leave information persists correctly after modal submission using React state
@@ -50,7 +50,7 @@ The application is a React-based single-page application (SPA) built with Create
         - **Design Consistency:** Uses brand colors (#014c75, #00d9a9) with step progress indicator matching overall app aesthetics. Technical skills rendered as dynamic form list with add/remove functionality. Project cards displayed with gray background (#fafafa) and structured layout. Submit button disabled until Resume is uploaded.
     - **Job Requirements:** Job posting and requirement management with metrics, three-tab navigation (Active Jobs, Profiles Submitted, Jobs Fulfilled), detailed job view pages, and an edit job modal. Includes advanced search and filtering for profiles.
     - **Talents Hired:** Comprehensive talent contract management with metrics cards, active/inactive tabs, advanced search and filter functionality (by name, role, location, experience), a detailed table, and a 2-step wizard for adding new hiring records.
-    - **Approval Process:** Three-tab approval system for pending Partner/Customer registrations, Talent Profile submissions, and Job Posts, with individual approve/reject actions (reject requires a comment) and bulk approve functionality. Features dynamic status badges and consistent filtering.
+    - **Approval Process:** Four-tab approval system for pending Partner/Customer registrations, Job Posts, Talent Profile submissions, and Timesheet submissions, with individual approve/reject actions (reject requires a comment) and bulk approve functionality. Features dynamic status badges, consistent filtering, and tab-specific search/filter options (Users: filter by Type; Profiles: filter by Role/Location; Jobs: filter by Location/Experience; Timesheet: filter by Partner/Month).
     - **Role Permissions:** Configuration for role-based access control.
 
 **System Design Choices:**
