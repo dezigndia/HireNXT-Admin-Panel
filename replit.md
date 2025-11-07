@@ -26,20 +26,22 @@ The application is a React-based single-page application (SPA) built with Create
     - **Dashboard Overview:** Modernized home page with key metrics cards (Total Talents Hired, Total Partners, Total Customers, Total Profiles Submitted, Estimated Revenue/Payout, Avg. Revenue per Customer, Avg. Cost per Talent), approvals pending section, and top customers hiring talents table.
     - **User Management:** Comprehensive user database management with metrics cards and consistent UI for customer, partner, and admin users.
     - **Timesheet Management:** Upload and manage timesheets for onboarded talents with features including:
-      - Three-tab navigation: Pending Upload, Submitted, Approved
+      - Three-tab navigation: Pending Upload, Submitted, Approved (hidden in historical view)
+      - Historical view mode: When "View All History" is active, tabs are hidden and all records are shown with status in the Status column
       - Metrics dashboard: Pending Upload count, Submitted count, Approved count, Total Amount (compact cards with 14-16px padding)
       - Automated timesheet calculations: working days (actualWorkingDays - unpaidLeaveDays), billable hours (working days × 8), calculated amount based on monthly rate
       - CSV/Excel file upload using Ant Design Dragger component (.csv, .xlsx, .xls formats)
       - Consistent search bar (Flex layout, 300px width, SearchOutlined prefix icon)
       - Historical view toggle: "View All History" button with Year, Month, and Partner dropdown filters
       - Advanced leave management in upload modal:
-        - Leave dates picker with multi-date selection
+        - Simplified leave dates input: just enter date numbers (e.g., "5, 10, 15") instead of full dates
         - Paid leave count input (clamped to not exceed total leave days)
-        - Real-time calculation preview showing: Total Leave Days, Paid Leave Days, Unpaid Leave Days, Billable Working Days, Billable Hours, Calculated Amount
+        - Real-time calculation preview in side-by-side layout: Leave breakdown (left) and Billable calculations (right)
         - Formula: unpaidLeaveDays = totalLeave - paidLeave; workingDays = actualWorkingDays - unpaidLeaveDays
-      - Dynamic action menus: Upload Timesheet (pending), Approve/Share (submitted), Share/Download (approved)
+        - Modal has inner scroll (maxHeight: 60vh) for better UX
+      - Admin action menus: All statuses include Modify, Reject (danger), and Delete (danger) options in addition to status-specific actions
       - Upload modal with talent details, drag-and-drop file upload, and leave management
-      - Table columns: Talent Name, Role, Partner (renamed from Partner Organization), Client Name, Month (shows "Month YYYY (XX days)" format with actual working days), Leave Taken (count with date tooltips), Working Days, Billable Hours, Amount, Status, Action
+      - Table columns: Talent Name, Role, Partner, Client Name, Month (shows "Month YYYY (XX days)" format with actual working days), Leave Taken (count with date tooltips), Working Days, Billable Hours, Amount, Status, Action
       - State-based data persistence: Leave information persists correctly after modal submission using React state
     - **Talent Profiles:** Talent profile database management with metrics, active/inactive tabs, detailed table columns, and action menus (View Document, Edit, Mark Inactive, Delete).
       - **Add New Profile:** 2-step wizard for adding talent profiles (matching Partner module's structure):
