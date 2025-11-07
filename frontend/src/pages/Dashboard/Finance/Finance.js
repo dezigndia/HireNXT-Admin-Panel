@@ -12,6 +12,7 @@ import {
   Descriptions,
   Form,
   InputNumber,
+  Upload,
 } from "antd";
 import {
   SearchOutlined,
@@ -26,6 +27,7 @@ import {
   SendOutlined,
   SyncOutlined,
   LineChartOutlined,
+  InboxOutlined,
 } from "@ant-design/icons";
 import {
   FinanceContainer,
@@ -42,6 +44,7 @@ import {
 } from "./Finance.style";
 
 const { Option } = Select;
+const { Dragger } = Upload;
 
 const Finance = () => {
   const [activeTab, setActiveTab] = useState("Client Billing");
@@ -50,6 +53,12 @@ const Finance = () => {
   const [filterCustomer, setFilterCustomer] = useState("");
   const [filterMonth, setFilterMonth] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
+  
+  // Create Invoice Modal state
+  const [createInvoiceModalVisible, setCreateInvoiceModalVisible] = useState(false);
+  const [selectedInvoiceRecord, setSelectedInvoiceRecord] = useState(null);
+  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [uploadedInvoiceFile, setUploadedInvoiceFile] = useState(null);
 
   // Mock data for Client Billing (Receivables)
   const [receivables, setReceivables] = useState([
@@ -547,19 +556,36 @@ const Finance = () => {
   };
 
   const handleCreateInvoice = (record) => {
-    Modal.confirm({
-      title: "Create Invoice",
-      content: `Create and send invoice to ${record.customer} for ${record.talentName} (${record.month} ${record.year})?`,
-      okText: "Create & Send",
-      okButtonProps: { style: { background: "#00d9a9", borderColor: "#00d9a9" } },
-      onOk: () => {
-        const updated = receivables.map((r) =>
-          r.id === record.id ? { ...r, invoiceStatus: "Sent" } : r
-        );
-        setReceivables(updated);
-        message.success(`Invoice created and sent to ${record.customer}`);
-      },
-    });
+    setSelectedInvoiceRecord(record);
+    setCreateInvoiceModalVisible(true);
+    // Generate default invoice number
+    const invoiceNum = `INV-${record.talentId}-${record.month.substring(0, 3).toUpperCase()}${record.year}`;
+    setInvoiceNumber(invoiceNum);
+  };
+
+  const handleCloseInvoiceModal = () => {
+    setCreateInvoiceModalVisible(false);
+    setSelectedInvoiceRecord(null);
+    setInvoiceNumber("");
+    setUploadedInvoiceFile(null);
+  };
+
+  const handleSubmitInvoice = () => {
+    if (!uploadedInvoiceFile) {
+      message.warning("Please upload an invoice file");
+      return;
+    }
+    if (!invoiceNumber.trim()) {
+      message.warning("Please enter an invoice number");
+      return;
+    }
+
+    const updated = receivables.map((r) =>
+      r.id === selectedInvoiceRecord.id ? { ...r, invoiceStatus: "Sent" } : r
+    );
+    setReceivables(updated);
+    message.success(`Invoice ${invoiceNumber} created and sent to ${selectedInvoiceRecord.customer}`);
+    handleCloseInvoiceModal();
   };
 
   // Action handlers for Partner Payables
@@ -922,6 +948,14 @@ const Finance = () => {
           menu={{
             items: [
               {
+                key: "createInvoice",
+                label: "Create Invoice",
+                icon: <SendOutlined />,
+                onClick: () => handleCreateInvoice(record),
+                disabled:
+                  record.invoiceStatus === "Sent" || record.invoiceStatus === "Paid",
+              },
+              {
                 key: "viewBreakup",
                 label: "View Breakup",
                 icon: <EyeOutlined />,
@@ -932,14 +966,6 @@ const Finance = () => {
                 label: "Download Timesheet",
                 icon: <DownloadOutlined />,
                 onClick: () => handleDownloadTimesheet(record),
-              },
-              {
-                key: "createInvoice",
-                label: "Create Invoice",
-                icon: <SendOutlined />,
-                onClick: () => handleCreateInvoice(record),
-                disabled:
-                  record.invoiceStatus === "Sent" || record.invoiceStatus === "Paid",
               },
             ],
           }}
@@ -1525,7 +1551,7 @@ const Finance = () => {
           {activeTab !== "Revenue Analysis" && (
             <Select
               placeholder="Filter by Partner"
-              value={filterPartner}
+              value={filterPartner || undefined}
               onChange={setFilterPartner}
               allowClear
               style={{ minWidth: 180 }}
@@ -1541,7 +1567,7 @@ const Finance = () => {
             activeTab === "Revenue Analysis") && (
             <Select
               placeholder="Filter by Customer"
-              value={filterCustomer}
+              value={filterCustomer || undefined}
               onChange={setFilterCustomer}
               allowClear
               style={{ minWidth: 180 }}
@@ -1554,7 +1580,7 @@ const Finance = () => {
           )}
           <Select
             placeholder="Filter by Month"
-            value={filterMonth}
+            value={filterMonth || undefined}
             onChange={setFilterMonth}
             allowClear
             style={{ minWidth: 150 }}
@@ -1567,7 +1593,7 @@ const Finance = () => {
           {activeTab !== "Revenue Analysis" && (
             <Select
               placeholder="Filter by Status"
-              value={filterStatus}
+              value={filterStatus || undefined}
               onChange={setFilterStatus}
               allowClear
               style={{ minWidth: 150 }}
@@ -1947,6 +1973,114 @@ const Finance = () => {
       {renderFilters()}
 
       {renderTable()}
+
+      {/* Create Invoice Modal */}
+      <Modal
+        title={`Create Invoice - ${selectedInvoiceRecord?.talentName || ''}`}
+        open={createInvoiceModalVisible}
+        onOk={handleSubmitInvoice}
+        onCancel={handleCloseInvoiceModal}
+        width={700}
+        okText="Create & Send Invoice"
+        okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
+      >
+        {selectedInvoiceRecord && (
+          <div style={{ maxHeight: "60vh", overflowY: "auto", paddingRight: 8 }}>
+            {/* Talent Details */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                Talent Details
+              </label>
+              <div style={{ padding: "12px 16px", background: "#f8f9fd", borderRadius: 6 }}>
+                <div><strong>Talent ID:</strong> {selectedInvoiceRecord.talentId}</div>
+                <div><strong>Role:</strong> {selectedInvoiceRecord.role}</div>
+                <div><strong>Partner:</strong> {selectedInvoiceRecord.partner}</div>
+                <div><strong>Customer:</strong> {selectedInvoiceRecord.customer}</div>
+                <div><strong>Month:</strong> {selectedInvoiceRecord.month} {selectedInvoiceRecord.year}</div>
+                <div><strong>Working Days:</strong> {selectedInvoiceRecord.workingDays} days</div>
+                <div><strong>Billable Hours:</strong> {selectedInvoiceRecord.billableHours} hours</div>
+              </div>
+            </div>
+
+            {/* Invoice Number */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                Invoice Number <span style={{ color: "red" }}>*</span>
+              </label>
+              <Input
+                placeholder="Enter invoice number"
+                value={invoiceNumber}
+                onChange={(e) => setInvoiceNumber(e.target.value)}
+                style={{ width: "100%" }}
+              />
+            </div>
+
+            {/* Amount Breakup */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                Amount Breakup
+              </label>
+              <div style={{ padding: 16, background: "#fff5e6", borderRadius: 6 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                  <span>Base Amount ({selectedInvoiceRecord.workingDays} days):</span>
+                  <strong>₹ {selectedInvoiceRecord.amount.toLocaleString("en-IN")}</strong>
+                </div>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                  <span>GST (18%):</span>
+                  <strong>₹ {selectedInvoiceRecord.gst.toLocaleString("en-IN")}</strong>
+                </div>
+                <div style={{ 
+                  display: "flex", 
+                  justifyContent: "space-between", 
+                  paddingTop: 8, 
+                  borderTop: "2px solid #014c75",
+                  marginTop: 8 
+                }}>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: "#014c75" }}>Total Amount:</span>
+                  <strong style={{ fontSize: 16, color: "#00d9a9" }}>
+                    ₹ {selectedInvoiceRecord.totalAmount.toLocaleString("en-IN")}
+                  </strong>
+                </div>
+              </div>
+            </div>
+
+            {/* Invoice Upload */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                Upload Invoice <span style={{ color: "red" }}>*</span>
+              </label>
+              <Dragger
+                name="file"
+                multiple={false}
+                accept=".pdf,.doc,.docx"
+                beforeUpload={(file) => {
+                  const isPDF = file.type === "application/pdf" ||
+                               file.type === "application/msword" ||
+                               file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                  if (!isPDF) {
+                    message.error("You can only upload PDF or Word documents!");
+                    return Upload.LIST_IGNORE;
+                  }
+                  setUploadedInvoiceFile(file);
+                  return false;
+                }}
+                onRemove={() => {
+                  setUploadedInvoiceFile(null);
+                }}
+                fileList={uploadedInvoiceFile ? [uploadedInvoiceFile] : []}
+              >
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined style={{ color: "#00d9a9" }} />
+                </p>
+                <p className="ant-upload-text">Click or drag invoice file to this area to upload</p>
+                <p className="ant-upload-hint">
+                  Support for PDF, DOC, or DOCX files. Upload the signed invoice document.
+                </p>
+              </Dragger>
+            </div>
+          </div>
+        )}
+      </Modal>
     </FinanceContainer>
   );
 };
