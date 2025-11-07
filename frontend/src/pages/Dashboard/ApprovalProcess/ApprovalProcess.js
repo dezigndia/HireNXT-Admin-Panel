@@ -169,6 +169,46 @@ const mockJobPosts = [
   },
 ];
 
+// Mock data for Timesheets (submitted status)
+const mockTimesheets = [
+  {
+    key: "1",
+    talentName: "Amit Patel",
+    role: "Backend Developer",
+    partnerOrg: "Digital Partners Inc",
+    clientName: "Microsoft Corp",
+    month: "November",
+    year: "2024",
+    actualWorkingDays: 21,
+    leaveTaken: { count: 1, dates: ["2024-11-15"] },
+    paidLeave: 1,
+    workingDays: 21,
+    billableHours: 168,
+    calculatedAmount: 140000,
+    monthlyRate: 140000,
+    submittedOn: "05-Nov-24",
+    status: "Pending",
+  },
+  {
+    key: "2",
+    talentName: "Sneha Kapoor",
+    role: "Frontend Developer",
+    partnerOrg: "TechCorp Solutions",
+    clientName: "Apple Inc",
+    month: "November",
+    year: "2024",
+    actualWorkingDays: 21,
+    leaveTaken: { count: 2, dates: ["2024-11-10", "2024-11-20"] },
+    paidLeave: 0,
+    workingDays: 19,
+    billableHours: 152,
+    calculatedAmount: (155000 / 21) * 19,
+    monthlyRate: 155000,
+    submittedOn: "04-Nov-24",
+    status: "Pending",
+  },
+];
+
 const ApprovalProcess = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Users");
@@ -177,6 +217,8 @@ const ApprovalProcess = () => {
   const [filterLocation, setFilterLocation] = useState(null);
   const [filterRole, setFilterRole] = useState(null);
   const [filterExperience, setFilterExperience] = useState(null);
+  const [filterPartner, setFilterPartner] = useState(null);
+  const [filterMonth, setFilterMonth] = useState(null);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [currentRejectRecord, setCurrentRejectRecord] = useState(null);
@@ -186,6 +228,7 @@ const ApprovalProcess = () => {
   const [partnersData, setPartnersData] = useState(mockPartnersCustomers);
   const [talentsData, setTalentsData] = useState(mockTalentProfiles);
   const [jobsData, setJobsData] = useState(mockJobPosts);
+  const [timesheetsData, setTimesheetsData] = useState(mockTimesheets);
 
   // Get current data based on active tab
   const getCurrentData = () => {
@@ -196,6 +239,8 @@ const ApprovalProcess = () => {
         return talentsData;
       case "Jobs":
         return jobsData;
+      case "Timesheet":
+        return timesheetsData;
       default:
         return [];
     }
@@ -207,6 +252,7 @@ const ApprovalProcess = () => {
       partners: partnersData.filter((item) => item.status === "Pending").length,
       talents: talentsData.filter((item) => item.status === "Pending").length,
       jobs: jobsData.filter((item) => item.status === "Pending").length,
+      timesheets: timesheetsData.filter((item) => item.status === "Pending").length,
     };
   };
 
@@ -230,6 +276,12 @@ const ApprovalProcess = () => {
         item.role.toLowerCase().includes(searchLower) ||
         item.skills.toLowerCase().includes(searchLower)
       );
+    } else if (activeTab === "Timesheet") {
+      matchesSearch = (
+        item.talentName.toLowerCase().includes(searchLower) ||
+        item.role.toLowerCase().includes(searchLower) ||
+        item.clientName.toLowerCase().includes(searchLower)
+      );
     } else {
       matchesSearch = (
         item.jobTitle.toLowerCase().includes(searchLower) ||
@@ -246,6 +298,9 @@ const ApprovalProcess = () => {
     } else if (activeTab === "Profiles") {
       matchesFilters = (!filterRole || item.role === filterRole) &&
                        (!filterLocation || item.location === filterLocation);
+    } else if (activeTab === "Timesheet") {
+      matchesFilters = (!filterPartner || item.partnerOrg === filterPartner) &&
+                       (!filterMonth || item.month === filterMonth);
     } else {
       matchesFilters = (!filterLocation || item.location === filterLocation) &&
                        (!filterExperience || item.experience === filterExperience);
@@ -270,6 +325,11 @@ const ApprovalProcess = () => {
       setTalentsData(updateData(talentsData, record.key));
       message.success(
         `Talent profile "${record.name}" has been approved and is now active!`
+      );
+    } else if (activeTab === "Timesheet") {
+      setTimesheetsData(updateData(timesheetsData, record.key));
+      message.success(
+        `Timesheet for "${record.talentName}" has been approved!`
       );
     } else {
       setJobsData(updateData(jobsData, record.key));
@@ -297,6 +357,8 @@ const ApprovalProcess = () => {
       setPartnersData(updateData(partnersData));
     } else if (activeTab === "Profiles") {
       setTalentsData(updateData(talentsData));
+    } else if (activeTab === "Timesheet") {
+      setTimesheetsData(updateData(timesheetsData));
     } else {
       setJobsData(updateData(jobsData));
     }
@@ -330,6 +392,11 @@ const ApprovalProcess = () => {
       setTalentsData(updateData(talentsData, currentRejectRecord.key));
       message.error(
         `Talent profile "${currentRejectRecord.name}" has been rejected`
+      );
+    } else if (activeTab === "Timesheet") {
+      setTimesheetsData(updateData(timesheetsData, currentRejectRecord.key));
+      message.error(
+        `Timesheet for "${currentRejectRecord.talentName}" has been rejected`
       );
     } else {
       setJobsData(updateData(jobsData, currentRejectRecord.key));
@@ -594,6 +661,97 @@ const ApprovalProcess = () => {
     },
   ];
 
+  // Columns for Timesheets
+  const timesheetColumns = [
+    {
+      title: "Talent Name",
+      dataIndex: "talentName",
+      key: "talentName",
+    },
+    {
+      title: "Role",
+      dataIndex: "role",
+      key: "role",
+    },
+    {
+      title: "Partner",
+      dataIndex: "partnerOrg",
+      key: "partnerOrg",
+    },
+    {
+      title: "Client Name",
+      dataIndex: "clientName",
+      key: "clientName",
+    },
+    {
+      title: "Month",
+      dataIndex: "month",
+      key: "month",
+      render: (text, record) => (
+        <span>
+          {text} {record.year}
+          <div style={{ fontSize: 11, color: "#666", marginTop: 2 }}>
+            ({record.actualWorkingDays} days)
+          </div>
+        </span>
+      ),
+    },
+    {
+      title: "Working Days",
+      dataIndex: "workingDays",
+      key: "workingDays",
+      render: (days) => <span style={{ fontWeight: 500 }}>{days} days</span>,
+    },
+    {
+      title: "Billable Hours",
+      dataIndex: "billableHours",
+      key: "billableHours",
+      render: (hours) => <span style={{ fontWeight: 500 }}>{hours} hrs</span>,
+    },
+    {
+      title: "Amount",
+      dataIndex: "calculatedAmount",
+      key: "calculatedAmount",
+      render: (amount) => (
+        <span style={{ fontWeight: 600, color: "#014c75" }}>
+          ₹ {Math.round(amount).toLocaleString("en-IN")}
+        </span>
+      ),
+    },
+    {
+      title: "Submitted On",
+      dataIndex: "submittedOn",
+      key: "submittedOn",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => (
+        <Tag
+          color={
+            status === "Approved"
+              ? "green"
+              : status === "Rejected"
+              ? "red"
+              : "orange"
+          }
+        >
+          {status}
+        </Tag>
+      ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Dropdown menu={getActionMenu(record)} trigger={["click"]}>
+          <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
+        </Dropdown>
+      ),
+    },
+  ];
+
   // Get columns based on active tab
   const getColumns = () => {
     switch (activeTab) {
@@ -603,6 +761,8 @@ const ApprovalProcess = () => {
         return talentsColumns;
       case "Jobs":
         return jobsColumns;
+      case "Timesheet":
+        return timesheetColumns;
       default:
         return [];
     }
@@ -629,6 +789,7 @@ const ApprovalProcess = () => {
             { key: "Users", count: pendingCounts.partners },
             { key: "Jobs", count: pendingCounts.jobs },
             { key: "Profiles", count: pendingCounts.talents },
+            { key: "Timesheet", count: pendingCounts.timesheets },
           ].map((tab) => (
             <Button
               key={tab.key}
@@ -648,6 +809,8 @@ const ApprovalProcess = () => {
                 setFilterLocation(null);
                 setFilterRole(null);
                 setFilterExperience(null);
+                setFilterPartner(null);
+                setFilterMonth(null);
               }}
             >
               {tab.key} ({tab.count})
@@ -665,6 +828,8 @@ const ApprovalProcess = () => {
                   ? "by name, contact person, or email"
                   : activeTab === "Profiles"
                   ? "by name, role, or skills"
+                  : activeTab === "Timesheet"
+                  ? "by talent name, role, or client"
                   : "by job title, company, or skills"
               }`}
               value={searchText}
@@ -783,6 +948,42 @@ const ApprovalProcess = () => {
                   <Option value="4+ years">4+ years</Option>
                   <Option value="5+ years">5+ years</Option>
                   <Option value="6+ years">6+ years</Option>
+                </Select>
+              </>
+            )}
+
+            {activeTab === "Timesheet" && (
+              <>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Partner
+                    </span>
+                  }
+                  value={filterPartner}
+                  onChange={setFilterPartner}
+                  style={{ width: 200 }}
+                  allowClear
+                >
+                  <Option value="TechCorp Solutions">TechCorp Solutions</Option>
+                  <Option value="Digital Partners Inc">Digital Partners Inc</Option>
+                </Select>
+                <Select
+                  placeholder={
+                    <span>
+                      <FilterOutlined style={{ marginRight: 8 }} />
+                      Filter by Month
+                    </span>
+                  }
+                  value={filterMonth}
+                  onChange={setFilterMonth}
+                  style={{ width: 150 }}
+                  allowClear
+                >
+                  <Option value="November">November</Option>
+                  <Option value="December">December</Option>
+                  <Option value="October">October</Option>
                 </Select>
               </>
             )}

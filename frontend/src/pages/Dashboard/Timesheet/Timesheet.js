@@ -210,11 +210,12 @@ const Timesheet = () => {
     if (!showPastTimesheets) {
       if (activeTab === "Pending Upload") {
         filtered = filtered.filter(t => t.status === "pending");
-      } else if (activeTab === "Submitted") {
-        filtered = filtered.filter(t => t.status === "submitted");
       } else if (activeTab === "Approved") {
         filtered = filtered.filter(t => t.status === "approved");
       }
+    } else {
+      // View All History: Only show approved timesheets
+      filtered = filtered.filter(t => t.status === "approved");
     }
 
     if (searchText) {
@@ -244,11 +245,10 @@ const Timesheet = () => {
 
   const getMetrics = () => {
     const pending = timesheets.filter(t => t.status === "pending").length;
-    const submitted = timesheets.filter(t => t.status === "submitted").length;
     const approved = timesheets.filter(t => t.status === "approved").length;
     const totalAmount = currentData.reduce((sum, t) => sum + t.calculatedAmount, 0);
 
-    return { pending, submitted, approved, totalAmount };
+    return { pending, approved, totalAmount };
   };
 
   const metrics = getMetrics();
@@ -387,7 +387,23 @@ const Timesheet = () => {
     });
   };
 
+  const handleView = (record) => {
+    message.info(`Viewing timesheet for ${record.talentName} - ${record.month} ${record.year}`);
+  };
+
   const getActionMenu = (record) => {
+    // View All History: Only show View action
+    if (showPastTimesheets) {
+      return [
+        {
+          key: "view",
+          label: "View",
+          onClick: () => handleView(record),
+        },
+      ];
+    }
+
+    // Current view: Show full admin actions
     const adminItems = [
       {
         key: "modify",
@@ -422,21 +438,6 @@ const Timesheet = () => {
           key: "upload",
           label: "Upload Timesheet",
           onClick: () => handleUploadClick(record),
-        },
-        ...baseItems,
-        ...adminItems,
-      ];
-    } else if (record.status === "submitted") {
-      return [
-        {
-          key: "approve",
-          label: "Approve Timesheet",
-          onClick: () => handleApprove(record),
-        },
-        {
-          key: "share",
-          label: "Share with Client",
-          onClick: () => handleShare(record),
         },
         ...baseItems,
         ...adminItems,
@@ -581,17 +582,6 @@ const Timesheet = () => {
 
         <MetricCard>
           <div className="metric-header">
-            <span className="metric-label">Submitted</span>
-            <div className="metric-icon primary">
-              <CloudUploadOutlined />
-            </div>
-          </div>
-          <div className="metric-value">{metrics.submitted}</div>
-          <div className="metric-subtext">Pending approval</div>
-        </MetricCard>
-
-        <MetricCard>
-          <div className="metric-header">
             <span className="metric-label">Approved</span>
             <div className="metric-icon success">
               <CheckCircleOutlined />
@@ -706,7 +696,7 @@ const Timesheet = () => {
           <Segmented
             value={activeTab}
             onChange={setActiveTab}
-            options={["Pending Upload", "Submitted", "Approved"]}
+            options={["Pending Upload", "Approved"]}
             block
           />
         </TabsContainer>
