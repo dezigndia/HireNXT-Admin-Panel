@@ -676,13 +676,13 @@ const Timesheet = () => {
             className={`tab-button ${activeTab === "Pending Upload" ? "active" : ""}`}
             onClick={() => setActiveTab("Pending Upload")}
           >
-            Pending Upload
+            Pending Upload ({metrics.pending})
           </Button>
           <Button
             className={`tab-button ${activeTab === "Approved" ? "active" : ""}`}
             onClick={() => setActiveTab("Approved")}
           >
-            Approved
+            Approved ({metrics.approved})
           </Button>
         </TabsContainer>
       )}
