@@ -34,6 +34,7 @@ import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
 import TalentsHired from "./TalentsHired/TalentsHired";
 import AddHiringRecord from "./TalentsHired/AddHiringRecord/AddHiringRecord";
 import Timesheet from "./Timesheet/Timesheet";
+import Finance from "./Finance/Finance";
 import Profile from "./Profile/Profile";
 
 const { Header, Content, Sider } = Layout;
@@ -79,6 +80,11 @@ const sideBarMenu = [
     key: "/home/approval-process",
     label: "Approval Process",
     icon: <FieldTimeOutlined />,
+  },
+  {
+    key: "/home/finance",
+    label: "Finance",
+    icon: <DollarOutlined />,
   },
 ];
 
@@ -222,6 +228,7 @@ const Dashboard = () => {
               />
               <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/approval-process" element={<ApprovalProcess />} />
+              <Route path="finance" element={<Finance />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </Layout>
