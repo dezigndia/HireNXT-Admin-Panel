@@ -319,15 +319,15 @@ export const UploadModal = styled.div`
 
 export const MetricsContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
 `;
 
 export const MetricCard = styled.div`
   background: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 14px 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -340,22 +340,22 @@ export const MetricCard = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
 
     .metric-label {
       color: #666;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 500;
     }
 
     .metric-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
+      font-size: 17px;
 
       &.primary {
         background: rgba(0, 217, 169, 0.1);
@@ -380,14 +380,14 @@ export const MetricCard = styled.div`
   }
 
   .metric-value {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: #014c75;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
 
   .metric-subtext {
     color: #999;
-    font-size: 12px;
+    font-size: 11px;
   }
 `;
