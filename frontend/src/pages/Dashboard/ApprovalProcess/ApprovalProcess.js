@@ -226,6 +226,7 @@ const ApprovalProcess = () => {
   const [form] = Form.useForm();
   const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
   const [selectedTimesheet, setSelectedTimesheet] = useState(null);
+  const [timesheetModalMode, setTimesheetModalMode] = useState("view");
 
   // State for each data type
   const [partnersData, setPartnersData] = useState(mockPartnersCustomers);
@@ -424,6 +425,7 @@ const ApprovalProcess = () => {
     } else if (activeTab === "Timesheet") {
       // Open timesheet view modal
       setSelectedTimesheet(record);
+      setTimesheetModalMode("view");
       setTimesheetModalVisible(true);
     } else {
       // Navigate to job details page  
@@ -454,6 +456,49 @@ const ApprovalProcess = () => {
     setRejectModalVisible(true);
   };
 
+  // Handle timesheet modify
+  const handleTimesheetModify = (record) => {
+    setSelectedTimesheet(record);
+    setTimesheetModalMode("edit");
+    setTimesheetModalVisible(true);
+  };
+
+  // Handle timesheet download
+  const handleTimesheetDownload = (record) => {
+    // Create timesheet content
+    const content = `
+TIMESHEET DETAILS
+=====================================
+Talent Name: ${record.talentName}
+Role: ${record.role}
+Partner Organization: ${record.partnerOrg}
+Client Name: ${record.clientName}
+Month: ${record.month} ${record.year}
+Actual Working Days: ${record.actualWorkingDays} days
+Leave Taken: ${record.leaveTaken.count} days (${record.leaveTaken.dates.join(", ")})
+Paid Leave: ${record.paidLeave} days
+Working Days: ${record.workingDays} days
+Billable Hours: ${record.billableHours} hrs
+Monthly Rate: ₹${record.monthlyRate.toLocaleString("en-IN")}
+Calculated Amount: ₹${Math.round(record.calculatedAmount).toLocaleString("en-IN")}
+Status: ${record.status}
+Submitted On: ${record.submittedOn}
+=====================================
+    `.trim();
+
+    // Create blob and download
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Timesheet_${record.talentName.replace(/\s+/g, "_")}_${record.month}_${record.year}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    message.success(`Timesheet downloaded for ${record.talentName}`);
+  };
+
   // Create action menu for each row
   const getActionMenu = (record) => {
     // Special handling for Timesheet tab
@@ -465,8 +510,18 @@ const ApprovalProcess = () => {
             label: "View",
             onClick: () => handleView(record),
           },
+          {
+            key: "download",
+            label: "Download Timesheet",
+            onClick: () => handleTimesheetDownload(record),
+          },
           ...(record.status === "Submitted"
             ? [
+                {
+                  key: "modify",
+                  label: "Modify",
+                  onClick: () => handleTimesheetModify(record),
+                },
                 {
                   key: "approve",
                   label: "Approve",
@@ -834,9 +889,18 @@ const ApprovalProcess = () => {
     onChange: (selectedKeys) => {
       setSelectedRowKeys(selectedKeys);
     },
-    getCheckboxProps: (record) => ({
-      disabled: record.status !== "Pending",
-    }),
+    getCheckboxProps: (record) => {
+      // For Timesheet tab, enable selection for "Submitted" status
+      // For other tabs, enable selection for "Pending" status
+      if (activeTab === "Timesheet") {
+        return {
+          disabled: record.status !== "Submitted",
+        };
+      }
+      return {
+        disabled: record.status !== "Pending",
+      };
+    },
   };
 
   return (
@@ -1071,6 +1135,7 @@ const ApprovalProcess = () => {
           columns={getColumns()}
           dataSource={filteredData}
           pagination={{ pageSize: 10 }}
+          scroll={{ x: 1500 }}
         />
 
         {/* Reject with Comment Modal */}
@@ -1140,14 +1205,34 @@ const ApprovalProcess = () => {
         <TimesheetDetailsModal
           visible={timesheetModalVisible}
           timesheet={selectedTimesheet}
-          mode="view"
+          mode={timesheetModalMode}
           onClose={() => {
             setTimesheetModalVisible(false);
             setSelectedTimesheet(null);
+            setTimesheetModalMode("view");
           }}
-          onSubmit={() => {
+          onSubmit={(updatedLeaveData) => {
+            // Update the timesheet with new leave data
+            if (selectedTimesheet && updatedLeaveData) {
+              const updatedTimesheets = timesheetsData.map(t => {
+                if (t.key === selectedTimesheet.key) {
+                  return {
+                    ...t,
+                    leaveTaken: updatedLeaveData.leaveTaken,
+                    paidLeave: updatedLeaveData.paidLeave,
+                    workingDays: updatedLeaveData.workingDays,
+                    billableHours: updatedLeaveData.billableHours,
+                    calculatedAmount: updatedLeaveData.calculatedAmount,
+                  };
+                }
+                return t;
+              });
+              setTimesheetsData(updatedTimesheets);
+              message.success("Timesheet updated successfully!");
+            }
             setTimesheetModalVisible(false);
             setSelectedTimesheet(null);
+            setTimesheetModalMode("view");
           }}
         />
       </div>
