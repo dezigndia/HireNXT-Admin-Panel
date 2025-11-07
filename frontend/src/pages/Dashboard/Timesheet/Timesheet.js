@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Table, Dropdown, Button, Empty, Segmented, Input, Select, Modal, message, Upload, Flex, InputNumber } from "antd";
+import { Table, Dropdown, Button, Empty, Segmented, Input, Select, Modal, message, Flex } from "antd";
 import {
   MoreOutlined,
   SearchOutlined,
@@ -9,7 +9,6 @@ import {
   CheckCircleOutlined,
   ClockCircleOutlined,
   DollarOutlined,
-  InboxOutlined,
   FilterOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
@@ -20,13 +19,12 @@ import {
   TabsContainer,
   TableContainer,
   EmptyState,
-  UploadModal,
   MetricsContainer,
   MetricCard,
 } from "./Timesheet.style";
+import TimesheetDetailsModal from "./TimesheetDetailsModal";
 
 const { Option } = Select;
-const { Dragger } = Upload;
 
 const Timesheet = () => {
   const [activeTab, setActiveTab] = useState("Pending Upload");
@@ -37,10 +35,7 @@ const Timesheet = () => {
   const [showPastTimesheets, setShowPastTimesheets] = useState(false);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [leaveDates, setLeaveDates] = useState([]);
-  const [leaveDateInput, setLeaveDateInput] = useState("");
-  const [paidLeaveCount, setPaidLeaveCount] = useState(0);
+  const [modalMode, setModalMode] = useState("edit");
   const [timesheets, setTimesheets] = useState([]);
 
   const getWorkingDaysForMonth = (monthStr) => {
@@ -255,19 +250,11 @@ const Timesheet = () => {
 
   const handleUploadClick = (record) => {
     setSelectedTalent(record);
+    setModalMode("edit");
     setUploadModalVisible(true);
-    setUploadedFile(null);
-    setLeaveDateInput("");
-    setLeaveDates([]);
-    setPaidLeaveCount(0);
   };
 
-  const handleUploadSubmit = () => {
-    if (!uploadedFile) {
-      message.error("Please upload a timesheet file");
-      return;
-    }
-
+  const handleUploadSubmit = ({ leaveDates, paidLeaveCount }) => {
     const clampedPaidLeave = Math.min(paidLeaveCount, leaveDates.length);
     const unpaidLeaveDays = leaveDates.length - clampedPaidLeave;
     const updatedWorkingDays = selectedTalent.actualWorkingDays - unpaidLeaveDays;
@@ -292,12 +279,6 @@ const Timesheet = () => {
 
     setTimesheets(updatedTimesheets);
     message.success(`Timesheet uploaded successfully for ${selectedTalent.talentName}`);
-    setUploadModalVisible(false);
-    setSelectedTalent(null);
-    setUploadedFile(null);
-    setLeaveDates([]);
-    setLeaveDateInput("");
-    setPaidLeaveCount(0);
   };
 
   const handleShare = (record) => {
@@ -334,16 +315,13 @@ const Timesheet = () => {
 
   const handleModify = (record) => {
     setSelectedTalent(record);
-    setLeaveDates(record.leaveTaken.dates);
-    setPaidLeaveCount(record.paidLeave || 0);
-    
-    // Extract date numbers from the existing dates
-    const dateNumbers = record.leaveTaken.dates.map(dateStr => {
-      const date = new Date(dateStr);
-      return date.getDate();
-    }).join(', ');
-    setLeaveDateInput(dateNumbers);
-    
+    setModalMode("edit");
+    setUploadModalVisible(true);
+  };
+
+  const handleView = (record) => {
+    setSelectedTalent(record);
+    setModalMode("view");
     setUploadModalVisible(true);
   };
 
@@ -387,18 +365,19 @@ const Timesheet = () => {
     });
   };
 
-  const handleView = (record) => {
-    message.info(`Viewing timesheet for ${record.talentName} - ${record.month} ${record.year}`);
-  };
-
   const getActionMenu = (record) => {
-    // View All History: Only show View action
+    // View All History: Only show View and Download actions
     if (showPastTimesheets) {
       return [
         {
           key: "view",
           label: "View",
           onClick: () => handleView(record),
+        },
+        {
+          key: "download",
+          label: "Download Timesheet",
+          onClick: () => handleDownload(record),
         },
       ];
     }
@@ -720,152 +699,16 @@ const Timesheet = () => {
         )}
       </TableContainer>
 
-      <Modal
-        title={`Upload Timesheet - ${selectedTalent?.talentName}`}
-        open={uploadModalVisible}
-        onCancel={() => {
+      <TimesheetDetailsModal
+        visible={uploadModalVisible}
+        timesheet={selectedTalent}
+        mode={modalMode}
+        onClose={() => {
           setUploadModalVisible(false);
           setSelectedTalent(null);
-          setUploadedFile(null);
-          setLeaveDates([]);
-          setLeaveDateInput("");
-          setPaidLeaveCount(0);
         }}
-        onOk={handleUploadSubmit}
-        okText="Submit Timesheet"
-        okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
-        width={700}
-      >
-        <div style={{ maxHeight: "60vh", overflowY: "auto", paddingRight: 8 }}>
-        <UploadModal>
-          {selectedTalent && (
-            <div>
-              <div className="form-group">
-                <label>Talent Details</label>
-                <div style={{ padding: "12px 16px", background: "#f8f9fd", borderRadius: 6 }}>
-                  <div><strong>Role:</strong> {selectedTalent.role}</div>
-                  <div><strong>Client:</strong> {selectedTalent.clientName}</div>
-                  <div><strong>Month:</strong> {selectedTalent.month} {selectedTalent.year}</div>
-                  <div><strong>Actual Working Days in Month:</strong> {selectedTalent.actualWorkingDays} days</div>
-                </div>
-              </div>
-
-              <div className="form-group" style={{ marginTop: 16 }}>
-                <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
-                  Leave Information
-                </label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                  <div>
-                    <label style={{ display: "block", marginBottom: 8, fontSize: 13 }}>
-                      Leave Dates (e.g., 5, 10, 15)
-                    </label>
-                    <Input
-                      placeholder="Enter date numbers separated by commas"
-                      value={leaveDateInput}
-                      onChange={(e) => {
-                        const inputValue = e.target.value;
-                        setLeaveDateInput(inputValue);
-                        
-                        const dateNumbers = inputValue.split(',').map(d => d.trim()).filter(d => d && !isNaN(Number(d)));
-                        const dates = dateNumbers.map(day => {
-                          const dayNum = parseInt(day, 10);
-                          const monthIndex = selectedTalent.month === "January" ? 0 : 
-                                            selectedTalent.month === "February" ? 1 :
-                                            selectedTalent.month === "March" ? 2 :
-                                            selectedTalent.month === "April" ? 3 :
-                                            selectedTalent.month === "May" ? 4 :
-                                            selectedTalent.month === "June" ? 5 :
-                                            selectedTalent.month === "July" ? 6 :
-                                            selectedTalent.month === "August" ? 7 :
-                                            selectedTalent.month === "September" ? 8 :
-                                            selectedTalent.month === "October" ? 9 :
-                                            selectedTalent.month === "November" ? 10 : 11;
-                          return `${selectedTalent.year}-${String(monthIndex + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
-                        });
-                        setLeaveDates(dates);
-                      }}
-                      style={{ width: "100%" }}
-                    />
-                    {leaveDates.length > 0 && (
-                      <div style={{ marginTop: 8, fontSize: 12, color: "#666" }}>
-                        Total leave days: {leaveDates.length}
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <label style={{ display: "block", marginBottom: 8, fontSize: 13 }}>
-                      Paid Leave Count
-                    </label>
-                    <InputNumber
-                      min={0}
-                      max={leaveDates.length || 0}
-                      value={paidLeaveCount}
-                      onChange={(val) => {
-                        const clampedValue = Math.min(val || 0, leaveDates.length);
-                        setPaidLeaveCount(clampedValue);
-                      }}
-                      style={{ width: "100%" }}
-                      placeholder="Enter paid leave count"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-group" style={{ marginTop: 16 }}>
-                <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
-                  Calculated Working Days & Amount
-                </label>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                  <div style={{ padding: "12px 16px", background: "#f0f9ff", borderRadius: 6 }}>
-                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Total Leave Days:</strong> {leaveDates.length} days</div>
-                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Paid Leave Days:</strong> {paidLeaveCount} days</div>
-                    <div style={{ fontSize: 13 }}><strong>Unpaid Leave Days:</strong> {leaveDates.length - paidLeaveCount} days</div>
-                  </div>
-                  <div style={{ padding: "12px 16px", background: "#e7f6f2", borderRadius: 6 }}>
-                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Billable Working Days:</strong> {selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount)} days</div>
-                    <div style={{ fontSize: 13, marginBottom: 6 }}><strong>Billable Hours:</strong> {(selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount)) * 8} hrs</div>
-                    <div style={{ color: "#00d9a9", fontSize: 15, fontWeight: 600 }}><strong>Amount:</strong> ₹ {Math.round((selectedTalent.monthlyRate / selectedTalent.actualWorkingDays) * (selectedTalent.actualWorkingDays - (leaveDates.length - paidLeaveCount))).toLocaleString("en-IN")}</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="upload-section" style={{ marginTop: 16 }}>
-                <label style={{ display: "block", marginBottom: 12, color: "#014c75", fontWeight: 500 }}>
-                  Upload Timesheet File (Excel/CSV)
-                </label>
-                <Dragger
-                  accept=".csv,.xlsx,.xls"
-                  maxCount={1}
-                  beforeUpload={(file) => {
-                    setUploadedFile(file);
-                    message.success(`${file.name} file selected successfully`);
-                    return false;
-                  }}
-                  onRemove={() => {
-                    setUploadedFile(null);
-                  }}
-                  fileList={uploadedFile ? [uploadedFile] : []}
-                >
-                  <p className="ant-upload-drag-icon">
-                    <InboxOutlined style={{ color: "#00d9a9", fontSize: 48 }} />
-                  </p>
-                  <p className="ant-upload-text" style={{ color: "#014c75", fontWeight: 500 }}>
-                    Click or drag file to this area to upload
-                  </p>
-                  <p className="ant-upload-hint" style={{ color: "#999" }}>
-                    Supported formats: .csv, .xlsx, .xls
-                  </p>
-                </Dragger>
-              </div>
-
-              <div style={{ marginTop: 16, padding: 12, background: "#e7f6f2", borderRadius: 6, fontSize: 13 }}>
-                <strong style={{ color: "#014c75" }}>Note:</strong> The working days and amount will be adjusted based on the leave information provided. The uploaded timesheet will be validated before submission.
-              </div>
-            </div>
-          )}
-        </UploadModal>
-        </div>
-      </Modal>
+        onSubmit={handleUploadSubmit}
+      />
     </TimesheetContainer>
   );
 };

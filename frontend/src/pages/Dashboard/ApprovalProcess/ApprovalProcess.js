@@ -24,9 +24,10 @@ import {
 } from "@ant-design/icons";
 import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
+import TimesheetDetailsModal from "../Timesheet/TimesheetDetailsModal";
 
 const { TextArea } = Input;
-const { Text } = Typography;
+const { Text} = Typography;
 const { Option } = Select;
 
 // Mock data for Partners/Customers
@@ -187,7 +188,7 @@ const mockTimesheets = [
     calculatedAmount: 140000,
     monthlyRate: 140000,
     submittedOn: "05-Nov-24",
-    status: "Pending",
+    status: "Submitted",
   },
   {
     key: "2",
@@ -205,7 +206,7 @@ const mockTimesheets = [
     calculatedAmount: (155000 / 21) * 19,
     monthlyRate: 155000,
     submittedOn: "04-Nov-24",
-    status: "Pending",
+    status: "Submitted",
   },
 ];
 
@@ -223,6 +224,8 @@ const ApprovalProcess = () => {
   const [rejectModalVisible, setRejectModalVisible] = useState(false);
   const [currentRejectRecord, setCurrentRejectRecord] = useState(null);
   const [form] = Form.useForm();
+  const [timesheetModalVisible, setTimesheetModalVisible] = useState(false);
+  const [selectedTimesheet, setSelectedTimesheet] = useState(null);
 
   // State for each data type
   const [partnersData, setPartnersData] = useState(mockPartnersCustomers);
@@ -252,7 +255,7 @@ const ApprovalProcess = () => {
       partners: partnersData.filter((item) => item.status === "Pending").length,
       talents: talentsData.filter((item) => item.status === "Pending").length,
       jobs: jobsData.filter((item) => item.status === "Pending").length,
-      timesheets: timesheetsData.filter((item) => item.status === "Pending").length,
+      timesheets: timesheetsData.filter((item) => item.status === "Submitted").length,
     };
   };
 
@@ -418,36 +421,94 @@ const ApprovalProcess = () => {
     } else if (activeTab === "Profiles") {
       // Navigate to talent details page (shared talent details component)
       navigate(`/home/talent-details/${record.key}`);
+    } else if (activeTab === "Timesheet") {
+      // Open timesheet view modal
+      setSelectedTimesheet(record);
+      setTimesheetModalVisible(true);
     } else {
       // Navigate to job details page  
       message.info(`Viewing job details: ${record.jobTitle}`);
     }
   };
 
-  // Create action menu for each row
-  const getActionMenu = (record) => ({
-    items: [
-      {
-        key: "view",
-        label: "View Details",
-        onClick: () => handleView(record),
+  // Handle timesheet approve
+  const handleTimesheetApprove = (record) => {
+    Modal.confirm({
+      title: "Approve Timesheet",
+      content: `Approve timesheet for ${record.talentName} (${record.month} ${record.year})?`,
+      okText: "Approve",
+      okButtonProps: { style: { background: "#00d9a9", borderColor: "#00d9a9" } },
+      onOk: () => {
+        const updatedTimesheets = timesheetsData.map(t => 
+          t.key === record.key ? { ...t, status: "Approved" } : t
+        );
+        setTimesheetsData(updatedTimesheets);
+        message.success(`Timesheet approved for ${record.talentName}`);
       },
-      ...(record.status === "Pending"
-        ? [
-            {
-              key: "approve",
-              label: "Approve",
-              onClick: () => handleApprove(record),
-            },
-            {
-              key: "reject",
-              label: "Reject",
-              onClick: () => handleRejectClick(record),
-            },
-          ]
-        : []),
-    ],
-  });
+    });
+  };
+
+  // Handle timesheet reject
+  const handleTimesheetReject = (record) => {
+    setCurrentRejectRecord(record);
+    setRejectModalVisible(true);
+  };
+
+  // Create action menu for each row
+  const getActionMenu = (record) => {
+    // Special handling for Timesheet tab
+    if (activeTab === "Timesheet") {
+      return {
+        items: [
+          {
+            key: "view",
+            label: "View",
+            onClick: () => handleView(record),
+          },
+          ...(record.status === "Submitted"
+            ? [
+                {
+                  key: "approve",
+                  label: "Approve",
+                  onClick: () => handleTimesheetApprove(record),
+                },
+                {
+                  key: "reject",
+                  label: "Reject",
+                  onClick: () => handleTimesheetReject(record),
+                  danger: true,
+                },
+              ]
+            : []),
+        ],
+      };
+    }
+
+    // Default handling for other tabs
+    return {
+      items: [
+        {
+          key: "view",
+          label: "View Details",
+          onClick: () => handleView(record),
+        },
+        ...(record.status === "Pending"
+          ? [
+              {
+                key: "approve",
+                label: "Approve",
+                onClick: () => handleApprove(record),
+              },
+              {
+                key: "reject",
+                label: "Reject",
+                onClick: () => handleRejectClick(record),
+              },
+            ]
+          : []),
+      ],
+    };
+  };
 
   // Columns for Partners/Customers
   const partnersColumns = [
@@ -1074,6 +1135,21 @@ const ApprovalProcess = () => {
             </Form.Item>
           </Form>
         </Modal>
+
+        {/* Timesheet Details Modal */}
+        <TimesheetDetailsModal
+          visible={timesheetModalVisible}
+          timesheet={selectedTimesheet}
+          mode="view"
+          onClose={() => {
+            setTimesheetModalVisible(false);
+            setSelectedTimesheet(null);
+          }}
+          onSubmit={() => {
+            setTimesheetModalVisible(false);
+            setSelectedTimesheet(null);
+          }}
+        />
       </div>
     </UserManagementWrapper>
   );
