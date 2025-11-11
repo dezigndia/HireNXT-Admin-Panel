@@ -13,6 +13,7 @@ import {
   Form,
   InputNumber,
   Upload,
+  Flex,
 } from "antd";
 import {
   SearchOutlined,
@@ -28,6 +29,7 @@ import {
   SyncOutlined,
   LineChartOutlined,
   InboxOutlined,
+  FilterOutlined,
 } from "@ant-design/icons";
 import {
   FinanceContainer,
@@ -1588,53 +1590,68 @@ const Finance = () => {
     // Financial Insights has different filters
     if (activeTab === "Financial Insights") {
       return (
-        <TopSection>
-          <FiltersRow>
+        <Flex align="start" justify="space-between" style={{ marginBottom: "20px" }}>
+          <Flex gap="middle">
             <Select
-              placeholder="Filter by Period"
+              placeholder={
+                <span>
+                  <FilterOutlined style={{ marginRight: 8 }} />
+                  Filter by Period
+                </span>
+              }
               value={filterPeriod || undefined}
               onChange={setFilterPeriod}
               allowClear
-              style={{ minWidth: 150 }}
+              style={{ width: 180 }}
             >
               <Option value="Monthly">Monthly</Option>
               <Option value="Quarterly">Quarterly</Option>
               <Option value="Yearly">Yearly</Option>
             </Select>
             <Select
-              placeholder="Filter by Year"
+              placeholder={
+                <span>
+                  <FilterOutlined style={{ marginRight: 8 }} />
+                  Filter by Year
+                </span>
+              }
               value={filterYear || undefined}
               onChange={setFilterYear}
               allowClear
-              style={{ minWidth: 120 }}
+              style={{ width: 150 }}
             >
               <Option value="2024">2024</Option>
               <Option value="2023">2023</Option>
               <Option value="2022">2022</Option>
             </Select>
-          </FiltersRow>
-        </TopSection>
+          </Flex>
+        </Flex>
       );
     }
 
     return (
-      <TopSection>
-        <FiltersRow>
+      <Flex align="start" justify="space-between" style={{ marginBottom: "20px" }}>
+        <Flex gap="middle">
           <Input
+            prefix={<SearchOutlined />}
             placeholder="Search by name, ID, customer, or partner..."
-            prefix={<SearchOutlined style={{ color: "#00d9a9" }} />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            allowClear
             style={{ width: 300 }}
+            allowClear
           />
           {activeTab !== "Revenue Analysis" && (
             <Select
-              placeholder="Filter by Partner"
+              placeholder={
+                <span>
+                  <FilterOutlined style={{ marginRight: 8 }} />
+                  Filter by Partner
+                </span>
+              }
               value={filterPartner || undefined}
               onChange={setFilterPartner}
               allowClear
-              style={{ minWidth: 180 }}
+              style={{ width: 220 }}
             >
               <Option value="TechCorp Solutions">TechCorp Solutions</Option>
               <Option value="Digital Partners Inc">Digital Partners Inc</Option>
@@ -1646,11 +1663,16 @@ const Finance = () => {
             activeTab === "Invoice Reconciliation" ||
             activeTab === "Revenue Analysis") && (
             <Select
-              placeholder="Filter by Customer"
+              placeholder={
+                <span>
+                  <FilterOutlined style={{ marginRight: 8 }} />
+                  Filter by Customer
+                </span>
+              }
               value={filterCustomer || undefined}
               onChange={setFilterCustomer}
               allowClear
-              style={{ minWidth: 180 }}
+              style={{ width: 220 }}
             >
               <Option value="Amazon Inc">Amazon Inc</Option>
               <Option value="Google LLC">Google LLC</Option>
@@ -1659,11 +1681,16 @@ const Finance = () => {
             </Select>
           )}
           <Select
-            placeholder="Filter by Month"
+            placeholder={
+              <span>
+                <FilterOutlined style={{ marginRight: 8 }} />
+                Filter by Month
+              </span>
+            }
             value={filterMonth || undefined}
             onChange={setFilterMonth}
             allowClear
-            style={{ minWidth: 150 }}
+            style={{ width: 200 }}
           >
             <Option value="January">January</Option>
             <Option value="February">February</Option>
@@ -1671,11 +1698,16 @@ const Finance = () => {
             <Option value="December">December</Option>
           </Select>
           <Select
-            placeholder="Filter by Year"
+            placeholder={
+              <span>
+                <FilterOutlined style={{ marginRight: 8 }} />
+                Filter by Year
+              </span>
+            }
             value={filterYear || undefined}
             onChange={setFilterYear}
             allowClear
-            style={{ minWidth: 120 }}
+            style={{ width: 150 }}
           >
             <Option value="2024">2024</Option>
             <Option value="2023">2023</Option>
@@ -1683,11 +1715,16 @@ const Finance = () => {
           </Select>
           {activeTab !== "Revenue Analysis" && (
             <Select
-              placeholder="Filter by Status"
+              placeholder={
+                <span>
+                  <FilterOutlined style={{ marginRight: 8 }} />
+                  Filter by Status
+                </span>
+              }
               value={filterStatus || undefined}
               onChange={setFilterStatus}
               allowClear
-              style={{ minWidth: 150 }}
+              style={{ width: 180 }}
             >
               {activeTab === "Client Billing" && (
                 <>
@@ -1714,8 +1751,8 @@ const Finance = () => {
               )}
             </Select>
           )}
-        </FiltersRow>
-      </TopSection>
+        </Flex>
+      </Flex>
     );
   };
 
