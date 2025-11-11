@@ -52,13 +52,20 @@ const Finance = () => {
   const [filterPartner, setFilterPartner] = useState("");
   const [filterCustomer, setFilterCustomer] = useState("");
   const [filterMonth, setFilterMonth] = useState("");
+  const [filterYear, setFilterYear] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
+  const [filterPeriod, setFilterPeriod] = useState(""); // For Financial Insights
   
   // Create Invoice Modal state
   const [createInvoiceModalVisible, setCreateInvoiceModalVisible] = useState(false);
   const [selectedInvoiceRecord, setSelectedInvoiceRecord] = useState(null);
   const [invoiceNumber, setInvoiceNumber] = useState("");
   const [uploadedInvoiceFile, setUploadedInvoiceFile] = useState(null);
+  
+  // Modify Fee Modal state
+  const [modifyFeeModalVisible, setModifyFeeModalVisible] = useState(false);
+  const [selectedFeeRecord, setSelectedFeeRecord] = useState(null);
+  const [newFeeAmount, setNewFeeAmount] = useState(0);
 
   // Mock data for Client Billing (Receivables)
   const [receivables, setReceivables] = useState([
@@ -737,10 +744,32 @@ const Finance = () => {
   };
 
   const handleModifyFee = (record) => {
-    Modal.info({
-      title: `Modify Fee - ${record.talentName}`,
-      content: "Fee modification feature - Implementation pending",
-    });
+    setSelectedFeeRecord(record);
+    setNewFeeAmount(0);
+    setModifyFeeModalVisible(true);
+  };
+
+  const handleCloseModifyFeeModal = () => {
+    setModifyFeeModalVisible(false);
+    setSelectedFeeRecord(null);
+    setNewFeeAmount(0);
+  };
+
+  const handleSubmitModifyFee = () => {
+    if (!newFeeAmount || newFeeAmount <= 0) {
+      message.warning("Please enter a valid fee amount");
+      return;
+    }
+
+    // Update the reconciliation record with new fee
+    const updated = reconciliation.map((r) =>
+      r.id === selectedFeeRecord.id
+        ? { ...r, modifiedFee: newFeeAmount, feeModifiedOn: new Date().toISOString().split("T")[0] }
+        : r
+    );
+    setReconciliation(updated);
+    message.success(`Fee modified to ₹${newFeeAmount.toLocaleString("en-IN")} for ${selectedFeeRecord.talentName}`);
+    handleCloseModifyFeeModal();
   };
 
   const handleUpdateReceivable = (record) => {
@@ -948,8 +977,8 @@ const Finance = () => {
           menu={{
             items: [
               {
-                key: "createInvoice",
-                label: "Create Invoice",
+                key: "uploadInvoice",
+                label: "Upload Invoice",
                 icon: <SendOutlined />,
                 onClick: () => handleCreateInvoice(record),
                 disabled:
@@ -1352,12 +1381,6 @@ const Finance = () => {
                 icon: <LineChartOutlined />,
                 onClick: () => handleViewTransaction(record),
               },
-              {
-                key: "modifyRecord",
-                label: "Modify Record",
-                icon: <EditOutlined />,
-                onClick: () => handleModifyRecord(record),
-              },
             ],
           }}
           trigger={["click"]}
@@ -1534,8 +1557,36 @@ const Finance = () => {
 
   // Render filters based on active tab
   const renderFilters = () => {
+    // Financial Insights has different filters
     if (activeTab === "Financial Insights") {
-      return null;
+      return (
+        <TopSection>
+          <FiltersRow>
+            <Select
+              placeholder="Filter by Period"
+              value={filterPeriod || undefined}
+              onChange={setFilterPeriod}
+              allowClear
+              style={{ minWidth: 150 }}
+            >
+              <Option value="Monthly">Monthly</Option>
+              <Option value="Quarterly">Quarterly</Option>
+              <Option value="Yearly">Yearly</Option>
+            </Select>
+            <Select
+              placeholder="Filter by Year"
+              value={filterYear || undefined}
+              onChange={setFilterYear}
+              allowClear
+              style={{ minWidth: 120 }}
+            >
+              <Option value="2024">2024</Option>
+              <Option value="2023">2023</Option>
+              <Option value="2022">2022</Option>
+            </Select>
+          </FiltersRow>
+        </TopSection>
+      );
     }
 
     return (
@@ -1543,10 +1594,11 @@ const Finance = () => {
         <FiltersRow>
           <Input
             placeholder="Search by name, ID, customer, or partner..."
-            prefix={<SearchOutlined />}
+            prefix={<SearchOutlined style={{ color: "#00d9a9" }} />}
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
             allowClear
+            style={{ width: 300 }}
           />
           {activeTab !== "Revenue Analysis" && (
             <Select
@@ -1589,6 +1641,17 @@ const Finance = () => {
             <Option value="February">February</Option>
             <Option value="November">November</Option>
             <Option value="December">December</Option>
+          </Select>
+          <Select
+            placeholder="Filter by Year"
+            value={filterYear || undefined}
+            onChange={setFilterYear}
+            allowClear
+            style={{ minWidth: 120 }}
+          >
+            <Option value="2024">2024</Option>
+            <Option value="2023">2023</Option>
+            <Option value="2022">2022</Option>
           </Select>
           {activeTab !== "Revenue Analysis" && (
             <Select
@@ -2077,6 +2140,57 @@ const Finance = () => {
                   Support for PDF, DOC, or DOCX files. Upload the signed invoice document.
                 </p>
               </Dragger>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Modify Fee Modal */}
+      <Modal
+        title={`Modify Fee - ${selectedFeeRecord?.talentName || ''}`}
+        open={modifyFeeModalVisible}
+        onOk={handleSubmitModifyFee}
+        onCancel={handleCloseModifyFeeModal}
+        width={600}
+        okText="Update Fee"
+        okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
+      >
+        {selectedFeeRecord && (
+          <div style={{ paddingRight: 8 }}>
+            {/* Talent Details */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                Reconciliation Details
+              </label>
+              <div style={{ padding: "12px 16px", background: "#f8f9fd", borderRadius: 6 }}>
+                <div><strong>Talent ID:</strong> {selectedFeeRecord.talentId}</div>
+                <div><strong>Talent Name:</strong> {selectedFeeRecord.talentName}</div>
+                <div><strong>Partner:</strong> {selectedFeeRecord.partner}</div>
+                <div><strong>Customer:</strong> {selectedFeeRecord.customer}</div>
+                <div><strong>Job ID:</strong> {selectedFeeRecord.jobId}</div>
+                <div><strong>Month:</strong> {selectedFeeRecord.month} {selectedFeeRecord.year}</div>
+              </div>
+            </div>
+
+            {/* New Fee Amount */}
+            <div style={{ marginBottom: 16 }}>
+              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                New Fee Amount (₹) <span style={{ color: "red" }}>*</span>
+              </label>
+              <InputNumber
+                placeholder="Enter new fee amount"
+                value={newFeeAmount}
+                onChange={(value) => setNewFeeAmount(Number(value) || 0)}
+                min={0}
+                style={{ width: "100%" }}
+                formatter={(value) => `₹ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                parser={(value) => Number(value.replace(/₹\s?|(,*)/g, ''))}
+              />
+            </div>
+
+            {/* Note */}
+            <div style={{ padding: 12, background: "#fff5e6", borderRadius: 6, fontSize: 13 }}>
+              <strong>Note:</strong> Modifying the fee will update the reconciliation record and may affect revenue calculations.
             </div>
           </div>
         )}
