@@ -65,7 +65,8 @@ const Finance = () => {
   // Modify Fee Modal state
   const [modifyFeeModalVisible, setModifyFeeModalVisible] = useState(false);
   const [selectedFeeRecord, setSelectedFeeRecord] = useState(null);
-  const [newFeeAmount, setNewFeeAmount] = useState(0);
+  const [clientFeePercentage, setClientFeePercentage] = useState(10); // Default 10% markup
+  const [partnerFeePercentage, setPartnerFeePercentage] = useState(5); // Default 5% deduction
 
   // Mock data for Client Billing (Receivables)
   const [receivables, setReceivables] = useState([
@@ -241,6 +242,9 @@ const Finance = () => {
       payableStatus: "Submitted",
       month: "December",
       year: "2024",
+      baseCost: 150000, // Talent base cost
+      clientFeePercentage: 10, // Default client markup %
+      partnerFeePercentage: 5, // Default partner deduction %
     },
     {
       id: 2,
@@ -256,6 +260,9 @@ const Finance = () => {
       payableStatus: "Submitted",
       month: "December",
       year: "2024",
+      baseCost: 165000,
+      clientFeePercentage: 10,
+      partnerFeePercentage: 5,
     },
     {
       id: 3,
@@ -271,6 +278,9 @@ const Finance = () => {
       payableStatus: "Paid",
       month: "November",
       year: "2024",
+      baseCost: 180000,
+      clientFeePercentage: 10,
+      partnerFeePercentage: 5,
     },
     {
       id: 4,
@@ -286,6 +296,9 @@ const Finance = () => {
       payableStatus: "Submitted",
       month: "December",
       year: "2024",
+      baseCost: 96000,
+      clientFeePercentage: 10,
+      partnerFeePercentage: 5,
     },
   ]);
 
@@ -745,30 +758,45 @@ const Finance = () => {
 
   const handleModifyFee = (record) => {
     setSelectedFeeRecord(record);
-    setNewFeeAmount(0);
+    // Set default percentages from the record (will come from Admin Settings in future)
+    setClientFeePercentage(record.clientFeePercentage || 10);
+    setPartnerFeePercentage(record.partnerFeePercentage || 5);
     setModifyFeeModalVisible(true);
   };
 
   const handleCloseModifyFeeModal = () => {
     setModifyFeeModalVisible(false);
     setSelectedFeeRecord(null);
-    setNewFeeAmount(0);
+    setClientFeePercentage(10);
+    setPartnerFeePercentage(5);
   };
 
   const handleSubmitModifyFee = () => {
-    if (!newFeeAmount || newFeeAmount <= 0) {
-      message.warning("Please enter a valid fee amount");
+    if (clientFeePercentage < 0 || partnerFeePercentage < 0) {
+      message.warning("Fee percentages cannot be negative");
       return;
     }
 
-    // Update the reconciliation record with new fee
+    // Update the reconciliation record with new fee percentages
     const updated = reconciliation.map((r) =>
       r.id === selectedFeeRecord.id
-        ? { ...r, modifiedFee: newFeeAmount, feeModifiedOn: new Date().toISOString().split("T")[0] }
+        ? { 
+            ...r, 
+            clientFeePercentage, 
+            partnerFeePercentage,
+            feeModifiedOn: new Date().toISOString().split("T")[0] 
+          }
         : r
     );
     setReconciliation(updated);
-    message.success(`Fee modified to ₹${newFeeAmount.toLocaleString("en-IN")} for ${selectedFeeRecord.talentName}`);
+    
+    const clientAmount = selectedFeeRecord.baseCost * (1 + clientFeePercentage / 100);
+    const partnerAmount = selectedFeeRecord.baseCost * (1 - partnerFeePercentage / 100);
+    const revenue = clientAmount - partnerAmount;
+    
+    message.success(
+      `Fee modified for ${selectedFeeRecord.talentName}: Client ${clientFeePercentage}%, Partner ${partnerFeePercentage}% | Revenue: ₹${revenue.toLocaleString("en-IN")}`
+    );
     handleCloseModifyFeeModal();
   };
 
@@ -2155,45 +2183,105 @@ const Finance = () => {
         okText="Update Fee"
         okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
       >
-        {selectedFeeRecord && (
-          <div style={{ paddingRight: 8 }}>
-            {/* Talent Details */}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
-                Reconciliation Details
-              </label>
-              <div style={{ padding: "12px 16px", background: "#f8f9fd", borderRadius: 6 }}>
-                <div><strong>Talent ID:</strong> {selectedFeeRecord.talentId}</div>
-                <div><strong>Talent Name:</strong> {selectedFeeRecord.talentName}</div>
-                <div><strong>Partner:</strong> {selectedFeeRecord.partner}</div>
-                <div><strong>Customer:</strong> {selectedFeeRecord.customer}</div>
-                <div><strong>Job ID:</strong> {selectedFeeRecord.jobId}</div>
-                <div><strong>Month:</strong> {selectedFeeRecord.month} {selectedFeeRecord.year}</div>
+        {selectedFeeRecord && (() => {
+          const baseCost = selectedFeeRecord.baseCost || 0;
+          const clientAmount = baseCost * (1 + clientFeePercentage / 100);
+          const partnerAmount = baseCost * (1 - partnerFeePercentage / 100);
+          const revenue = clientAmount - partnerAmount;
+          
+          return (
+            <div style={{ paddingRight: 8 }}>
+              {/* Talent Details */}
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                  Reconciliation Details
+                </label>
+                <div style={{ padding: "12px 16px", background: "#f8f9fd", borderRadius: 6 }}>
+                  <div><strong>Talent ID:</strong> {selectedFeeRecord.talentId}</div>
+                  <div><strong>Talent Name:</strong> {selectedFeeRecord.talentName}</div>
+                  <div><strong>Partner:</strong> {selectedFeeRecord.partner}</div>
+                  <div><strong>Customer:</strong> {selectedFeeRecord.customer}</div>
+                  <div><strong>Job ID:</strong> {selectedFeeRecord.jobId}</div>
+                  <div><strong>Month:</strong> {selectedFeeRecord.month} {selectedFeeRecord.year}</div>
+                  <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid #d9d9d9" }}>
+                    <strong>Talent Base Cost:</strong> ₹ {baseCost.toLocaleString("en-IN")}
+                  </div>
+                </div>
+              </div>
+
+              {/* Fee Percentages */}
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                  Fee Configuration
+                </label>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                  <div>
+                    <label style={{ display: "block", marginBottom: 8, fontSize: 13 }}>
+                      Client Fee (% Markup) <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <InputNumber
+                      value={clientFeePercentage}
+                      onChange={(value) => setClientFeePercentage(Number(value) || 0)}
+                      min={0}
+                      max={100}
+                      style={{ width: "100%" }}
+                      formatter={(value) => `${value}%`}
+                      parser={(value) => Number(value.replace('%', ''))}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: "block", marginBottom: 8, fontSize: 13 }}>
+                      Partner Fee (% Deduction) <span style={{ color: "red" }}>*</span>
+                    </label>
+                    <InputNumber
+                      value={partnerFeePercentage}
+                      onChange={(value) => setPartnerFeePercentage(Number(value) || 0)}
+                      min={0}
+                      max={100}
+                      style={{ width: "100%" }}
+                      formatter={(value) => `${value}%`}
+                      parser={(value) => Number(value.replace('%', ''))}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Calculated Amounts */}
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                  Auto-Calculated Amounts
+                </label>
+                <div style={{ padding: 16, background: "#e6f7ff", borderRadius: 6 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                    <span>Client Amount (Base + {clientFeePercentage}%):</span>
+                    <strong style={{ color: "#014c75" }}>₹ {clientAmount.toLocaleString("en-IN")}</strong>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                    <span>Partner Amount (Base - {partnerFeePercentage}%):</span>
+                    <strong style={{ color: "#014c75" }}>₹ {partnerAmount.toLocaleString("en-IN")}</strong>
+                  </div>
+                  <div style={{ 
+                    display: "flex", 
+                    justifyContent: "space-between", 
+                    paddingTop: 8, 
+                    borderTop: "2px solid #014c75",
+                    marginTop: 8 
+                  }}>
+                    <span style={{ fontSize: 15, fontWeight: 600, color: "#014c75" }}>Revenue:</span>
+                    <strong style={{ fontSize: 16, color: "#00d9a9" }}>
+                      ₹ {revenue.toLocaleString("en-IN")}
+                    </strong>
+                  </div>
+                </div>
+              </div>
+
+              {/* Note */}
+              <div style={{ padding: 12, background: "#fff5e6", borderRadius: 6, fontSize: 13 }}>
+                <strong>Note:</strong> Fee percentages will be auto-populated from Admin Settings in the future. Client Fee is added to base cost (markup), Partner Fee is deducted from base cost.
               </div>
             </div>
-
-            {/* New Fee Amount */}
-            <div style={{ marginBottom: 16 }}>
-              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
-                New Fee Amount (₹) <span style={{ color: "red" }}>*</span>
-              </label>
-              <InputNumber
-                placeholder="Enter new fee amount"
-                value={newFeeAmount}
-                onChange={(value) => setNewFeeAmount(Number(value) || 0)}
-                min={0}
-                style={{ width: "100%" }}
-                formatter={(value) => `₹ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                parser={(value) => Number(value.replace(/₹\s?|(,*)/g, ''))}
-              />
-            </div>
-
-            {/* Note */}
-            <div style={{ padding: 12, background: "#fff5e6", borderRadius: 6, fontSize: 13 }}>
-              <strong>Note:</strong> Modifying the fee will update the reconciliation record and may affect revenue calculations.
-            </div>
-          </div>
-        )}
+          );
+        })()}
       </Modal>
     </FinanceContainer>
   );
