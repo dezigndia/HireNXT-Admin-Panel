@@ -58,7 +58,7 @@ const sideBarMenu = [
   },
   {
     key: "/customer/finance",
-    label: "Finance Management",
+    label: "Finance",
     icon: <DollarOutlined />,
   },
 ];

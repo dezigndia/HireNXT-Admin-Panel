@@ -32,7 +32,6 @@ const { Option } = Select;
 
 const FinanceManagement = () => {
   const [searchText, setSearchText] = useState("");
-  const [filterPartner, setFilterPartner] = useState("");
   const [filterMonth, setFilterMonth] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
 
@@ -40,6 +39,8 @@ const FinanceManagement = () => {
   const [modifyModalVisible, setModifyModalVisible] = useState(false);
   const [selectedPayable, setSelectedPayable] = useState(null);
   const [modifyReason, setModifyReason] = useState("");
+  const [updatePayableModalVisible, setUpdatePayableModalVisible] = useState(false);
+  const [selectedPayableStatus, setSelectedPayableStatus] = useState("");
 
   // Mock data for Customer Finance (Partner Payables from customer perspective)
   const [payables, setPayables] = useState([
@@ -150,7 +151,6 @@ const FinanceManagement = () => {
           <Descriptions.Item label="Invoice ID">{record.invoiceId}</Descriptions.Item>
           <Descriptions.Item label="Talent ID">{record.talentId}</Descriptions.Item>
           <Descriptions.Item label="Talent Name">{record.talentName}</Descriptions.Item>
-          <Descriptions.Item label="Partner">{record.partner}</Descriptions.Item>
           <Descriptions.Item label="Job ID">{record.jobId}</Descriptions.Item>
           <Descriptions.Item label="Month">
             {record.month} {record.year}
@@ -255,6 +255,35 @@ const FinanceManagement = () => {
     setSelectedPayable(null);
   };
 
+  const handleUpdatePayable = (record) => {
+    setSelectedPayable(record);
+    setSelectedPayableStatus(record.status === "Paid" ? "Paid" : "Unpaid");
+    setUpdatePayableModalVisible(true);
+  };
+
+  const handleSubmitUpdatePayable = () => {
+    const updated = payables.map((p) =>
+      p.id === selectedPayable.id
+        ? { 
+            ...p, 
+            status: selectedPayableStatus,
+            ...(selectedPayableStatus === "Paid" && !p.paidOn ? { paidOn: new Date().toISOString().split("T")[0] } : {})
+          }
+        : p
+    );
+    setPayables(updated);
+    message.success(`Invoice ${selectedPayable.invoiceId} status updated to ${selectedPayableStatus}`);
+    setUpdatePayableModalVisible(false);
+    setSelectedPayable(null);
+    setSelectedPayableStatus("");
+  };
+
+  const handleCancelUpdatePayable = () => {
+    setUpdatePayableModalVisible(false);
+    setSelectedPayable(null);
+    setSelectedPayableStatus("");
+  };
+
   // Filter data
   const getFilteredData = () => {
     let filtered = [...payables];
@@ -263,13 +292,12 @@ const FinanceManagement = () => {
       filtered = filtered.filter(
         (p) =>
           p.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
-          p.partner.toLowerCase().includes(searchText.toLowerCase()) ||
           p.invoiceId.toLowerCase().includes(searchText.toLowerCase()) ||
-          p.talentId.toLowerCase().includes(searchText.toLowerCase())
+          p.talentId.toLowerCase().includes(searchText.toLowerCase()) ||
+          p.jobId.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
-    if (filterPartner) filtered = filtered.filter((p) => p.partner === filterPartner);
     if (filterMonth) filtered = filtered.filter((p) => p.month === filterMonth);
     if (filterStatus) filtered = filtered.filter((p) => p.status === filterStatus);
 
@@ -277,7 +305,6 @@ const FinanceManagement = () => {
   };
 
   // Get unique values for filters
-  const partners = [...new Set(payables.map((p) => p.partner))];
   const months = [...new Set(payables.map((p) => p.month))];
   const statuses = [...new Set(payables.map((p) => p.status))];
 
@@ -337,6 +364,16 @@ const FinanceManagement = () => {
       );
     }
 
+    // Add Update Payable for Approved/Paid status
+    if (record.status === "Approved" || record.status === "Paid") {
+      items.push({
+        key: "update-payable",
+        label: "Update Payable",
+        icon: <EditOutlined />,
+        onClick: () => handleUpdatePayable(record),
+      });
+    }
+
     return items;
   };
 
@@ -359,12 +396,6 @@ const FinanceManagement = () => {
       dataIndex: "talentName",
       key: "talentName",
       width: 150,
-    },
-    {
-      title: "Partner",
-      dataIndex: "partner",
-      key: "partner",
-      width: 180,
     },
     {
       title: "Month",
@@ -447,7 +478,7 @@ const FinanceManagement = () => {
     <FiltersContainer>
       <Flex style={{ gap: "12px", flexWrap: "wrap" }}>
         <Input
-          placeholder="Search by Talent, Partner, or Invoice ID"
+          placeholder="Search by Talent Name, Invoice ID, or Job ID"
           prefix={<SearchOutlined />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
@@ -455,20 +486,7 @@ const FinanceManagement = () => {
           allowClear
         />
         <Select
-          placeholder="Filter by Partner"
-          value={filterPartner}
-          onChange={setFilterPartner}
-          style={{ width: 200 }}
-          allowClear
-        >
-          {partners.map((p) => (
-            <Option key={p} value={p}>
-              {p}
-            </Option>
-          ))}
-        </Select>
-        <Select
-          placeholder="Filter by Month"
+          placeholder="Select Month"
           value={filterMonth}
           onChange={setFilterMonth}
           style={{ width: 150 }}
@@ -481,7 +499,7 @@ const FinanceManagement = () => {
           ))}
         </Select>
         <Select
-          placeholder="Filter by Status"
+          placeholder="Select Status"
           value={filterStatus}
           onChange={setFilterStatus}
           style={{ width: 150 }}
@@ -567,6 +585,42 @@ const FinanceManagement = () => {
                 value={modifyReason}
                 onChange={(e) => setModifyReason(e.target.value)}
               />
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Update Payable Modal */}
+      <Modal
+        title={`Update Payable Status - ${selectedPayable?.invoiceId || ""}`}
+        open={updatePayableModalVisible}
+        onOk={handleSubmitUpdatePayable}
+        onCancel={handleCancelUpdatePayable}
+        width={600}
+        okText="Update Status"
+        okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
+      >
+        {selectedPayable && (
+          <div>
+            <div style={{ marginBottom: 16, padding: 12, background: "#f8f9fd", borderRadius: 6 }}>
+              <div><strong>Invoice ID:</strong> {selectedPayable.invoiceId}</div>
+              <div><strong>Talent Name:</strong> {selectedPayable.talentName}</div>
+              <div><strong>Month:</strong> {selectedPayable.month} {selectedPayable.year}</div>
+              <div><strong>Total Amount:</strong> ₹ {selectedPayable.totalAmount.toLocaleString("en-IN")}</div>
+              <div><strong>Current Status:</strong> <Tag color={selectedPayable.status === "Paid" ? "green" : "blue"}>{selectedPayable.status}</Tag></div>
+            </div>
+            <div>
+              <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
+                Update Status *
+              </label>
+              <Select
+                value={selectedPayableStatus}
+                onChange={setSelectedPayableStatus}
+                style={{ width: "100%" }}
+              >
+                <Option value="Paid">Paid</Option>
+                <Option value="Unpaid">Unpaid</Option>
+              </Select>
             </div>
           </div>
         )}

@@ -34,7 +34,6 @@ const { Option } = Select;
 const CustomerTimesheet = () => {
   const [activeTab, setActiveTab] = useState("Pending Approval");
   const [searchText, setSearchText] = useState("");
-  const [filterPartner, setFilterPartner] = useState("");
   const [filterMonth, setFilterMonth] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
 
@@ -217,12 +216,11 @@ const CustomerTimesheet = () => {
         (t) =>
           t.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
           t.talentId.toLowerCase().includes(searchText.toLowerCase()) ||
-          t.partner.toLowerCase().includes(searchText.toLowerCase())
+          t.role.toLowerCase().includes(searchText.toLowerCase())
       );
     }
 
     // Apply other filters
-    if (filterPartner) filtered = filtered.filter((t) => t.partner === filterPartner);
     if (filterMonth) filtered = filtered.filter((t) => t.month === filterMonth);
     if (filterStatus) filtered = filtered.filter((t) => t.status === filterStatus);
 
@@ -230,7 +228,6 @@ const CustomerTimesheet = () => {
   };
 
   // Get unique values for filters
-  const partners = [...new Set(timesheets.map((t) => t.partner))];
   const months = [...new Set(timesheets.map((t) => t.month))];
 
   // Calculate metrics
@@ -290,19 +287,12 @@ const CustomerTimesheet = () => {
       dataIndex: "talentId",
       key: "talentId",
       width: 100,
-      fixed: /** @type {'left'} */ ("left"),
     },
     {
       title: "Talent Name",
       dataIndex: "talentName",
       key: "talentName",
       width: 150,
-    },
-    {
-      title: "Partner",
-      dataIndex: "partner",
-      key: "partner",
-      width: 180,
     },
     {
       title: "Role",
@@ -379,28 +369,15 @@ const CustomerTimesheet = () => {
     <FiltersContainer>
       <Flex style={{ gap: "12px", flexWrap: "wrap" }}>
         <Input
-          placeholder="Search by Talent Name, ID, or Partner"
+          placeholder="Search by Talent Name, ID, or Role"
           prefix={<SearchOutlined />}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          style={{ width: 300 }}
+          style={{ width: 280 }}
           allowClear
         />
         <Select
-          placeholder="Filter by Partner"
-          value={filterPartner}
-          onChange={setFilterPartner}
-          style={{ width: 200 }}
-          allowClear
-        >
-          {partners.map((p) => (
-            <Option key={p} value={p}>
-              {p}
-            </Option>
-          ))}
-        </Select>
-        <Select
-          placeholder="Filter by Month"
+          placeholder="Select Month"
           value={filterMonth}
           onChange={setFilterMonth}
           style={{ width: 150 }}
