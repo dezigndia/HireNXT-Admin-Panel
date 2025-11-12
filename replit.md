@@ -21,6 +21,8 @@ The application is a React-based single-page application (SPA) built with Create
 - **User Dashboards:**
     - **Customer Dashboard:** Overview metrics, talent search, "My Jobs" section, "Job Details" with candidate management, "Post Job" wizard, and "Hired Talents" management.
     - **Partner Dashboard:** Overview with partner-specific metrics, "Ongoing Jobs", "Submit Profiles", "Talent Details", "Bench Pool", "Talents Hired", "Timesheet" (upload/modify only, no approval), and "Finance" (client billing only, customer info confidential).
+        - **Partner Timesheet:** Simplified timesheet module with upload and modify capabilities only (no approval rights). Features Upload/Modify/View modals using shared TimesheetDetailsModal component from Admin module with mode-based functionality (Upload/Modify mode shows leave management and file upload with real-time calculations; View mode is read-only), two-tab navigation (Pending Upload, Approved), metrics dashboard, and consistent design with Admin module.
+        - **Partner Finance:** Single-tab finance module showing only Client Billing (receivables) with customer information kept confidential. Features Upload Invoice modal (invoice number, amount breakup, file upload for PDF/DOC/DOCX), actions (Upload Invoice for pending status, View Breakup, Download Timesheet), metrics (Total Amount, Current Receivable, Overdue Amount, Total Invoices), and consistent search/filter design using Flex layout.
     - **Admin Dashboard:**
         - **Dashboard Overview:** Key metrics (Talents Hired, Partners, Customers, Profiles Submitted, Revenue/Payout), pending approvals, top customers hiring.
         - **User Management:** Comprehensive database management for customer, partner, and admin users.
