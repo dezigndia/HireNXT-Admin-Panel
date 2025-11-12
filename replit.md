@@ -19,10 +19,28 @@ The application is a React-based single-page application (SPA) built with Create
 **Technical Implementations & Feature Specifications:**
 - **Authentication:** Role-based access control with `ProtectedRoute` and mock authentication.
 - **User Dashboards:**
-    - **Customer Dashboard:** Overview metrics, talent search, "My Jobs" section, "Job Details" with candidate management, "Post Job" wizard, and "Hired Talents" management.
+    - **Customer Dashboard:** Overview metrics, talent search, "My Jobs" section, "Job Details" with candidate management, "Post Job" wizard, "Hired Talents" management, "Timesheet" (approve/view/download/ask to modify only, no upload rights), and "Finance Management" (invoice approval and review).
     - **Partner Dashboard:** Overview with partner-specific metrics, "Ongoing Jobs", "Submit Profiles", "Talent Details", "Bench Pool", "Talents Hired", "Timesheet" (upload/modify only, no approval), and "Finance" (client billing only, customer info confidential).
         - **Partner Timesheet:** Simplified timesheet module with upload and modify capabilities only (no approval rights). Features Upload/Modify/View modals using shared TimesheetDetailsModal component from Admin module with mode-based functionality (Upload/Modify mode shows leave management and file upload with real-time calculations; View mode is read-only), two-tab navigation (Pending Upload, Approved), metrics dashboard, and consistent design with Admin module.
         - **Partner Finance:** Single-tab finance module showing only Client Billing (receivables) with customer information kept confidential. Features Upload Invoice modal (invoice number, amount breakup, file upload for PDF/DOC/DOCX), actions (Upload Invoice for pending status, View Breakup, Download Timesheet), metrics (Total Amount, Current Receivable, Overdue Amount, Total Invoices), and consistent search/filter design using Flex layout.
+    - **Customer Dashboard:**
+        - **Dashboard Overview:** Key metrics for customer operations (My Jobs, Submitted Profiles, Talents Hired, Active Jobs).
+        - **Find Talents:** Search and browse available talent pool.
+        - **My Jobs:** Job posting management with detailed views.
+        - **Submitted Profiles:** Review partner-submitted talent profiles for open positions.
+        - **Talents Hired:** Management of hired talents and contracts.
+        - **Timesheet Management:** Two-tab system (Pending Approval, Approved) for reviewing partner-submitted timesheets with customer-specific actions:
+            - **Approve:** Approve submitted timesheets for payment processing.
+            - **View:** Read-only view of timesheet details using shared TimesheetDetailsModal component.
+            - **Download:** Download timesheet files.
+            - **Ask to Modify:** Request modifications to submitted timesheets with reason specification.
+        - **Finance Management:** Single-tab invoice review system following Admin's Partner Payable pattern with customer-specific actions:
+            - **View Details:** Modal showing complete invoice details and breakup.
+            - **Download Invoice:** Download partner-submitted invoice files.
+            - **Download Timesheet:** Download associated timesheet documentation.
+            - **Approve:** Approve invoices for payment processing.
+            - **Ask to Modify:** Request invoice modifications with reason specification.
+            - Metrics dashboard: Total Paid, Current Payable, Pending Approval, Total Invoices.
     - **Admin Dashboard:**
         - **Dashboard Overview:** Key metrics (Talents Hired, Partners, Customers, Profiles Submitted, Revenue/Payout), pending approvals, top customers hiring.
         - **User Management:** Comprehensive database management for customer, partner, and admin users.
