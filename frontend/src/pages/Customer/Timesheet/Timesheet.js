@@ -474,8 +474,8 @@ const CustomerTimesheet = () => {
             <div style={{ marginBottom: 16, padding: 12, background: "#f8f9fd", borderRadius: 6 }}>
               <div><strong>Talent ID:</strong> {selectedTimesheet.talentId}</div>
               <div><strong>Talent Name:</strong> {selectedTimesheet.talentName}</div>
+              <div><strong>Role:</strong> {selectedTimesheet.role}</div>
               <div><strong>Month:</strong> {selectedTimesheet.month} {selectedTimesheet.year}</div>
-              <div><strong>Partner:</strong> {selectedTimesheet.partner}</div>
             </div>
             <div>
               <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>

@@ -262,15 +262,25 @@ const FinanceManagement = () => {
   };
 
   const handleSubmitUpdatePayable = () => {
-    const updated = payables.map((p) =>
-      p.id === selectedPayable.id
-        ? { 
+    const updated = payables.map((p) => {
+      if (p.id === selectedPayable.id) {
+        if (selectedPayableStatus === "Paid") {
+          return { 
             ...p, 
-            status: selectedPayableStatus,
-            ...(selectedPayableStatus === "Paid" && !p.paidOn ? { paidOn: new Date().toISOString().split("T")[0] } : {})
-          }
-        : p
-    );
+            status: "Paid",
+            paidOn: p.paidOn || new Date().toISOString().split("T")[0]
+          };
+        } else {
+          // When marking as Unpaid, remove paidOn timestamp
+          const { paidOn, ...rest } = p;
+          return { 
+            ...rest, 
+            status: "Unpaid"
+          };
+        }
+      }
+      return p;
+    });
     setPayables(updated);
     message.success(`Invoice ${selectedPayable.invoiceId} status updated to ${selectedPayableStatus}`);
     setUpdatePayableModalVisible(false);
@@ -571,7 +581,7 @@ const FinanceManagement = () => {
             <div style={{ marginBottom: 16, padding: 12, background: "#f8f9fd", borderRadius: 6 }}>
               <div><strong>Invoice ID:</strong> {selectedPayable.invoiceId}</div>
               <div><strong>Talent Name:</strong> {selectedPayable.talentName}</div>
-              <div><strong>Partner:</strong> {selectedPayable.partner}</div>
+              <div><strong>Job ID:</strong> {selectedPayable.jobId}</div>
               <div><strong>Month:</strong> {selectedPayable.month} {selectedPayable.year}</div>
               <div><strong>Total Amount:</strong> ₹ {selectedPayable.totalAmount.toLocaleString("en-IN")}</div>
             </div>
