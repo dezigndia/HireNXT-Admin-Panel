@@ -143,6 +143,13 @@ const CustomerTimesheet = () => {
             : t
         );
         setTimesheets(updated);
+        
+        // Close view modal if it's the same record being approved
+        if (selectedTimesheet && selectedTimesheet.id === record.id) {
+          setViewModalVisible(false);
+          setSelectedTimesheet(null);
+        }
+        
         message.success(`Timesheet for ${record.talentName} approved successfully`);
       },
     });
@@ -166,7 +173,19 @@ const CustomerTimesheet = () => {
         : t
     );
     setTimesheets(updated);
+    
+    // Close view modal if it's open for the same record
+    if (viewModalVisible && selectedTimesheet) {
+      setViewModalVisible(false);
+    }
+    
     message.success(`Modification request sent to partner for ${selectedTimesheet.talentName}`);
+    setModifyModalVisible(false);
+    setModifyReason("");
+    setSelectedTimesheet(null);
+  };
+
+  const handleCancelModifyModal = () => {
     setModifyModalVisible(false);
     setModifyReason("");
     setSelectedTimesheet(null);
@@ -302,14 +321,14 @@ const CustomerTimesheet = () => {
       dataIndex: "workingDays",
       key: "workingDays",
       width: 120,
-      align: "center",
+      align: /** @type {'center'} */ ("center"),
     },
     {
       title: "Billable Hours",
       dataIndex: "billableHours",
       key: "billableHours",
       width: 120,
-      align: "center",
+      align: /** @type {'center'} */ ("center"),
     },
     {
       title: "Amount",
@@ -454,12 +473,13 @@ const CustomerTimesheet = () => {
         />
       </TableContainer>
 
-      {/* View Timesheet Modal */}
+      {/* View Timesheet Modal - Customer can only view, not edit */}
       <TimesheetDetailsModal
         visible={viewModalVisible}
         onClose={handleCloseViewModal}
         timesheet={selectedTimesheet}
-        mode={modalMode}
+        mode="view"
+        onSubmit={() => {}}
       />
 
       {/* Ask to Modify Modal */}
@@ -467,11 +487,7 @@ const CustomerTimesheet = () => {
         title={`Request Modification - ${selectedTimesheet?.talentName || ""}`}
         open={modifyModalVisible}
         onOk={handleSubmitModifyRequest}
-        onCancel={() => {
-          setModifyModalVisible(false);
-          setModifyReason("");
-          setSelectedTimesheet(null);
-        }}
+        onCancel={handleCancelModifyModal}
         width={600}
         okText="Send Request"
         okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
