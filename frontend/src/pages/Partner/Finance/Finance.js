@@ -45,7 +45,7 @@ const PartnerFinance = () => {
   const [uploadedInvoiceFile, setUploadedInvoiceFile] = useState(null);
 
   // Mock data for Partner's Client Billing (no customer column)
-  const [receivables] = useState([
+  const [receivables, setReceivables] = useState([
     {
       id: 1,
       talentId: "T001",
@@ -205,6 +205,11 @@ const PartnerFinance = () => {
       return;
     }
 
+    const updated = receivables.map((r) =>
+      r.id === selectedInvoiceRecord.id ? { ...r, invoiceStatus: "Sent" } : r
+    );
+    setReceivables(updated);
+    
     message.success(`Invoice ${invoiceNumber} created and sent successfully`);
     handleCloseInvoiceModal();
   };
