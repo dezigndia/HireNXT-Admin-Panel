@@ -374,8 +374,8 @@ const FinanceManagement = () => {
       );
     }
 
-    // Add Update Payable for Approved/Paid status
-    if (record.status === "Approved" || record.status === "Paid") {
+    // Add Update Payable for Approved status only
+    if (record.status === "Approved") {
       items.push({
         key: "update-payable",
         label: "Update Payable",
@@ -393,7 +393,6 @@ const FinanceManagement = () => {
       dataIndex: "invoiceId",
       key: "invoiceId",
       width: 140,
-      fixed: /** @type {'left'} */ ("left"),
     },
     {
       title: "Talent ID",
