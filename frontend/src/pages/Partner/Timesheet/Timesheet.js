@@ -299,7 +299,7 @@ const PartnerTimesheet = () => {
       title: "Action",
       key: "action",
       width: 80,
-      fixed: "right",
+      fixed: /** @type {'right'} */ ('right'),
       render: (_, record) => {
         const items = [];
 
@@ -492,7 +492,7 @@ const PartnerTimesheet = () => {
             setUploadModalVisible(false);
             setSelectedTalent(null);
           }}
-          talent={selectedTalent}
+          timesheet={selectedTalent}
           mode={modalMode}
           onSubmit={handleUploadSubmit}
         />
