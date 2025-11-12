@@ -214,6 +214,12 @@ const FinanceManagement = () => {
             : p
         );
         setPayables(updated);
+        
+        // Clear selected record if it's the same as approved
+        if (selectedPayable && selectedPayable.id === record.id) {
+          setSelectedPayable(null);
+        }
+        
         message.success(`Invoice ${record.invoiceId} approved successfully`);
       },
     });
@@ -238,6 +244,12 @@ const FinanceManagement = () => {
     );
     setPayables(updated);
     message.success(`Modification request sent for invoice ${selectedPayable.invoiceId}`);
+    setModifyModalVisible(false);
+    setModifyReason("");
+    setSelectedPayable(null);
+  };
+
+  const handleCancelModifyModal = () => {
     setModifyModalVisible(false);
     setModifyReason("");
     setSelectedPayable(null);
@@ -365,14 +377,14 @@ const FinanceManagement = () => {
       dataIndex: "days",
       key: "days",
       width: 80,
-      align: "center",
+      align: /** @type {'center'} */ ("center"),
     },
     {
       title: "Hours",
       dataIndex: "hours",
       key: "hours",
       width: 80,
-      align: "center",
+      align: /** @type {'center'} */ ("center"),
     },
     {
       title: "Amount",
@@ -531,11 +543,7 @@ const FinanceManagement = () => {
         title={`Request Modification - ${selectedPayable?.invoiceId || ""}`}
         open={modifyModalVisible}
         onOk={handleSubmitModifyRequest}
-        onCancel={() => {
-          setModifyModalVisible(false);
-          setModifyReason("");
-          setSelectedPayable(null);
-        }}
+        onCancel={handleCancelModifyModal}
         width={600}
         okText="Send Request"
         okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
