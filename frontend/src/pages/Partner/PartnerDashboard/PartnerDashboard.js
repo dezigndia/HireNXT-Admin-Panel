@@ -15,6 +15,7 @@ import {
   SettingOutlined,
   UserOutlined,
   LockOutlined,
+  DollarOutlined,
 } from "@ant-design/icons";
 import { PartnerDashboardWrapper } from "./PartnerDashboard.style";
 import PartnerOverview from "../PartnerOverview/PartnerOverview";
@@ -24,6 +25,8 @@ import SubmitProfiles from "../SubmitProfiles/SubmitProfiles";
 import BenchPool from "../BenchPool/BenchPool";
 import TalentDetails from "../TalentDetails/TalentDetails";
 import Profile from "../Profile/Profile";
+import PartnerTimesheet from "../Timesheet/Timesheet";
+import PartnerFinance from "../Finance/Finance";
 
 const sideBarMenu = [
   { key: "/partner", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -41,6 +44,16 @@ const sideBarMenu = [
     key: "/partner/talent-hired",
     label: "Talents Hired",
     icon: <AuditOutlined />,
+  },
+  {
+    key: "/partner/timesheet",
+    label: "Timesheet",
+    icon: <FieldTimeOutlined />,
+  },
+  {
+    key: "/partner/finance",
+    label: "Finance",
+    icon: <DollarOutlined />,
   },
 ];
 
@@ -163,6 +176,8 @@ const PartnerDashboard = () => {
               <Route path="/submit-profiles/:jobId" element={<SubmitProfiles />} />
               <Route path="/talent-hired" element={<TalentsHired />} />
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
+              <Route path="/timesheet" element={<PartnerTimesheet />} />
+              <Route path="/finance" element={<PartnerFinance />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </Layout>
