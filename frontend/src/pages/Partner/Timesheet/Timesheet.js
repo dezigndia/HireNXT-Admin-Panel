@@ -187,6 +187,9 @@ const PartnerTimesheet = () => {
 
     setTimesheets(updatedTimesheets);
     message.success(`Timesheet uploaded successfully for ${selectedTalent.talentName}`);
+    
+    setUploadModalVisible(false);
+    setSelectedTalent(null);
   };
 
   const handleDownload = (record) => {
