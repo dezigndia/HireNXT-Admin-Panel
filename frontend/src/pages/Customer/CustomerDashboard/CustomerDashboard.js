@@ -13,6 +13,8 @@ import {
   UserOutlined,
   SearchOutlined,
   LockOutlined,
+  ClockCircleOutlined,
+  DollarOutlined,
 } from "@ant-design/icons";
 import { CustomerDashboardWrapper } from "./CustomerDashboard.style";
 import CustomerOverview from "../CustomerOverview/CustomerOverview";
@@ -24,6 +26,8 @@ import PostJob from "../PostJob/PostJob";
 import HiredTalents from "../HiredTalents/HiredTalents";
 import TalentDetails from "../TalentDetails/TalentDetails";
 import Profile from "../Profile/Profile";
+import CustomerTimesheet from "../Timesheet/Timesheet";
+import FinanceManagement from "../FinanceManagement/FinanceManagement";
 
 const sideBarMenu = [
   { key: "/customer", label: "Dashboard", icon: <DashboardOutlined /> },
@@ -46,6 +50,16 @@ const sideBarMenu = [
     key: "/customer/hired-talents",
     label: "Talents Hired",
     icon: <UserOutlined />,
+  },
+  {
+    key: "/customer/timesheet",
+    label: "Timesheet",
+    icon: <ClockCircleOutlined />,
+  },
+  {
+    key: "/customer/finance",
+    label: "Finance Management",
+    icon: <DollarOutlined />,
   },
 ];
 
@@ -119,6 +133,8 @@ const CustomerDashboard = () => {
     if (path.startsWith("/customer/my-jobs")) return "/customer/my-jobs";
     if (path.startsWith("/customer/submitted-profiles")) return "/customer/submitted-profiles";
     if (path.startsWith("/customer/hired-talents")) return "/customer/hired-talents";
+    if (path.startsWith("/customer/timesheet")) return "/customer/timesheet";
+    if (path.startsWith("/customer/finance")) return "/customer/finance";
     return "/customer";
   };
 
@@ -192,6 +208,8 @@ const CustomerDashboard = () => {
               <Route path="/submitted-profiles" element={<SubmittedProfiles />} />
               <Route path="/hired-talents" element={<HiredTalents />} />
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
+              <Route path="/timesheet" element={<CustomerTimesheet />} />
+              <Route path="/finance" element={<FinanceManagement />} />
               <Route path="/profile" element={<Profile />} />
             </Routes>
           </Layout>
