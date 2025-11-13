@@ -382,6 +382,21 @@ const SubmitProfiles = () => {
     handleAddResourceModalClose();
   };
 
+  const handleWithdrawProfile = (record) => {
+    Modal.confirm({
+      title: "Withdraw Profile",
+      content: `Are you sure you want to withdraw ${record.name}'s profile from this job?`,
+      okText: "Yes, Withdraw",
+      cancelText: "Cancel",
+      okButtonProps: { danger: true },
+      onOk: () => {
+        const updatedProfiles = profiles.filter((p) => p.id !== record.id);
+        setProfiles(updatedProfiles);
+        message.success(`${record.name}'s profile has been withdrawn successfully`);
+      },
+    });
+  };
+
   const filteredBenchResources = mockBenchResources.filter(
     (resource) =>
       resource.name.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -527,7 +542,7 @@ const SubmitProfiles = () => {
     {
       title: "Action",
       key: "action",
-      width: 100,
+      width: 180,
       render: (_, record) => (
         <div style={{ display: "flex", gap: 8 }}>
           <Tooltip title="Download Resume">
@@ -536,6 +551,15 @@ const SubmitProfiles = () => {
               size="small"
               onClick={() => window.open(record.resumeUrl, "_blank")}
             />
+          </Tooltip>
+          <Tooltip title="Withdraw Profile">
+            <Button
+              danger
+              size="small"
+              onClick={() => handleWithdrawProfile(record)}
+            >
+              Withdraw
+            </Button>
           </Tooltip>
         </div>
       ),

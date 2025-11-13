@@ -353,7 +353,7 @@ const PartnerFinance = () => {
   return (
     <FinanceContainer>
       <PageHeader>
-        <h1>Finance - Client Billing</h1>
+        <h1>Finance</h1>
         <p>View billing records and invoices for your talents</p>
       </PageHeader>
 

@@ -118,6 +118,9 @@ const BenchPool = () => {
   const [activeTab, setActiveTab] = useState("Active");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [viewDetailsModalVisible, setViewDetailsModalVisible] = useState(false);
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [benchData, setBenchData] = useState(dummyBenchData);
   const [form] = Form.useForm();
@@ -142,18 +145,41 @@ const BenchPool = () => {
   const totalTalentsHired = benchData.reduce((sum, r) => sum + r.pastHired, 0);
 
   const handleOpenModal = () => {
+    setIsEditMode(false);
+    setSelectedResource(null);
     setIsModalVisible(true);
     setCurrentStep(0);
   };
   
   const handleCloseModal = () => {
     setIsModalVisible(false);
+    setIsEditMode(false);
+    setSelectedResource(null);
     form.resetFields();
     setResume(null);
     setAadhar(null);
     setPan(null);
     setDegree(null);
     setCurrentStep(0);
+  };
+
+  const handleViewDetails = (record) => {
+    setSelectedResource(record);
+    setViewDetailsModalVisible(true);
+  };
+
+  const handleEdit = (record) => {
+    setSelectedResource(record);
+    setIsEditMode(true);
+    setIsModalVisible(true);
+    setCurrentStep(0);
+    
+    form.setFieldsValue({
+      name: record.name,
+      role: record.role,
+      location: record.location,
+      experience: record.experience,
+    });
   };
 
   const handleNext = () => {
@@ -169,28 +195,50 @@ const BenchPool = () => {
   };
 
   const handleSubmit = async (values) => {
-    const data = new FormData();
-    if (resume) data.append("resume", resume);
-    if (aadhar) data.append("Aadhar", aadhar);
-    if (pan) data.append("pan", pan);
-    if (degree) data.append("degree", degree);
-    if (values) data.append("data", JSON.stringify(values));
-
-    try {
-      const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+    if (isEditMode && selectedResource) {
+      // Edit mode: Update existing resource
+      const updatedData = benchData.map((item) => {
+        if (item.key === selectedResource.key) {
+          return {
+            ...item, // Preserve all existing fields
+            name: values.name || item.name,
+            role: values.role || item.role,
+            location: values.location || item.location,
+            experience: values.experience || item.experience,
+            // Only update fields that are in the form, preserve everything else
+          };
+        }
+        return item;
       });
-      console.log("Resource added successfully!");
-      console.log(response.data);
-      message.success("Resource added successfully!");
-    } catch (error) {
-      console.error(error);
-      message.error("Failed to add resource. Please try again.");
-    }
+      
+      setBenchData(updatedData);
+      message.success("Resource updated successfully!");
+      handleCloseModal();
+    } else {
+      // Add mode: Create new resource
+      const data = new FormData();
+      if (resume) data.append("resume", resume);
+      if (aadhar) data.append("Aadhar", aadhar);
+      if (pan) data.append("pan", pan);
+      if (degree) data.append("degree", degree);
+      if (values) data.append("data", JSON.stringify(values));
 
-    handleCloseModal();
+      try {
+        const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log("Resource added successfully!");
+        console.log(response.data);
+        message.success("Resource added successfully!");
+      } catch (error) {
+        console.error(error);
+        message.error("Failed to add resource. Please try again.");
+      }
+
+      handleCloseModal();
+    }
   };
 
   const handleStatusChange = (status) => {
@@ -217,6 +265,7 @@ const BenchPool = () => {
         key: "1",
         label: "View Details",
         icon: <FileTextOutlined />,
+        onClick: () => handleViewDetails(record),
       },
       {
         key: "2",
@@ -243,6 +292,7 @@ const BenchPool = () => {
       {
         key: "4",
         label: "Edit",
+        onClick: () => handleEdit(record),
       },
       {
         key: "5",
@@ -531,7 +581,7 @@ const BenchPool = () => {
             style={{ borderBottom: "1px solid #e8e8e8", marginBottom: "24px", paddingBottom: "16px" }}
           >
             <Text style={{ fontSize: "28px", color: "#014c75", fontWeight: 600 }}>
-              Add Bench Resource {currentStep === 0 ? "(Step 1/2)" : "(Step 2/2)"}
+              {isEditMode ? "Edit" : "Add"} Bench Resource {currentStep === 0 ? "(Step 1/2)" : "(Step 2/2)"}
             </Text>
           </Flex>
           <Form form={form} layout="vertical" onFinish={handleSubmit}>
@@ -906,6 +956,106 @@ const BenchPool = () => {
               </Space>
             </Form.Item>
           </Form>
+        </Modal>
+
+        {/* View Details Modal */}
+        <Modal
+          open={viewDetailsModalVisible}
+          onCancel={() => {
+            setViewDetailsModalVisible(false);
+            setSelectedResource(null);
+          }}
+          footer={[
+            <Button key="close" onClick={() => {
+              setViewDetailsModalVisible(false);
+              setSelectedResource(null);
+            }}>
+              Close
+            </Button>,
+          ]}
+          width={700}
+          title={<span style={{ fontSize: "20px", color: "#014c75", fontWeight: 600 }}>Talent Details</span>}
+        >
+          {selectedResource && (
+            <div style={{ padding: "16px 0" }}>
+              <Row gutter={[16, 24]}>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Name</Text>
+                    <div style={{ marginTop: "8px", fontSize: "15px", color: "#262626" }}>{selectedResource.name}</div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Role</Text>
+                    <div style={{ marginTop: "8px", fontSize: "15px", color: "#262626" }}>{selectedResource.role}</div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Top Skill</Text>
+                    <div style={{ marginTop: "8px" }}>
+                      <Tag color="blue" style={{ fontSize: "13px" }}>{selectedResource.topSkill}</Tag>
+                    </div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Monthly Rate</Text>
+                    <div style={{ marginTop: "8px", fontSize: "15px", color: "#00d9a9", fontWeight: 600 }}>
+                      {selectedResource.monthlyRate}
+                    </div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Experience</Text>
+                    <div style={{ marginTop: "8px", fontSize: "15px", color: "#262626" }}>{selectedResource.experience}</div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Location</Text>
+                    <div style={{ marginTop: "8px", fontSize: "15px", color: "#262626" }}>{selectedResource.location}</div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Jobs Applied</Text>
+                    <div style={{ marginTop: "8px" }}>
+                      <Tag color="cyan" style={{ fontSize: "13px", fontWeight: 600 }}>{selectedResource.jobsApplied}</Tag>
+                    </div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Past Hired</Text>
+                    <div style={{ marginTop: "8px" }}>
+                      <Tag color="green" style={{ fontSize: "13px", fontWeight: 600 }}>{selectedResource.pastHired}</Tag>
+                    </div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Total Billed</Text>
+                    <div style={{ marginTop: "8px", fontSize: "15px", color: "#014c75", fontWeight: 600 }}>
+                      {selectedResource.totalBilled}
+                    </div>
+                  </div>
+                </Col>
+                <Col span={12}>
+                  <div>
+                    <Text strong style={{ color: "#8c8c8c", fontSize: "13px" }}>Status</Text>
+                    <div style={{ marginTop: "8px" }}>
+                      <Tag color={selectedResource.status === "Active" ? "green" : "red"} style={{ fontSize: "13px" }}>
+                        {selectedResource.status}
+                      </Tag>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+          )}
         </Modal>
       </div>
     </BenchPoolWrapper>
