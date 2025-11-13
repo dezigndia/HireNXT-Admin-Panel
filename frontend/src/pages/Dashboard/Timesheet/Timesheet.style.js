@@ -327,70 +327,57 @@ export const MetricsContainer = styled.div`
   margin-bottom: 20px;
 `;
 
+export const MetricsSection = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
 export const MetricCard = styled.div`
   background: white;
   border-radius: 8px;
   padding: 14px 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s ease;
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border-color: #00d9a9;
   }
 
-  .metric-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-
-    .metric-label {
-      color: #666;
-      font-size: 13px;
-      font-weight: 500;
-    }
-
-    .metric-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-
-      &.primary {
-        background: rgba(0, 217, 169, 0.1);
-        color: #00d9a9;
-      }
-
-      &.secondary {
-        background: rgba(1, 76, 117, 0.1);
-        color: #014c75;
-      }
-
-      &.warning {
-        background: rgba(255, 193, 7, 0.1);
-        color: #ffc107;
-      }
-
-      &.success {
-        background: rgba(40, 167, 69, 0.1);
-        color: #28a745;
-      }
-    }
+  .metric-label {
+    font-size: 13px;
+    color: #8c8c8c;
+    margin-bottom: 8px;
+    font-weight: 500;
   }
 
   .metric-value {
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 700;
     color: #014c75;
-    margin-bottom: 3px;
+    margin: 0;
   }
 
-  .metric-subtext {
-    color: #999;
-    font-size: 11px;
+  .metric-change {
+    font-size: 12px;
+    margin-top: 4px;
+    
+    &.positive {
+      color: #52c41a;
+    }
+    
+    &.negative {
+      color: #ff4d4f;
+    }
   }
 `;

@@ -19,7 +19,7 @@ import {
   TabsContainer,
   TableContainer,
   EmptyState,
-  MetricsContainer,
+  MetricsSection,
   MetricCard,
 } from "./Timesheet.style";
 import TimesheetDetailsModal from "./TimesheetDetailsModal";
@@ -241,9 +241,14 @@ const Timesheet = () => {
   const getMetrics = () => {
     const pending = timesheets.filter(t => t.status === "pending").length;
     const approved = timesheets.filter(t => t.status === "approved").length;
-    const totalAmount = currentData.reduce((sum, t) => sum + t.calculatedAmount, 0);
+    const totalAmountPending = timesheets
+      .filter(t => t.status === "pending" || t.status === "submitted")
+      .reduce((sum, t) => sum + t.calculatedAmount, 0);
+    const totalAmountApproved = timesheets
+      .filter(t => t.status === "approved")
+      .reduce((sum, t) => sum + t.calculatedAmount, 0);
 
-    return { pending, approved, totalAmount };
+    return { pending, approved, totalAmountPending, totalAmountApproved };
   };
 
   const metrics = getMetrics();
@@ -547,40 +552,31 @@ const Timesheet = () => {
         <p>Upload and manage timesheets for onboarded talents</p>
       </PageHeader>
 
-      <MetricsContainer>
+      <MetricsSection>
         <MetricCard>
-          <div className="metric-header">
-            <span className="metric-label">Pending Upload</span>
-            <div className="metric-icon warning">
-              <ClockCircleOutlined />
-            </div>
-          </div>
+          <div className="metric-label">Pending Upload</div>
           <div className="metric-value">{metrics.pending}</div>
-          <div className="metric-subtext">Timesheets awaiting upload</div>
         </MetricCard>
 
         <MetricCard>
-          <div className="metric-header">
-            <span className="metric-label">Approved</span>
-            <div className="metric-icon success">
-              <CheckCircleOutlined />
-            </div>
-          </div>
+          <div className="metric-label">Approved</div>
           <div className="metric-value">{metrics.approved}</div>
-          <div className="metric-subtext">Ready for billing</div>
         </MetricCard>
 
         <MetricCard>
-          <div className="metric-header">
-            <span className="metric-label">Total Amount</span>
-            <div className="metric-icon secondary">
-              <DollarOutlined />
-            </div>
+          <div className="metric-label">Total Amount Pending</div>
+          <div className="metric-value">
+            ₹ {(metrics.totalAmountPending / 100000).toFixed(2)}L
           </div>
-          <div className="metric-value">₹ {Math.round(metrics.totalAmount / 100000)}L</div>
-          <div className="metric-subtext">Current view total</div>
         </MetricCard>
-      </MetricsContainer>
+
+        <MetricCard>
+          <div className="metric-label">Total Amount Approved</div>
+          <div className="metric-value">
+            ₹ {(metrics.totalAmountApproved / 100000).toFixed(2)}L
+          </div>
+        </MetricCard>
+      </MetricsSection>
 
       <TopSection>
         <Flex align="start" justify="space-between" style={{ marginBottom: 20 }}>
