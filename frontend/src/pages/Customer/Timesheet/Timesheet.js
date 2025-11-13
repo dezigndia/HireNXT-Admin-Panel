@@ -45,6 +45,7 @@ const CustomerTimesheet = () => {
   const [modifyReason, setModifyReason] = useState("");
 
   // Mock data for Customer timesheets
+  // Note: Customers only see Verified and Approved timesheets (Submitted status is hidden)
   const [timesheets, setTimesheets] = useState([
     {
       id: 1,
@@ -61,8 +62,9 @@ const CustomerTimesheet = () => {
       calculatedAmount: 136363,
       leaveTaken: { count: 2, dates: [5, 15] },
       paidLeave: 2,
-      status: "submitted",
+      status: "verified",
       submittedDate: "2024-12-28",
+      verifiedDate: "2024-12-30",
     },
     {
       id: 2,
@@ -79,8 +81,9 @@ const CustomerTimesheet = () => {
       calculatedAmount: 140000,
       leaveTaken: { count: 0, dates: [] },
       paidLeave: 0,
-      status: "submitted",
+      status: "verified",
       submittedDate: "2024-12-29",
+      verifiedDate: "2024-12-31",
     },
     {
       id: 3,
@@ -200,12 +203,13 @@ const CustomerTimesheet = () => {
   };
 
   // Filter data based on active tab and filters
+  // Note: Only Verified and Approved timesheets are shown to customers (Submitted is hidden)
   const getFilteredData = () => {
     let filtered = [...timesheets];
 
     // Filter by active tab
     if (activeTab === "Pending Approval") {
-      filtered = filtered.filter((t) => t.status === "submitted");
+      filtered = filtered.filter((t) => t.status === "verified");
     } else if (activeTab === "Approved") {
       filtered = filtered.filter((t) => t.status === "approved");
     }
@@ -231,11 +235,12 @@ const CustomerTimesheet = () => {
   const months = [...new Set(timesheets.map((t) => t.month))];
 
   // Calculate metrics
+  // Note: Only Verified and Approved timesheets are shown to customers (Submitted is hidden)
   const getMetrics = () => {
-    const pendingApproval = timesheets.filter((t) => t.status === "submitted").length;
+    const pendingApproval = timesheets.filter((t) => t.status === "verified").length;
     const approved = timesheets.filter((t) => t.status === "approved").length;
     const totalAmountPending = timesheets
-      .filter((t) => t.status === "submitted")
+      .filter((t) => t.status === "verified")
       .reduce((sum, t) => sum + t.calculatedAmount, 0);
     const totalAmountApproved = timesheets
       .filter((t) => t.status === "approved")
@@ -263,7 +268,8 @@ const CustomerTimesheet = () => {
       },
     ];
 
-    if (record.status === "submitted") {
+    // Only show Approve and Ask to Modify for Verified timesheets
+    if (record.status === "verified") {
       items.unshift(
         {
           key: "approve",
@@ -336,9 +342,9 @@ const CustomerTimesheet = () => {
       width: 140,
       render: (status) => {
         const config = {
-          submitted: { color: "orange", text: "Pending Approval" },
+          verified: { color: "blue", text: "Pending Approval" },
           approved: { color: "green", text: "Approved" },
-          modification_requested: { color: "blue", text: "Modification Requested" },
+          modification_requested: { color: "cyan", text: "Modification Requested" },
         };
         const { color, text } = config[status] || {};
         return <Tag color={color}>{text}</Tag>;
