@@ -7,6 +7,7 @@ import {
   CloudUploadOutlined,
   FileDoneOutlined,
   CheckCircleOutlined,
+  CheckOutlined,
   ClockCircleOutlined,
   DollarOutlined,
   FilterOutlined,
@@ -204,7 +205,7 @@ const Timesheet = () => {
 
     if (!showPastTimesheets) {
       if (activeTab === "Pending Upload") {
-        filtered = filtered.filter(t => t.status === "pending" || t.status === "submitted");
+        filtered = filtered.filter(t => t.status === "pending" || t.status === "submitted" || t.status === "verified");
       } else if (activeTab === "Approved") {
         filtered = filtered.filter(t => t.status === "approved");
       }
@@ -239,10 +240,10 @@ const Timesheet = () => {
   const currentData = getFilteredData();
 
   const getMetrics = () => {
-    const pending = timesheets.filter(t => t.status === "pending" || t.status === "submitted").length;
+    const pending = timesheets.filter(t => t.status === "pending" || t.status === "submitted" || t.status === "verified").length;
     const approved = timesheets.filter(t => t.status === "approved").length;
     const totalAmountPending = timesheets
-      .filter(t => t.status === "pending" || t.status === "submitted")
+      .filter(t => t.status === "pending" || t.status === "submitted" || t.status === "verified")
       .reduce((sum, t) => sum + t.calculatedAmount, 0);
     const totalAmountApproved = timesheets
       .filter(t => t.status === "approved")
@@ -300,6 +301,22 @@ const Timesheet = () => {
 
   const handleDownload = (record) => {
     message.info(`Downloading timesheet for ${record.talentName}...`);
+  };
+
+  const handleVerify = (record) => {
+    Modal.confirm({
+      title: "Verify Timesheet",
+      content: `Verify timesheet for ${record.talentName} (${record.month})? This will make it available for approval.`,
+      okText: "Verify",
+      okButtonProps: { style: { background: "#00d9a9", borderColor: "#00d9a9" } },
+      onOk: () => {
+        const updatedTimesheets = timesheets.map(t => 
+          t.id === record.id ? { ...t, status: "verified", verifiedDate: new Date().toISOString().split('T')[0] } : t
+        );
+        setTimesheets(updatedTimesheets);
+        message.success(`Timesheet verified for ${record.talentName}`);
+      },
+    });
   };
 
   const handleApprove = (record) => {
@@ -426,6 +443,28 @@ const Timesheet = () => {
         ...baseItems,
         ...adminItems,
       ];
+    } else if (record.status === "submitted") {
+      return [
+        {
+          key: "verify",
+          label: "Verify",
+          icon: <CheckCircleOutlined />,
+          onClick: () => handleVerify(record),
+        },
+        ...baseItems,
+        ...adminItems,
+      ];
+    } else if (record.status === "verified") {
+      return [
+        {
+          key: "approve",
+          label: "Approve",
+          icon: <CheckOutlined />,
+          onClick: () => handleApprove(record),
+        },
+        ...baseItems,
+        ...adminItems,
+      ];
     } else {
       return [
         {
@@ -526,6 +565,7 @@ const Timesheet = () => {
         <span className={`status-badge ${record.status}`}>
           {record.status === "pending" && "Pending"}
           {record.status === "submitted" && "Submitted"}
+          {record.status === "verified" && "Verified"}
           {record.status === "approved" && "Approved"}
           {record.status === "rejected" && "Rejected"}
         </span>
