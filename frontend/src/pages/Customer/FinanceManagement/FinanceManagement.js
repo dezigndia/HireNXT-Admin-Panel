@@ -43,6 +43,7 @@ const FinanceManagement = () => {
   const [selectedPayableStatus, setSelectedPayableStatus] = useState("");
 
   // Mock data for Customer Finance (Partner Payables from customer perspective)
+  // Note: Customers only see Verified and Approved invoices (Submitted status is hidden)
   const [payables, setPayables] = useState([
     {
       id: 1,
@@ -59,8 +60,9 @@ const FinanceManagement = () => {
       amount: 120000,
       gst: 21600,
       totalAmount: 141600,
-      status: "Submitted",
+      status: "Verified",
       submittedOn: "2024-12-28",
+      verifiedOn: "2024-12-30",
     },
     {
       id: 2,
@@ -77,8 +79,9 @@ const FinanceManagement = () => {
       amount: 132000,
       gst: 23760,
       totalAmount: 155760,
-      status: "Submitted",
+      status: "Verified",
       submittedOn: "2024-12-29",
+      verifiedOn: "2024-12-31",
     },
     {
       id: 3,
@@ -319,14 +322,15 @@ const FinanceManagement = () => {
   const statuses = [...new Set(payables.map((p) => p.status))];
 
   // Calculate metrics
+  // Note: Only Verified and Approved invoices are shown to customers (Submitted is hidden)
   const getMetrics = () => {
     const totalPaid = payables
       .filter((p) => p.status === "Paid")
       .reduce((sum, p) => sum + p.totalAmount, 0);
     const currentPayable = payables
-      .filter((p) => p.status === "Submitted" || p.status === "Approved")
+      .filter((p) => p.status === "Verified" || p.status === "Approved")
       .reduce((sum, p) => sum + p.totalAmount, 0);
-    const pendingApproval = payables.filter((p) => p.status === "Submitted").length;
+    const pendingApproval = payables.filter((p) => p.status === "Verified").length;
     const totalInvoices = payables.length;
 
     return { totalPaid, currentPayable, pendingApproval, totalInvoices };
@@ -357,7 +361,8 @@ const FinanceManagement = () => {
       },
     ];
 
-    if (record.status === "Submitted") {
+    // Only show Approve and Ask to Modify for Verified invoices
+    if (record.status === "Verified") {
       items.unshift(
         {
           key: "approve",
@@ -455,8 +460,10 @@ const FinanceManagement = () => {
       key: "status",
       width: 140,
       render: (status) => {
-        const color =
-          status === "Paid" ? "green" : status === "Approved" ? "blue" : "orange";
+        let color = "orange";
+        if (status === "Paid") color = "green";
+        else if (status === "Approved") color = "cyan";
+        else if (status === "Verified") color = "blue";
         return <Tag color={color}>{status}</Tag>;
       },
     },
@@ -616,7 +623,7 @@ const FinanceManagement = () => {
               <div><strong>Talent Name:</strong> {selectedPayable.talentName}</div>
               <div><strong>Month:</strong> {selectedPayable.month} {selectedPayable.year}</div>
               <div><strong>Total Amount:</strong> ₹ {selectedPayable.totalAmount.toLocaleString("en-IN")}</div>
-              <div><strong>Current Status:</strong> <Tag color={selectedPayable.status === "Paid" ? "green" : "blue"}>{selectedPayable.status}</Tag></div>
+              <div><strong>Current Status:</strong> <Tag color={selectedPayable.status === "Paid" ? "green" : selectedPayable.status === "Approved" ? "cyan" : "blue"}>{selectedPayable.status}</Tag></div>
             </div>
             <div>
               <label style={{ display: "block", marginBottom: 8, color: "#014c75", fontWeight: 500 }}>
