@@ -63,6 +63,12 @@ The application is a React-based single-page application (SPA) built with Create
             - **Revenue Analysis:** Profit analysis based on talent costs and fees.
             - **Financial Insights:** Dashboard with key financial metrics and performance indicators.
         - **Role Permissions:** Configuration for role-based access control.
+        - **Settings:** System-wide configuration and pricing rules:
+            - **Markups & Deductions Tab:** Configure markup percentages on talent prices for clients and deduction percentages for partners.
+                - **Global Configuration:** Default markup percentage for all clients (applies when no client-specific markup is set), default deduction percentage for all partners (applies when no partner-specific deduction is set).
+                - **Client-Specific Markups:** Table showing client ID, client name, markup percentage, status (Active/Inactive), applied from date, and Edit action. Allows configuring custom markup percentages for individual clients.
+                - **Partner-Specific Deductions:** Table showing partner ID, partner name, deduction percentage, status (Active/Inactive), applied from date, and Edit action. Allows configuring custom deduction percentages for individual partners.
+                - **Edit Modals:** Update markup/deduction percentages (0-100%, supports decimals) and toggle active/inactive status.
 
 **System Design Choices:**
 - **Frontend-only Repository:** Focuses solely on the React frontend.
@@ -82,6 +88,14 @@ The application is a React-based single-page application (SPA) built with Create
     - Removed Client Name column from Partner Timesheet table for partner confidentiality
     - Renamed Partner Finance heading from "Finance - Client Billing" to "Finance"
     - Removed Settings from Partner sidebar navigation (commented out for potential future use)
+    - **Implemented Settings Module (Nov 13, 2025):**
+        - Created comprehensive Settings page with Markups & Deductions configuration
+        - Global configuration for default client markup and partner deduction percentages
+        - Client-specific markup configuration table with edit functionality
+        - Partner-specific deduction configuration table with edit functionality
+        - Percentage validation (0-100%) with decimal support
+        - Active/Inactive status toggle for individual configurations
+        - Consistent design with Ant Design components and existing module patterns
     - **Implemented 4-Status Verification Workflow (Nov 13, 2025):**
         - **Workflow:** pending → submitted → verified → approved/paid
         - **Admin Finance - Partner Payables:** Added "Verify" action for Submitted invoices, conditional action menu (Verify for Submitted, Approve for Verified), defensive validation in approval handler, Verified status shown in blue

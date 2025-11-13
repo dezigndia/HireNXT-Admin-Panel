@@ -230,7 +230,7 @@ const Dashboard = () => {
               <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/approval-process" element={<ApprovalProcess />} />
               <Route path="finance" element={<Finance />} />
-              <Route path="/settings" element={<Settings />} />
+              <Route path="settings" element={<Settings />} />
               <Route path="account" element={<Account role="admin" />} />
             </Routes>
           </Layout>

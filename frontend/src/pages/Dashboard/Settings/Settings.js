@@ -431,7 +431,8 @@ const Settings = () => {
               min={0}
               max={100}
               precision={2}
-              addonAfter="%"
+              formatter={(value) => (value ? `${value}%` : "")}
+              parser={(value) => (value ? value.replace("%", "") : "")}
             />
           </Form.Item>
           <Form.Item
@@ -453,7 +454,8 @@ const Settings = () => {
               min={0}
               max={100}
               precision={2}
-              addonAfter="%"
+              formatter={(value) => (value ? `${value}%` : "")}
+              parser={(value) => (value ? value.replace("%", "") : "")}
             />
           </Form.Item>
         </Form>
@@ -510,7 +512,8 @@ const Settings = () => {
                   min={0}
                   max={100}
                   precision={2}
-                  addonAfter="%"
+                  formatter={(value) => `${value}%`}
+                  parser={(value) => value.replace("%", "")}
                 />
               </Form.Item>
               <Form.Item name="isActive" label="Status" valuePropName="checked">
@@ -575,7 +578,8 @@ const Settings = () => {
                   min={0}
                   max={100}
                   precision={2}
-                  addonAfter="%"
+                  formatter={(value) => `${value}%`}
+                  parser={(value) => value.replace("%", "")}
                 />
               </Form.Item>
               <Form.Item name="isActive" label="Status" valuePropName="checked">
