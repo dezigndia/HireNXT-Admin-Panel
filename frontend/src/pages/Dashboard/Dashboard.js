@@ -35,6 +35,7 @@ import TalentsHired from "./TalentsHired/TalentsHired";
 import AddHiringRecord from "./TalentsHired/AddHiringRecord/AddHiringRecord";
 import Timesheet from "./Timesheet/Timesheet";
 import Finance from "./Finance/Finance";
+import Settings from "./Settings/Settings";
 import Account from "../../components/Account/Account";
 
 const { Header, Content, Sider } = Layout;
@@ -89,7 +90,7 @@ const sideBarMenu = [
 ];
 
 const sideBarMenu2 = [
-  { key: 11, label: "Settings", icon: <SettingOutlined /> },
+  { key: "/home/settings", label: "Settings", icon: <SettingOutlined /> },
   { key: "/logout", label: "Logout", icon: <LogoutOutlined /> },
 ];
 
@@ -229,6 +230,7 @@ const Dashboard = () => {
               <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/approval-process" element={<ApprovalProcess />} />
               <Route path="finance" element={<Finance />} />
+              <Route path="/settings" element={<Settings />} />
               <Route path="account" element={<Account role="admin" />} />
             </Routes>
           </Layout>
