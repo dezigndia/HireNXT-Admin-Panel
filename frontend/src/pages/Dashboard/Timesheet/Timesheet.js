@@ -462,10 +462,16 @@ const Timesheet = () => {
           icon: <CheckOutlined />,
           onClick: () => handleApprove(record),
         },
+        {
+          key: "share",
+          label: "Share with Client",
+          onClick: () => handleShare(record),
+        },
         ...baseItems,
         ...adminItems,
       ];
     } else {
+      // Approved status
       return [
         {
           key: "share",

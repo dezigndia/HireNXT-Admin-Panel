@@ -85,7 +85,7 @@ The application is a React-based single-page application (SPA) built with Create
     - **Implemented 4-Status Verification Workflow (Nov 13, 2025):**
         - **Workflow:** pending → submitted → verified → approved/paid
         - **Admin Finance - Partner Payables:** Added "Verify" action for Submitted invoices, conditional action menu (Verify for Submitted, Approve for Verified), defensive validation in approval handler, Verified status shown in blue
-        - **Admin Timesheet:** Added "Verify" action for submitted timesheets, conditional action menu based on status (Upload for pending, Verify for submitted, Approve for verified, Share for approved), updated metrics to include verified in pending count
+        - **Admin Timesheet:** Added "Verify" action for submitted timesheets, conditional action menu based on status (Upload for pending, Verify for submitted, Approve AND Share for verified, Share for approved), updated metrics to include verified in pending count. Admin has full rights to both approve and share verified timesheets
         - **Customer Finance:** Updated to only show Verified and Approved invoices (Submitted status hidden from customer view), metrics and actions updated accordingly, status colors: Verified=blue, Approved=cyan, Paid=green
         - **Customer Timesheet:** Updated to only show verified and approved timesheets (submitted status hidden from customer view), Pending Approval tab filters for verified status, metrics calculations updated
         - **Design Rationale:** Enforces separation of concerns - Admin must verify submissions before Customer can approve, prevents premature approvals, maintains audit trail through status progression
