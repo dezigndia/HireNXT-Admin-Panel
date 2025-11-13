@@ -35,7 +35,7 @@ import TalentsHired from "./TalentsHired/TalentsHired";
 import AddHiringRecord from "./TalentsHired/AddHiringRecord/AddHiringRecord";
 import Timesheet from "./Timesheet/Timesheet";
 import Finance from "./Finance/Finance";
-import Profile from "./Profile/Profile";
+import Account from "../../components/Account/Account";
 
 const { Header, Content, Sider } = Layout;
 
@@ -109,8 +109,8 @@ const Dashboard = () => {
 
   const profileMenuItems = [
     {
-      key: 'profile',
-      label: 'View Profile',
+      key: 'account',
+      label: 'View Account',
       icon: <UserOutlined />,
     },
     {
@@ -131,8 +131,8 @@ const Dashboard = () => {
       localStorage.removeItem("userRole");
       localStorage.removeItem("userName");
       navigate("/", { replace: true });
-    } else if (key === 'profile') {
-      navigate("/home/profile");
+    } else if (key === 'account') {
+      navigate("/home/account");
     } else if (key === 'change-password') {
       navigate("/home/change-password");
     }
@@ -229,7 +229,7 @@ const Dashboard = () => {
               <Route path="/timesheet" element={<Timesheet />} />
               <Route path="/approval-process" element={<ApprovalProcess />} />
               <Route path="finance" element={<Finance />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/account" element={<Account role="admin" />} />
             </Routes>
           </Layout>
         </Layout>
