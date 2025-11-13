@@ -178,7 +178,7 @@ const PartnerDashboard = () => {
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
               <Route path="/timesheet" element={<PartnerTimesheet />} />
               <Route path="/finance" element={<PartnerFinance />} />
-              <Route path="/account" element={<Account role="partner" />} />
+              <Route path="account" element={<Account role="partner" />} />
             </Routes>
           </Layout>
         </Layout>

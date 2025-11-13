@@ -210,7 +210,7 @@ const CustomerDashboard = () => {
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
               <Route path="/timesheet" element={<CustomerTimesheet />} />
               <Route path="/finance" element={<FinanceManagement />} />
-              <Route path="/account" element={<Account role="customer" />} />
+              <Route path="account" element={<Account role="customer" />} />
             </Routes>
           </Layout>
         </Layout>
