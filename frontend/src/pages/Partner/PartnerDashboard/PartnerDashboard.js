@@ -24,7 +24,7 @@ import TalentsHired from "../TalentsHired/TalentsHired";
 import SubmitProfiles from "../SubmitProfiles/SubmitProfiles";
 import BenchPool from "../BenchPool/BenchPool";
 import TalentDetails from "../TalentDetails/TalentDetails";
-import Profile from "../Profile/Profile";
+import Account from "../../../components/Account/Account";
 import PartnerTimesheet from "../Timesheet/Timesheet";
 import PartnerFinance from "../Finance/Finance";
 
@@ -78,8 +78,8 @@ const PartnerDashboard = () => {
 
   const profileMenuItems = [
     {
-      key: 'profile',
-      label: 'View Profile',
+      key: 'account',
+      label: 'View Account',
       icon: <UserOutlined />,
     },
     {
@@ -100,8 +100,8 @@ const PartnerDashboard = () => {
       localStorage.removeItem("userRole");
       localStorage.removeItem("userName");
       navigate("/", { replace: true });
-    } else if (key === 'profile') {
-      navigate("/partner/profile");
+    } else if (key === 'account') {
+      navigate("/partner/account");
     } else if (key === 'change-password') {
       navigate("/partner/change-password");
     }
@@ -178,7 +178,7 @@ const PartnerDashboard = () => {
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
               <Route path="/timesheet" element={<PartnerTimesheet />} />
               <Route path="/finance" element={<PartnerFinance />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/account" element={<Account role="partner" />} />
             </Routes>
           </Layout>
         </Layout>

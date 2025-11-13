@@ -25,7 +25,7 @@ import JobDetails from "../JobDetails/JobDetails";
 import PostJob from "../PostJob/PostJob";
 import HiredTalents from "../HiredTalents/HiredTalents";
 import TalentDetails from "../TalentDetails/TalentDetails";
-import Profile from "../Profile/Profile";
+import Account from "../../../components/Account/Account";
 import CustomerTimesheet from "../Timesheet/Timesheet";
 import FinanceManagement from "../FinanceManagement/FinanceManagement";
 
@@ -96,8 +96,8 @@ const CustomerDashboard = () => {
 
   const profileMenuItems = [
     {
-      key: 'profile',
-      label: 'View Profile',
+      key: 'account',
+      label: 'View Account',
       icon: <UserOutlined />,
     },
     {
@@ -118,8 +118,8 @@ const CustomerDashboard = () => {
       localStorage.removeItem("userRole");
       localStorage.removeItem("userName");
       navigate("/", { replace: true });
-    } else if (key === 'profile') {
-      navigate("/customer/profile");
+    } else if (key === 'account') {
+      navigate("/customer/account");
     } else if (key === 'change-password') {
       navigate("/customer/change-password");
     }
@@ -210,7 +210,7 @@ const CustomerDashboard = () => {
               <Route path="/talent-details/:talentId" element={<TalentDetails />} />
               <Route path="/timesheet" element={<CustomerTimesheet />} />
               <Route path="/finance" element={<FinanceManagement />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/account" element={<Account role="customer" />} />
             </Routes>
           </Layout>
         </Layout>
