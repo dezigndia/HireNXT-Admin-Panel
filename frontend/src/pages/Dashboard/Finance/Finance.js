@@ -484,7 +484,7 @@ const Finance = () => {
       .filter((p) => p.status === "Paid")
       .reduce((sum, p) => sum + p.totalAmount, 0);
     const currentPayable = payables
-      .filter((p) => p.status === "Submitted")
+      .filter((p) => p.status === "Submitted" || p.status === "Verified")
       .reduce((sum, p) => sum + p.totalAmount, 0);
     const overduePayable = payables
       .filter((p) => p.status === "Overdue")
@@ -660,6 +660,28 @@ const Finance = () => {
 
   const handleDownloadTimesheetPayable = (record) => {
     message.info(`Downloading timesheet for ${record.talentName}...`);
+  };
+
+  const handleVerifyPayable = (record) => {
+    Modal.confirm({
+      title: "Verify Payable",
+      content: `Verify invoice ${record.invoiceId} from ${record.partner}? This will make it available for approval.`,
+      okText: "Verify",
+      okButtonProps: { style: { background: "#00d9a9", borderColor: "#00d9a9" } },
+      onOk: () => {
+        const updated = payables.map((p) =>
+          p.id === record.id
+            ? {
+                ...p,
+                status: "Verified",
+                verifiedOn: new Date().toISOString().split("T")[0],
+              }
+            : p
+        );
+        setPayables(updated);
+        message.success(`Invoice verified for ${record.partner}`);
+      },
+    });
   };
 
   const handleApprovePayable = (record) => {
@@ -1129,6 +1151,8 @@ const Finance = () => {
           color={
             status === "Paid"
               ? "green"
+              : status === "Verified"
+              ? "blue"
               : status === "Rejected"
               ? "red"
               : "orange"
@@ -1165,11 +1189,18 @@ const Finance = () => {
                 onClick: () => handleDownloadTimesheetPayable(record),
               },
               {
+                key: "verify",
+                label: "Verify",
+                icon: <CheckCircleOutlined />,
+                onClick: () => handleVerifyPayable(record),
+                disabled: record.status !== "Submitted",
+              },
+              {
                 key: "approve",
                 label: "Approve",
                 icon: <CheckOutlined />,
                 onClick: () => handleApprovePayable(record),
-                disabled: record.status !== "Submitted",
+                disabled: record.status !== "Verified",
               },
               {
                 key: "modify",
@@ -1737,6 +1768,7 @@ const Finance = () => {
               {activeTab === "Partner Payables" && (
                 <>
                   <Option value="Submitted">Submitted</Option>
+                  <Option value="Verified">Verified</Option>
                   <Option value="Paid">Paid</Option>
                   <Option value="Rejected">Rejected</Option>
                 </>
