@@ -23,6 +23,7 @@ import {
   DownloadOutlined,
   EyeOutlined,
   CheckOutlined,
+  CheckCircleOutlined,
   CloseOutlined,
   EditOutlined,
   SendOutlined,
@@ -685,6 +686,12 @@ const Finance = () => {
   };
 
   const handleApprovePayable = (record) => {
+    // Defensive check: Only allow approval of verified invoices
+    if (record.status !== "Verified") {
+      message.error("Only verified invoices can be approved. Please verify the invoice first.");
+      return;
+    }
+    
     Modal.confirm({
       title: "Approve Payable",
       content: `Approve payment for ${record.partner} - ${record.invoiceId}?`,
@@ -1166,62 +1173,75 @@ const Finance = () => {
       title: "Action",
       key: "action",
       width: 80,
-      render: (_, record) => (
-        <Dropdown
-          menu={{
-            items: [
-              {
-                key: "view",
-                label: "View",
-                icon: <EyeOutlined />,
-                onClick: () => handleViewPayable(record),
-              },
-              {
-                key: "downloadInvoice",
-                label: "Download Invoice",
-                icon: <DownloadOutlined />,
-                onClick: () => handleDownloadInvoice(record),
-              },
-              {
-                key: "downloadTimesheet",
-                label: "Download Timesheet",
-                icon: <FileTextOutlined />,
-                onClick: () => handleDownloadTimesheetPayable(record),
-              },
-              {
-                key: "verify",
-                label: "Verify",
-                icon: <CheckCircleOutlined />,
-                onClick: () => handleVerifyPayable(record),
-                disabled: record.status !== "Submitted",
-              },
-              {
-                key: "approve",
-                label: "Approve",
-                icon: <CheckOutlined />,
-                onClick: () => handleApprovePayable(record),
-                disabled: record.status !== "Verified",
-              },
-              {
-                key: "modify",
-                label: "Modify",
-                icon: <EditOutlined />,
-                onClick: () => handleModifyPayable(record),
-              },
-              {
-                key: "reject",
-                label: "Reject",
-                icon: <CloseOutlined />,
-                onClick: () => handleRejectPayable(record),
-                disabled: record.status !== "Submitted",
-              },
-            ],
-          }}
-          trigger={["click"]}
-        >
-          <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
-        </Dropdown>
-      ),
+      render: (_, record) => {
+        const menuItems = [
+          {
+            key: "view",
+            label: "View",
+            icon: <EyeOutlined />,
+            onClick: () => handleViewPayable(record),
+          },
+          {
+            key: "downloadInvoice",
+            label: "Download Invoice",
+            icon: <DownloadOutlined />,
+            onClick: () => handleDownloadInvoice(record),
+          },
+          {
+            key: "downloadTimesheet",
+            label: "Download Timesheet",
+            icon: <FileTextOutlined />,
+            onClick: () => handleDownloadTimesheetPayable(record),
+          },
+        ];
+
+        // Only show Verify for Submitted status
+        if (record.status === "Submitted") {
+          menuItems.push({
+            key: "verify",
+            label: "Verify",
+            icon: <CheckCircleOutlined />,
+            onClick: () => handleVerifyPayable(record),
+          });
+        }
+
+        // Only show Approve for Verified status
+        if (record.status === "Verified") {
+          menuItems.push({
+            key: "approve",
+            label: "Approve",
+            icon: <CheckOutlined />,
+            onClick: () => handleApprovePayable(record),
+          });
+        }
+
+        menuItems.push({
+          key: "modify",
+          label: "Modify",
+          icon: <EditOutlined />,
+          onClick: () => handleModifyPayable(record),
+        });
+
+        // Only show Reject for Submitted status
+        if (record.status === "Submitted") {
+          menuItems.push({
+            key: "reject",
+            label: "Reject",
+            icon: <CloseOutlined />,
+            onClick: () => handleRejectPayable(record),
+            danger: true,
+          });
+        }
+
+        return (
+          <Dropdown
+            menu={{ items: menuItems }}
+            trigger={["click"]}
+          >
+            <MoreOutlined style={{ cursor: "pointer", fontSize: "18px" }} />
+          </Dropdown>
+        );
+      },
     },
   ];
 
