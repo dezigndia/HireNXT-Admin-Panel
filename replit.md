@@ -18,6 +18,9 @@ The application is a React-based single-page application (SPA) built with Create
 
 **Technical Implementations & Feature Specifications:**
 - **Authentication:** Role-based access control with `ProtectedRoute` and mock authentication.
+- **Account Module:** Shared tabbed interface across all panels (Admin, Partner, Customer) accessible via dropdown menu "View Account":
+    - **My Profile Tab:** User profile form with personal details, company information, and change password functionality.
+    - **Invite User Tab:** User invitation management with table showing User Name, Email ID, Mobile Number, Date added, Status (Active/Inactive), and Actions (Delete, Resend invitation, More menu). Features "Invite Users" button to open invitation modal.
 - **User Dashboards:**
     - **Customer Dashboard:** Overview metrics, talent search, "My Jobs" section, "Job Details" with candidate management, "Post Job" wizard, "Hired Talents" management, "Timesheet" (approve/view/download/ask to modify only, no upload rights), and "Finance Management" (invoice approval and review).
     - **Partner Dashboard:** Overview with partner-specific metrics, "Ongoing Jobs", "Submit Profiles", "Talent Details", "Bench Pool", "Talents Hired", "Timesheet" (upload/modify only, no approval), and "Finance" (client billing only, customer info confidential).
@@ -40,7 +43,9 @@ The application is a React-based single-page application (SPA) built with Create
             - **Download Timesheet:** Download associated timesheet documentation.
             - **Approve:** Approve invoices for payment processing.
             - **Ask to Modify:** Request invoice modifications with reason specification.
+            - **Update Payable:** Toggle invoice status between Paid/Unpaid (available for Approved status only).
             - Metrics dashboard: Total Paid, Current Payable, Pending Approval, Total Invoices.
+            - **Partner Confidentiality:** Partner information completely hidden from Customer views (no partner columns in tables, filters, or modals).
     - **Admin Dashboard:**
         - **Dashboard Overview:** Key metrics (Talents Hired, Partners, Customers, Profiles Submitted, Revenue/Payout), pending approvals, top customers hiring.
         - **User Management:** Comprehensive database management for customer, partner, and admin users.
@@ -61,6 +66,12 @@ The application is a React-based single-page application (SPA) built with Create
 - **Frontend-only Repository:** Focuses solely on the React frontend.
 - **External Backend:** Communicates with an external RESTful API.
 - **Environment Configuration:** Uses `.env` files for environment-specific variables.
+- **Shared Components:** Reusable components (Account module) stored in `src/components/` for DRY principles across all panels.
+- **Recent Changes (Nov 2025):**
+    - Renamed "Profile" to "Account" across all dashboards
+    - Added Invite User functionality with tabbed interface
+    - Implemented partner confidentiality in Customer Finance/Timesheet modules
+    - Added Update Payable action for Customer Finance (Approved invoices only)
 
 ## External Dependencies
 - **Backend API:** An external RESTful API hosted on Azure: `https://hirenxt-api-gwhpfddbfnc9d5dc.westus2-01.azurewebsites.net`.
