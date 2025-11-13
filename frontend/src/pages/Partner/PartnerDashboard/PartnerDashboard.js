@@ -58,7 +58,7 @@ const sideBarMenu = [
 ];
 
 const sideBarMenu2 = [
-  { key: 11, label: "Settings", icon: <SettingOutlined /> },
+  // { key: 11, label: "Settings", icon: <SettingOutlined /> }, // Commented out for now
   { key: "/logout", label: "Logout", icon: <LogoutOutlined /> },
 ];
 
