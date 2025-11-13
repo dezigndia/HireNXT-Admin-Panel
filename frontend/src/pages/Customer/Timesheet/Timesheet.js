@@ -20,8 +20,8 @@ import {
 } from "@ant-design/icons";
 import {
   TimesheetContainer,
-  MetricsCard,
-  MetricsGrid,
+  MetricsSection,
+  MetricCard,
   FiltersContainer,
   TabsContainer,
   TableContainer,
@@ -234,12 +234,14 @@ const CustomerTimesheet = () => {
   const getMetrics = () => {
     const pendingApproval = timesheets.filter((t) => t.status === "submitted").length;
     const approved = timesheets.filter((t) => t.status === "approved").length;
-    const totalAmount = timesheets
+    const totalAmountPending = timesheets
+      .filter((t) => t.status === "submitted")
+      .reduce((sum, t) => sum + t.calculatedAmount, 0);
+    const totalAmountApproved = timesheets
       .filter((t) => t.status === "approved")
       .reduce((sum, t) => sum + t.calculatedAmount, 0);
-    const totalTimesheets = timesheets.length;
 
-    return { pendingApproval, approved, totalAmount, totalTimesheets };
+    return { pendingApproval, approved, totalAmountPending, totalAmountApproved };
   };
 
   const metrics = getMetrics();
@@ -398,24 +400,28 @@ const CustomerTimesheet = () => {
       <h2 style={{ marginBottom: 24, color: "#014c75" }}>Timesheet Management</h2>
 
       {/* Metrics */}
-      <MetricsGrid>
-        <MetricsCard>
-          <div className="metric-value">{metrics.pendingApproval}</div>
+      <MetricsSection>
+        <MetricCard>
           <div className="metric-label">Pending Approval</div>
-        </MetricsCard>
-        <MetricsCard>
-          <div className="metric-value">{metrics.approved}</div>
+          <div className="metric-value">{metrics.pendingApproval}</div>
+        </MetricCard>
+        <MetricCard>
           <div className="metric-label">Approved</div>
-        </MetricsCard>
-        <MetricsCard>
-          <div className="metric-value">₹ {metrics.totalAmount.toLocaleString("en-IN")}</div>
-          <div className="metric-label">Total Approved Amount</div>
-        </MetricsCard>
-        <MetricsCard>
-          <div className="metric-value">{metrics.totalTimesheets}</div>
-          <div className="metric-label">Total Timesheets</div>
-        </MetricsCard>
-      </MetricsGrid>
+          <div className="metric-value">{metrics.approved}</div>
+        </MetricCard>
+        <MetricCard>
+          <div className="metric-label">Total Amount Pending</div>
+          <div className="metric-value">
+            ₹ {(metrics.totalAmountPending / 100000).toFixed(2)}L
+          </div>
+        </MetricCard>
+        <MetricCard>
+          <div className="metric-label">Total Amount Approved</div>
+          <div className="metric-value">
+            ₹ {(metrics.totalAmountApproved / 100000).toFixed(2)}L
+          </div>
+        </MetricCard>
+      </MetricsSection>
 
       {/* Tabs */}
       <TabsContainer>
