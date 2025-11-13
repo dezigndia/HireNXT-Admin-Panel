@@ -76,9 +76,10 @@ The application is a React-based single-page application (SPA) built with Create
     - Added Update Payable action for Customer Finance (Approved invoices only)
     - Updated Timesheet metrics across all panels (Admin, Partner, Customer) to match Finance module styling with fixed positioning across tabs
     - Added "Total Amount Approved" metric and renamed "Total Amount" to "Total Amount Pending" in all Timesheet modules
-    - Implemented Withdraw Profile action in Partner Submit Profiles with confirmation modal
+    - Implemented Withdraw Profile action in Partner Submit Profiles with confirmation modal (fixed missing message import)
     - Added View Details and Edit functionality to Partner Bench Pool (Edit allows updating basic fields while preserving system data)
-    - Updated Partner Timesheet with realistic data based on 4 active talents from Talents Hired
+    - Updated Partner Timesheet with realistic data showing current month (November 2025) with mixed statuses (Pending and Approved)
+    - Removed Client Name column from Partner Timesheet table for partner confidentiality
     - Renamed Partner Finance heading from "Finance - Client Billing" to "Finance"
     - Removed Settings from Partner sidebar navigation (commented out for potential future use)
 
