@@ -29,7 +29,7 @@ const { Option } = Select;
 const PartnerTimesheet = () => {
   const [activeTab, setActiveTab] = useState("Pending Upload");
   const [searchText, setSearchText] = useState("");
-  const [filterYear, setFilterYear] = useState("2024");
+  const [filterYear, setFilterYear] = useState("2025");
   const [filterMonth, setFilterMonth] = useState(null);
   const [uploadModalVisible, setUploadModalVisible] = useState(false);
   const [selectedTalent, setSelectedTalent] = useState(null);
@@ -56,8 +56,9 @@ const PartnerTimesheet = () => {
   };
 
   // Realistic timesheet data based on active talents from Talents Hired
+  // Current month: November 2025 with mixed statuses (Pending and Approved)
   const initialTimesheets = [
-    // Rajesh Kumar - December pending
+    // Rajesh Kumar - November 2025 pending
     {
       id: 1,
       talentName: "Rajesh Kumar",
@@ -65,17 +66,17 @@ const PartnerTimesheet = () => {
       clientName: "Amazon Web Services",
       onboardingDate: "2024-01-15",
       monthlyRate: 150000,
-      month: "December",
-      year: "2024",
-      actualWorkingDays: 22,
+      month: "November",
+      year: "2025",
+      actualWorkingDays: 20,
       leaveTaken: { count: 0, dates: [] },
       paidLeave: 0,
-      workingDays: 22,
-      billableHours: 22 * 8,
+      workingDays: 20,
+      billableHours: 20 * 8,
       calculatedAmount: 150000,
       status: "pending",
     },
-    // Rajesh Kumar - November approved
+    // Rajesh Kumar - October 2025 approved
     {
       id: 2,
       talentName: "Rajesh Kumar",
@@ -83,18 +84,18 @@ const PartnerTimesheet = () => {
       clientName: "Amazon Web Services",
       onboardingDate: "2024-01-15",
       monthlyRate: 150000,
-      month: "November",
-      year: "2024",
-      actualWorkingDays: 22,
+      month: "October",
+      year: "2025",
+      actualWorkingDays: 23,
       leaveTaken: { count: 1, dates: [15] },
       paidLeave: 1,
-      workingDays: 22,
-      billableHours: 22 * 8,
+      workingDays: 23,
+      billableHours: 23 * 8,
       calculatedAmount: 150000,
       status: "approved",
-      approvedDate: "2024-12-01",
+      approvedDate: "2025-11-01",
     },
-    // Priya Sharma - December submitted
+    // Priya Sharma - November 2025 approved
     {
       id: 3,
       talentName: "Priya Sharma",
@@ -102,18 +103,18 @@ const PartnerTimesheet = () => {
       clientName: "Google LLC",
       onboardingDate: "2023-08-20",
       monthlyRate: 165000,
-      month: "December",
-      year: "2024",
-      actualWorkingDays: 22,
-      leaveTaken: { count: 2, dates: [5, 12] },
-      paidLeave: 1,
-      workingDays: 21,
-      billableHours: 21 * 8,
-      calculatedAmount: 157500,
-      status: "submitted",
-      submittedDate: "2024-12-20",
+      month: "November",
+      year: "2025",
+      actualWorkingDays: 20,
+      leaveTaken: { count: 0, dates: [] },
+      paidLeave: 0,
+      workingDays: 20,
+      billableHours: 20 * 8,
+      calculatedAmount: 165000,
+      status: "approved",
+      approvedDate: "2025-11-12",
     },
-    // Priya Sharma - November approved
+    // Priya Sharma - October 2025 approved
     {
       id: 4,
       talentName: "Priya Sharma",
@@ -121,18 +122,18 @@ const PartnerTimesheet = () => {
       clientName: "Google LLC",
       onboardingDate: "2023-08-20",
       monthlyRate: 165000,
-      month: "November",
-      year: "2024",
-      actualWorkingDays: 22,
-      leaveTaken: { count: 0, dates: [] },
-      paidLeave: 0,
-      workingDays: 22,
-      billableHours: 22 * 8,
+      month: "October",
+      year: "2025",
+      actualWorkingDays: 23,
+      leaveTaken: { count: 2, dates: [10, 11] },
+      paidLeave: 2,
+      workingDays: 23,
+      billableHours: 23 * 8,
       calculatedAmount: 165000,
       status: "approved",
-      approvedDate: "2024-12-02",
+      approvedDate: "2025-11-02",
     },
-    // Amit Patel - December pending
+    // Amit Patel - November 2025 submitted
     {
       id: 5,
       talentName: "Amit Patel",
@@ -140,17 +141,18 @@ const PartnerTimesheet = () => {
       clientName: "Microsoft Corporation",
       onboardingDate: "2024-03-10",
       monthlyRate: 140000,
-      month: "December",
-      year: "2024",
-      actualWorkingDays: 22,
-      leaveTaken: { count: 0, dates: [] },
+      month: "November",
+      year: "2025",
+      actualWorkingDays: 20,
+      leaveTaken: { count: 1, dates: [7] },
       paidLeave: 0,
-      workingDays: 22,
-      billableHours: 22 * 8,
-      calculatedAmount: 140000,
-      status: "pending",
+      workingDays: 19,
+      billableHours: 19 * 8,
+      calculatedAmount: 133000,
+      status: "submitted",
+      submittedDate: "2025-11-10",
     },
-    // Amit Patel - November approved
+    // Amit Patel - October 2025 approved
     {
       id: 6,
       talentName: "Amit Patel",
@@ -158,18 +160,18 @@ const PartnerTimesheet = () => {
       clientName: "Microsoft Corporation",
       onboardingDate: "2024-03-10",
       monthlyRate: 140000,
-      month: "November",
-      year: "2024",
-      actualWorkingDays: 22,
-      leaveTaken: { count: 1, dates: [15] },
-      paidLeave: 1,
-      workingDays: 22,
-      billableHours: 22 * 8,
+      month: "October",
+      year: "2025",
+      actualWorkingDays: 23,
+      leaveTaken: { count: 0, dates: [] },
+      paidLeave: 0,
+      workingDays: 23,
+      billableHours: 23 * 8,
       calculatedAmount: 140000,
       status: "approved",
-      approvedDate: "2024-12-01",
+      approvedDate: "2025-11-01",
     },
-    // Sneha Reddy - December submitted
+    // Sneha Reddy - November 2025 approved
     {
       id: 7,
       talentName: "Sneha Reddy",
@@ -177,18 +179,18 @@ const PartnerTimesheet = () => {
       clientName: "Facebook Inc",
       onboardingDate: "2024-02-01",
       monthlyRate: 170000,
-      month: "December",
-      year: "2024",
-      actualWorkingDays: 22,
-      leaveTaken: { count: 1, dates: [18] },
-      paidLeave: 0,
-      workingDays: 21,
-      billableHours: 21 * 8,
-      calculatedAmount: 162273,
-      status: "submitted",
-      submittedDate: "2024-12-21",
+      month: "November",
+      year: "2025",
+      actualWorkingDays: 20,
+      leaveTaken: { count: 1, dates: [14] },
+      paidLeave: 1,
+      workingDays: 20,
+      billableHours: 20 * 8,
+      calculatedAmount: 170000,
+      status: "approved",
+      approvedDate: "2025-11-11",
     },
-    // Sneha Reddy - November approved
+    // Sneha Reddy - October 2025 approved
     {
       id: 8,
       talentName: "Sneha Reddy",
@@ -196,16 +198,16 @@ const PartnerTimesheet = () => {
       clientName: "Facebook Inc",
       onboardingDate: "2024-02-01",
       monthlyRate: 170000,
-      month: "November",
-      year: "2024",
-      actualWorkingDays: 22,
+      month: "October",
+      year: "2025",
+      actualWorkingDays: 23,
       leaveTaken: { count: 0, dates: [] },
       paidLeave: 0,
-      workingDays: 22,
-      billableHours: 22 * 8,
+      workingDays: 23,
+      billableHours: 23 * 8,
       calculatedAmount: 170000,
       status: "approved",
-      approvedDate: "2024-12-03",
+      approvedDate: "2025-11-03",
     },
   ];
 
@@ -226,7 +228,6 @@ const PartnerTimesheet = () => {
     if (searchText) {
       filtered = filtered.filter(t =>
         t.talentName.toLowerCase().includes(searchText.toLowerCase()) ||
-        t.clientName.toLowerCase().includes(searchText.toLowerCase()) ||
         t.role.toLowerCase().includes(searchText.toLowerCase())
       );
     }
@@ -324,13 +325,6 @@ const PartnerTimesheet = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      width: 150,
-      ellipsis: true,
-    },
-    {
-      title: "Client Name",
-      dataIndex: "clientName",
-      key: "clientName",
       width: 150,
       ellipsis: true,
     },
