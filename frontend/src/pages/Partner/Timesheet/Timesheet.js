@@ -19,7 +19,7 @@ import {
   TabsContainer,
   TableContainer,
   EmptyState,
-  MetricsContainer,
+  MetricsSection,
   MetricCard,
 } from "./Timesheet.style";
 import TimesheetDetailsModal from "../../Dashboard/Timesheet/TimesheetDetailsModal";
@@ -149,9 +149,14 @@ const PartnerTimesheet = () => {
   const getMetrics = () => {
     const pending = timesheets.filter(t => t.status === "pending").length;
     const approved = timesheets.filter(t => t.status === "approved").length;
-    const totalAmount = currentData.reduce((sum, t) => sum + t.calculatedAmount, 0);
+    const totalAmountPending = timesheets
+      .filter(t => t.status === "pending" || t.status === "submitted")
+      .reduce((sum, t) => sum + t.calculatedAmount, 0);
+    const totalAmountApproved = timesheets
+      .filter(t => t.status === "approved")
+      .reduce((sum, t) => sum + t.calculatedAmount, 0);
 
-    return { pending, approved, totalAmount };
+    return { pending, approved, totalAmountPending, totalAmountApproved };
   };
 
   const metrics = getMetrics();
@@ -363,40 +368,31 @@ const PartnerTimesheet = () => {
         <p>Upload and manage timesheets for your talents</p>
       </PageHeader>
 
-      <MetricsContainer>
+      <MetricsSection>
         <MetricCard>
-          <div className="metric-header">
-            <span className="metric-label">Pending Upload</span>
-            <div className="metric-icon warning">
-              <CloudUploadOutlined />
-            </div>
-          </div>
+          <div className="metric-label">Pending Upload</div>
           <div className="metric-value">{metrics.pending}</div>
-          <div className="metric-subtext">Timesheets</div>
         </MetricCard>
 
         <MetricCard>
-          <div className="metric-header">
-            <span className="metric-label">Approved</span>
-            <div className="metric-icon success">
-              <CheckCircleOutlined />
-            </div>
-          </div>
+          <div className="metric-label">Approved</div>
           <div className="metric-value">{metrics.approved}</div>
-          <div className="metric-subtext">Timesheets</div>
         </MetricCard>
 
         <MetricCard>
-          <div className="metric-header">
-            <span className="metric-label">Total Amount</span>
-            <div className="metric-icon primary">
-              <DollarOutlined />
-            </div>
+          <div className="metric-label">Total Amount Pending</div>
+          <div className="metric-value">
+            ₹ {(metrics.totalAmountPending / 100000).toFixed(2)}L
           </div>
-          <div className="metric-value">₹ {(metrics.totalAmount / 100000).toFixed(2)}L</div>
-          <div className="metric-subtext">Current View</div>
         </MetricCard>
-      </MetricsContainer>
+
+        <MetricCard>
+          <div className="metric-label">Total Amount Approved</div>
+          <div className="metric-value">
+            ₹ {(metrics.totalAmountApproved / 100000).toFixed(2)}L
+          </div>
+        </MetricCard>
+      </MetricsSection>
 
       <TabsContainer>
         <Button
