@@ -24,7 +24,7 @@ The application is a React-based single-page application (SPA) built with Create
 - **User Dashboards:**
     - **Customer Dashboard:** Overview metrics, talent search, "My Jobs" section, "Job Details" with candidate management, "Post Job" wizard, "Hired Talents" management, "Timesheet" (approve/view/download/ask to modify only, no upload rights), and "Finance Management" (invoice approval and review).
     - **Partner Dashboard:** Overview with partner-specific metrics, "Ongoing Jobs", "Submit Profiles", "Talent Details", "Bench Pool", "Talents Hired", "Timesheet" (upload/modify only, no approval), and "Finance" (client billing only, customer info confidential).
-        - **Partner Timesheet:** Simplified timesheet module with upload and modify capabilities only (no approval rights). Features Upload/Modify/View modals using shared TimesheetDetailsModal component from Admin module with mode-based functionality (Upload/Modify mode shows leave management and file upload with real-time calculations; View mode is read-only), two-tab navigation (Pending Upload, Approved), metrics dashboard, and consistent design with Admin module.
+        - **Partner Timesheet:** Simplified timesheet module with upload and modify capabilities only (no approval rights). Features Upload/Modify/View modals using shared TimesheetDetailsModal component from Admin module with mode-based functionality (Upload/Modify mode shows leave management and file upload with real-time calculations; View mode is read-only), two-tab navigation (Pending Upload, Approved), Finance-style metrics dashboard (Pending Upload, Approved, Total Amount Pending, Total Amount Approved) fixed across tabs, and consistent design with Admin module.
         - **Partner Finance:** Single-tab finance module showing only Client Billing (receivables) with customer information kept confidential. Features Upload Invoice modal (invoice number, amount breakup, file upload for PDF/DOC/DOCX), actions (Upload Invoice for pending status, View Breakup, Download Timesheet), metrics (Total Amount, Current Receivable, Overdue Amount, Total Invoices), and consistent search/filter design using Flex layout.
     - **Customer Dashboard:**
         - **Dashboard Overview:** Key metrics for customer operations (My Jobs, Submitted Profiles, Talents Hired, Active Jobs).
@@ -32,7 +32,7 @@ The application is a React-based single-page application (SPA) built with Create
         - **My Jobs:** Job posting management with detailed views.
         - **Submitted Profiles:** Review partner-submitted talent profiles for open positions.
         - **Talents Hired:** Management of hired talents and contracts.
-        - **Timesheet Management:** Two-tab system (Pending Approval, Approved) for reviewing partner-submitted timesheets with customer-specific actions:
+        - **Timesheet Management:** Two-tab system (Pending Approval, Approved) for reviewing partner-submitted timesheets with customer-specific actions and Finance-style metrics (Pending Approval, Approved, Total Amount Pending, Total Amount Approved) fixed across tabs:
             - **Approve:** Approve submitted timesheets for payment processing.
             - **View:** Read-only view of timesheet details using shared TimesheetDetailsModal component.
             - **Download:** Download timesheet files.
@@ -49,7 +49,7 @@ The application is a React-based single-page application (SPA) built with Create
     - **Admin Dashboard:**
         - **Dashboard Overview:** Key metrics (Talents Hired, Partners, Customers, Profiles Submitted, Revenue/Payout), pending approvals, top customers hiring.
         - **User Management:** Comprehensive database management for customer, partner, and admin users.
-        - **Timesheet Management:** Upload, manage, and approve timesheets with leave management, automated calculations, and historical views.
+        - **Timesheet Management:** Upload, manage, and approve timesheets with leave management, automated calculations, and historical views. Features Finance-style metrics (Pending Upload, Approved, Total Amount Pending, Total Amount Approved) fixed across tabs.
         - **Talent Profiles:** Database management with add/edit functionality via a 2-step wizard, including skill management and document uploads.
         - **Job Requirements:** Management of job postings with detailed views and edit capabilities.
         - **Talents Hired:** Contract management with advanced search/filters and a 2-step hiring record wizard.
@@ -72,6 +72,8 @@ The application is a React-based single-page application (SPA) built with Create
     - Added Invite User functionality with tabbed interface
     - Implemented partner confidentiality in Customer Finance/Timesheet modules
     - Added Update Payable action for Customer Finance (Approved invoices only)
+    - Updated Timesheet metrics across all panels (Admin, Partner, Customer) to match Finance module styling with fixed positioning across tabs
+    - Added "Total Amount Approved" metric and renamed "Total Amount" to "Total Amount Pending" in all Timesheet modules
 
 ## External Dependencies
 - **Backend API:** An external RESTful API hosted on Azure: `https://hirenxt-api-gwhpfddbfnc9d5dc.westus2-01.azurewebsites.net`.

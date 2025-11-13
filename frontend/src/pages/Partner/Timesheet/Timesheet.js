@@ -147,7 +147,7 @@ const PartnerTimesheet = () => {
   const currentData = getFilteredData();
 
   const getMetrics = () => {
-    const pending = timesheets.filter(t => t.status === "pending").length;
+    const pending = timesheets.filter(t => t.status === "pending" || t.status === "submitted").length;
     const approved = timesheets.filter(t => t.status === "approved").length;
     const totalAmountPending = timesheets
       .filter(t => t.status === "pending" || t.status === "submitted")

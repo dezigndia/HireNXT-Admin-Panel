@@ -204,7 +204,7 @@ const Timesheet = () => {
 
     if (!showPastTimesheets) {
       if (activeTab === "Pending Upload") {
-        filtered = filtered.filter(t => t.status === "pending");
+        filtered = filtered.filter(t => t.status === "pending" || t.status === "submitted");
       } else if (activeTab === "Approved") {
         filtered = filtered.filter(t => t.status === "approved");
       }
@@ -239,7 +239,7 @@ const Timesheet = () => {
   const currentData = getFilteredData();
 
   const getMetrics = () => {
-    const pending = timesheets.filter(t => t.status === "pending").length;
+    const pending = timesheets.filter(t => t.status === "pending" || t.status === "submitted").length;
     const approved = timesheets.filter(t => t.status === "approved").length;
     const totalAmountPending = timesheets
       .filter(t => t.status === "pending" || t.status === "submitted")
