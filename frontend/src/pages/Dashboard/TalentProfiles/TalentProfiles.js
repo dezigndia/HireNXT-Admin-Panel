@@ -107,7 +107,7 @@ const TalentProfiles = () => {
     // Function to fetch data from the backend
     const fetchData = async () => {
       try {
-        const response = await fetch(API_CONST.GET_TALENT_PROFILE, {
+        const response = await fetch(API_CONST.GET_TALENT_POOL, {
           method: "POST",
         });
 
@@ -133,7 +133,7 @@ const TalentProfiles = () => {
   if (values) data.append('data', JSON.stringify(values));
 
   try {
-    const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
+    const response = await axios.post(API_CONST.ADD_TALENT_POOL, data, {
       headers: {
         'Content-Type': "multipart/form-data"
       },
