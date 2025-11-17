@@ -81,36 +81,6 @@ const adminColumns = [
   },
 ];
 
-// Sample data
-const activeProfiles = [
-  {
-    key: "1",
-    name: "John Doe",
-    onboardedDate: "2024-05-01",
-    email: "john@example.com",
-    duration: "6 months",
-    monthlyRate: "$5000",
-    marketRate: "$5500",
-  },
-  {
-    key: "2",
-    name: "Alice Johnson",
-    onboardedDate: "2024-04-10",
-    email: "alice.johnson@example.com",
-    duration: "12 months",
-    monthlyRate: "$6200",
-    marketRate: "$6500",
-  },
-  {
-    key: "3",
-    name: "Bob Lee",
-    onboardedDate: "2024-06-05",
-    email: "bob.lee@example.com",
-    duration: "3 months",
-    monthlyRate: "$4700",
-    marketRate: "$5000",
-  },
-];
 
 const inactiveProfiles = [
   {
@@ -145,10 +115,11 @@ const inactiveProfiles = [
 const activeColumns = [
   { title: "Name", dataIndex: "name", key: "name" },
   { title: "Onboarded Date", dataIndex: "onboardedDate", key: "onboardedDate" },
-  { title: "Email", dataIndex: "email", key: "email" },
-  { title: "Duration", dataIndex: "duration", key: "duration" },
-  { title: "Monthly Rate", dataIndex: "monthlyRate", key: "monthlyRate" },
+  { title: "Role", dataIndex: "role", key: "role" },
+  { title: "Top Skill", dataIndex: "skills", key: "skills" },
   { title: "Market Rate", dataIndex: "marketRate", key: "marketRate" },
+  { title: "Experience", dataIndex: "experienceyears", key: "experienceyears" },
+  { title: "Notice Period", dataIndex: "notice", key: "notice" },
   {
     title: "Action",
     key: "action",
@@ -214,7 +185,7 @@ const BenchPool = () => {
     // Function to fetch data from the backend
     const fetchData = async () => {
       try {
-        const response = await fetch(API_CONST.GET_TALENT_PROFILE, {
+        const response = await fetch(API_CONST.GET_TALENT_POOL, {
           method: "POST",
         });
 
@@ -240,7 +211,7 @@ const BenchPool = () => {
     if (values) data.append("data", JSON.stringify(values));
 
     try {
-      const response = await axios.post(API_CONST.ADD_TALENT_PROFILE, data, {
+      const response = await axios.post(API_CONST.ADD_TALENT_POOL, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -299,7 +270,7 @@ const BenchPool = () => {
           <Tabs.TabPane tab="Active Profiles" key="1">
             <Table
               columns={activeColumns}
-              dataSource={activeProfiles}
+              dataSource={filteredData}
               pagination={false}
             />
           </Tabs.TabPane>
