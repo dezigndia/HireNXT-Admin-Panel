@@ -77,19 +77,45 @@ export const MyJobsWrapper = styled.div`
     }
   }
 
-  .filter-section {
+  .tabs-section {
+    display: flex;
+    gap: 12px;
     margin-bottom: 24px;
+    border-bottom: 2px solid #e8e8e8;
+    padding-bottom: 0;
 
-    .job-filter {
-      .ant-segmented-item {
-        font-weight: 500;
+    .tab-button {
+      padding: 12px 24px;
+      border: none;
+      background: transparent;
+      color: #666;
+      font-size: 15px;
+      font-weight: 500;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s;
+      margin-bottom: -2px;
+      height: auto;
+      border-radius: 0;
+      box-shadow: none;
+
+      &:hover {
+        color: #014c75;
+        background: transparent;
       }
 
-      .ant-segmented-item-selected {
-        background: #01d9a9;
-        color: white;
+      &.active {
+        color: #014c75;
+        border-bottom-color: #00d9a9;
+        background: transparent;
       }
     }
+  }
+
+  .empty-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: none;
   }
 
   .jobs-list {

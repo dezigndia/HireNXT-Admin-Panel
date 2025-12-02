@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Card, Table, Tag, Button, Dropdown, Menu, Avatar, Tooltip } from "antd";
+import { Card, Table, Tag, Button, Dropdown, Avatar, Tooltip, Modal, Input, message } from "antd";
 import {
   ArrowLeftOutlined,
   FilePdfOutlined,
@@ -12,6 +12,8 @@ import {
   DollarOutlined,
   CalendarOutlined,
   CommentOutlined,
+  ExclamationCircleOutlined,
+  StopOutlined,
 } from "@ant-design/icons";
 import { JobDetailsWrapper } from "./JobDetails.style";
 
@@ -211,6 +213,9 @@ const JobDetails = () => {
   const navigate = useNavigate();
   const jobData = mockJobDetails[jobId];
   const [profiles, setProfiles] = useState([]);
+  const [cancelModalVisible, setCancelModalVisible] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [cancelReason, setCancelReason] = useState("");
 
   useEffect(() => {
     if (jobData) {
@@ -231,41 +236,140 @@ const JobDetails = () => {
     );
   }
 
-  const handleAction = (profileId, action) => {
-    console.log(`Action: ${action} for profile ID: ${profileId}`);
-    setProfiles(
-      profiles.map((profile) =>
-        profile.id === profileId ? { ...profile, status: action } : profile
-      )
-    );
+  const handleScheduleInterview = (profile) => {
+    Modal.confirm({
+      title: "Schedule Interview",
+      icon: <VideoCameraOutlined style={{ color: "#1890ff" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to schedule an interview for this candidate?</p>
+          <div style={{ 
+            marginTop: 12, 
+            padding: 12, 
+            background: "#f8f9fd", 
+            borderRadius: 6 
+          }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{profile.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{profile.role}</p>
+          </div>
+        </div>
+      ),
+      okText: "Schedule Interview",
+      okButtonProps: { 
+        style: { background: "#00d9a9", borderColor: "#00d9a9" }
+      },
+      cancelText: "Cancel",
+      onOk: () => {
+        setProfiles(
+          profiles.map((p) =>
+            p.id === profile.id 
+              ? { ...p, previousStatus: p.status, status: "interviewing" } 
+              : p
+          )
+        );
+        message.success(`Interview scheduled for ${profile.name}`);
+      },
+    });
   };
 
-  const getActionMenu = (record) => (
-    <Menu>
-      <Menu.Item
-        key="interview"
-        icon={<VideoCameraOutlined />}
-        onClick={() => handleAction(record.id, "interviewing")}
-      >
-        Schedule Interview
-      </Menu.Item>
-      <Menu.Item
-        key="hire"
-        icon={<CheckCircleOutlined />}
-        onClick={() => handleAction(record.id, "hired")}
-      >
-        Hire
-      </Menu.Item>
-      <Menu.Item
-        key="reject"
-        icon={<CloseCircleOutlined />}
-        danger
-        onClick={() => handleAction(record.id, "rejected")}
-      >
-        Reject
-      </Menu.Item>
-    </Menu>
-  );
+  const handleCancelInterview = (profile) => {
+    setSelectedProfile(profile);
+    setCancelReason("");
+    setCancelModalVisible(true);
+  };
+
+  const handleSubmitCancelInterview = () => {
+    if (!cancelReason.trim()) {
+      message.warning("Please provide a reason for cancelling the interview");
+      return;
+    }
+
+    setProfiles(
+      profiles.map((p) =>
+        p.id === selectedProfile.id 
+          ? { ...p, status: p.previousStatus || "submitted", previousStatus: undefined } 
+          : p
+      )
+    );
+    message.success(`Interview cancelled for ${selectedProfile.name}`);
+    setCancelModalVisible(false);
+    setSelectedProfile(null);
+    setCancelReason("");
+  };
+
+  const handleAction = (profileId, action) => {
+    if (action === "hired") {
+      Modal.confirm({
+        title: "Hire Candidate",
+        icon: <CheckCircleOutlined style={{ color: "#52c41a" }} />,
+        content: "Are you sure you want to hire this candidate?",
+        okText: "Hire",
+        okButtonProps: { style: { background: "#52c41a", borderColor: "#52c41a" } },
+        onOk: () => {
+          setProfiles(
+            profiles.map((p) =>
+              p.id === profileId ? { ...p, status: action } : p
+            )
+          );
+          message.success("Candidate hired successfully");
+        },
+      });
+    } else if (action === "rejected") {
+      Modal.confirm({
+        title: "Reject Candidate",
+        icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+        content: "Are you sure you want to reject this candidate?",
+        okText: "Reject",
+        okButtonProps: { danger: true },
+        onOk: () => {
+          setProfiles(
+            profiles.map((p) =>
+              p.id === profileId ? { ...p, status: action } : p
+            )
+          );
+          message.success("Candidate rejected");
+        },
+      });
+    } else {
+      setProfiles(
+        profiles.map((profile) =>
+          profile.id === profileId ? { ...profile, status: action } : profile
+        )
+      );
+    }
+  };
+
+  const getActionMenuItems = (record) => {
+    const items = [];
+
+    if (record.status === "interviewing") {
+      items.push({
+        key: "cancel",
+        label: "Cancel Interview",
+        icon: <StopOutlined />,
+        danger: true,
+        onClick: () => handleCancelInterview(record),
+      });
+    }
+
+    items.push(
+      {
+        key: "hire",
+        label: "Hire",
+        icon: <CheckCircleOutlined />,
+        onClick: () => handleAction(record.id, "hired"),
+      },
+      {
+        key: "reject",
+        label: "Reject",
+        icon: <CloseCircleOutlined />,
+        danger: true,
+        onClick: () => handleAction(record.id, "rejected"),
+      }
+    );
+
+    return items;
+  };
 
   const columns = [
     {
@@ -288,7 +392,7 @@ const JobDetails = () => {
       key: "name",
       width: 150,
       render: (name, record) => (
-        <a 
+        <a
           href="#"
           style={{ color: "#1890ff", fontWeight: 500 }}
           onClick={(e) => {
@@ -341,17 +445,39 @@ const JobDetails = () => {
       width: 120,
     },
     {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      width: 120,
+      render: (status) => {
+        const config = {
+          submitted: { color: "blue", text: "Submitted" },
+          interviewing: { color: "orange", text: "Interviewing" },
+          hired: { color: "green", text: "Hired" },
+          rejected: { color: "red", text: "Rejected" },
+        };
+        const { color, text } = config[status] || { color: "default", text: status };
+        return <Tag color={color}>{text}</Tag>;
+      },
+    },
+    {
       title: "Action",
       key: "action",
       width: 150,
       render: (_, record) => (
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <Tooltip title="Schedule Interview">
+          <Tooltip title={record.status === "interviewing" ? "Interview Scheduled" : "Schedule Interview"}>
             <Button
               type="primary"
               icon={<VideoCameraOutlined />}
               size="small"
-              onClick={() => handleAction(record.id, "interviewing")}
+              disabled={record.status === "interviewing" || record.status === "hired" || record.status === "rejected"}
+              onClick={() => handleScheduleInterview(record)}
+              style={
+                record.status === "interviewing"
+                  ? { background: "#d9d9d9", borderColor: "#d9d9d9" }
+                  : {}
+              }
             />
           </Tooltip>
           <Tooltip title="Download Resume">
@@ -361,7 +487,10 @@ const JobDetails = () => {
               onClick={() => window.open(record.resumeUrl, "_blank")}
             />
           </Tooltip>
-          <Dropdown overlay={getActionMenu(record)} trigger={["click"]}>
+          <Dropdown 
+            menu={{ items: getActionMenuItems(record) }} 
+            trigger={["click"]}
+          >
             <Button icon={<MoreOutlined />} size="small" />
           </Dropdown>
         </div>
@@ -444,10 +573,60 @@ const JobDetails = () => {
             dataSource={profiles}
             rowKey="id"
             pagination={false}
-            scroll={{ x: 1200 }}
+            scroll={{ x: 1400 }}
           />
         </Card>
       </div>
+
+      <Modal
+        title="Cancel Interview"
+        open={cancelModalVisible}
+        onOk={handleSubmitCancelInterview}
+        onCancel={() => {
+          setCancelModalVisible(false);
+          setSelectedProfile(null);
+          setCancelReason("");
+        }}
+        okText="Cancel Interview"
+        okButtonProps={{ danger: true }}
+        cancelText="Go Back"
+      >
+        {selectedProfile && (
+          <div>
+            <div
+              style={{
+                marginBottom: 16,
+                padding: 12,
+                background: "#f8f9fd",
+                borderRadius: 6,
+              }}
+            >
+              <p style={{ margin: 0, fontWeight: 500 }}>{selectedProfile.name}</p>
+              <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>
+                {selectedProfile.role}
+              </p>
+            </div>
+            <div>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: 8,
+                  color: "#014c75",
+                  fontWeight: 500,
+                }}
+              >
+                Reason for Cancellation *
+              </label>
+              <Input.TextArea
+                rows={4}
+                placeholder="Please provide a reason for cancelling the interview..."
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+      </Modal>
     </JobDetailsWrapper>
   );
 };
