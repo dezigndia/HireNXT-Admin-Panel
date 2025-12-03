@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Dropdown, Segmented, Empty } from "antd";
+import { Table, Dropdown, Button, Empty } from "antd";
 import { useNavigate } from "react-router-dom";
 import { MoreOutlined } from "@ant-design/icons";
 import {
@@ -257,14 +257,18 @@ const HiredTalents = () => {
       </PageHeader>
 
       <TabsContainer>
-        <Segmented
-          value={activeTab}
-          onChange={setActiveTab}
-          options={[
-            { label: "Active Talents", value: "Active Talents" },
-            { label: "Inactive Talents", value: "Inactive Talents" },
-          ]}
-        />
+        <Button
+          className={activeTab === "Active Talents" ? "tab-button active" : "tab-button"}
+          onClick={() => setActiveTab("Active Talents")}
+        >
+          Active ({mockHiredTalents.length})
+        </Button>
+        <Button
+          className={activeTab === "Inactive Talents" ? "tab-button active" : "tab-button"}
+          onClick={() => setActiveTab("Inactive Talents")}
+        >
+          Inactive ({mockInactiveTalents.length})
+        </Button>
       </TabsContainer>
 
       <TableContainer>
