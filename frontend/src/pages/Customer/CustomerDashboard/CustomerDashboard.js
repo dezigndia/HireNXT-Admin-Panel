@@ -9,7 +9,6 @@ import {
   FileDoneOutlined,
   AuditOutlined,
   LogoutOutlined,
-  SettingOutlined,
   UserOutlined,
   SearchOutlined,
   LockOutlined,
@@ -64,7 +63,6 @@ const sideBarMenu = [
 ];
 
 const sideBarMenu2 = [
-  { key: 11, label: "Settings", icon: <SettingOutlined /> },
   { key: "/logout", label: "Logout", icon: <LogoutOutlined /> },
 ];
 
@@ -87,8 +85,6 @@ const CustomerDashboard = () => {
       localStorage.removeItem("userRole");
       localStorage.removeItem("userName");
       navigate("/", { replace: true });
-    } else if (e.key === 11) {
-      navigate("/customer/settings");
     } else {
       navigate(e.key);
     }
