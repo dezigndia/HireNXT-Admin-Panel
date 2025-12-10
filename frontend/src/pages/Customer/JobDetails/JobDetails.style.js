@@ -7,22 +7,44 @@ export const JobDetailsWrapper = styled.div`
 
   .header {
     margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-    .back-button {
-      margin-bottom: 12px;
-      color: #595959;
-      font-weight: 500;
+    .header-left {
+      display: flex;
+      flex-direction: column;
 
-      &:hover {
-        color: #1890ff;
+      .back-button {
+        margin-bottom: 12px;
+        color: #595959;
+        font-weight: 500;
+        padding-left: 0;
+
+        &:hover {
+          color: #1890ff;
+        }
+      }
+
+      h2 {
+        font-size: 24px;
+        font-weight: 600;
+        margin: 0;
+        color: #014c75;
       }
     }
 
-    h2 {
-      font-size: 24px;
-      font-weight: 600;
-      margin: 0;
-      color: #014c75;
+    .view-details-btn {
+      background: #00d9a9;
+      border-color: #00d9a9;
+      height: 40px;
+      padding: 0 20px;
+      font-weight: 500;
+
+      &:hover {
+        background: #01c49b;
+        border-color: #01c49b;
+      }
     }
   }
 
