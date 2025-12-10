@@ -14,6 +14,7 @@ import {
   CommentOutlined,
   ExclamationCircleOutlined,
   StopOutlined,
+  EyeOutlined,
 } from "@ant-design/icons";
 import { JobDetailsWrapper } from "./JobDetails.style";
 
@@ -501,15 +502,25 @@ const JobDetails = () => {
   return (
     <JobDetailsWrapper>
       <div className="header">
+        <div className="header-left">
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={() => navigate("/customer/my-jobs")}
+            className="back-button"
+          >
+            Back to Jobs
+          </Button>
+          <h2>Ongoing Jobs</h2>
+        </div>
         <Button
-          type="text"
-          icon={<ArrowLeftOutlined />}
-          onClick={() => navigate("/customer/my-jobs")}
-          className="back-button"
+          type="primary"
+          icon={<EyeOutlined />}
+          onClick={() => navigate(`/customer/view-job/${jobId}`)}
+          className="view-details-btn"
         >
-          Back to Jobs
+          View Job Details
         </Button>
-        <h2>Ongoing Jobs</h2>
       </div>
 
       <Card className="job-summary-card">
