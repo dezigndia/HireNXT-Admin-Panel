@@ -8,12 +8,36 @@ export const PostJobWrapper = styled.div`
     padding: 24px 40px;
     background: white;
     border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .header-content {
+      display: flex;
+      align-items: center;
+    }
 
     h2 {
       font-size: 28px;
       font-weight: 700;
       color: #014c75;
       margin: 0;
+    }
+
+    .cancel-btn {
+      height: 40px;
+      padding: 0 24px;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      border: 1px solid #d9d9d9;
+      color: #595959;
+      background: white;
+
+      &:hover {
+        color: #ff4d4f;
+        border-color: #ff4d4f;
+      }
     }
   }
 
@@ -22,8 +46,56 @@ export const PostJobWrapper = styled.div`
     padding: 32px 40px 24px;
     border-bottom: 1px solid #e8e8e8;
 
-    .ant-steps-item {
-      padding: 0;
+    .ant-steps {
+      .ant-steps-item .ant-steps-item-container .ant-steps-item-title::after {
+        display: none;
+      }
+
+      .ant-steps-item .ant-steps-item-container {
+        display: flex;
+        justify-content: center;
+        padding: 16px 24px;
+        border: 1px solid #e3e3e3;
+        border-radius: 0;
+        margin: 0;
+      }
+
+      &.ant-steps-horizontal:not(.ant-steps-label-vertical) .ant-steps-item {
+        padding-inline-start: 0;
+      }
+
+      .ant-steps-item-active .ant-steps-item-container {
+        background-color: #014c75;
+        border-radius: 5px;
+        border-color: #014c75;
+      }
+
+      .ant-steps-item-process .ant-steps-item-icon {
+        background-color: #00d9a9;
+        border-color: #00d9a9;
+      }
+
+      .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
+        color: #fff;
+      }
+
+      .ant-steps-item-wait .ant-steps-item-container {
+        background-color: #fff;
+      }
+
+      .ant-steps-item-finish .ant-steps-item-container {
+        background-color: #e6fff9;
+        border-color: #00d9a9;
+      }
+
+      .ant-steps-item-finish .ant-steps-item-icon {
+        background-color: #00d9a9;
+        border-color: #00d9a9;
+        
+        .ant-steps-icon {
+          color: white;
+        }
+      }
     }
 
     .ant-steps-item-icon {
@@ -44,32 +116,6 @@ export const PostJobWrapper = styled.div`
       }
     }
 
-    .ant-steps-item-process .ant-steps-item-icon {
-      background-color: #00d9a9;
-      border-color: #00d9a9;
-      
-      .ant-steps-icon {
-        color: white;
-      }
-    }
-
-    .ant-steps-item-finish .ant-steps-item-icon {
-      background-color: #00d9a9;
-      border-color: #00d9a9;
-      
-      .ant-steps-icon {
-        color: white;
-      }
-    }
-
-    .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
-      background-color: #00d9a9;
-    }
-
-    .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-tail::after {
-      background-color: #d9d9d9;
-    }
-
     .ant-steps-item-title {
       font-size: 14px;
       font-weight: 500;
@@ -78,7 +124,7 @@ export const PostJobWrapper = styled.div`
     }
 
     .ant-steps-item-process .ant-steps-item-title {
-      color: #1a1a1a;
+      color: #fff;
       font-weight: 600;
     }
 
