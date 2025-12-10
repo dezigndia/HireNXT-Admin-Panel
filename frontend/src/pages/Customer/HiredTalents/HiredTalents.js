@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Table, Dropdown, Button, Empty } from "antd";
+import { Table, Dropdown, Button, Empty, Card, Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
-import { MoreOutlined } from "@ant-design/icons";
+import { MoreOutlined, DollarOutlined, UserOutlined, LineChartOutlined, TrophyOutlined } from "@ant-design/icons";
 import {
   HiredTalentsContainer,
   PageHeader,
+  MetricsContainer,
   TabsContainer,
   TableContainer,
   EmptyState,
@@ -106,6 +107,25 @@ const HiredTalents = () => {
 
   const currentData =
     activeTab === "Active Talents" ? mockHiredTalents : mockInactiveTalents;
+
+  const formatCurrency = (amount) => {
+    if (amount >= 10000000) {
+      return `₹ ${(amount / 10000000).toFixed(2)} Cr`;
+    } else if (amount >= 100000) {
+      return `₹ ${(amount / 100000).toFixed(2)} L`;
+    }
+    return `₹ ${amount.toLocaleString("en-IN")}`;
+  };
+
+  const metrics = {
+    activeMonthlyBilling: mockHiredTalents.reduce((sum, t) => sum + t.monthlyRate, 0),
+    avgPerTalent: mockHiredTalents.length > 0 
+      ? Math.round(mockHiredTalents.reduce((sum, t) => sum + t.monthlyRate, 0) / mockHiredTalents.length) 
+      : 0,
+    totalCostSaved: mockHiredTalents.reduce((sum, t) => sum + (t.marketRate - t.monthlyRate), 0),
+    totalBilled: mockHiredTalents.reduce((sum, t) => sum + t.monthlyRate, 0),
+    totalMarketRate: mockHiredTalents.reduce((sum, t) => sum + t.marketRate, 0),
+  };
 
   const handleMenuClick = (action, record) => {
     console.log(`${action} for talent:`, record);
@@ -255,6 +275,65 @@ const HiredTalents = () => {
       <PageHeader>
         <h1>Talents Hired</h1>
       </PageHeader>
+
+      <MetricsContainer>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={56}
+              icon={<DollarOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#e6fff9" }}
+            />
+            <div className="metric-info">
+              <h3>{formatCurrency(metrics.activeMonthlyBilling)}</h3>
+              <p>Active Monthly Billing</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={56}
+              icon={<UserOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#f0f5ff" }}
+            />
+            <div className="metric-info">
+              <h3>{formatCurrency(metrics.avgPerTalent)}</h3>
+              <p>Avg per Talent</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={56}
+              icon={<TrophyOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#fff7e6" }}
+            />
+            <div className="metric-info">
+              <h3>{formatCurrency(metrics.totalCostSaved)}</h3>
+              <p>Total Cost Saved</p>
+            </div>
+          </div>
+        </Card>
+        <Card className="metric-card">
+          <div className="metric-content">
+            <Avatar
+              size={56}
+              icon={<LineChartOutlined />}
+              className="metric-icon"
+              style={{ backgroundColor: "#f6ffed" }}
+            />
+            <div className="metric-info">
+              <h3>{formatCurrency(metrics.totalBilled)} / {formatCurrency(metrics.totalMarketRate)}</h3>
+              <p>Total Billed / Market Rate</p>
+            </div>
+          </div>
+        </Card>
+      </MetricsContainer>
 
       <TabsContainer>
         <Button

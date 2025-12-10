@@ -114,8 +114,18 @@ const MyJobs = () => {
     });
   };
 
+  const handleViewJobDetails = (jobId) => {
+    navigate(`/customer/my-jobs/${jobId}`);
+  };
+
   const getActionMenuItems = (job) => {
     const items = [
+      {
+        key: "view",
+        label: "View Job Details",
+        icon: <FileTextOutlined />,
+        onClick: () => handleViewJobDetails(job.id),
+      },
       {
         key: "edit",
         label: "Edit Job",

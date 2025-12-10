@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Steps, message } from "antd";
+import { Steps, message, Button, Modal } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { PostJobWrapper } from "./PostJob.style";
 import SkillRequired from "./SkillRequired";
 import BasicDetails from "./BasicDetails";
@@ -194,17 +195,48 @@ const PostJob = () => {
     navigate("/customer/my-jobs");
   };
 
+  const handleCancel = () => {
+    Modal.confirm({
+      title: "Cancel Job Posting",
+      icon: <ExclamationCircleOutlined style={{ color: "#faad14" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to cancel?</p>
+          <p style={{ color: "#666", fontSize: 13 }}>
+            All unsaved changes will be lost.
+          </p>
+        </div>
+      ),
+      okText: "Yes, Cancel",
+      okButtonProps: { 
+        danger: true,
+      },
+      cancelText: "Continue Editing",
+      onOk: () => {
+        navigate("/customer/my-jobs");
+      },
+    });
+  };
+
   const CurrentStepComponent = steps[currentStep].component;
 
   return (
     <PostJobWrapper>
       <div className="post-job-header">
-        <h2>{isEditMode ? "Edit Job" : "Post Job"}</h2>
-        {isEditMode && (
-          <span style={{ color: "#666", fontSize: 14, marginLeft: 12 }}>
-            Job ID: {jobId}
-          </span>
-        )}
+        <div className="header-content">
+          <h2>{isEditMode ? "Edit Job" : "Post Job"}</h2>
+          {isEditMode && (
+            <span style={{ color: "#666", fontSize: 14, marginLeft: 12 }}>
+              Job ID: {jobId}
+            </span>
+          )}
+        </div>
+        <Button 
+          className="cancel-btn"
+          onClick={handleCancel}
+        >
+          Cancel
+        </Button>
       </div>
 
       <div className="steps-container">
