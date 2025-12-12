@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Table, Input, Tag, Typography, Dropdown, Select, Tooltip, Modal, message } from "antd";
+import { Table, Input, Tag, Dropdown, Select, Modal, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { 
   MoreOutlined, 
@@ -9,11 +9,9 @@ import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   StopOutlined,
-  EyeOutlined,
 } from "@ant-design/icons";
 import { SubmittedProfilesWrapper } from "./SubmittedProfiles.style";
 
-const { Title } = Typography;
 const { Search } = Input;
 const { Option } = Select;
 
@@ -338,53 +336,51 @@ const SubmittedProfiles = () => {
 
   return (
     <SubmittedProfilesWrapper>
-      <div style={{ padding: "20px" }}>
-        <Title level={2} className="title-header">Submitted Profiles</Title>
+      <h2>Submitted Profiles</h2>
 
-        <div style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" }}>
-          <Search
-            placeholder="Search by name, profile ID, or job title"
-            prefix={<SearchOutlined />}
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{ width: "100%", maxWidth: "300px" }}
-            allowClear
-          />
-
-          <Select
-            placeholder="Filter by Job"
-            value={selectedJob}
-            onChange={setSelectedJob}
-            style={{ width: 200 }}
-          >
-            <Option value="all">All Jobs</Option>
-            <Option value="2930493">2930493 - SAP Hana Developer</Option>
-            <Option value="2930494">2930494 - React Developer</Option>
-            <Option value="2930495">2930495 - DevOps Engineer</Option>
-            <Option value="2930496">2930496 - Python Developer</Option>
-          </Select>
-
-          <Select
-            placeholder="Filter by Status"
-            value={selectedStatus}
-            onChange={setSelectedStatus}
-            style={{ width: 200 }}
-          >
-            <Option value="all">All Status</Option>
-            <Option value="Under Review">Under Review</Option>
-            <Option value="Interview Scheduled">Interview Scheduled</Option>
-            <Option value="Hired">Hired</Option>
-            <Option value="Rejected">Rejected</Option>
-          </Select>
-        </div>
-
-        <Table
-          columns={columns}
-          dataSource={filteredData}
-          pagination={{ pageSize: 10 }}
-          scroll={{ x: 1600 }}
+      <div style={{ display: "flex", gap: "12px", marginBottom: "24px", flexWrap: "wrap" }}>
+        <Search
+          placeholder="Search by name, profile ID, or job title"
+          prefix={<SearchOutlined />}
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: "100%", maxWidth: "300px" }}
+          allowClear
         />
+
+        <Select
+          placeholder="Filter by Job"
+          value={selectedJob}
+          onChange={setSelectedJob}
+          style={{ width: 200 }}
+        >
+          <Option value="all">All Jobs</Option>
+          <Option value="2930493">2930493 - SAP Hana Developer</Option>
+          <Option value="2930494">2930494 - React Developer</Option>
+          <Option value="2930495">2930495 - DevOps Engineer</Option>
+          <Option value="2930496">2930496 - Python Developer</Option>
+        </Select>
+
+        <Select
+          placeholder="Filter by Status"
+          value={selectedStatus}
+          onChange={setSelectedStatus}
+          style={{ width: 200 }}
+        >
+          <Option value="all">All Status</Option>
+          <Option value="Under Review">Under Review</Option>
+          <Option value="Interview Scheduled">Interview Scheduled</Option>
+          <Option value="Hired">Hired</Option>
+          <Option value="Rejected">Rejected</Option>
+        </Select>
       </div>
+
+      <Table
+        columns={columns}
+        dataSource={filteredData}
+        pagination={{ pageSize: 10 }}
+        scroll={{ x: 1600 }}
+      />
 
       <Modal
         title="Cancel Interview"
