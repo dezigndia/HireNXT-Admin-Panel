@@ -47,17 +47,39 @@ export const PostJobWrapper = styled.div`
     border-bottom: 1px solid #e8e8e8;
 
     .ant-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+
+      .ant-steps-item {
+        flex: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible;
+
+        &::after {
+          display: none !important;
+        }
+      }
+
+      .ant-steps-item-tail {
+        display: none !important;
+      }
+
       .ant-steps-item .ant-steps-item-container .ant-steps-item-title::after {
         display: none;
       }
 
       .ant-steps-item .ant-steps-item-container {
         display: flex;
+        align-items: center;
         justify-content: center;
-        padding: 16px 24px;
+        gap: 12px;
+        padding: 16px 20px;
         border: 1px solid #e3e3e3;
         border-radius: 0;
         margin: 0;
+        min-height: 64px;
       }
 
       &.ant-steps-horizontal:not(.ant-steps-label-vertical) .ant-steps-item {
@@ -73,6 +95,7 @@ export const PostJobWrapper = styled.div`
       .ant-steps-item-process .ant-steps-item-icon {
         background-color: #00d9a9;
         border-color: #00d9a9;
+        margin: 0;
       }
 
       .ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-content > .ant-steps-item-title {
@@ -91,45 +114,53 @@ export const PostJobWrapper = styled.div`
       .ant-steps-item-finish .ant-steps-item-icon {
         background-color: #00d9a9;
         border-color: #00d9a9;
+        margin: 0;
         
         .ant-steps-icon {
           color: white;
         }
       }
-    }
 
-    .ant-steps-item-icon {
-      width: 36px;
-      height: 36px;
-      line-height: 36px;
-      font-size: 14px;
-      font-weight: 600;
-      margin: 0 auto;
-    }
-
-    .ant-steps-item-wait .ant-steps-item-icon {
-      background-color: #f5f5f5;
-      border-color: #d9d9d9;
-      
-      .ant-steps-icon {
-        color: #999;
+      .ant-steps-item-icon {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        font-size: 14px;
+        font-weight: 600;
+        margin: 0;
+        flex-shrink: 0;
       }
-    }
 
-    .ant-steps-item-title {
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 32px;
-      color: #595959;
-    }
+      .ant-steps-item-wait .ant-steps-item-icon {
+        background-color: #f5f5f5;
+        border-color: #d9d9d9;
+        margin: 0;
+        
+        .ant-steps-icon {
+          color: #999;
+        }
+      }
 
-    .ant-steps-item-process .ant-steps-item-title {
-      color: #fff;
-      font-weight: 600;
-    }
+      .ant-steps-item-content {
+        min-height: auto;
+      }
 
-    .ant-steps-item-finish .ant-steps-item-title {
-      color: #1a1a1a;
+      .ant-steps-item-title {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.4;
+        color: #595959;
+        padding-right: 0 !important;
+      }
+
+      .ant-steps-item-process .ant-steps-item-title {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      .ant-steps-item-finish .ant-steps-item-title {
+        color: #1a1a1a;
+      }
     }
   }
 
