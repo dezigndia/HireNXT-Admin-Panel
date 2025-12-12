@@ -1,12 +1,22 @@
 import styled from "styled-components";
 
 export const OverviewWrapper = styled.div`
-  padding: 20px 0;
-  background-color: #f8f9fd;
+  padding: 24px;
+  background: #f8f9fd;
+  min-height: 100vh;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 24px 0;
+    color: #014c75;
+  }
 
   .page-title {
+    font-size: 24px;
+    font-weight: 600;
     color: #014c75;
-    margin-bottom: 0;
+    margin: 0 0 24px 0;
   }
 
   .account-alert {
