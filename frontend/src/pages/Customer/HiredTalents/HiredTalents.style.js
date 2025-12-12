@@ -1,19 +1,19 @@
 import styled from "styled-components";
 
 export const HiredTalentsContainer = styled.div`
-  padding: 40px 48px;
-  background: #f8f9fa;
+  padding: 24px;
+  background: #f8f9fd;
   min-height: 100vh;
 `;
 
 export const PageHeader = styled.div`
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 
-  h1 {
-    font-size: 28px;
+  h2 {
+    font-size: 24px;
     font-weight: 600;
     color: #014c75;
-    margin: 0 0 20px 0;
+    margin: 0 0 24px 0;
   }
 `;
 

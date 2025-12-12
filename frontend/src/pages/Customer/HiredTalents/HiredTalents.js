@@ -273,7 +273,7 @@ const HiredTalents = () => {
   return (
     <HiredTalentsContainer>
       <PageHeader>
-        <h1>Talents Hired</h1>
+        <h2>Talents Hired</h2>
       </PageHeader>
 
       <MetricsContainer>
