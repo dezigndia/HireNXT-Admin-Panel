@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const FindTalentsWrapper = styled.div`
   padding: 24px;
-  background: #f5f5f5;
+  background: #f8f9fd;
   min-height: 100vh;
 
   .header {
@@ -12,7 +12,7 @@ export const FindTalentsWrapper = styled.div`
       font-size: 24px;
       font-weight: 600;
       margin: 0;
-      color: #262626;
+      color: #014c75;
     }
 
     .total-count {
