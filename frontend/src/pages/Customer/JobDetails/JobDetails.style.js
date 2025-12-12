@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const JobDetailsWrapper = styled.div`
   padding: 24px;
-  background: #f5f5f5;
+  background: #f8f9fd;
   min-height: 100vh;
 
   .header {

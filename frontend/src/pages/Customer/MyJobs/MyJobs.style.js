@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const MyJobsWrapper = styled.div`
   padding: 24px;
-  background: #f5f5f5;
+  background: #f8f9fd;
   min-height: 100vh;
 
   .header {
@@ -15,7 +15,7 @@ export const MyJobsWrapper = styled.div`
       font-size: 24px;
       font-weight: 600;
       margin: 0;
-      color: #262626;
+      color: #014c75;
     }
 
     .post-job-btn {
