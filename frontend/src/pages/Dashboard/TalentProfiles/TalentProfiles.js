@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Table,
   Button,
@@ -10,6 +10,8 @@ import {
   Dropdown,
   Menu,
   Card,
+  Modal,
+  message,
 } from "antd";
 import {
   SearchOutlined,
@@ -18,6 +20,10 @@ import {
   UserAddOutlined,
   FileTextOutlined,
   TrophyOutlined,
+  ExclamationCircleOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  StopOutlined,
 } from "@ant-design/icons";
 import { UserManagementWrapper, MetricsContainer, TabsContainer } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
@@ -25,55 +31,10 @@ import axios from "axios";
 import { API_CONST } from "../../../const";
 const { Text } = Typography;
 
-const usersData = Array.from({ length: 25 }, (_, index) => ({
-  key: index.toString(),
-  name: `User ${index + 1}`,
-  email: `user${index + 1}@example.com`,
-  contact: `+91-90000000${index}`,
-  organization: "Sample Organization",
-  designation: "Software Engineer",
-  experience: "3 years 2 months",
-  cost: "₹1,50,000",
-  createdOn: "12-Oct-24 | 11:30",
-  modifiedOn: "12-Oct-24 | 14:30",
-  status: index % 2 === 0 ? "Active" : "Inactive",
-  backgroundVerified: index % 3 === 0 ? "Yes" : "No",
-}));
-
-const adminColumns = [
-  { title: "Name", dataIndex: "name", key: "name" },
-  { title: "Email Id", dataIndex: "email", key: "email" },
-  { title: "Contact No", dataIndex: "contact", key: "contact" },
-  { title: "Organization", dataIndex: "organization", key: "organization" },
-  { title: "Rate", dataIndex: "rate", key: "rate" },
-  { title: "Experience", dataIndex: "experience", key: "experience" },
-  { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
-  { title: "Background Verified", dataIndex: "backgroundVerified", key: "backgroundVerified" },
-  {
-    title: "Action",
-    key: "action",
-    render: () => (
-      <Dropdown
-        overlay={
-          <Menu>
-            <Menu.Item key="1">View Document</Menu.Item>
-            <Menu.Item key="2">Edit</Menu.Item>
-            <Menu.Item key="3">Mark Inactive</Menu.Item>
-            <Menu.Item key="4">Delete</Menu.Item>
-          </Menu>
-        }
-        trigger={["click"]}
-      >
-        <MoreOutlined />
-      </Dropdown>
-    ),
-  },
-];
-
 const TalentProfiles = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active");
   const [searchText, setSearchText] = useState("");
-  // Mock data for initial display
   const mockTalentData = [
     {
       key: "1",
@@ -179,6 +140,127 @@ const TalentProfiles = () => {
   const inactiveCount = usersData.filter((user) => user.status === "Inactive").length;
   const totalCount = usersData.length;
 
+  const handleViewDocuments = (record) => {
+    navigate(`/home/talent-profiles/documents/${record.key}`);
+  };
+
+  const handleEditTalent = (record) => {
+    navigate(`/home/talent-profiles/add-new-profile?edit=${record.key}`);
+  };
+
+  const handleMarkInactive = (record) => {
+    Modal.confirm({
+      title: "Mark as Inactive",
+      icon: <ExclamationCircleOutlined style={{ color: "#faad14" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to mark this talent as inactive?</p>
+          <div style={{ marginTop: 12, padding: 12, background: "#f8f9fd", borderRadius: 6 }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.organization}</p>
+          </div>
+        </div>
+      ),
+      okText: "Mark Inactive",
+      okButtonProps: { style: { background: "#faad14", borderColor: "#faad14" } },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.map(user => 
+          user.key === record.key ? { ...user, status: "Inactive" } : user
+        ));
+        message.success(`${record.name} has been marked as inactive`);
+      },
+    });
+  };
+
+  const handleDeleteTalent = (record) => {
+    Modal.confirm({
+      title: "Delete Talent Profile",
+      icon: <ExclamationCircleOutlined style={{ color: "#ff4d4f" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to delete this talent profile?</p>
+          <p style={{ color: "#ff4d4f", fontSize: 13 }}>This action cannot be undone.</p>
+          <div style={{ marginTop: 12, padding: 12, background: "#fff2f0", borderRadius: 6, border: "1px solid #ffccc7" }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.email}</p>
+          </div>
+        </div>
+      ),
+      okText: "Delete",
+      okButtonProps: { danger: true },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.filter(user => user.key !== record.key));
+        message.success(`${record.name} has been deleted`);
+      },
+    });
+  };
+
+  const getActionMenuItems = (record) => [
+    {
+      key: "view-docs",
+      label: "View Documents",
+      icon: <FileTextOutlined />,
+      onClick: () => handleViewDocuments(record),
+    },
+    {
+      key: "edit",
+      label: "Edit",
+      icon: <EditOutlined />,
+      onClick: () => handleEditTalent(record),
+    },
+    { type: "divider" },
+    ...(record.status === "Active" ? [{
+      key: "inactive",
+      label: "Mark Inactive",
+      icon: <StopOutlined />,
+      onClick: () => handleMarkInactive(record),
+    }] : []),
+    {
+      key: "delete",
+      label: "Delete",
+      icon: <DeleteOutlined />,
+      danger: true,
+      onClick: () => handleDeleteTalent(record),
+    },
+  ];
+
+  const columns = [
+    { 
+      title: "Name", 
+      dataIndex: "name", 
+      key: "name",
+      render: (text, record) => (
+        <a 
+          onClick={() => navigate(`/home/talent-profiles/details/${record.key}`)}
+          style={{ color: "#014c75", fontWeight: 500, cursor: "pointer" }}
+        >
+          {text}
+        </a>
+      ),
+    },
+    { title: "Email Id", dataIndex: "email", key: "email" },
+    { title: "Contact No", dataIndex: "contact", key: "contact" },
+    { title: "Organization", dataIndex: "organization", key: "organization" },
+    { title: "Rate", dataIndex: "rate", key: "rate" },
+    { title: "Experience", dataIndex: "experience", key: "experience" },
+    { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
+    { title: "Background Verified", dataIndex: "backgroundVerified", key: "backgroundVerified" },
+    {
+      title: "Action",
+      key: "action",
+      render: (_, record) => (
+        <Dropdown
+          menu={{ items: getActionMenuItems(record) }}
+          trigger={["click"]}
+        >
+          <MoreOutlined style={{ cursor: "pointer", fontSize: 18 }} />
+        </Dropdown>
+      ),
+    },
+  ];
+
   return (
     <UserManagementWrapper>
       <h2 className="title-header">Talent Profile</h2>
@@ -263,7 +345,7 @@ const TalentProfiles = () => {
           </Link>
         </Flex>
         <Table
-          columns={adminColumns}
+          columns={columns}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
         />

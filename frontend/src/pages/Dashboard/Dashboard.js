@@ -27,6 +27,8 @@ import RolePermission from "./RolePermission/RolePermission";
 import UserManagement from "./UserManagement/UserManagement";
 import TalentProfiles from "./TalentProfiles/TalentProfiles";
 import AddTalentProfile from "./TalentProfiles/AddTalentProfile/AddTalentProfile";
+import AdminTalentDetails from "./TalentProfiles/TalentDetails/TalentDetails";
+import TalentDocuments from "./TalentProfiles/TalentDocuments/TalentDocuments";
 import JobRequirments from "./JobRequirments/JobRequirments";
 import PostNewJob from "./JobRequirments/PostNewJob";
 import AdminJobDetails from "./JobRequirments/JobDetails";
@@ -212,6 +214,14 @@ const Dashboard = () => {
               <Route
                 path="/talent-profiles/add-new-profile"
                 element={<AddTalentProfile />}
+              />
+              <Route
+                path="/talent-profiles/details/:talentId"
+                element={<AdminTalentDetails />}
+              />
+              <Route
+                path="/talent-profiles/documents/:talentId"
+                element={<TalentDocuments />}
               />
               <Route path="/job-requirments" element={<JobRequirments />} />
               <Route
