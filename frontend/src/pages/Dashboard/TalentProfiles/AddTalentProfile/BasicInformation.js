@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button, Row, Col, Select } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { FormStepWrapper } from "./AddTalentProfile.style";
 
 const { Option } = Select;
 
-const BasicInformation = ({ initialData, onNext, isFirstStep }) => {
+const BasicInformation = ({ initialData, onNext, onCancel, isFirstStep, isEditMode }) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    if (initialData && initialData.name) {
+      form.setFieldsValue(initialData);
+    }
+  }, [initialData, form]);
 
   const partnerOrganizations = [
     { id: "P001", name: "TechCorp Solutions" },
@@ -278,7 +284,9 @@ const BasicInformation = ({ initialData, onNext, isFirstStep }) => {
         </Row>
 
         <div className="button-group">
-          <div></div>
+          <Button onClick={onCancel}>
+            Cancel
+          </Button>
           <Button type="primary" onClick={handleNext}>
             Next
           </Button>
