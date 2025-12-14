@@ -15,7 +15,7 @@ import {
   Menu,
   Card,
 } from "antd";
-import { MoreOutlined, SearchOutlined, PlusOutlined, UserOutlined, TeamOutlined, ShopOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined, PlusOutlined, UserOutlined, TeamOutlined, ShopOutlined, EditOutlined } from "@ant-design/icons";
 import { UserManagementWrapper, MetricsContainer, TabsContainer } from "./UserManagement.style";
 import MaskGroup from "./../../../assets/Mask-Group.svg";
 import { API_CONST } from "../../../const";
@@ -23,7 +23,6 @@ const { Text, Link, Title } = Typography;
 const { Option } = Select;
 
 const UserManagement = () => {
-  // Mock data for initial display
   const mockUserData = [
     {
       key: "1",
@@ -117,8 +116,26 @@ const UserManagement = () => {
   const [activeTab, setActiveTab] = useState("Customer");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedRole, setSelectedRole] = useState(null); // State to track selected role
+  const [selectedRole, setSelectedRole] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [form] = Form.useForm();
+
+  const handleEditUser = (record) => {
+    setEditingUser(record);
+    setIsEditMode(true);
+    setSelectedRole(record.type);
+    form.setFieldsValue({
+      role: record.type,
+      name: record.name,
+      company: record.organization,
+      designation: record.designation,
+      email: record.email,
+      contact: record.contact,
+      adminRole: record.role,
+    });
+    setIsModalVisible(true);
+  };
 
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
@@ -128,7 +145,18 @@ const UserManagement = () => {
     { title: "Designation", dataIndex: "designation", key: "designation" },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
-    { title: "Action", key: "action", render: () => <Button>Edit</Button> },
+    { 
+      title: "Action", 
+      key: "action", 
+      render: (_, record) => (
+        <Button 
+          icon={<EditOutlined />}
+          onClick={() => handleEditUser(record)}
+        >
+          Edit
+        </Button>
+      ) 
+    },
   ];
 
   const adminColumns = [
@@ -141,11 +169,11 @@ const UserManagement = () => {
     {
       title: "Action",
       key: "action",
-      render: () => (
+      render: (_, record) => (
         <Dropdown
           overlay={
             <Menu>
-              <Menu.Item key="1">Edit</Menu.Item>
+              <Menu.Item key="1" onClick={() => handleEditUser(record)}>Edit</Menu.Item>
               <Menu.Item key="2">Delete</Menu.Item>
               <Menu.Item key="3">View Details</Menu.Item>
               <Menu.Item key="4">Reset Password</Menu.Item>
@@ -153,7 +181,7 @@ const UserManagement = () => {
           }
           trigger={["click"]}
         >
-          <MoreOutlined />
+          <MoreOutlined style={{ cursor: "pointer", fontSize: 18 }} />
         </Dropdown>
       ),
     },
@@ -187,15 +215,24 @@ const UserManagement = () => {
       user.name.toLowerCase().includes(searchText.toLowerCase())
     );
 
-  const handleOpenModal = () => setIsModalVisible(true);
+  const handleOpenModal = () => {
+    setIsEditMode(false);
+    setEditingUser(null);
+    form.resetFields();
+    setSelectedRole(null);
+    setIsModalVisible(true);
+  };
+  
   const handleCloseModal = () => {
     setIsModalVisible(false);
     form.resetFields();
-    setSelectedRole(null); // Reset role on modal close
+    setSelectedRole(null);
+    setEditingUser(null);
+    setIsEditMode(false);
   };
 
   const handleRoleChange = (value) => {
-    setSelectedRole(value); // Update the selected role
+    setSelectedRole(value);
   };
 
   const rowSelection = {
@@ -214,8 +251,30 @@ const UserManagement = () => {
   };
 
   const handleSubmit = async (e) => {
+    if (isEditMode && editingUser) {
+      const today = new Date();
+      const formattedDate = `${today.getDate().toString().padStart(2, '0')}-${today.toLocaleString('en-US', { month: 'short' })}-${today.getFullYear().toString().slice(-2)}`;
+      
+      const updatedUser = {
+        ...editingUser,
+        name: e.name,
+        email: e.email,
+        contact: e.contact,
+        organization: e.company,
+        designation: e.designation,
+        role: e.adminRole || editingUser.role,
+        modifiedOn: formattedDate,
+      };
+      
+      setUsersData(usersData.map(user => 
+        user.key === editingUser.key ? updatedUser : user
+      ));
+      message.success("User updated successfully!");
+      handleCloseModal();
+      return;
+    }
+
     try {
-      // Send form data to the backend
       const response = await fetch(API_CONST.ADD_USER_MANAGEMENT, {
         method: "POST",
         headers: {
@@ -224,10 +283,9 @@ const UserManagement = () => {
         body: JSON.stringify(e),
       });
 
-      // Check for successful response
       if (response.ok) {
         const data = await response.json();
-        message.success("Processing complete!");
+        message.success("User added successfully!");
         window.location.reload();
       } else {
         console.error("Error submitting form:", response.statusText);
@@ -339,54 +397,52 @@ const UserManagement = () => {
             Add New User
           </Button>
         </Flex>
-        {selectedRole !== "Admin" ? (
-          <>
-            <Table
-              rowSelection={{
-                type: "checkbox",
-                ...rowSelection,
-              }}
-              columns={columns}
-              dataSource={filteredData}
-              pagination={{ pageSize: 5 }}
-            />
-          </>
+        {activeTab !== "Admin" ? (
+          <Table
+            rowSelection={{
+              type: "checkbox",
+              ...rowSelection,
+            }}
+            columns={columns}
+            dataSource={filteredData}
+            pagination={{ pageSize: 5 }}
+          />
         ) : (
-          <>
-            <Table
-              rowSelection={{
-                type: "checkbox",
-                ...rowSelection,
-              }}
-              columns={adminColumns}
-              dataSource={filteredData}
-              pagination={{ pageSize: 5 }}
-            />
-          </>
+          <Table
+            rowSelection={{
+              type: "checkbox",
+              ...rowSelection,
+            }}
+            columns={adminColumns}
+            dataSource={filteredData}
+            pagination={{ pageSize: 5 }}
+          />
         )}
 
-        {/* Add New User Modal */}
         <Modal
-          visible={isModalVisible}
+          open={isModalVisible}
           onCancel={handleCloseModal}
           footer={null}
+          width={500}
         >
           <Flex
             justify="center"
             vertical
             align="center"
-            style={{ borderBottom: "1px solid #000", marginBottom: "1rem" }}
+            style={{ borderBottom: "1px solid #e8e8e8", marginBottom: "1.5rem", paddingBottom: "1rem" }}
           >
-            <Text style={{ fontSize: "30px", color: "#014c75" }}>
-              Add New User
+            <Text style={{ fontSize: "24px", color: "#014c75", fontWeight: 600 }}>
+              {isEditMode ? "Edit User" : "Add New User"}
             </Text>
             <Text
               style={{
                 fontSize: "14px",
-                paddingBottom: "1rem",
+                color: "#666",
               }}
             >
-              Create New User like Customer, Partner or Admin
+              {isEditMode 
+                ? `Update details for ${editingUser?.name}` 
+                : "Create New User like Customer, Partner or Admin"}
             </Text>
           </Flex>
 
@@ -399,6 +455,7 @@ const UserManagement = () => {
               <Select
                 placeholder="Select the role type from the list"
                 onChange={handleRoleChange}
+                disabled={isEditMode}
               >
                 <Option value="Customer">Customer</Option>
                 <Option value="Partner">Partner</Option>
@@ -414,7 +471,6 @@ const UserManagement = () => {
             >
               <Input placeholder="Enter Full Name" />
             </Form.Item>
-            {/* Conditionally Render Company Name */}
             {selectedRole !== "Admin" && (
               <Form.Item
                 label="Company Name"
@@ -431,10 +487,24 @@ const UserManagement = () => {
                 label="Designation"
                 name="designation"
                 rules={[
-                  { required: true, message: "Please enter the company name!" },
+                  { required: true, message: "Please enter the designation!" },
                 ]}
               >
-                <Input placeholder="Enter Company Name" />
+                <Input placeholder="Enter Designation" />
+              </Form.Item>
+            )}
+            {selectedRole === "Admin" && (
+              <Form.Item
+                label="Admin Role"
+                name="adminRole"
+                rules={[
+                  { required: true, message: "Please select admin role!" },
+                ]}
+              >
+                <Select placeholder="Select Admin Role">
+                  <Option value="Super Admin">Super Admin</Option>
+                  <Option value="Admin">Admin</Option>
+                </Select>
               </Form.Item>
             )}
             <Form.Item
@@ -459,28 +529,33 @@ const UserManagement = () => {
             >
               <Input placeholder="Enter Contact Number" />
             </Form.Item>
-            <Form.Item
-              label="Password"
-              name="password"
-              rules={[{ required: true, message: "Please set a password!" }]}
-            >
-              <Input.Password placeholder="Set New Password" />
-            </Form.Item>
-            <Form.Item name="forcePasswordChange" valuePropName="checked">
-              <Checkbox>Force Password Change in First Login</Checkbox>
-            </Form.Item>
+            {!isEditMode && (
+              <>
+                <Form.Item
+                  label="Password"
+                  name="password"
+                  rules={[{ required: true, message: "Please set a password!" }]}
+                >
+                  <Input.Password placeholder="Set New Password" />
+                </Form.Item>
+                <Form.Item name="forcePasswordChange" valuePropName="checked">
+                  <Checkbox>Force Password Change in First Login</Checkbox>
+                </Form.Item>
+              </>
+            )}
             <Form.Item>
               <div
                 style={{
                   display: "flex",
                   justifyContent: "center",
                   gap: "1rem",
+                  marginTop: "1rem",
                 }}
               >
-                <Button type="primary" htmlType="submit">
-                  Submit
+                <Button type="primary" htmlType="submit" style={{ backgroundColor: "#00d9a9", borderColor: "#00d9a9" }}>
+                  {isEditMode ? "Save Changes" : "Submit"}
                 </Button>
-                <Button onClick={handleCloseModal}>Discard</Button>
+                <Button onClick={handleCloseModal}>Cancel</Button>
               </div>
             </Form.Item>
           </Form>
