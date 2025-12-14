@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Upload, Row, Col, Input, Card } from "antd";
 import { UploadOutlined, PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { FormStepWrapper } from "./AddTalentProfile.style";
 
-const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) => {
+const AdditionalInformation = ({ initialData, onBack, onSubmit, onCancel, isLastStep, isEditMode }) => {
   const [form] = Form.useForm();
   const [resume, setResume] = useState(initialData.resume || null);
   const [aadhar, setAadhar] = useState(initialData.aadhar || null);
   const [pan, setPan] = useState(initialData.pan || null);
   const [degree, setDegree] = useState(initialData.degree || null);
+
+  useEffect(() => {
+    if (initialData && initialData.summary !== undefined) {
+      form.setFieldsValue(initialData);
+    }
+  }, [initialData, form]);
 
   const handleSubmit = () => {
     form
@@ -260,15 +266,21 @@ const AdditionalInformation = ({ initialData, onBack, onSubmit, isLastStep }) =>
         </div>
 
         <div className="button-group">
-          <Button onClick={handleBack}>
-            Back
-          </Button>
+          <div style={{ display: "flex", gap: 8 }}>
+            <Button onClick={onCancel}>
+              Cancel
+            </Button>
+            <Button onClick={handleBack}>
+              Back
+            </Button>
+          </div>
           <Button 
             type="primary" 
             onClick={handleSubmit}
-            disabled={!resume}
+            disabled={!resume && !isEditMode}
+            style={{ backgroundColor: "#00d9a9", borderColor: "#00d9a9" }}
           >
-            Submit
+            {isEditMode ? "Save Changes" : "Submit"}
           </Button>
         </div>
       </Form>
