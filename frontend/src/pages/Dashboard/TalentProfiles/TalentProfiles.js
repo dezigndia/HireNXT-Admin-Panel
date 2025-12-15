@@ -392,8 +392,8 @@ const TalentProfiles = () => {
         );
       },
     },
-    { title: "Experience", dataIndex: "experience", key: "experience", width: 90 },
-    { title: "Created on", dataIndex: "createdOn", key: "createdOn", width: 100 },
+    { title: "Experience", dataIndex: "experience", key: "experience", width: 95 },
+    { title: "Created on", dataIndex: "createdOn", key: "createdOn", width: 95 },
     {
       title: "Action",
       key: "action",
