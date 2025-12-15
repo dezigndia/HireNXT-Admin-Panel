@@ -15,7 +15,7 @@ import {
   Menu,
   Card,
 } from "antd";
-import { MoreOutlined, SearchOutlined, PlusOutlined, UserOutlined, TeamOutlined, ShopOutlined, EditOutlined, DeleteOutlined, StopOutlined, ExclamationCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined, PlusOutlined, UserOutlined, TeamOutlined, ShopOutlined, EditOutlined, DeleteOutlined, StopOutlined, ExclamationCircleOutlined, CheckCircleOutlined, LockOutlined } from "@ant-design/icons";
 import { UserManagementWrapper, MetricsContainer, TabsContainer } from "./UserManagement.style";
 import MaskGroup from "./../../../assets/Mask-Group.svg";
 import { API_CONST } from "../../../const";
@@ -244,6 +244,28 @@ const UserManagement = () => {
     });
   };
 
+  const handleChangePassword = (record) => {
+    Modal.confirm({
+      title: "Change Password",
+      icon: <LockOutlined style={{ color: "#1890ff" }} />,
+      content: (
+        <div>
+          <p>Send a password reset link to this user?</p>
+          <div style={{ marginTop: 12, padding: 12, background: "#e6f7ff", borderRadius: 6, border: "1px solid #91d5ff" }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.email}</p>
+          </div>
+        </div>
+      ),
+      okText: "Send Reset Link",
+      okButtonProps: { style: { background: "#1890ff", borderColor: "#1890ff" } },
+      cancelText: "Cancel",
+      onOk: () => {
+        message.success(`Password reset link sent to ${record.email}`);
+      },
+    });
+  };
+
   const getActionMenuItems = (record) => {
     const items = [
       {
@@ -251,6 +273,12 @@ const UserManagement = () => {
         label: "Edit",
         icon: <EditOutlined />,
         onClick: () => handleEditUser(record),
+      },
+      {
+        key: "change-password",
+        label: "Change Password",
+        icon: <LockOutlined />,
+        onClick: () => handleChangePassword(record),
       },
       { type: "divider", key: "divider-1" },
     ];
