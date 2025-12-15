@@ -62,7 +62,7 @@ const TalentProfiles = () => {
       contact: "+91-9876543210",
       organization: "TechCorp Solutions",
       partnerRate: 180000,
-      marketRate: 195000,
+      role: "Senior Developer",
       experience: "5 Years",
       createdOn: "15-Oct-24",
       status: "Active",
@@ -75,7 +75,7 @@ const TalentProfiles = () => {
       contact: "+91-9876543211",
       organization: "Digital Partners Inc",
       partnerRate: 150000,
-      marketRate: 165000,
+      role: "UI/UX Designer",
       experience: "4 Years",
       createdOn: "18-Oct-24",
       status: "Active",
@@ -88,7 +88,7 @@ const TalentProfiles = () => {
       contact: "+91-9876543212",
       organization: "Innovate Tech",
       partnerRate: 200000,
-      marketRate: 210000,
+      role: "Tech Lead",
       experience: "6 Years",
       createdOn: "20-Oct-24",
       status: "Inactive",
@@ -101,7 +101,7 @@ const TalentProfiles = () => {
       contact: "+91-9876543213",
       organization: "CodeCraft Ltd",
       partnerRate: 170000,
-      marketRate: 180000,
+      role: "Full Stack Developer",
       experience: "5 Years",
       createdOn: "22-Oct-24",
       status: "Active",
@@ -114,7 +114,7 @@ const TalentProfiles = () => {
       contact: "+91-9876543214",
       organization: "WebWorks Pro",
       partnerRate: 160000,
-      marketRate: 200000,
+      role: "DevOps Engineer",
       experience: "4 Years",
       createdOn: "25-Oct-24",
       status: "Inactive",
@@ -127,7 +127,7 @@ const TalentProfiles = () => {
       contact: "+91-9876543215",
       organization: "DataSystems Inc",
       partnerRate: 190000,
-      marketRate: 185000,
+      role: "Data Analyst",
       experience: "7 Years",
       createdOn: "28-Oct-24",
       status: "Active",
@@ -373,25 +373,7 @@ const TalentProfiles = () => {
       width: 110,
       render: (_, record) => record.partnerRate ? formatCurrency(calculateClientRate(record.partnerRate)) : "-",
     },
-    { 
-      title: "Market Rate", 
-      dataIndex: "marketRate", 
-      key: "marketRate",
-      width: 120,
-      render: (value, record) => {
-        if (!value || !record.partnerRate) return "-";
-        const clientRate = calculateClientRate(record.partnerRate);
-        const isHigher = value > clientRate;
-        const isLower = value < clientRate;
-        return (
-          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            {formatCurrency(value)}
-            {isHigher && <ArrowUpOutlined style={{ color: "#52c41a", fontSize: 12 }} />}
-            {isLower && <ArrowDownOutlined style={{ color: "#ff4d4f", fontSize: 12 }} />}
-          </span>
-        );
-      },
-    },
+    { title: "Role", dataIndex: "role", key: "role", width: 120, ellipsis: true },
     { title: "Experience", dataIndex: "experience", key: "experience", width: 95 },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn", width: 95 },
     {
