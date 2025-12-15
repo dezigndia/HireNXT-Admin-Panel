@@ -381,7 +381,6 @@ const TalentProfiles = () => {
       dataIndex: "name", 
       key: "name",
       width: 140,
-      fixed: "left",
       render: (text, record) => (
         <a 
           onClick={() => navigate(`/home/talent-profiles/details/${record.key}`)}
