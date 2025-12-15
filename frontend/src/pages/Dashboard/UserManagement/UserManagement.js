@@ -15,7 +15,7 @@ import {
   Menu,
   Card,
 } from "antd";
-import { MoreOutlined, SearchOutlined, PlusOutlined, UserOutlined, TeamOutlined, ShopOutlined, EditOutlined } from "@ant-design/icons";
+import { MoreOutlined, SearchOutlined, PlusOutlined, UserOutlined, TeamOutlined, ShopOutlined, EditOutlined, DeleteOutlined, StopOutlined, ExclamationCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { UserManagementWrapper, MetricsContainer, TabsContainer } from "./UserManagement.style";
 import MaskGroup from "./../../../assets/Mask-Group.svg";
 import { API_CONST } from "../../../const";
@@ -34,6 +34,7 @@ const UserManagement = () => {
       createdOn: "10-Oct-24",
       modifiedOn: "15-Oct-24",
       type: "Customer",
+      status: "Active",
     },
     {
       key: "2",
@@ -45,6 +46,7 @@ const UserManagement = () => {
       createdOn: "12-Oct-24",
       modifiedOn: "18-Oct-24",
       type: "Customer",
+      status: "Active",
     },
     {
       key: "3",
@@ -56,6 +58,7 @@ const UserManagement = () => {
       createdOn: "14-Oct-24",
       modifiedOn: "20-Oct-24",
       type: "Customer",
+      status: "Inactive",
     },
     {
       key: "4",
@@ -67,6 +70,7 @@ const UserManagement = () => {
       createdOn: "08-Oct-24",
       modifiedOn: "16-Oct-24",
       type: "Partner",
+      status: "Active",
     },
     {
       key: "5",
@@ -78,6 +82,7 @@ const UserManagement = () => {
       createdOn: "11-Oct-24",
       modifiedOn: "19-Oct-24",
       type: "Partner",
+      status: "Active",
     },
     {
       key: "6",
@@ -89,6 +94,7 @@ const UserManagement = () => {
       createdOn: "13-Oct-24",
       modifiedOn: "21-Oct-24",
       type: "Partner",
+      status: "Inactive",
     },
     {
       key: "7",
@@ -99,6 +105,7 @@ const UserManagement = () => {
       createdOn: "01-Oct-24",
       modifiedOn: "22-Oct-24",
       type: "Admin",
+      status: "Active",
     },
     {
       key: "8",
@@ -109,16 +116,19 @@ const UserManagement = () => {
       createdOn: "05-Oct-24",
       modifiedOn: "23-Oct-24",
       type: "Admin",
+      status: "Active",
     },
   ];
 
   const [usersData, setUsersData] = useState(mockUserData);
   const [activeTab, setActiveTab] = useState("Customer");
+  const [statusTab, setStatusTab] = useState("Active");
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
   const [editingUser, setEditingUser] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [form] = Form.useForm();
 
   const handleEditUser = (record) => {
@@ -137,6 +147,141 @@ const UserManagement = () => {
     setIsModalVisible(true);
   };
 
+  const handleMarkInactive = (record) => {
+    Modal.confirm({
+      title: "Mark as Inactive",
+      icon: <ExclamationCircleOutlined style={{ color: "#faad14" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to mark this user as inactive?</p>
+          <div style={{ marginTop: 12, padding: 12, background: "#f8f9fd", borderRadius: 6 }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.organization || record.role}</p>
+          </div>
+        </div>
+      ),
+      okText: "Mark Inactive",
+      okButtonProps: { style: { background: "#faad14", borderColor: "#faad14" } },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.map(user => 
+          user.key === record.key ? { ...user, status: "Inactive" } : user
+        ));
+        message.success(`${record.name} has been marked as inactive`);
+      },
+    });
+  };
+
+  const handleMarkActive = (record) => {
+    Modal.confirm({
+      title: "Mark as Active",
+      icon: <CheckCircleOutlined style={{ color: "#52c41a" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to mark this user as active?</p>
+          <div style={{ marginTop: 12, padding: 12, background: "#f6ffed", borderRadius: 6 }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.organization || record.role}</p>
+          </div>
+        </div>
+      ),
+      okText: "Mark Active",
+      okButtonProps: { style: { background: "#52c41a", borderColor: "#52c41a" } },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.map(user => 
+          user.key === record.key ? { ...user, status: "Active" } : user
+        ));
+        message.success(`${record.name} has been marked as active`);
+      },
+    });
+  };
+
+  const handleDeleteUser = (record) => {
+    Modal.confirm({
+      title: "Delete User",
+      icon: <ExclamationCircleOutlined style={{ color: "#ff4d4f" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to delete this user?</p>
+          <p style={{ color: "#ff4d4f", fontSize: 13 }}>This action cannot be undone.</p>
+          <div style={{ marginTop: 12, padding: 12, background: "#fff2f0", borderRadius: 6, border: "1px solid #ffccc7" }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.email}</p>
+          </div>
+        </div>
+      ),
+      okText: "Delete",
+      okButtonProps: { danger: true },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.filter(user => user.key !== record.key));
+        message.success(`${record.name} has been deleted`);
+      },
+    });
+  };
+
+  const handleBulkStatusChange = () => {
+    const newStatus = statusTab === "Active" ? "Inactive" : "Active";
+    Modal.confirm({
+      title: `Change Status to ${newStatus}`,
+      icon: <ExclamationCircleOutlined style={{ color: newStatus === "Active" ? "#52c41a" : "#faad14" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to change the status of {selectedRowKeys.length} selected user(s) to {newStatus}?</p>
+        </div>
+      ),
+      okText: `Mark ${newStatus}`,
+      okButtonProps: { style: { background: newStatus === "Active" ? "#52c41a" : "#faad14", borderColor: newStatus === "Active" ? "#52c41a" : "#faad14" } },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.map(user => 
+          selectedRowKeys.includes(user.key) ? { ...user, status: newStatus } : user
+        ));
+        message.success(`${selectedRowKeys.length} user(s) have been marked as ${newStatus}`);
+        setSelectedRowKeys([]);
+      },
+    });
+  };
+
+  const getActionMenuItems = (record) => {
+    const items = [
+      {
+        key: "edit",
+        label: "Edit",
+        icon: <EditOutlined />,
+        onClick: () => handleEditUser(record),
+      },
+      { type: "divider", key: "divider-1" },
+    ];
+    
+    if (record.status === "Active") {
+      items.push({
+        key: "inactive",
+        label: "Mark Inactive",
+        icon: <StopOutlined />,
+        onClick: () => handleMarkInactive(record),
+      });
+    } else {
+      items.push({
+        key: "active",
+        label: "Mark Active",
+        icon: <CheckCircleOutlined />,
+        onClick: () => handleMarkActive(record),
+      });
+    }
+    
+    items.push({
+      key: "delete",
+      label: "Delete",
+      icon: <DeleteOutlined />,
+      danger: true,
+      onClick: () => handleDeleteUser(record),
+    });
+    
+    return items;
+  };
+
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },
     { title: "Email Id", dataIndex: "email", key: "email" },
@@ -145,17 +290,17 @@ const UserManagement = () => {
     { title: "Designation", dataIndex: "designation", key: "designation" },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Modified on", dataIndex: "modifiedOn", key: "modifiedOn" },
-    { 
-      title: "Action", 
-      key: "action", 
+    {
+      title: "Action",
+      key: "action",
       render: (_, record) => (
-        <Button 
-          icon={<EditOutlined />}
-          onClick={() => handleEditUser(record)}
+        <Dropdown
+          menu={{ items: getActionMenuItems(record) }}
+          trigger={["click"]}
         >
-          Edit
-        </Button>
-      ) 
+          <MoreOutlined style={{ cursor: "pointer", fontSize: 18 }} />
+        </Dropdown>
+      ),
     },
   ];
 
@@ -171,14 +316,7 @@ const UserManagement = () => {
       key: "action",
       render: (_, record) => (
         <Dropdown
-          overlay={
-            <Menu>
-              <Menu.Item key="1" onClick={() => handleEditUser(record)}>Edit</Menu.Item>
-              <Menu.Item key="2">Delete</Menu.Item>
-              <Menu.Item key="3">View Details</Menu.Item>
-              <Menu.Item key="4">Reset Password</Menu.Item>
-            </Menu>
-          }
+          menu={{ items: getActionMenuItems(record) }}
           trigger={["click"]}
         >
           <MoreOutlined style={{ cursor: "pointer", fontSize: 18 }} />
@@ -188,7 +326,6 @@ const UserManagement = () => {
   ];
 
   useEffect(() => {
-    // Function to fetch data from the backend
     const fetchData = async () => {
       try {
         const response = await fetch(API_CONST.GET_USER_MANAGEMENT, {
@@ -200,10 +337,13 @@ const UserManagement = () => {
         }
         const result = await response.json();
         console.log(result);
-        setUsersData(result.Response);
+        const usersWithStatus = result.Response.map(user => ({
+          ...user,
+          status: user.status || "Active",
+        }));
+        setUsersData(usersWithStatus);
       } catch (error) {
-        console.log(error.message); // Store error message in state
-        // Keep mock data on error
+        console.log(error.message);
       }
     };
     fetchData();
@@ -211,6 +351,7 @@ const UserManagement = () => {
 
   const filteredData = usersData
     .filter((user) => user.type === activeTab)
+    .filter((user) => user.status === statusTab)
     .filter((user) =>
       user.name.toLowerCase().includes(searchText.toLowerCase())
     );
@@ -236,16 +377,12 @@ const UserManagement = () => {
   };
 
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        "selectedRows: ",
-        selectedRows
-      );
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys, selectedRows) => {
+      setSelectedRowKeys(newSelectedRowKeys);
     },
     getCheckboxProps: (record) => ({
       disabled: record.name === "Disabled User",
-      // Column configuration not to be checked
       name: record.name,
     }),
   };
@@ -275,12 +412,16 @@ const UserManagement = () => {
     }
 
     try {
+      const userData = {
+        ...e,
+        status: "Active",
+      };
       const response = await fetch(API_CONST.ADD_USER_MANAGEMENT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(e),
+        body: JSON.stringify(userData),
       });
 
       if (response.ok) {
@@ -300,6 +441,9 @@ const UserManagement = () => {
   const adminCount = usersData.filter((user) => user.type === "Admin").length;
   const customerCount = usersData.filter((user) => user.type === "Customer").length;
   const partnerCount = usersData.filter((user) => user.type === "Partner").length;
+  
+  const activeCountForType = usersData.filter((user) => user.type === activeTab && user.status === "Active").length;
+  const inactiveCountForType = usersData.filter((user) => user.type === activeTab && user.status === "Inactive").length;
 
   return (
     <UserManagementWrapper>
@@ -369,55 +513,98 @@ const UserManagement = () => {
           <Button
             key={tab}
             className={activeTab === tab ? "tab-button active" : "tab-button"}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              setActiveTab(tab);
+              setSelectedRowKeys([]);
+            }}
           >
             {tab}
           </Button>
         ))}
       </TabsContainer>
-        <Flex align="start" justify="space-between">
+
+      <TabsContainer style={{ marginTop: "16px" }}>
+        <Button
+          className={statusTab === "Active" ? "tab-button active" : "tab-button"}
+          onClick={() => {
+            setStatusTab("Active");
+            setSelectedRowKeys([]);
+          }}
+        >
+          Active ({activeCountForType})
+        </Button>
+        <Button
+          className={statusTab === "Inactive" ? "tab-button active" : "tab-button"}
+          onClick={() => {
+            setStatusTab("Inactive");
+            setSelectedRowKeys([]);
+          }}
+        >
+          Inactive ({inactiveCountForType})
+        </Button>
+      </TabsContainer>
+
+      <Flex align="start" justify="space-between" style={{ marginTop: "16px" }}>
+        <Flex align="center" gap={16}>
           <Input
             prefix={<SearchOutlined />}
             placeholder="Search resources using Name"
             onChange={(e) => setSearchText(e.target.value)}
             style={{ marginBottom: "20px", width: "300px" }}
           />
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={handleOpenModal}
-            style={{ 
-              backgroundColor: "#00d9a9",
-              borderColor: "#00d9a9",
-              height: "40px",
-              fontSize: "14px",
-              fontWeight: 500,
-            }}
-          >
-            Add New User
-          </Button>
+          {selectedRowKeys.length > 0 && (
+            <Button
+              type="primary"
+              onClick={handleBulkStatusChange}
+              style={{ 
+                backgroundColor: statusTab === "Active" ? "#faad14" : "#52c41a",
+                borderColor: statusTab === "Active" ? "#faad14" : "#52c41a",
+                height: "40px",
+                fontSize: "14px",
+                fontWeight: 500,
+                marginBottom: "20px",
+              }}
+            >
+              {statusTab === "Active" ? `Mark Inactive (${selectedRowKeys.length})` : `Mark Active (${selectedRowKeys.length})`}
+            </Button>
+          )}
         </Flex>
-        {activeTab !== "Admin" ? (
-          <Table
-            rowSelection={{
-              type: "checkbox",
-              ...rowSelection,
-            }}
-            columns={columns}
-            dataSource={filteredData}
-            pagination={{ pageSize: 5 }}
-          />
-        ) : (
-          <Table
-            rowSelection={{
-              type: "checkbox",
-              ...rowSelection,
-            }}
-            columns={adminColumns}
-            dataSource={filteredData}
-            pagination={{ pageSize: 5 }}
-          />
-        )}
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={handleOpenModal}
+          style={{ 
+            backgroundColor: "#00d9a9",
+            borderColor: "#00d9a9",
+            height: "40px",
+            fontSize: "14px",
+            fontWeight: 500,
+          }}
+        >
+          Add New User
+        </Button>
+      </Flex>
+      {activeTab !== "Admin" ? (
+        <Table
+          rowSelection={{
+            type: "checkbox",
+            ...rowSelection,
+          }}
+          columns={columns}
+          dataSource={filteredData}
+          pagination={{ pageSize: 5 }}
+        />
+      ) : (
+        <Table
+          rowSelection={{
+            type: "checkbox",
+            ...rowSelection,
+          }}
+          columns={adminColumns}
+          dataSource={filteredData}
+          pagination={{ pageSize: 5 }}
+        />
+      )}
 
         <Modal
           open={isModalVisible}
