@@ -380,7 +380,7 @@ const TalentProfiles = () => {
       title: "Name", 
       dataIndex: "name", 
       key: "name",
-      width: 130,
+      width: 140,
       fixed: "left",
       render: (text, record) => (
         <a 
@@ -391,45 +391,88 @@ const TalentProfiles = () => {
         </a>
       ),
     },
-    { title: "Email Id", dataIndex: "email", key: "email", width: 170, ellipsis: true },
-    { title: "Contact No", dataIndex: "contact", key: "contact", width: 125 },
-    { title: "Organization", dataIndex: "organization", key: "organization", width: 130, ellipsis: true },
-    { title: "Role", dataIndex: "role", key: "role", width: 130, ellipsis: true },
-    { title: "Experience", dataIndex: "experience", key: "experience", width: 90 },
+    { title: "Email Id", dataIndex: "email", key: "email", width: 180, ellipsis: true },
+    { title: "Contact No", dataIndex: "contact", key: "contact", width: 130 },
+    { title: "Organization", dataIndex: "organization", key: "organization", width: 140, ellipsis: true },
+    { title: "Role", dataIndex: "role", key: "role", width: 150, ellipsis: true },
+    { title: "Experience", dataIndex: "experience", key: "experience", width: 100 },
     { 
       title: "Partner Rate", 
       dataIndex: "partnerRate", 
       key: "partnerRate",
-      width: 105,
-      render: (value) => value ? formatCurrency(value) : "-",
+      width: 115,
+      render: (value) => value ? (
+        <span style={{ fontWeight: 600, color: "#014c75" }}>{formatCurrency(value)}</span>
+      ) : "-",
     },
     { 
       title: "Settled Cost", 
       key: "settledCost",
-      width: 100,
-      render: (_, record) => record.partnerRate ? formatCurrency(calculateSettledCost(record.partnerRate)) : "-",
+      width: 115,
+      render: (_, record) => record.partnerRate ? (
+        <span style={{ fontWeight: 600, color: "#52c41a" }}>{formatCurrency(calculateSettledCost(record.partnerRate))}</span>
+      ) : "-",
     },
     { 
       title: "Client Rate", 
       key: "clientRate",
-      width: 100,
-      render: (_, record) => record.partnerRate ? formatCurrency(calculateClientRate(record.partnerRate)) : "-",
+      width: 110,
+      render: (_, record) => record.partnerRate ? (
+        <span style={{ fontWeight: 600, color: "#1890ff" }}>{formatCurrency(calculateClientRate(record.partnerRate))}</span>
+      ) : "-",
     },
-    { title: "Jobs Applied", dataIndex: "jobsApplied", key: "jobsApplied", width: 100, align: "center" },
-    { title: "Past Hired", dataIndex: "pastHired", key: "pastHired", width: 90, align: "center" },
-    { title: "Rejected", dataIndex: "rejected", key: "rejected", width: 80, align: "center" },
+    { 
+      title: "Jobs Applied", 
+      dataIndex: "jobsApplied", 
+      key: "jobsApplied", 
+      width: 110, 
+      align: "center",
+      render: (value) => (
+        <span style={{ background: "#e6f7ff", padding: "4px 10px", borderRadius: 4, fontWeight: 500, color: "#1890ff" }}>
+          {value || 0}
+        </span>
+      ),
+    },
+    { 
+      title: "Past Hired", 
+      dataIndex: "pastHired", 
+      key: "pastHired", 
+      width: 100, 
+      align: "center",
+      render: (value) => (
+        <span style={{ background: "#f6ffed", padding: "4px 10px", borderRadius: 4, fontWeight: 500, color: "#52c41a" }}>
+          {value || 0}
+        </span>
+      ),
+    },
+    { 
+      title: "Rejected", 
+      dataIndex: "rejected", 
+      key: "rejected", 
+      width: 90, 
+      align: "center",
+      render: (value) => (
+        <span style={{ background: "#fff2f0", padding: "4px 10px", borderRadius: 4, fontWeight: 500, color: "#ff4d4f" }}>
+          {value || 0}
+        </span>
+      ),
+    },
     { 
       title: "Rejection Rate", 
       key: "rejectionRate", 
-      width: 105,
+      width: 120,
       align: "center",
       render: (_, record) => {
         if (!record.jobsApplied || record.jobsApplied === 0) return "-";
         const rate = ((record.rejected || 0) / record.jobsApplied * 100).toFixed(1);
-        return `${rate}%`;
+        return (
+          <span style={{ background: "#fff7e6", padding: "4px 10px", borderRadius: 4, fontWeight: 500, color: "#faad14" }}>
+            {rate}%
+          </span>
+        );
       },
     },
-    { title: "Created on", dataIndex: "createdOn", key: "createdOn", width: 95 },
+    { title: "Created on", dataIndex: "createdOn", key: "createdOn", width: 100 },
     {
       title: "Action",
       key: "action",
@@ -510,40 +553,37 @@ const TalentProfiles = () => {
         ))}
       </TabsContainer>
 
-        <Flex gap={12} style={{ marginBottom: 16 }} wrap="wrap">
-          <Select
-            placeholder="Location"
-            allowClear
-            style={{ width: 150 }}
-            value={locationFilter}
-            onChange={setLocationFilter}
-            options={locationOptions.map(loc => ({ label: loc, value: loc }))}
-          />
-          <Select
-            placeholder="Role"
-            allowClear
-            style={{ width: 180 }}
-            value={roleFilter}
-            onChange={setRoleFilter}
-            options={roleOptions.map(role => ({ label: role, value: role }))}
-          />
-          <Select
-            placeholder="Experience"
-            allowClear
-            style={{ width: 140 }}
-            value={experienceFilter}
-            onChange={setExperienceFilter}
-            options={experienceOptions.map(exp => ({ label: exp, value: exp }))}
-          />
-        </Flex>
-
-        <Flex align="start" justify="space-between">
-          <Flex align="center" gap={12}>
+        <Flex align="center" justify="space-between" style={{ marginBottom: 16 }} wrap="wrap" gap={12}>
+          <Flex align="center" gap={12} wrap="wrap">
             <Input
               prefix={<SearchOutlined />}
-              placeholder="Search resources using Name"
+              placeholder="Search by Name"
               onChange={(e) => setSearchText(e.target.value)}
-              style={{ marginBottom: "20px", width: "300px" }}
+              style={{ width: 200 }}
+            />
+            <Select
+              placeholder="Location"
+              allowClear
+              style={{ width: 140 }}
+              value={locationFilter}
+              onChange={setLocationFilter}
+              options={locationOptions.map(loc => ({ label: loc, value: loc }))}
+            />
+            <Select
+              placeholder="Role"
+              allowClear
+              style={{ width: 160 }}
+              value={roleFilter}
+              onChange={setRoleFilter}
+              options={roleOptions.map(role => ({ label: role, value: role }))}
+            />
+            <Select
+              placeholder="Experience"
+              allowClear
+              style={{ width: 130 }}
+              value={experienceFilter}
+              onChange={setExperienceFilter}
+              options={experienceOptions.map(exp => ({ label: exp, value: exp }))}
             />
             {selectedRowKeys.length > 0 && (
               <Button
@@ -553,10 +593,9 @@ const TalentProfiles = () => {
                 style={{ 
                   backgroundColor: activeTab === "Active" ? "#faad14" : "#52c41a",
                   borderColor: activeTab === "Active" ? "#faad14" : "#52c41a",
-                  height: "40px",
-                  fontSize: "14px",
+                  height: "32px",
+                  fontSize: "13px",
                   fontWeight: 500,
-                  marginBottom: "20px",
                 }}
               >
                 Mark {activeTab === "Active" ? "Inactive" : "Active"} ({selectedRowKeys.length})
@@ -570,7 +609,7 @@ const TalentProfiles = () => {
               style={{ 
                 backgroundColor: "#00d9a9",
                 borderColor: "#00d9a9",
-                height: "40px",
+                height: "36px",
                 fontSize: "14px",
                 fontWeight: 500,
               }}
@@ -584,7 +623,7 @@ const TalentProfiles = () => {
           columns={columns}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
-          scroll={{ x: 1600 }}
+          scroll={{ x: 1800 }}
         />
     </UserManagementWrapper>
   );
