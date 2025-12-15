@@ -341,6 +341,7 @@ const TalentProfiles = () => {
       title: "Name", 
       dataIndex: "name", 
       key: "name",
+      width: 140,
       render: (text, record) => (
         <a 
           onClick={() => navigate(`/home/talent-profiles/details/${record.key}`)}
@@ -350,29 +351,33 @@ const TalentProfiles = () => {
         </a>
       ),
     },
-    { title: "Email Id", dataIndex: "email", key: "email" },
-    { title: "Contact No", dataIndex: "contact", key: "contact" },
-    { title: "Organization", dataIndex: "organization", key: "organization" },
+    { title: "Email Id", dataIndex: "email", key: "email", width: 180, ellipsis: true },
+    { title: "Contact No", dataIndex: "contact", key: "contact", width: 130 },
+    { title: "Organization", dataIndex: "organization", key: "organization", width: 140, ellipsis: true },
     { 
       title: "Partner Rate", 
       dataIndex: "partnerRate", 
       key: "partnerRate",
+      width: 110,
       render: (value) => value ? formatCurrency(value) : "-",
     },
     { 
       title: "Settled Cost", 
       key: "settledCost",
+      width: 110,
       render: (_, record) => record.partnerRate ? formatCurrency(calculateSettledCost(record.partnerRate)) : "-",
     },
     { 
       title: "Client Rate", 
       key: "clientRate",
+      width: 110,
       render: (_, record) => record.partnerRate ? formatCurrency(calculateClientRate(record.partnerRate)) : "-",
     },
     { 
       title: "Market Rate", 
       dataIndex: "marketRate", 
       key: "marketRate",
+      width: 120,
       render: (value, record) => {
         if (!value || !record.partnerRate) return "-";
         const clientRate = calculateClientRate(record.partnerRate);
@@ -387,12 +392,12 @@ const TalentProfiles = () => {
         );
       },
     },
-    { title: "Experience", dataIndex: "experience", key: "experience" },
-    { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
-    { title: "Background Verified", dataIndex: "backgroundVerified", key: "backgroundVerified" },
+    { title: "Experience", dataIndex: "experience", key: "experience", width: 90 },
+    { title: "Created on", dataIndex: "createdOn", key: "createdOn", width: 100 },
     {
       title: "Action",
       key: "action",
+      width: 70,
       render: (_, record) => (
         <Dropdown
           menu={{ items: getActionMenuItems(record) }}
@@ -514,6 +519,7 @@ const TalentProfiles = () => {
           columns={columns}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
+          scroll={{ x: 1200 }}
         />
     </UserManagementWrapper>
   );
