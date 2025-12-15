@@ -58,6 +58,7 @@ const TalentProfiles = () => {
   const [locationFilter, setLocationFilter] = useState(null);
   const [roleFilter, setRoleFilter] = useState(null);
   const [experienceFilter, setExperienceFilter] = useState(null);
+  const [organizationFilter, setOrganizationFilter] = useState(null);
   const mockTalentData = [
     {
       key: "1",
@@ -168,12 +169,14 @@ const TalentProfiles = () => {
   const locationOptions = [...new Set(usersData.map(u => u.location).filter(Boolean))];
   const roleOptions = [...new Set(usersData.map(u => u.role).filter(Boolean))];
   const experienceOptions = [...new Set(usersData.map(u => u.experience).filter(Boolean))];
+  const organizationOptions = [...new Set(usersData.map(u => u.organization).filter(Boolean))];
 
   const filteredData = usersData.filter((user) => {
     if (user.status !== activeTab) return false;
     if (locationFilter && user.location !== locationFilter) return false;
     if (roleFilter && user.role !== roleFilter) return false;
     if (experienceFilter && user.experience !== experienceFilter) return false;
+    if (organizationFilter && user.organization !== organizationFilter) return false;
     if (searchText && !user.name.toLowerCase().includes(searchText.toLowerCase())) return false;
     return true;
   });
@@ -583,6 +586,14 @@ const TalentProfiles = () => {
               value={experienceFilter}
               onChange={setExperienceFilter}
               options={experienceOptions.map(exp => ({ label: exp, value: exp }))}
+            />
+            <Select
+              placeholder="Organization"
+              allowClear
+              style={{ width: 180 }}
+              value={organizationFilter}
+              onChange={setOrganizationFilter}
+              options={organizationOptions.map(org => ({ label: org, value: org }))}
             />
             {selectedRowKeys.length > 0 && (
               <Button
