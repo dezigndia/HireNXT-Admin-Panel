@@ -623,7 +623,6 @@ const TalentProfiles = () => {
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
           scroll={{ x: 1800 }}
-          size="small"
           style={{ fontSize: 13 }}
         />
     </UserManagementWrapper>
