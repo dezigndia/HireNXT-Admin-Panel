@@ -24,6 +24,9 @@ import {
   EditOutlined,
   DeleteOutlined,
   StopOutlined,
+  CheckCircleOutlined,
+  ArrowUpOutlined,
+  ArrowDownOutlined,
 } from "@ant-design/icons";
 import { UserManagementWrapper, MetricsContainer, TabsContainer } from "../UserManagement/UserManagement.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
@@ -31,10 +34,26 @@ import axios from "axios";
 import { API_CONST } from "../../../const";
 const { Text } = Typography;
 
+const PARTNER_DEDUCTION_PERCENT = 10;
+const CUSTOMER_MARKUP_PERCENT = 15;
+
+const formatCurrency = (amount) => {
+  return `₹${amount.toLocaleString('en-IN')}`;
+};
+
+const calculateSettledCost = (partnerRate) => {
+  return Math.round(partnerRate * (1 - PARTNER_DEDUCTION_PERCENT / 100));
+};
+
+const calculateClientRate = (partnerRate) => {
+  return Math.round(partnerRate * (1 + CUSTOMER_MARKUP_PERCENT / 100));
+};
+
 const TalentProfiles = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active");
   const [searchText, setSearchText] = useState("");
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const mockTalentData = [
     {
       key: "1",
@@ -42,7 +61,8 @@ const TalentProfiles = () => {
       email: "rajesh.kumar@gmail.com",
       contact: "+91-9876543210",
       organization: "TechCorp Solutions",
-      rate: "₹1,80,000",
+      partnerRate: 180000,
+      marketRate: 195000,
       experience: "5 Years",
       createdOn: "15-Oct-24",
       status: "Active",
@@ -54,7 +74,8 @@ const TalentProfiles = () => {
       email: "priya.sharma@gmail.com",
       contact: "+91-9876543211",
       organization: "Digital Partners Inc",
-      rate: "₹1,50,000",
+      partnerRate: 150000,
+      marketRate: 165000,
       experience: "4 Years",
       createdOn: "18-Oct-24",
       status: "Active",
@@ -66,7 +87,8 @@ const TalentProfiles = () => {
       email: "amit.patel@gmail.com",
       contact: "+91-9876543212",
       organization: "Innovate Tech",
-      rate: "₹2,00,000",
+      partnerRate: 200000,
+      marketRate: 210000,
       experience: "6 Years",
       createdOn: "20-Oct-24",
       status: "Inactive",
@@ -78,7 +100,8 @@ const TalentProfiles = () => {
       email: "sneha.reddy@gmail.com",
       contact: "+91-9876543213",
       organization: "CodeCraft Ltd",
-      rate: "₹1,70,000",
+      partnerRate: 170000,
+      marketRate: 180000,
       experience: "5 Years",
       createdOn: "22-Oct-24",
       status: "Active",
@@ -90,7 +113,8 @@ const TalentProfiles = () => {
       email: "vikram.singh@gmail.com",
       contact: "+91-9876543214",
       organization: "WebWorks Pro",
-      rate: "₹1,60,000",
+      partnerRate: 160000,
+      marketRate: 200000,
       experience: "4 Years",
       createdOn: "25-Oct-24",
       status: "Inactive",
@@ -102,7 +126,8 @@ const TalentProfiles = () => {
       email: "anjali.gupta@gmail.com",
       contact: "+91-9876543215",
       organization: "DataSystems Inc",
-      rate: "₹1,90,000",
+      partnerRate: 190000,
+      marketRate: 185000,
       experience: "7 Years",
       createdOn: "28-Oct-24",
       status: "Active",
@@ -114,8 +139,22 @@ const TalentProfiles = () => {
 
   const filteredData = usersData.filter((user) => user.status === activeTab);
 
+  const parseRateString = (rateStr) => {
+    if (typeof rateStr === 'number') return rateStr;
+    if (!rateStr) return 0;
+    return parseInt(rateStr.replace(/[₹,\s]/g, ''), 10) || 0;
+  };
+
+  const transformApiData = (apiData) => {
+    return apiData.map(item => ({
+      ...item,
+      key: item.key || item.id || String(Math.random()),
+      partnerRate: item.partnerRate || parseRateString(item.rate),
+      marketRate: item.marketRate || Math.round((item.partnerRate || parseRateString(item.rate)) * 1.1),
+    }));
+  };
+
   useEffect(() => {
-    // Function to fetch data from the backend
     const fetchData = async () => {
       try {
         const response = await fetch(API_CONST.GET_TALENT_PROFILE, {
@@ -127,10 +166,10 @@ const TalentProfiles = () => {
         }
         const result = await response.json();
         console.log(result);
-        setUsersData(result.Response);
+        const transformedData = transformApiData(result.Response);
+        setUsersData(transformedData);
       } catch (error) {
-        console.log(error.message); // Store error message in state
-        // Keep mock data on error
+        console.log(error.message);
       }
     };
     fetchData();
@@ -197,6 +236,72 @@ const TalentProfiles = () => {
     });
   };
 
+  const handleMarkActive = (record) => {
+    Modal.confirm({
+      title: "Mark as Active",
+      icon: <CheckCircleOutlined style={{ color: "#52c41a" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to mark this talent as active?</p>
+          <div style={{ marginTop: 12, padding: 12, background: "#f6ffed", borderRadius: 6, border: "1px solid #b7eb8f" }}>
+            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
+            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.organization}</p>
+          </div>
+        </div>
+      ),
+      okText: "Mark Active",
+      okButtonProps: { style: { background: "#52c41a", borderColor: "#52c41a" } },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.map(user => 
+          user.key === record.key ? { ...user, status: "Active" } : user
+        ));
+        message.success(`${record.name} has been marked as active`);
+      },
+    });
+  };
+
+  const handleBulkStatusChange = (newStatus) => {
+    const selectedTalents = usersData.filter(user => selectedRowKeys.includes(user.key));
+    const statusColor = newStatus === "Active" ? "#52c41a" : "#faad14";
+    const bgColor = newStatus === "Active" ? "#f6ffed" : "#fff7e6";
+    const borderColor = newStatus === "Active" ? "#b7eb8f" : "#ffe58f";
+    
+    Modal.confirm({
+      title: `Mark ${selectedRowKeys.length} Talent(s) as ${newStatus}`,
+      icon: newStatus === "Active" ? 
+        <CheckCircleOutlined style={{ color: statusColor }} /> : 
+        <StopOutlined style={{ color: statusColor }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to mark the following talents as {newStatus.toLowerCase()}?</p>
+          <div style={{ marginTop: 12, padding: 12, background: bgColor, borderRadius: 6, border: `1px solid ${borderColor}`, maxHeight: 150, overflow: "auto" }}>
+            {selectedTalents.map(talent => (
+              <p key={talent.key} style={{ margin: "4px 0", fontSize: 13 }}>{talent.name}</p>
+            ))}
+          </div>
+        </div>
+      ),
+      okText: `Mark ${newStatus}`,
+      okButtonProps: { style: { background: statusColor, borderColor: statusColor } },
+      cancelText: "Cancel",
+      onOk: () => {
+        setUsersData(usersData.map(user => 
+          selectedRowKeys.includes(user.key) ? { ...user, status: newStatus } : user
+        ));
+        setSelectedRowKeys([]);
+        message.success(`${selectedRowKeys.length} talent(s) marked as ${newStatus.toLowerCase()}`);
+      },
+    });
+  };
+
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: (newSelectedRowKeys) => {
+      setSelectedRowKeys(newSelectedRowKeys);
+    },
+  };
+
   const getActionMenuItems = (record) => [
     {
       key: "view-docs",
@@ -216,7 +321,12 @@ const TalentProfiles = () => {
       label: "Mark Inactive",
       icon: <StopOutlined />,
       onClick: () => handleMarkInactive(record),
-    }] : []),
+    }] : [{
+      key: "active",
+      label: "Mark Active",
+      icon: <CheckCircleOutlined />,
+      onClick: () => handleMarkActive(record),
+    }]),
     {
       key: "delete",
       label: "Delete",
@@ -243,7 +353,40 @@ const TalentProfiles = () => {
     { title: "Email Id", dataIndex: "email", key: "email" },
     { title: "Contact No", dataIndex: "contact", key: "contact" },
     { title: "Organization", dataIndex: "organization", key: "organization" },
-    { title: "Rate", dataIndex: "rate", key: "rate" },
+    { 
+      title: "Partner Rate", 
+      dataIndex: "partnerRate", 
+      key: "partnerRate",
+      render: (value) => value ? formatCurrency(value) : "-",
+    },
+    { 
+      title: "Settled Cost", 
+      key: "settledCost",
+      render: (_, record) => record.partnerRate ? formatCurrency(calculateSettledCost(record.partnerRate)) : "-",
+    },
+    { 
+      title: "Client Rate", 
+      key: "clientRate",
+      render: (_, record) => record.partnerRate ? formatCurrency(calculateClientRate(record.partnerRate)) : "-",
+    },
+    { 
+      title: "Market Rate", 
+      dataIndex: "marketRate", 
+      key: "marketRate",
+      render: (value, record) => {
+        if (!value || !record.partnerRate) return "-";
+        const clientRate = calculateClientRate(record.partnerRate);
+        const isHigher = value > clientRate;
+        const isLower = value < clientRate;
+        return (
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            {formatCurrency(value)}
+            {isHigher && <ArrowUpOutlined style={{ color: "#52c41a", fontSize: 12 }} />}
+            {isLower && <ArrowDownOutlined style={{ color: "#ff4d4f", fontSize: 12 }} />}
+          </span>
+        );
+      },
+    },
     { title: "Experience", dataIndex: "experience", key: "experience" },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn" },
     { title: "Background Verified", dataIndex: "backgroundVerified", key: "backgroundVerified" },
@@ -315,19 +458,41 @@ const TalentProfiles = () => {
           <Button
             key={tab}
             className={activeTab === tab ? "tab-button active" : "tab-button"}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => {
+              setActiveTab(tab);
+              setSelectedRowKeys([]);
+            }}
           >
             {tab}
           </Button>
         ))}
       </TabsContainer>
         <Flex align="start" justify="space-between">
-          <Input
-            prefix={<SearchOutlined />}
-            placeholder="Search resources using Name"
-            onChange={(e) => setSearchText(e.target.value)}
-            style={{ marginBottom: "20px", width: "300px" }}
-          />
+          <Flex align="center" gap={12}>
+            <Input
+              prefix={<SearchOutlined />}
+              placeholder="Search resources using Name"
+              onChange={(e) => setSearchText(e.target.value)}
+              style={{ marginBottom: "20px", width: "300px" }}
+            />
+            {selectedRowKeys.length > 0 && (
+              <Button
+                type="primary"
+                icon={activeTab === "Active" ? <StopOutlined /> : <CheckCircleOutlined />}
+                onClick={() => handleBulkStatusChange(activeTab === "Active" ? "Inactive" : "Active")}
+                style={{ 
+                  backgroundColor: activeTab === "Active" ? "#faad14" : "#52c41a",
+                  borderColor: activeTab === "Active" ? "#faad14" : "#52c41a",
+                  height: "40px",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  marginBottom: "20px",
+                }}
+              >
+                Mark {activeTab === "Active" ? "Inactive" : "Active"} ({selectedRowKeys.length})
+              </Button>
+            )}
+          </Flex>
           <Link to="/home/talent-profiles/add-new-profile">
             <Button
               type="primary"
@@ -345,6 +510,7 @@ const TalentProfiles = () => {
           </Link>
         </Flex>
         <Table
+          rowSelection={rowSelection}
           columns={columns}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
