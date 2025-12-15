@@ -30,6 +30,12 @@ const mockTalentData = {
     marketRate: "₹ 2,00,000",
     availability: "Immediately Available",
     organization: "TechCorp Solutions",
+    status: "Active",
+    performanceScore: "High",
+    jobsApplied: 12,
+    pastHired: 8,
+    totalRejected: 2,
+    avgContractDuration: "8 months",
     skills: [
       { skill: "SAP HANA", level: "Expert" },
       { skill: "SQL", level: "Advanced" },
@@ -62,6 +68,12 @@ const mockTalentData = {
     marketRate: "₹ 1,70,000",
     availability: "Available in 2 weeks",
     organization: "Digital Partners Inc",
+    status: "Active",
+    performanceScore: "Average",
+    jobsApplied: 8,
+    pastHired: 5,
+    totalRejected: 1,
+    avgContractDuration: "6 months",
     skills: [
       { skill: "React", level: "Expert" },
       { skill: "TypeScript", level: "Advanced" },
@@ -93,6 +105,12 @@ const mockTalentData = {
     marketRate: "₹ 2,20,000",
     availability: "Immediately Available",
     organization: "Innovate Tech",
+    status: "Inactive",
+    performanceScore: "High",
+    jobsApplied: 15,
+    pastHired: 10,
+    totalRejected: 3,
+    avgContractDuration: "10 months",
     skills: [
       { skill: "Docker", level: "Expert" },
       { skill: "Kubernetes", level: "Expert" },
@@ -127,6 +145,12 @@ for (let i = 4; i <= 10; i++) {
     marketRate: `₹ ${(i % 5 + 12) * 10},000`,
     availability: "Immediately Available",
     organization: "Sample Org",
+    status: i % 2 === 0 ? "Active" : "Inactive",
+    performanceScore: i % 3 === 0 ? "High" : i % 3 === 1 ? "Average" : "Low",
+    jobsApplied: 5 + i,
+    pastHired: 2 + (i % 4),
+    totalRejected: i % 3,
+    avgContractDuration: `${4 + (i % 5)} months`,
     skills: [
       { skill: "JavaScript", level: "Expert" },
       { skill: "React", level: "Advanced" },
@@ -247,6 +271,50 @@ const TalentDetails = () => {
           <div className="detail-item">
             <h4>Availability</h4>
             <p>{talent.availability}</p>
+          </div>
+        </div>
+      </Card>
+
+      <Card className="metrics-card" style={{ marginBottom: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+          <h3 style={{ margin: 0 }}>Talent Metrics</h3>
+          <div style={{ display: "flex", gap: 12 }}>
+            <Tag 
+              color={talent.status === "Active" ? "success" : "default"}
+              style={{ fontSize: 13, padding: "4px 12px" }}
+            >
+              {talent.status || "Active"}
+            </Tag>
+            <Tag 
+              color={talent.performanceScore === "High" ? "green" : talent.performanceScore === "Average" ? "orange" : "red"}
+              style={{ fontSize: 13, padding: "4px 12px" }}
+            >
+              {talent.performanceScore || "Average"} Performance
+            </Tag>
+          </div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 16 }}>
+          <div style={{ textAlign: "center", padding: 16, background: "#f8f9fd", borderRadius: 8 }}>
+            <h2 style={{ margin: 0, color: "#014c75", fontSize: 24 }}>{talent.jobsApplied || 0}</h2>
+            <p style={{ margin: "8px 0 0", color: "#666", fontSize: 13 }}>Jobs Applied</p>
+          </div>
+          <div style={{ textAlign: "center", padding: 16, background: "#f6ffed", borderRadius: 8 }}>
+            <h2 style={{ margin: 0, color: "#52c41a", fontSize: 24 }}>{talent.pastHired || 0}</h2>
+            <p style={{ margin: "8px 0 0", color: "#666", fontSize: 13 }}>Past Hired</p>
+          </div>
+          <div style={{ textAlign: "center", padding: 16, background: "#fff2f0", borderRadius: 8 }}>
+            <h2 style={{ margin: 0, color: "#ff4d4f", fontSize: 24 }}>{talent.totalRejected || 0}</h2>
+            <p style={{ margin: "8px 0 0", color: "#666", fontSize: 13 }}>Total Rejected</p>
+          </div>
+          <div style={{ textAlign: "center", padding: 16, background: "#fff7e6", borderRadius: 8 }}>
+            <h2 style={{ margin: 0, color: "#faad14", fontSize: 24 }}>
+              {talent.jobsApplied ? ((talent.totalRejected || 0) / talent.jobsApplied * 100).toFixed(1) : 0}%
+            </h2>
+            <p style={{ margin: "8px 0 0", color: "#666", fontSize: 13 }}>Rejection Rate</p>
+          </div>
+          <div style={{ textAlign: "center", padding: 16, background: "#e6f7ff", borderRadius: 8 }}>
+            <h2 style={{ margin: 0, color: "#1890ff", fontSize: 24 }}>{talent.avgContractDuration || "-"}</h2>
+            <p style={{ margin: "8px 0 0", color: "#666", fontSize: 13 }}>Avg Contract Duration</p>
           </div>
         </div>
       </Card>
