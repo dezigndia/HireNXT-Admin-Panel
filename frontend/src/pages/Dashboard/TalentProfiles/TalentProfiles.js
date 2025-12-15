@@ -392,7 +392,7 @@ const TalentProfiles = () => {
       ),
     },
     { title: "Email Id", dataIndex: "email", key: "email", width: 180, ellipsis: true },
-    { title: "Contact No", dataIndex: "contact", key: "contact", width: 130 },
+    { title: "Contact No", dataIndex: "contact", key: "contact", width: 150 },
     { title: "Organization", dataIndex: "organization", key: "organization", width: 140, ellipsis: true },
     { title: "Role", dataIndex: "role", key: "role", width: 150, ellipsis: true },
     { title: "Experience", dataIndex: "experience", key: "experience", width: 100 },
