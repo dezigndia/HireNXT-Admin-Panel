@@ -394,7 +394,7 @@ const TalentProfiles = () => {
     { title: "Contact No", dataIndex: "contact", key: "contact", width: 150 },
     { title: "Organization", dataIndex: "organization", key: "organization", width: 140, ellipsis: true },
     { title: "Role", dataIndex: "role", key: "role", width: 150, ellipsis: true },
-    { title: "Experience", dataIndex: "experience", key: "experience", width: 100 },
+    { title: "Experience", dataIndex: "experience", key: "experience", width: 120 },
     { 
       title: "Partner Rate", 
       dataIndex: "partnerRate", 
@@ -448,7 +448,7 @@ const TalentProfiles = () => {
       title: "Rejected", 
       dataIndex: "rejected", 
       key: "rejected", 
-      width: 90, 
+      width: 100, 
       align: "center",
       render: (value) => (
         <span style={{ background: "#fff2f0", padding: "4px 10px", borderRadius: 4, fontWeight: 500, color: "#ff4d4f" }}>
@@ -623,6 +623,8 @@ const TalentProfiles = () => {
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
           scroll={{ x: 1800 }}
+          size="small"
+          style={{ fontSize: 13 }}
         />
     </UserManagementWrapper>
   );
