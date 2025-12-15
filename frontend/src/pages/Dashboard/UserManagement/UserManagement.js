@@ -523,26 +523,44 @@ const UserManagement = () => {
         ))}
       </TabsContainer>
 
-      <TabsContainer style={{ marginTop: "16px" }}>
+      <div style={{ marginTop: "16px", display: "flex", gap: "8px" }}>
         <Button
-          className={statusTab === "Active" ? "tab-button active" : "tab-button"}
+          type={statusTab === "Active" ? "link" : "text"}
           onClick={() => {
             setStatusTab("Active");
             setSelectedRowKeys([]);
+          }}
+          style={{ 
+            padding: "4px 12px",
+            height: "32px",
+            fontSize: "13px",
+            color: statusTab === "Active" ? "#00d9a9" : "#666",
+            fontWeight: statusTab === "Active" ? 600 : 400,
+            borderBottom: statusTab === "Active" ? "2px solid #00d9a9" : "2px solid transparent",
+            borderRadius: 0,
           }}
         >
           Active ({activeCountForType})
         </Button>
         <Button
-          className={statusTab === "Inactive" ? "tab-button active" : "tab-button"}
+          type={statusTab === "Inactive" ? "link" : "text"}
           onClick={() => {
             setStatusTab("Inactive");
             setSelectedRowKeys([]);
           }}
+          style={{ 
+            padding: "4px 12px",
+            height: "32px",
+            fontSize: "13px",
+            color: statusTab === "Inactive" ? "#00d9a9" : "#666",
+            fontWeight: statusTab === "Inactive" ? 600 : 400,
+            borderBottom: statusTab === "Inactive" ? "2px solid #00d9a9" : "2px solid transparent",
+            borderRadius: 0,
+          }}
         >
           Inactive ({inactiveCountForType})
         </Button>
-      </TabsContainer>
+      </div>
 
       <Flex align="start" justify="space-between" style={{ marginTop: "16px" }}>
         <Flex align="center" gap={16}>
