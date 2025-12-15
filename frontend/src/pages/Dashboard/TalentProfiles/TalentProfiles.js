@@ -475,7 +475,7 @@ const TalentProfiles = () => {
     {
       title: "Action",
       key: "action",
-      width: 70,
+      width: 90,
       fixed: "right",
       render: (_, record) => (
         <Dropdown
