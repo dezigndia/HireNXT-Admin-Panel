@@ -129,7 +129,10 @@ const UserManagement = () => {
   const [editingUser, setEditingUser] = useState(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [isPasswordModalVisible, setIsPasswordModalVisible] = useState(false);
+  const [passwordUser, setPasswordUser] = useState(null);
   const [form] = Form.useForm();
+  const [passwordForm] = Form.useForm();
 
   const handleEditUser = (record) => {
     setEditingUser(record);
@@ -245,25 +248,22 @@ const UserManagement = () => {
   };
 
   const handleChangePassword = (record) => {
-    Modal.confirm({
-      title: "Change Password",
-      icon: <LockOutlined style={{ color: "#1890ff" }} />,
-      content: (
-        <div>
-          <p>Send a password reset link to this user?</p>
-          <div style={{ marginTop: 12, padding: 12, background: "#e6f7ff", borderRadius: 6, border: "1px solid #91d5ff" }}>
-            <p style={{ margin: 0, fontWeight: 500 }}>{record.name}</p>
-            <p style={{ margin: "4px 0 0", color: "#666", fontSize: 13 }}>{record.email}</p>
-          </div>
-        </div>
-      ),
-      okText: "Send Reset Link",
-      okButtonProps: { style: { background: "#1890ff", borderColor: "#1890ff" } },
-      cancelText: "Cancel",
-      onOk: () => {
-        message.success(`Password reset link sent to ${record.email}`);
-      },
-    });
+    setPasswordUser(record);
+    passwordForm.resetFields();
+    setIsPasswordModalVisible(true);
+  };
+
+  const handlePasswordSubmit = (values) => {
+    message.success(`Password changed successfully for ${passwordUser.name}`);
+    setIsPasswordModalVisible(false);
+    setPasswordUser(null);
+    passwordForm.resetFields();
+  };
+
+  const handleClosePasswordModal = () => {
+    setIsPasswordModalVisible(false);
+    setPasswordUser(null);
+    passwordForm.resetFields();
   };
 
   const getActionMenuItems = (record) => {
@@ -789,6 +789,74 @@ const UserManagement = () => {
                   {isEditMode ? "Save Changes" : "Submit"}
                 </Button>
                 <Button onClick={handleCloseModal}>Cancel</Button>
+              </div>
+            </Form.Item>
+          </Form>
+        </Modal>
+
+        <Modal
+          open={isPasswordModalVisible}
+          onCancel={handleClosePasswordModal}
+          footer={null}
+          width={450}
+        >
+          <Flex
+            justify="center"
+            vertical
+            align="center"
+            style={{ borderBottom: "1px solid #e8e8e8", marginBottom: "1.5rem", paddingBottom: "1rem" }}
+          >
+            <LockOutlined style={{ fontSize: 32, color: "#1890ff", marginBottom: 8 }} />
+            <Text style={{ fontSize: "20px", color: "#014c75", fontWeight: 600 }}>
+              Change Password
+            </Text>
+            <Text style={{ fontSize: "14px", color: "#666" }}>
+              {passwordUser?.name}
+            </Text>
+          </Flex>
+
+          <Form form={passwordForm} layout="vertical" onFinish={handlePasswordSubmit}>
+            <Form.Item
+              label="New Password"
+              name="newPassword"
+              rules={[
+                { required: true, message: "Please enter the new password!" },
+                { min: 6, message: "Password must be at least 6 characters!" },
+              ]}
+            >
+              <Input.Password placeholder="Enter New Password" />
+            </Form.Item>
+            <Form.Item
+              label="Confirm Password"
+              name="confirmPassword"
+              dependencies={['newPassword']}
+              rules={[
+                { required: true, message: "Please confirm the password!" },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('newPassword') === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(new Error('Passwords do not match!'));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password placeholder="Confirm New Password" />
+            </Form.Item>
+            <Form.Item>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "1rem",
+                  marginTop: "1rem",
+                }}
+              >
+                <Button type="primary" htmlType="submit" style={{ backgroundColor: "#1890ff", borderColor: "#1890ff" }}>
+                  Change Password
+                </Button>
+                <Button onClick={handleClosePasswordModal}>Cancel</Button>
               </div>
             </Form.Item>
           </Form>
