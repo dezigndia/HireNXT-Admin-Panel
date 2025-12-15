@@ -12,6 +12,7 @@ import {
   Card,
   Modal,
   message,
+  Select,
 } from "antd";
 import {
   SearchOutlined,
@@ -54,6 +55,9 @@ const TalentProfiles = () => {
   const [activeTab, setActiveTab] = useState("Active");
   const [searchText, setSearchText] = useState("");
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
+  const [locationFilter, setLocationFilter] = useState(null);
+  const [roleFilter, setRoleFilter] = useState(null);
+  const [experienceFilter, setExperienceFilter] = useState(null);
   const mockTalentData = [
     {
       key: "1",
@@ -64,6 +68,10 @@ const TalentProfiles = () => {
       partnerRate: 180000,
       role: "Senior Developer",
       experience: "5 Years",
+      location: "Bangalore",
+      jobsApplied: 12,
+      pastHired: 8,
+      rejected: 2,
       createdOn: "15-Oct-24",
       status: "Active",
       backgroundVerified: "Yes",
@@ -77,6 +85,10 @@ const TalentProfiles = () => {
       partnerRate: 150000,
       role: "UI/UX Designer",
       experience: "4 Years",
+      location: "Mumbai",
+      jobsApplied: 8,
+      pastHired: 5,
+      rejected: 1,
       createdOn: "18-Oct-24",
       status: "Active",
       backgroundVerified: "Yes",
@@ -90,6 +102,10 @@ const TalentProfiles = () => {
       partnerRate: 200000,
       role: "Tech Lead",
       experience: "6 Years",
+      location: "Pune",
+      jobsApplied: 15,
+      pastHired: 10,
+      rejected: 3,
       createdOn: "20-Oct-24",
       status: "Inactive",
       backgroundVerified: "No",
@@ -103,6 +119,10 @@ const TalentProfiles = () => {
       partnerRate: 170000,
       role: "Full Stack Developer",
       experience: "5 Years",
+      location: "Hyderabad",
+      jobsApplied: 10,
+      pastHired: 7,
+      rejected: 2,
       createdOn: "22-Oct-24",
       status: "Active",
       backgroundVerified: "Yes",
@@ -116,6 +136,10 @@ const TalentProfiles = () => {
       partnerRate: 160000,
       role: "DevOps Engineer",
       experience: "4 Years",
+      location: "Delhi",
+      jobsApplied: 6,
+      pastHired: 3,
+      rejected: 2,
       createdOn: "25-Oct-24",
       status: "Inactive",
       backgroundVerified: "Yes",
@@ -129,6 +153,10 @@ const TalentProfiles = () => {
       partnerRate: 190000,
       role: "Data Analyst",
       experience: "7 Years",
+      location: "Bangalore",
+      jobsApplied: 9,
+      pastHired: 6,
+      rejected: 1,
       createdOn: "28-Oct-24",
       status: "Active",
       backgroundVerified: "No",
@@ -137,7 +165,18 @@ const TalentProfiles = () => {
 
   const [usersData, setUsersData] = useState(mockTalentData);
 
-  const filteredData = usersData.filter((user) => user.status === activeTab);
+  const locationOptions = [...new Set(usersData.map(u => u.location).filter(Boolean))];
+  const roleOptions = [...new Set(usersData.map(u => u.role).filter(Boolean))];
+  const experienceOptions = [...new Set(usersData.map(u => u.experience).filter(Boolean))];
+
+  const filteredData = usersData.filter((user) => {
+    if (user.status !== activeTab) return false;
+    if (locationFilter && user.location !== locationFilter) return false;
+    if (roleFilter && user.role !== roleFilter) return false;
+    if (experienceFilter && user.experience !== experienceFilter) return false;
+    if (searchText && !user.name.toLowerCase().includes(searchText.toLowerCase())) return false;
+    return true;
+  });
 
   const parseRateString = (rateStr) => {
     if (typeof rateStr === 'number') return rateStr;
@@ -341,7 +380,8 @@ const TalentProfiles = () => {
       title: "Name", 
       dataIndex: "name", 
       key: "name",
-      width: 140,
+      width: 130,
+      fixed: "left",
       render: (text, record) => (
         <a 
           onClick={() => navigate(`/home/talent-profiles/details/${record.key}`)}
@@ -351,35 +391,50 @@ const TalentProfiles = () => {
         </a>
       ),
     },
-    { title: "Email Id", dataIndex: "email", key: "email", width: 180, ellipsis: true },
-    { title: "Contact No", dataIndex: "contact", key: "contact", width: 130 },
-    { title: "Organization", dataIndex: "organization", key: "organization", width: 140, ellipsis: true },
+    { title: "Email Id", dataIndex: "email", key: "email", width: 170, ellipsis: true },
+    { title: "Contact No", dataIndex: "contact", key: "contact", width: 125 },
+    { title: "Organization", dataIndex: "organization", key: "organization", width: 130, ellipsis: true },
+    { title: "Role", dataIndex: "role", key: "role", width: 130, ellipsis: true },
+    { title: "Experience", dataIndex: "experience", key: "experience", width: 90 },
     { 
       title: "Partner Rate", 
       dataIndex: "partnerRate", 
       key: "partnerRate",
-      width: 110,
+      width: 105,
       render: (value) => value ? formatCurrency(value) : "-",
     },
     { 
       title: "Settled Cost", 
       key: "settledCost",
-      width: 110,
+      width: 100,
       render: (_, record) => record.partnerRate ? formatCurrency(calculateSettledCost(record.partnerRate)) : "-",
     },
     { 
       title: "Client Rate", 
       key: "clientRate",
-      width: 110,
+      width: 100,
       render: (_, record) => record.partnerRate ? formatCurrency(calculateClientRate(record.partnerRate)) : "-",
     },
-    { title: "Role", dataIndex: "role", key: "role", width: 120, ellipsis: true },
-    { title: "Experience", dataIndex: "experience", key: "experience", width: 95 },
+    { title: "Jobs Applied", dataIndex: "jobsApplied", key: "jobsApplied", width: 100, align: "center" },
+    { title: "Past Hired", dataIndex: "pastHired", key: "pastHired", width: 90, align: "center" },
+    { title: "Rejected", dataIndex: "rejected", key: "rejected", width: 80, align: "center" },
+    { 
+      title: "Rejection Rate", 
+      key: "rejectionRate", 
+      width: 105,
+      align: "center",
+      render: (_, record) => {
+        if (!record.jobsApplied || record.jobsApplied === 0) return "-";
+        const rate = ((record.rejected || 0) / record.jobsApplied * 100).toFixed(1);
+        return `${rate}%`;
+      },
+    },
     { title: "Created on", dataIndex: "createdOn", key: "createdOn", width: 95 },
     {
       title: "Action",
       key: "action",
       width: 70,
+      fixed: "right",
       render: (_, record) => (
         <Dropdown
           menu={{ items: getActionMenuItems(record) }}
@@ -454,6 +509,34 @@ const TalentProfiles = () => {
           </Button>
         ))}
       </TabsContainer>
+
+        <Flex gap={12} style={{ marginBottom: 16 }} wrap="wrap">
+          <Select
+            placeholder="Location"
+            allowClear
+            style={{ width: 150 }}
+            value={locationFilter}
+            onChange={setLocationFilter}
+            options={locationOptions.map(loc => ({ label: loc, value: loc }))}
+          />
+          <Select
+            placeholder="Role"
+            allowClear
+            style={{ width: 180 }}
+            value={roleFilter}
+            onChange={setRoleFilter}
+            options={roleOptions.map(role => ({ label: role, value: role }))}
+          />
+          <Select
+            placeholder="Experience"
+            allowClear
+            style={{ width: 140 }}
+            value={experienceFilter}
+            onChange={setExperienceFilter}
+            options={experienceOptions.map(exp => ({ label: exp, value: exp }))}
+          />
+        </Flex>
+
         <Flex align="start" justify="space-between">
           <Flex align="center" gap={12}>
             <Input
@@ -501,7 +584,7 @@ const TalentProfiles = () => {
           columns={columns}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
-          scroll={{ x: 1200 }}
+          scroll={{ x: 1600 }}
         />
     </UserManagementWrapper>
   );
