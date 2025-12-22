@@ -1,6 +1,6 @@
-//let PORT_URL = "http://localhost:4000";
+let PORT_URL = "http://localhost:4000";
 //let PORT_URL = "http://65.2.123.21";
-let PORT_URL = "https://hirenxt-api-gwhpfddbfnc9d5dc.westus2-01.azurewebsites.net";
+//let PORT_URL = "https://hirenxt-api-gwhpfddbfnc9d5dc.westus2-01.azurewebsites.net";
 
 export const API_CONST = Object.freeze({
     LOGIN: PORT_URL + "/api/login",

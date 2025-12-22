@@ -17,6 +17,7 @@ import { LoginWrapper } from "./Login.style";
 import Logo from "./../../assets/logo.svg";
 import lgSlider from "./../../assets/lg-slider-1.png";
 import { login as authLogin } from "./../../services/authService";
+import { API_CONST } from "../../const";
 const { Title, Paragraph, Link } = Typography;
 
 const Login = () => {
@@ -40,7 +41,13 @@ const Login = () => {
 
     try {
       // Use authService which handles both mock and real API
-      const response = await authLogin(email, password);
+      const response = await fetch(API_CONST.LOGIN, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({"email":email,"password":password}),
+      });
       const data = await response.json();
 
       if (response.ok) {
@@ -53,14 +60,14 @@ const Login = () => {
         }
         
         localStorage.setItem("authToken", data.token);
-        localStorage.setItem("userRole", data.user.role);
+        localStorage.setItem("userRole", data.user.roles);
         localStorage.setItem("userName", data.user.name);
         
         // Role-based routing
-        const userRole = data.user.role;
-        if (userRole === "customer") {
+        const userRole = data.user.roles;
+        if (userRole === "Customer") {
           navigate("/customer");
-        } else if (userRole === "partner") {
+        } else if (userRole === "Partner") {
           navigate("/partner");
         } else {
           navigate("/home");
