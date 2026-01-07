@@ -21,7 +21,7 @@ import {
   SearchOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
+import { ApprovalProcessWrapper } from "./ApprovalProcess.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 const { Text } = Typography;
 const { Option } = Select;
@@ -101,7 +101,7 @@ const ApprovalProcess = () => {
   };
 
   return (
-    <UserManagementWrapper>
+    <ApprovalProcessWrapper>
       <div style={{ padding: "20px" }}>
         <h2 className="title-header">Approval Process</h2>
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
@@ -286,7 +286,7 @@ const ApprovalProcess = () => {
           </Form>
         </Modal>
       </div>
-    </UserManagementWrapper>
+    </ApprovalProcessWrapper>
   );
 };
 

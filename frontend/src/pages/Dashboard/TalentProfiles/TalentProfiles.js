@@ -21,7 +21,7 @@ import {
   SearchOutlined,
   MoreOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
+import { TalentProfilesWrapper } from "./TalentProfiles.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 import axios from "axios";
 import { API_CONST } from "../../../const";
@@ -149,7 +149,7 @@ const TalentProfiles = () => {
 
 
   return (
-    <UserManagementWrapper>
+    <TalentProfilesWrapper>
       <div style={{ padding: "20px" }}>
         <h2 className="title-header">Talent Profile</h2>
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
@@ -367,7 +367,7 @@ const TalentProfiles = () => {
           </Form>
         </Modal>
       </div>
-    </UserManagementWrapper>
+    </TalentProfilesWrapper>
   );
 };
 

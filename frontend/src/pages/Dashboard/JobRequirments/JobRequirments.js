@@ -18,7 +18,7 @@ import {
   SnippetsOutlined,
   WechatOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper } from "./../UserManagement/UserManagement.style";
+import { JobRequirmentsWrapper } from "./JobRequirments.style";
 // import MaskGroup from "../Mask-Group.svg";
 import { API_CONST } from "../../../const";
 import { Link } from "react-router-dom";
@@ -135,7 +135,7 @@ const JobRequirments = () => {
   };
 
   return (
-    <UserManagementWrapper>
+    <JobRequirmentsWrapper>
       <div style={{ padding: "20px" }}>
         <h2 className="title-header">Job Requirements</h2>
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
@@ -250,7 +250,7 @@ const JobRequirments = () => {
           </>
         )}
       </div>
-    </UserManagementWrapper>
+    </JobRequirmentsWrapper>
   );
 };
 

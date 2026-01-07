@@ -7,6 +7,7 @@ import {
   MessageOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
+import { JobDetailsWrapper } from "./JobDetails.style";
 
 const jobDetails = {
   id: "J12345",
@@ -108,9 +109,9 @@ const columns = [
 
 const JobDetails = () => {
   return (
-    <div style={{ padding: 24 }}>
-      <Typography.Title level={2}>Job Details</Typography.Title>
-      <Card style={{ marginBottom: 24 }}>
+    <JobDetailsWrapper>
+      <h2 className="title-header">Job Details</h2>
+      <Card className="detail-card">
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Typography.Text type="secondary">Job ID</Typography.Text>
@@ -177,7 +178,7 @@ const JobDetails = () => {
       <Card>
         <Table columns={columns} dataSource={profiles} pagination={false} />
       </Card>
-    </div>
+    </JobDetailsWrapper>
   );
 };
 

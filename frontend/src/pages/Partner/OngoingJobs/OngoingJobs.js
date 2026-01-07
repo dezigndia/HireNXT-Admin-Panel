@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { API_CONST } from "../../../const";
+import { OngoingJobsWrapper } from "./OngoingJobs.style";
 
 const { Search } = Input;
 const { Title, Text, Paragraph } = Typography;
@@ -58,18 +59,12 @@ const OngoingJobs = () => {
   );
 
   return (
-    <div
-      style={{
-        padding: 0,
-        width: "100%",
-        minHeight: "100vh",
-        background: "#fafcff",
-      }}
-    >
+    <OngoingJobsWrapper>
+      <h2 className="title-header">Ongoing Jobs</h2>
       {/* Search Bar */}
       <Row gutter={[0, 24]} style={{ margin: 0 }}>
         <Col span={24}>
-          <div style={{ padding: "24px 16px 0 16px", width: "100%" }}>
+          <div className="search-bar">
             <Search
               placeholder="Search jobs..."
               value={search}
@@ -110,12 +105,8 @@ const OngoingJobs = () => {
                   key={job.id}
                   hoverable
                   onClick={() => setSelectedJob(job)}
+                  className={`job-list-card ${selectedJob?.id === job.id ? 'selected' : ''}`}
                   style={{
-                    marginBottom: 16,
-                    borderColor:
-                      selectedJob?.id === job.id ? "#1890ff" : "#f0f0f0",
-                    background: selectedJob?.id === job.id ? "#e6f7ff" : "#fff",
-                    transition: "background 0.2s, border 0.2s",
                     width: "100%",
                   }}
                   bodyStyle={{ padding: 16 }}
@@ -201,6 +192,7 @@ const OngoingJobs = () => {
           }}
         >
           <Card
+            className="job-details-card"
             style={{
               minHeight: 200,
               width: "100%",
@@ -390,7 +382,7 @@ const OngoingJobs = () => {
           </Card>
         </Col>
       </Row>
-    </div>
+    </OngoingJobsWrapper>
   );
 };
 export default OngoingJobs;

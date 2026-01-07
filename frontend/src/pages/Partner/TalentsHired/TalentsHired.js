@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Tabs, Table, Button } from "antd";
+import { TalentsHiredWrapper } from "./TalentsHired.style";
 
 // Sample data
 const activeProfiles = [
@@ -110,7 +111,8 @@ function TalentsHired() {
   const [tab, setTab] = useState("1");
 
   return (
-    <div>
+    <TalentsHiredWrapper>
+      <h2 className="title-header">Talents Hired</h2>
       <Tabs activeKey={tab} onChange={setTab}>
         <Tabs.TabPane tab="Active Profiles" key="1">
           <Table
@@ -127,7 +129,7 @@ function TalentsHired() {
           />
         </Tabs.TabPane>
       </Tabs>
-    </div>
+    </TalentsHiredWrapper>
   );
 }
 
