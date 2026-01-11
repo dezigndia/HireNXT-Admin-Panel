@@ -75,7 +75,7 @@ const CustomerDashboard = () => {
     const token = localStorage.getItem("authToken");
     const userRole = localStorage.getItem("userRole");
     
-    if (!token || userRole !== "customer") {
+    if (!token || userRole !== "Customer") {
       navigate("/", { replace: true });
     }
   }, [navigate]);

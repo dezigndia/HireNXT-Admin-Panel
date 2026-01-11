@@ -35,191 +35,10 @@ const { Option } = Select;
 
 const JobRequirments = () => {
   // Mock data for submitted profiles (for Profiles Submitted tab)
-  const mockSubmittedProfiles = [
-    { 
-      key: "0", profileId: "PRF001", name: "Akshay Joshi", email: "akshay.joshi@techpro.com", contact: "+91-9876543210", 
-      jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.2 years", 
-      skills: [
-        { skill: "React", level: "Expert" },
-        { skill: "Redux", level: "Advanced" },
-        { skill: "TypeScript", level: "Intermediate" }
-      ], 
-      expectedSalary: "₹1,75,000", submittedOn: "25-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" 
-    },
-    { 
-      key: "1", profileId: "PRF002", name: "Priya Sharma", email: "priya.sharma@webdev.com", contact: "+91-9876543211", 
-      jobId: "JOB001", jobTitle: "Senior React Developer", experience: "6.0 years", 
-      skills: [
-        { skill: "React", level: "Expert" },
-        { skill: "TypeScript", level: "Advanced" },
-        { skill: "Next.js", level: "Intermediate" }
-      ], 
-      expectedSalary: "₹1,90,000", submittedOn: "26-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" 
-    },
-    { 
-      key: "2", profileId: "PRF003", name: "Rajesh Kumar", email: "rajesh.kumar@techpro.com", contact: "+91-9876543212", 
-      jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.5 years", 
-      skills: [
-        { skill: "Node.js", level: "Advanced" },
-        { skill: "React", level: "Intermediate" },
-        { skill: "PostgreSQL", level: "Intermediate" }
-      ], 
-      expectedSalary: "₹1,60,000", submittedOn: "27-Oct-24", status: "Interview Scheduled", partnerOrg: "Innovate Tech" 
-    },
-    { 
-      key: "3", profileId: "PRF004", name: "Vineet Malhotra", email: "vineet.m@datatech.com", contact: "+91-9876543213", 
-      jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.5 years", 
-      skills: [
-        { skill: "Java", level: "Expert" },
-        { skill: "Spring Boot", level: "Advanced" },
-        { skill: "MySQL", level: "Intermediate" }
-      ], 
-      expectedSalary: "₹2,10,000", submittedOn: "24-Oct-24", status: "Under Review", partnerOrg: "TechCorp Solutions" 
-    },
-    { 
-      key: "4", profileId: "PRF005", name: "Amit Patel", email: "amit.patel@cloudops.com", contact: "+91-9876543214", 
-      jobId: "JOB003", jobTitle: "Backend Developer", experience: "7.0 years", 
-      skills: [
-        { skill: "Java", level: "Expert" },
-        { skill: "Microservices", level: "Expert" },
-        { skill: "AWS", level: "Advanced" }
-      ], 
-      expectedSalary: "₹2,20,000", submittedOn: "23-Oct-24", status: "Shortlisted", partnerOrg: "Digital Partners Inc" 
-    },
-    { 
-      key: "5", profileId: "PRF006", name: "Neha Gupta", email: "neha.gupta@backend.com", contact: "+91-9876543215", 
-      jobId: "JOB002", jobTitle: "Full Stack Developer", experience: "4.2 years", 
-      skills: [
-        { skill: "Node.js", level: "Advanced" },
-        { skill: "React", level: "Intermediate" },
-        { skill: "MongoDB", level: "Beginner" }
-      ], 
-      expectedSalary: "₹1,55,000", submittedOn: "22-Oct-24", status: "Rejected", partnerOrg: "Innovate Tech" 
-    },
-    { 
-      key: "6", profileId: "PRF007", name: "Karthik Reddy", email: "karthik.r@frontend.com", contact: "+91-9876543216", 
-      jobId: "JOB001", jobTitle: "Senior React Developer", experience: "5.5 years", 
-      skills: [
-        { skill: "React", level: "Expert" },
-        { skill: "Redux", level: "Advanced" },
-        { skill: "GraphQL", level: "Advanced" }
-      ], 
-      expectedSalary: "₹1,80,000", submittedOn: "21-Oct-24", status: "Interview Scheduled", partnerOrg: "TechCorp Solutions" 
-    },
-    { 
-      key: "7", profileId: "PRF008", name: "Sneha Patel", email: "sneha.patel@backend.pro", contact: "+91-9876543217", 
-      jobId: "JOB003", jobTitle: "Backend Developer", experience: "6.0 years", 
-      skills: [
-        { skill: "Java", level: "Expert" },
-        { skill: "Spring Boot", level: "Advanced" },
-        { skill: "Microservices", level: "Advanced" }
-      ], 
-      expectedSalary: "₹2,05,000", submittedOn: "20-Oct-24", status: "Under Review", partnerOrg: "Digital Partners Inc" 
-    },
-  ];
 
-  // Mock data for initial display (jobs)
-  const mockJobData = [
-    {
-      key: "1",
-      id: "JOB001",
-      role: "Senior React Developer",
-      location: "Bangalore",
-      engagement_type: "Full Time",
-      requirement_count: 3,
-      experience: "5+ years",
-      engagement_months: "12 months",
-      start_date: "01-Nov-24",
-      budget: "₹2,00,000",
-      created_on: "15-Oct-24",
-      type: "Active Jobs",
-      name: "Senior React Developer",
-      profiles_submitted: 5,
-    },
-    {
-      key: "2",
-      id: "JOB002",
-      role: "Full Stack Developer",
-      location: "Mumbai",
-      engagement_type: "Contract",
-      requirement_count: 2,
-      experience: "4+ years",
-      engagement_months: "6 months",
-      start_date: "05-Nov-24",
-      budget: "₹1,70,000",
-      created_on: "18-Oct-24",
-      type: "Active Jobs",
-      name: "Full Stack Developer",
-      profiles_submitted: 3,
-    },
-    {
-      key: "3",
-      id: "JOB003",
-      role: "Backend Developer",
-      location: "Hyderabad",
-      engagement_type: "Full Time",
-      requirement_count: 4,
-      experience: "6+ years",
-      engagement_months: "12 months",
-      start_date: "10-Nov-24",
-      budget: "₹2,25,000",
-      created_on: "20-Oct-24",
-      type: "Profiles Submitted",
-      name: "Backend Developer",
-      profiles_submitted: 8,
-    },
-    {
-      key: "4",
-      id: "JOB004",
-      role: "DevOps Engineer",
-      location: "Pune",
-      engagement_type: "Full Time",
-      requirement_count: 2,
-      experience: "5+ years",
-      engagement_months: "12 months",
-      start_date: "15-Nov-24",
-      budget: "₹1,90,000",
-      created_on: "22-Oct-24",
-      type: "Profiles Submitted",
-      name: "DevOps Engineer",
-      profiles_submitted: 6,
-    },
-    {
-      key: "5",
-      id: "JOB005",
-      role: "UI/UX Designer",
-      location: "Delhi",
-      engagement_type: "Contract",
-      requirement_count: 1,
-      experience: "4+ years",
-      engagement_months: "6 months",
-      start_date: "20-Nov-24",
-      budget: "₹1,35,000",
-      created_on: "25-Oct-24",
-      type: "Jobs Fulfilled",
-      name: "UI/UX Designer",
-      hired_count: 1,
-    },
-    {
-      key: "6",
-      id: "JOB006",
-      role: "QA Engineer",
-      location: "Bangalore",
-      engagement_type: "Full Time",
-      requirement_count: 3,
-      experience: "3+ years",
-      engagement_months: "12 months",
-      start_date: "01-Dec-24",
-      budget: "₹1,15,000",
-      created_on: "28-Oct-24",
-      type: "Jobs Fulfilled",
-      name: "QA Engineer",
-      hired_count: 2,
-    },
-  ];
 
-  const [usersData, setUsersData] = useState(mockJobData);
-  const [submittedProfiles, setSubmittedProfiles] = useState(mockSubmittedProfiles);
+  const [usersData, setUsersData] = useState([{}]);
+  const [submittedProfiles, setSubmittedProfiles] = useState([]);
   const [activeTab, setActiveTab] = useState("Active Jobs");
   const [searchText, setSearchText] = useState("");
   const [selectedJob, setSelectedJob] = useState("all");
@@ -234,25 +53,17 @@ const JobRequirments = () => {
     { 
       title: "Job Id", 
       dataIndex: "id", 
-      key: "id",
-      render: (id) => (
-        <a
-          onClick={() => navigate(`/home/job-requirments/job-details/${id}`)}
-          style={{ color: "#1890ff", cursor: "pointer", fontWeight: 500 }}
-        >
-          {id}
-        </a>
-      ),
+      key: "id"
     },
     { title: "Job Requirement Title", dataIndex: "role", key: "role" },
     { title: "Location", dataIndex: "location", key: "location" },
-    { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
-    { title: "Positions", dataIndex: "requirement_count", key: "requirement_count" },
-    { title: "Experience", dataIndex: "experience", key: "experience" },
-    { title: "Duration", dataIndex: "engagement_months", key: "engagement_months" },
-    { title: "Start Date", dataIndex: "start_date", key: "start_date" },
-    { title: "Salary(INR)", dataIndex: "budget", key: "budget" },
-    { title: "Created On", dataIndex: "created_on", key: "created_on" },
+    // { title: "Type", dataIndex: "engagement_type", key: "engagement_type" },
+    // { title: "Positions", dataIndex: "requirement_count", key: "requirement_count" },
+    // { title: "Experience", dataIndex: "experience", key: "experience" },
+    // { title: "Duration", dataIndex: "engagement_months", key: "engagement_months" },
+    // { title: "Start Date", dataIndex: "start_date", key: "start_date" },
+    // { title: "Salary(INR)", dataIndex: "budget", key: "budget" },
+    // { title: "Created On", dataIndex: "created_on", key: "created_on" },
     {
       title: "Action",
       key: "action",
@@ -272,6 +83,40 @@ const JobRequirments = () => {
       ),
     },
   ];
+
+  useEffect(() => {
+    // Function to fetch data from the backend
+    const fetchData = async () => {
+      try {
+        const response = await fetch(API_CONST.GET_JOB_REQUIREMENTS, {
+          method: "POST",
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const result = await response.json();
+        console.log(result);
+
+        const rows = result?.Response?.rows || [];
+
+      // ✅ Normalize tab types
+      const transformedData = rows.map(item => ({
+        ...item,
+        type:
+          item.type === "User to Review" ? "Active Jobs" :
+          item.type === "Job to Review" ? "Profiles Submitted" :
+          item.type === "Profile to Review" ? "Jobs Fulfilled" :
+          item.type,
+      }));
+        setUsersData(transformedData) ;
+      } catch (error) {
+        console.log(error.message); // Store error message in state
+        // Keep mock data on error
+      }
+    };
+    fetchData();
+  }, []);
 
   // Profiles Submitted columns (showing all submitted profiles)
   const profilesSubmittedColumns = [
@@ -441,38 +286,6 @@ const JobRequirments = () => {
   };
 
 
-  useEffect(() => {
-    // Function to fetch data from the backend
-    const fetchData = async () => {
-      try {
-        const response = await fetch(API_CONST.GET_JOB_REQUIREMENTS, {
-          method: "POST",
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        console.log(result);
-        
-        // Transform legacy type values to new tab labels for consistency
-        const transformedData = (result.Response || []).map(item => ({
-          ...item,
-          type: item.type === "User to Review" ? "Active Jobs" :
-                item.type === "Job to Review" ? "Profiles Submitted" :
-                item.type === "Profile to Review" ? "Jobs Fulfilled" :
-                item.type
-        }));
-        
-        setUsersData(transformedData);
-      } catch (error) {
-        console.log(error.message); // Store error message in state
-        // Keep mock data on error
-      }
-    };
-    fetchData();
-  }, []);
-
   // Filter data based on active tab
   const getFilteredData = () => {
     if (activeTab === "Profiles Submitted") {
@@ -499,7 +312,8 @@ const JobRequirments = () => {
     }
   };
 
-  const filteredData = getFilteredData();
+  //const filteredData = getFilteredData();
+  const filteredData = usersData;
 
   const handleOpenModal = () => setIsModalVisible(true);
   const handleCloseModal = () => {
@@ -523,9 +337,9 @@ const JobRequirments = () => {
     }),
   };
 
-  const activeJobsCount = usersData.filter((user) => user.type === "Active Jobs").length;
+  const activeJobsCount = usersData.length;
   const profilesSubmittedCount = submittedProfiles.length; // Count of all submitted profiles
-  const jobsFulfilledCount = usersData.filter((user) => user.type === "Jobs Fulfilled").length;
+  const jobsFulfilledCount = usersData.length;
 
   return (
     <UserManagementWrapper>
@@ -654,15 +468,15 @@ const JobRequirments = () => {
           </Flex>
         )}
         <Table
-          rowSelection={{
-            type: "checkbox",
-            ...rowSelection,
-          }}
+        rowSelection={{
+          type: "checkbox",
+          ...rowSelection,
+        }}
           columns={getColumns()}
           dataSource={filteredData}
           pagination={{ pageSize: 5 }}
-          scroll={activeTab === "Profiles Submitted" ? { x: 2300 } : undefined}
         />
+        
     </UserManagementWrapper>
   );
 };
