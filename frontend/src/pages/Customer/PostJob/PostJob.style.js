@@ -289,6 +289,20 @@ export const PostJobWrapper = styled.div`
       }
     }
 
+    .three-skill-row-simple {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+
+      .ant-form-item {
+        margin-bottom: 0;
+      }
+
+      @media (max-width: 1200px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .ant-select-multiple .ant-select-selector {
       min-height: 60px !important;
       height: auto !important;
