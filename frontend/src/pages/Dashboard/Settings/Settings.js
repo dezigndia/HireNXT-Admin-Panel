@@ -1,20 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   Button,
-  Input,
   InputNumber,
   Select,
   Tag,
   message,
   Modal,
   Form,
-  Switch,
+  Row,
+  Col,
+  Spin,
 } from "antd";
 import {
   EditOutlined,
   SettingOutlined,
-  PercentageOutlined,
+  GlobalOutlined,
+  TeamOutlined,
+  UserOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
 import {
   SettingsContainer,
@@ -30,189 +34,216 @@ import {
 const { Option } = Select;
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState("Markups");
+  const [activeTab, setActiveTab] = useState("Global");
+  const [globalForm] = Form.useForm();
+  const [clientForm] = Form.useForm();
+  const [partnerForm] = Form.useForm();
+  const [exchangeRate, setExchangeRate] = useState(null);
+  const [loadingRate, setLoadingRate] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
 
-  // Global configuration state
   const [globalConfig, setGlobalConfig] = useState({
-    defaultClientMarkup: 10, // Default 10% markup for clients
-    defaultPartnerDeduction: 5, // Default 5% deduction for partners
+    clientMarkup: 15,
+    partnerDeduction: 10,
+    workingDays: 22,
+    workingHours: 8,
+    defaultCurrency: "USD",
   });
 
-  // Client-specific markups
-  const [clientMarkups, setClientMarkups] = useState([
+  const [clientConfigs, setClientConfigs] = useState([
     {
       id: 1,
       clientId: "CL001",
       clientName: "Tech Innovations Inc",
-      markupPercentage: 12,
-      isActive: true,
-      appliedFrom: "2024-01-01",
+      location: "New York, USA",
+      markup: 15,
+      workingDays: 22,
+      workingHours: 8,
+      currency: "USD",
     },
     {
       id: 2,
       clientId: "CL002",
       clientName: "Digital Solutions Ltd",
-      markupPercentage: 10,
-      isActive: true,
-      appliedFrom: "2024-01-15",
+      location: "London, UK",
+      markup: 15,
+      workingDays: 22,
+      workingHours: 8,
+      currency: "USD",
     },
     {
       id: 3,
       clientId: "CL003",
       clientName: "Global Tech Corp",
-      markupPercentage: 15,
-      isActive: true,
-      appliedFrom: "2024-02-01",
+      location: "Bangalore, India",
+      markup: 15,
+      workingDays: 22,
+      workingHours: 8,
+      currency: "USD",
     },
   ]);
 
-  // Partner-specific deductions
-  const [partnerDeductions, setPartnerDeductions] = useState([
+  const [partnerConfigs, setPartnerConfigs] = useState([
     {
       id: 1,
       partnerId: "PT001",
       partnerName: "TechCorp Solutions",
-      deductionPercentage: 5,
-      isActive: true,
-      appliedFrom: "2024-01-01",
+      location: "Bangalore, India",
+      deduction: 10,
+      workingDays: 22,
+      workingHours: 8,
+      currency: "USD",
     },
     {
       id: 2,
       partnerId: "PT002",
       partnerName: "Digital Partners Inc",
-      deductionPercentage: 4,
-      isActive: true,
-      appliedFrom: "2024-01-15",
+      location: "Pune, India",
+      deduction: 10,
+      workingDays: 22,
+      workingHours: 8,
+      currency: "USD",
     },
     {
       id: 3,
       partnerId: "PT003",
       partnerName: "Innovate Tech",
-      deductionPercentage: 6,
-      isActive: true,
-      appliedFrom: "2024-02-01",
+      location: "Chennai, India",
+      deduction: 10,
+      workingDays: 22,
+      workingHours: 8,
+      currency: "USD",
     },
   ]);
 
-  // Modal states
   const [globalConfigModalVisible, setGlobalConfigModalVisible] = useState(false);
-  const [clientMarkupModalVisible, setClientMarkupModalVisible] = useState(false);
-  const [partnerDeductionModalVisible, setPartnerDeductionModalVisible] = useState(false);
+  const [clientEditModalVisible, setClientEditModalVisible] = useState(false);
+  const [partnerEditModalVisible, setPartnerEditModalVisible] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [selectedPartner, setSelectedPartner] = useState(null);
-  const [form] = Form.useForm();
 
-  // Handle global config update
+  const fetchExchangeRate = async () => {
+    setLoadingRate(true);
+    try {
+      const response = await fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=INR');
+      const data = await response.json();
+      const rate = Math.round(data.rates.INR);
+      setExchangeRate(rate);
+      setLastUpdated(new Date().toLocaleString());
+      message.success(`Exchange rate updated: 1 USD = ₹${rate}`);
+    } catch (error) {
+      console.error('Failed to fetch exchange rate:', error);
+      message.error('Failed to fetch exchange rate. Please try again.');
+    } finally {
+      setLoadingRate(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchExchangeRate();
+  }, []);
+
   const handleUpdateGlobalConfig = () => {
-    form.validateFields().then((values) => {
-      setGlobalConfig({
-        defaultClientMarkup: values.defaultClientMarkup,
-        defaultPartnerDeduction: values.defaultPartnerDeduction,
-      });
+    globalForm.validateFields().then((values) => {
+      setGlobalConfig(values);
       setGlobalConfigModalVisible(false);
       message.success("Global configuration updated successfully");
     });
   };
 
-  // Handle client markup edit
-  const handleEditClientMarkup = (record) => {
+  const handleEditClient = (record) => {
     setSelectedClient(record);
-    form.setFieldsValue({
-      markupPercentage: record.markupPercentage,
-      isActive: record.isActive,
+    clientForm.setFieldsValue({
+      markup: record.markup,
+      workingDays: record.workingDays,
+      workingHours: record.workingHours,
+      currency: record.currency,
     });
-    setClientMarkupModalVisible(true);
+    setClientEditModalVisible(true);
   };
 
-  const handleUpdateClientMarkup = () => {
-    form.validateFields().then((values) => {
-      const updated = clientMarkups.map((c) =>
+  const handleUpdateClient = () => {
+    clientForm.validateFields().then((values) => {
+      const updated = clientConfigs.map((c) =>
         c.id === selectedClient.id
-          ? {
-              ...c,
-              markupPercentage: values.markupPercentage,
-              isActive: values.isActive,
-            }
+          ? { ...c, ...values }
           : c
       );
-      setClientMarkups(updated);
-      setClientMarkupModalVisible(false);
+      setClientConfigs(updated);
+      setClientEditModalVisible(false);
       setSelectedClient(null);
-      form.resetFields();
-      message.success(`Markup updated for ${selectedClient.clientName}`);
+      clientForm.resetFields();
+      message.success(`Configuration updated for ${selectedClient.clientName}`);
     });
   };
 
-  // Handle partner deduction edit
-  const handleEditPartnerDeduction = (record) => {
+  const handleEditPartner = (record) => {
     setSelectedPartner(record);
-    form.setFieldsValue({
-      deductionPercentage: record.deductionPercentage,
-      isActive: record.isActive,
+    partnerForm.setFieldsValue({
+      deduction: record.deduction,
+      workingDays: record.workingDays,
+      workingHours: record.workingHours,
+      currency: record.currency,
     });
-    setPartnerDeductionModalVisible(true);
+    setPartnerEditModalVisible(true);
   };
 
-  const handleUpdatePartnerDeduction = () => {
-    form.validateFields().then((values) => {
-      const updated = partnerDeductions.map((p) =>
+  const handleUpdatePartner = () => {
+    partnerForm.validateFields().then((values) => {
+      const updated = partnerConfigs.map((p) =>
         p.id === selectedPartner.id
-          ? {
-              ...p,
-              deductionPercentage: values.deductionPercentage,
-              isActive: values.isActive,
-            }
+          ? { ...p, ...values }
           : p
       );
-      setPartnerDeductions(updated);
-      setPartnerDeductionModalVisible(false);
+      setPartnerConfigs(updated);
+      setPartnerEditModalVisible(false);
       setSelectedPartner(null);
-      form.resetFields();
-      message.success(`Deduction updated for ${selectedPartner.partnerName}`);
+      partnerForm.resetFields();
+      message.success(`Configuration updated for ${selectedPartner.partnerName}`);
     });
   };
 
-  // Client markup columns
-  const clientMarkupColumns = [
-    {
-      title: "Client ID",
-      dataIndex: "clientId",
-      key: "clientId",
-      width: 120,
-    },
+  const clientColumns = [
     {
       title: "Client Name",
       dataIndex: "clientName",
       key: "clientName",
-      width: 200,
+      width: 180,
     },
     {
-      title: "Markup Percentage",
-      dataIndex: "markupPercentage",
-      key: "markupPercentage",
+      title: "Location",
+      dataIndex: "location",
+      key: "location",
       width: 150,
-      render: (percentage) => (
-        <Tag color="green" style={{ fontSize: 14, padding: "4px 12px" }}>
-          {percentage}%
-        </Tag>
-      ),
     },
     {
-      title: "Status",
-      dataIndex: "isActive",
-      key: "isActive",
+      title: "Markup (%)",
+      dataIndex: "markup",
+      key: "markup",
       width: 100,
-      render: (isActive) => (
-        <Tag color={isActive ? "green" : "red"}>
-          {isActive ? "Active" : "Inactive"}
+      render: (val) => (
+        <Tag color="green" style={{ fontSize: 14, padding: "4px 12px" }}>
+          {val}%
         </Tag>
       ),
     },
     {
-      title: "Applied From",
-      dataIndex: "appliedFrom",
-      key: "appliedFrom",
+      title: "Working Days",
+      dataIndex: "workingDays",
+      key: "workingDays",
       width: 120,
+    },
+    {
+      title: "Working Hours",
+      dataIndex: "workingHours",
+      key: "workingHours",
+      width: 120,
+    },
+    {
+      title: "Currency",
+      dataIndex: "currency",
+      key: "currency",
+      width: 100,
     },
     {
       title: "Action",
@@ -222,7 +253,7 @@ const Settings = () => {
         <Button
           type="link"
           icon={<EditOutlined />}
-          onClick={() => handleEditClientMarkup(record)}
+          onClick={() => handleEditClient(record)}
         >
           Edit
         </Button>
@@ -230,47 +261,47 @@ const Settings = () => {
     },
   ];
 
-  // Partner deduction columns
-  const partnerDeductionColumns = [
-    {
-      title: "Partner ID",
-      dataIndex: "partnerId",
-      key: "partnerId",
-      width: 120,
-    },
+  const partnerColumns = [
     {
       title: "Partner Name",
       dataIndex: "partnerName",
       key: "partnerName",
-      width: 200,
-    },
-    {
-      title: "Deduction Percentage",
-      dataIndex: "deductionPercentage",
-      key: "deductionPercentage",
       width: 180,
-      render: (percentage) => (
-        <Tag color="orange" style={{ fontSize: 14, padding: "4px 12px" }}>
-          {percentage}%
-        </Tag>
-      ),
     },
     {
-      title: "Status",
-      dataIndex: "isActive",
-      key: "isActive",
-      width: 100,
-      render: (isActive) => (
-        <Tag color={isActive ? "green" : "red"}>
-          {isActive ? "Active" : "Inactive"}
-        </Tag>
-      ),
+      title: "Location",
+      dataIndex: "location",
+      key: "location",
+      width: 150,
     },
     {
-      title: "Applied From",
-      dataIndex: "appliedFrom",
-      key: "appliedFrom",
+      title: "Deduction (%)",
+      dataIndex: "deduction",
+      key: "deduction",
       width: 120,
+      render: (val) => (
+        <Tag color="orange" style={{ fontSize: 14, padding: "4px 12px" }}>
+          {val}%
+        </Tag>
+      ),
+    },
+    {
+      title: "Working Days",
+      dataIndex: "workingDays",
+      key: "workingDays",
+      width: 120,
+    },
+    {
+      title: "Working Hours",
+      dataIndex: "workingHours",
+      key: "workingHours",
+      width: 120,
+    },
+    {
+      title: "Currency",
+      dataIndex: "currency",
+      key: "currency",
+      width: 100,
     },
     {
       title: "Action",
@@ -280,7 +311,7 @@ const Settings = () => {
         <Button
           type="link"
           icon={<EditOutlined />}
-          onClick={() => handleEditPartnerDeduction(record)}
+          onClick={() => handleEditPartner(record)}
         >
           Edit
         </Button>
@@ -300,24 +331,35 @@ const Settings = () => {
 
       <TabsContainer>
         <Button
-          className={`tab-button ${activeTab === "Markups" ? "active" : ""}`}
-          onClick={() => setActiveTab("Markups")}
+          className={`tab-button ${activeTab === "Global" ? "active" : ""}`}
+          onClick={() => setActiveTab("Global")}
         >
-          <PercentageOutlined /> Markups & Deductions
+          <GlobalOutlined /> Global Settings
+        </Button>
+        <Button
+          className={`tab-button ${activeTab === "Client" ? "active" : ""}`}
+          onClick={() => setActiveTab("Client")}
+        >
+          <UserOutlined /> Client Specific Configurations
+        </Button>
+        <Button
+          className={`tab-button ${activeTab === "Partner" ? "active" : ""}`}
+          onClick={() => setActiveTab("Partner")}
+        >
+          <TeamOutlined /> Partner Specific Configuration
         </Button>
       </TabsContainer>
 
-      {activeTab === "Markups" && (
+      {activeTab === "Global" && (
         <div>
-          {/* Global Configuration */}
           <ContentSection style={{ marginBottom: 24 }}>
             <SectionHeader>
-              <h3>Global Configuration</h3>
+              <h3>Client Markup / Partner Deductions</h3>
               <Button
                 type="primary"
                 icon={<EditOutlined />}
                 onClick={() => {
-                  form.setFieldsValue(globalConfig);
+                  globalForm.setFieldsValue(globalConfig);
                   setGlobalConfigModalVisible(true);
                 }}
                 style={{ background: "#00d9a9", borderColor: "#00d9a9" }}
@@ -328,10 +370,10 @@ const Settings = () => {
 
             <ConfigCard>
               <ConfigRow>
-                <span className="label">Default Client Markup</span>
+                <span className="label">Client Markup</span>
                 <span className="value">
                   <Tag color="green" style={{ fontSize: 16, padding: "6px 16px" }}>
-                    {globalConfig.defaultClientMarkup}%
+                    {globalConfig.clientMarkup}%
                   </Tag>
                   <span style={{ color: "#666", fontSize: 13 }}>
                     Applied to all clients without specific markup
@@ -339,10 +381,10 @@ const Settings = () => {
                 </span>
               </ConfigRow>
               <ConfigRow>
-                <span className="label">Default Partner Deduction</span>
+                <span className="label">Partner Deduction</span>
                 <span className="value">
                   <Tag color="orange" style={{ fontSize: 16, padding: "6px 16px" }}>
-                    {globalConfig.defaultPartnerDeduction}%
+                    {globalConfig.partnerDeduction}%
                   </Tag>
                   <span style={{ color: "#666", fontSize: 13 }}>
                     Applied to all partners without specific deduction
@@ -352,124 +394,213 @@ const Settings = () => {
             </ConfigCard>
           </ContentSection>
 
-          {/* Client-Specific Markups */}
           <ContentSection style={{ marginBottom: 24 }}>
             <SectionHeader>
-              <h3>Client-Specific Markups</h3>
+              <h3>Working Days and Hours</h3>
             </SectionHeader>
-            <p style={{ color: "#666", marginBottom: 16, fontSize: 14 }}>
-              Configure custom markup percentages for specific clients. If no client-specific
-              markup is set, the default global markup will be applied.
-            </p>
-            <TableContainer>
-              <Table
-                columns={clientMarkupColumns}
-                dataSource={clientMarkups}
-                rowKey="id"
-                pagination={{
-                  pageSize: 5,
-                  showTotal: (total) => `Total ${total} clients`,
-                }}
-              />
-            </TableContainer>
+
+            <ConfigCard>
+              <ConfigRow>
+                <span className="label">Working Days per Month</span>
+                <span className="value">
+                  <Tag color="blue" style={{ fontSize: 16, padding: "6px 16px" }}>
+                    {globalConfig.workingDays} days
+                  </Tag>
+                  <span style={{ color: "#666", fontSize: 13 }}>
+                    Default working days for billing calculations
+                  </span>
+                </span>
+              </ConfigRow>
+              <ConfigRow>
+                <span className="label">Working Hours per Day</span>
+                <span className="value">
+                  <Tag color="blue" style={{ fontSize: 16, padding: "6px 16px" }}>
+                    {globalConfig.workingHours} hours
+                  </Tag>
+                  <span style={{ color: "#666", fontSize: 13 }}>
+                    Default working hours for billing calculations
+                  </span>
+                </span>
+              </ConfigRow>
+            </ConfigCard>
           </ContentSection>
 
-          {/* Partner-Specific Deductions */}
           <ContentSection>
             <SectionHeader>
-              <h3>Partner-Specific Deductions</h3>
+              <h3>Default Currency & Exchange Rate</h3>
+              <Button
+                icon={<SyncOutlined spin={loadingRate} />}
+                onClick={fetchExchangeRate}
+                disabled={loadingRate}
+              >
+                Refresh Rate
+              </Button>
             </SectionHeader>
-            <p style={{ color: "#666", marginBottom: 16, fontSize: 14 }}>
-              Configure custom deduction percentages for specific partners. If no partner-specific
-              deduction is set, the default global deduction will be applied.
-            </p>
-            <TableContainer>
-              <Table
-                columns={partnerDeductionColumns}
-                dataSource={partnerDeductions}
-                rowKey="id"
-                pagination={{
-                  pageSize: 5,
-                  showTotal: (total) => `Total ${total} partners`,
-                }}
-              />
-            </TableContainer>
+
+            <ConfigCard>
+              <ConfigRow>
+                <span className="label">Default Currency</span>
+                <span className="value">
+                  <Tag color="purple" style={{ fontSize: 16, padding: "6px 16px" }}>
+                    {globalConfig.defaultCurrency}
+                  </Tag>
+                  <span style={{ color: "#666", fontSize: 13 }}>
+                    Primary currency for all transactions
+                  </span>
+                </span>
+              </ConfigRow>
+              <ConfigRow>
+                <span className="label">USD to INR Exchange Rate</span>
+                <span className="value">
+                  {loadingRate ? (
+                    <Spin size="small" />
+                  ) : (
+                    <Tag color="cyan" style={{ fontSize: 16, padding: "6px 16px" }}>
+                      1 USD = ₹{exchangeRate || '---'}
+                    </Tag>
+                  )}
+                  <span style={{ color: "#666", fontSize: 13 }}>
+                    {lastUpdated ? `Last updated: ${lastUpdated}` : 'Fetching from Frankfurter API...'}
+                  </span>
+                </span>
+              </ConfigRow>
+            </ConfigCard>
           </ContentSection>
         </div>
       )}
 
-      {/* Global Configuration Modal */}
+      {activeTab === "Client" && (
+        <ContentSection>
+          <SectionHeader>
+            <h3>Client Specific Configurations</h3>
+          </SectionHeader>
+          <p style={{ color: "#666", marginBottom: 16, fontSize: 14 }}>
+            Configure custom settings for specific clients. Values default to global settings if not customized.
+          </p>
+          <TableContainer>
+            <Table
+              columns={clientColumns}
+              dataSource={clientConfigs}
+              rowKey="id"
+              pagination={{
+                pageSize: 10,
+                showTotal: (total) => `Total ${total} clients`,
+              }}
+            />
+          </TableContainer>
+        </ContentSection>
+      )}
+
+      {activeTab === "Partner" && (
+        <ContentSection>
+          <SectionHeader>
+            <h3>Partner Specific Configuration</h3>
+          </SectionHeader>
+          <p style={{ color: "#666", marginBottom: 16, fontSize: 14 }}>
+            Configure custom settings for specific partners. Values default to global settings if not customized.
+          </p>
+          <TableContainer>
+            <Table
+              columns={partnerColumns}
+              dataSource={partnerConfigs}
+              rowKey="id"
+              pagination={{
+                pageSize: 10,
+                showTotal: (total) => `Total ${total} partners`,
+              }}
+            />
+          </TableContainer>
+        </ContentSection>
+      )}
+
       <Modal
         title="Update Global Configuration"
         open={globalConfigModalVisible}
         onOk={handleUpdateGlobalConfig}
         onCancel={() => {
           setGlobalConfigModalVisible(false);
-          form.resetFields();
+          globalForm.resetFields();
         }}
         width={600}
         okText="Update"
         okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
       >
-        <Form form={form} layout="vertical" style={{ marginTop: 16 }}>
+        <Form form={globalForm} layout="vertical" style={{ marginTop: 16 }}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="clientMarkup"
+                label="Client Markup (%)"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  min={0}
+                  max={100}
+                  formatter={(value) => `${value}%`}
+                  parser={(value) => value.replace("%", "")}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="partnerDeduction"
+                label="Partner Deduction (%)"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <InputNumber
+                  style={{ width: "100%" }}
+                  min={0}
+                  max={100}
+                  formatter={(value) => `${value}%`}
+                  parser={(value) => value.replace("%", "")}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="workingDays"
+                label="Working Days per Month"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <InputNumber style={{ width: "100%" }} min={1} max={31} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="workingHours"
+                label="Working Hours per Day"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <InputNumber style={{ width: "100%" }} min={1} max={24} />
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item
-            name="defaultClientMarkup"
-            label="Default Client Markup (%)"
-            rules={[
-              { required: true, message: "Please enter default client markup" },
-              {
-                type: "number",
-                min: 0,
-                max: 100,
-                message: "Markup must be between 0 and 100",
-              },
-            ]}
+            name="defaultCurrency"
+            label="Default Currency"
+            rules={[{ required: true, message: "Required" }]}
           >
-            <InputNumber
-              style={{ width: "100%" }}
-              placeholder="Enter markup percentage"
-              min={0}
-              max={100}
-              precision={2}
-              formatter={(value) => (value ? `${value}%` : "")}
-              parser={(value) => (value ? value.replace("%", "") : "")}
-            />
-          </Form.Item>
-          <Form.Item
-            name="defaultPartnerDeduction"
-            label="Default Partner Deduction (%)"
-            rules={[
-              { required: true, message: "Please enter default partner deduction" },
-              {
-                type: "number",
-                min: 0,
-                max: 100,
-                message: "Deduction must be between 0 and 100",
-              },
-            ]}
-          >
-            <InputNumber
-              style={{ width: "100%" }}
-              placeholder="Enter deduction percentage"
-              min={0}
-              max={100}
-              precision={2}
-              formatter={(value) => (value ? `${value}%` : "")}
-              parser={(value) => (value ? value.replace("%", "") : "")}
-            />
+            <Select placeholder="Select currency">
+              <Option value="USD">USD - US Dollar</Option>
+              <Option value="INR">INR - Indian Rupee</Option>
+              <Option value="EUR">EUR - Euro</Option>
+              <Option value="GBP">GBP - British Pound</Option>
+            </Select>
           </Form.Item>
         </Form>
       </Modal>
 
-      {/* Client Markup Modal */}
       <Modal
-        title={`Edit Markup - ${selectedClient?.clientName || ""}`}
-        open={clientMarkupModalVisible}
-        onOk={handleUpdateClientMarkup}
+        title={`Edit Configuration - ${selectedClient?.clientName || ""}`}
+        open={clientEditModalVisible}
+        onOk={handleUpdateClient}
         onCancel={() => {
-          setClientMarkupModalVisible(false);
+          setClientEditModalVisible(false);
           setSelectedClient(null);
-          form.resetFields();
+          clientForm.resetFields();
         }}
         width={500}
         okText="Update"
@@ -477,65 +608,59 @@ const Settings = () => {
       >
         {selectedClient && (
           <div>
-            <div
-              style={{
-                marginBottom: 16,
-                padding: 12,
-                background: "#f8f9fd",
-                borderRadius: 6,
-              }}
-            >
-              <div>
-                <strong>Client ID:</strong> {selectedClient.clientId}
-              </div>
-              <div>
-                <strong>Client Name:</strong> {selectedClient.clientName}
-              </div>
+            <div style={{ marginBottom: 16, padding: 12, background: "#f8f9fd", borderRadius: 6 }}>
+              <div><strong>Client:</strong> {selectedClient.clientName}</div>
+              <div><strong>Location:</strong> {selectedClient.location}</div>
             </div>
-            <Form form={form} layout="vertical">
-              <Form.Item
-                name="markupPercentage"
-                label="Markup Percentage (%)"
-                rules={[
-                  { required: true, message: "Please enter markup percentage" },
-                  {
-                    type: "number",
-                    min: 0,
-                    max: 100,
-                    message: "Markup must be between 0 and 100",
-                  },
-                ]}
-              >
-                <InputNumber
-                  style={{ width: "100%" }}
-                  placeholder="Enter markup percentage"
-                  min={0}
-                  max={100}
-                  precision={2}
-                  formatter={(value) => `${value}%`}
-                  parser={(value) => value.replace("%", "")}
-                />
-              </Form.Item>
-              <Form.Item name="isActive" label="Status" valuePropName="checked">
-                <Switch
-                  checkedChildren="Active"
-                  unCheckedChildren="Inactive"
-                />
-              </Form.Item>
+            <Form form={clientForm} layout="vertical">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item name="markup" label="Markup (%)">
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      min={0}
+                      max={100}
+                      formatter={(value) => `${value}%`}
+                      parser={(value) => value.replace("%", "")}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item name="currency" label="Currency">
+                    <Select>
+                      <Option value="USD">USD</Option>
+                      <Option value="INR">INR</Option>
+                      <Option value="EUR">EUR</Option>
+                      <Option value="GBP">GBP</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item name="workingDays" label="Working Days">
+                    <InputNumber style={{ width: "100%" }} min={1} max={31} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item name="workingHours" label="Working Hours">
+                    <InputNumber style={{ width: "100%" }} min={1} max={24} />
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form>
           </div>
         )}
       </Modal>
 
-      {/* Partner Deduction Modal */}
       <Modal
-        title={`Edit Deduction - ${selectedPartner?.partnerName || ""}`}
-        open={partnerDeductionModalVisible}
-        onOk={handleUpdatePartnerDeduction}
+        title={`Edit Configuration - ${selectedPartner?.partnerName || ""}`}
+        open={partnerEditModalVisible}
+        onOk={handleUpdatePartner}
         onCancel={() => {
-          setPartnerDeductionModalVisible(false);
+          setPartnerEditModalVisible(false);
           setSelectedPartner(null);
-          form.resetFields();
+          partnerForm.resetFields();
         }}
         width={500}
         okText="Update"
@@ -543,51 +668,46 @@ const Settings = () => {
       >
         {selectedPartner && (
           <div>
-            <div
-              style={{
-                marginBottom: 16,
-                padding: 12,
-                background: "#f8f9fd",
-                borderRadius: 6,
-              }}
-            >
-              <div>
-                <strong>Partner ID:</strong> {selectedPartner.partnerId}
-              </div>
-              <div>
-                <strong>Partner Name:</strong> {selectedPartner.partnerName}
-              </div>
+            <div style={{ marginBottom: 16, padding: 12, background: "#f8f9fd", borderRadius: 6 }}>
+              <div><strong>Partner:</strong> {selectedPartner.partnerName}</div>
+              <div><strong>Location:</strong> {selectedPartner.location}</div>
             </div>
-            <Form form={form} layout="vertical">
-              <Form.Item
-                name="deductionPercentage"
-                label="Deduction Percentage (%)"
-                rules={[
-                  { required: true, message: "Please enter deduction percentage" },
-                  {
-                    type: "number",
-                    min: 0,
-                    max: 100,
-                    message: "Deduction must be between 0 and 100",
-                  },
-                ]}
-              >
-                <InputNumber
-                  style={{ width: "100%" }}
-                  placeholder="Enter deduction percentage"
-                  min={0}
-                  max={100}
-                  precision={2}
-                  formatter={(value) => `${value}%`}
-                  parser={(value) => value.replace("%", "")}
-                />
-              </Form.Item>
-              <Form.Item name="isActive" label="Status" valuePropName="checked">
-                <Switch
-                  checkedChildren="Active"
-                  unCheckedChildren="Inactive"
-                />
-              </Form.Item>
+            <Form form={partnerForm} layout="vertical">
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item name="deduction" label="Deduction (%)">
+                    <InputNumber
+                      style={{ width: "100%" }}
+                      min={0}
+                      max={100}
+                      formatter={(value) => `${value}%`}
+                      parser={(value) => value.replace("%", "")}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item name="currency" label="Currency">
+                    <Select>
+                      <Option value="USD">USD</Option>
+                      <Option value="INR">INR</Option>
+                      <Option value="EUR">EUR</Option>
+                      <Option value="GBP">GBP</Option>
+                    </Select>
+                  </Form.Item>
+                </Col>
+              </Row>
+              <Row gutter={16}>
+                <Col span={12}>
+                  <Form.Item name="workingDays" label="Working Days">
+                    <InputNumber style={{ width: "100%" }} min={1} max={31} />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item name="workingHours" label="Working Hours">
+                    <InputNumber style={{ width: "100%" }} min={1} max={24} />
+                  </Form.Item>
+                </Col>
+              </Row>
             </Form>
           </div>
         )}

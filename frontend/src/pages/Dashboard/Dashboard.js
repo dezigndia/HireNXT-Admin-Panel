@@ -21,7 +21,7 @@ import { Breadcrumb, Button, Layout, Menu, theme, Dropdown, Space, Avatar } from
 import { DashboardWrapper } from "./Dashboard.style";
 // @ts-ignore
 import Logo from "./../../assets/logo.svg";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import Overview from "./Overview/Overview";
 import RolePermission from "./RolePermission/RolePermission";
 import UserManagement from "./UserManagement/UserManagement";
@@ -98,6 +98,23 @@ const sideBarMenu2 = [
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const getSelectedKey = () => {
+    const path = location.pathname;
+    if (path === "/home" || path === "/home/") return "/home";
+    if (path.startsWith("/home/role-permission")) return "/home/role-permission";
+    if (path.startsWith("/home/user-management")) return "/home/user-management";
+    if (path.startsWith("/home/talent-profiles")) return "/home/talent-profiles";
+    if (path.startsWith("/home/job-requirments")) return "/home/job-requirments";
+    if (path.startsWith("/home/talents-hired")) return "/home/talents-hired";
+    if (path.startsWith("/home/timesheet")) return "/home/timesheet";
+    if (path.startsWith("/home/finance")) return "/home/finance";
+    if (path.startsWith("/home/approval-process")) return "/home/approval-process";
+    if (path.startsWith("/home/settings")) return "/home/settings";
+    if (path.startsWith("/home/account")) return "";
+    return "/home";
+  };
 
   const handleClick = (e) => {
     if (e.key === "/logout") {
@@ -181,8 +198,7 @@ const Dashboard = () => {
           >
             <Menu
               mode="inline"
-              defaultSelectedKeys={["1"]}
-              defaultOpenKeys={["sub1"]}
+              selectedKeys={[getSelectedKey()]}
               style={{
                 borderRight: 0,
               }}
@@ -192,6 +208,7 @@ const Dashboard = () => {
 
             <Menu
               mode="inline"
+              selectedKeys={[getSelectedKey()]}
               style={{
                 borderRight: 0,
               }}
