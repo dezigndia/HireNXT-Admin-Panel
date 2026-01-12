@@ -255,6 +255,50 @@ export const PostJobWrapper = styled.div`
       }
     }
 
+    .three-skill-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+
+      .skill-item {
+        display: flex;
+        gap: 8px;
+
+        .ant-form-item {
+          margin-bottom: 0;
+        }
+
+        > .ant-form-item:first-child {
+          flex: 1;
+        }
+
+        > .ant-form-item:last-child {
+          width: 130px;
+          flex-shrink: 0;
+        }
+      }
+
+      @media (max-width: 1200px) {
+        grid-template-columns: 1fr;
+        
+        .skill-item {
+          > .ant-form-item:last-child {
+            width: 180px;
+          }
+        }
+      }
+    }
+
+    .ant-select-multiple .ant-select-selector {
+      min-height: 60px !important;
+      height: auto !important;
+      padding: 4px 8px !important;
+    }
+
+    .ant-select-multiple .ant-select-selection-overflow {
+      flex-wrap: wrap;
+    }
+
     .two-column-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
