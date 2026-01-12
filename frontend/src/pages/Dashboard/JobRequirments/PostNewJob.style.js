@@ -6,8 +6,8 @@ export const PostNewJobWrapper = styled.div`
 
   .post-job-header {
     h2 {
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 24px;
+      font-weight: 600;
       color: #014c75;
       margin: 0;
     }

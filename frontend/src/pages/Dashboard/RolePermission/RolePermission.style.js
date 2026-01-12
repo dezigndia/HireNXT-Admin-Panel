@@ -6,10 +6,10 @@ export const RolePermissionWrapper = styled.div`
   min-height: 100vh;
 
   .title-header {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: #014c75;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .permission-label {

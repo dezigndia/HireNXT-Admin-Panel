@@ -5,8 +5,10 @@ export const OverviewWrapper = styled.div`
   background-color: #f8f9fd;
 
   .page-title {
+    font-size: 24px;
+    font-weight: 600;
     color: #014c75;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
   .approval-item {

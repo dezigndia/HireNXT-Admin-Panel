@@ -6,10 +6,10 @@ export const AddHiringRecordWrapper = styled.div`
   min-height: 100vh;
 
   .page-header {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 
     h1 {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 600;
       color: #014c75;
       margin: 0;

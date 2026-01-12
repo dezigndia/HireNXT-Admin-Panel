@@ -22,7 +22,7 @@ import {
   MoreOutlined,
   FilterOutlined,
 } from "@ant-design/icons";
-import { UserManagementWrapper } from "../UserManagement/UserManagement.style";
+import { ApprovalProcessWrapper } from "./ApprovalProcess.style";
 import MaskGroup from "../../../assets/Mask-Group.svg";
 import TimesheetDetailsModal from "../Timesheet/TimesheetDetailsModal";
 
@@ -921,9 +921,9 @@ Submitted On: ${record.submittedOn}
   };
 
   return (
-    <UserManagementWrapper>
-      <div style={{ padding: "20px" }}>
-        <h2 className="title-header">Approval Process</h2>
+    <ApprovalProcessWrapper>
+      <div className="approval-container">
+        <h2 style={{ fontSize: 24, fontWeight: 600, color: "#014c75", marginBottom: 24 }}>Approval Process</h2>
 
         {/* Tabs Section */}
         <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
@@ -1253,7 +1253,7 @@ Submitted On: ${record.submittedOn}
           }}
         />
       </div>
-    </UserManagementWrapper>
+    </ApprovalProcessWrapper>
   );
 };
 
