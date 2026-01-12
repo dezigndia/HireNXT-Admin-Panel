@@ -50,7 +50,7 @@ const Settings = () => {
     partnerDeduction: 10,
     workingDays: 22,
     workingHours: 8,
-    defaultCurrency: "USD",
+    defaultCurrency: "INR",
     paidLeave: 1,
   });
 
@@ -76,7 +76,7 @@ const Settings = () => {
       markup: 15,
       workingDays: 22,
       workingHours: 8,
-      currency: "USD",
+      currency: "INR",
       paidLeave: 1,
     },
     {
@@ -87,7 +87,7 @@ const Settings = () => {
       markup: 15,
       workingDays: 22,
       workingHours: 8,
-      currency: "USD",
+      currency: "INR",
       paidLeave: 1,
     },
     {
@@ -98,7 +98,7 @@ const Settings = () => {
       markup: 15,
       workingDays: 22,
       workingHours: 8,
-      currency: "USD",
+      currency: "INR",
       paidLeave: 1,
     },
   ]);
@@ -112,7 +112,7 @@ const Settings = () => {
       deduction: 10,
       workingDays: 22,
       workingHours: 8,
-      currency: "USD",
+      currency: "INR",
     },
     {
       id: 2,
@@ -122,7 +122,7 @@ const Settings = () => {
       deduction: 10,
       workingDays: 22,
       workingHours: 8,
-      currency: "USD",
+      currency: "INR",
     },
     {
       id: 3,
@@ -132,7 +132,7 @@ const Settings = () => {
       deduction: 10,
       workingDays: 22,
       workingHours: 8,
-      currency: "USD",
+      currency: "INR",
     },
   ]);
 
