@@ -78,15 +78,17 @@ const JobResponsibilities = ({ initialData, onBack, onSubmit }) => {
         </div>
       </Form.Item>
 
-      <div className="form-actions">
+      <div className="form-actions" style={{ justifyContent: "space-between" }}>
+        <div style={{ display: "flex", gap: 12 }}>
+          <Button onClick={onBack}>
+            Back
+          </Button>
+          <Button type="primary" htmlType="button" onClick={handleSubmit}>
+            Post Job
+          </Button>
+        </div>
         <Button onClick={handleCancel}>
           Cancel
-        </Button>
-        <Button onClick={onBack}>
-          Back
-        </Button>
-        <Button type="primary" htmlType="button" onClick={handleSubmit}>
-          Post Job
         </Button>
       </div>
     </Form>

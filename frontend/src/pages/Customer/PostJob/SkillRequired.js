@@ -1,13 +1,37 @@
 import React from "react";
-import { Form, Select, Button } from "antd";
+import { Form, Select, Button, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
 const SkillRequired = ({ initialData, onNext }) => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const handleSubmit = (values) => {
     onNext(values);
+  };
+
+  const handleCancel = () => {
+    Modal.confirm({
+      title: "Cancel Job Posting",
+      icon: <ExclamationCircleOutlined style={{ color: "#faad14" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to cancel?</p>
+          <p style={{ color: "#666", fontSize: 13 }}>
+            All unsaved changes will be lost.
+          </p>
+        </div>
+      ),
+      okText: "Yes, Cancel",
+      okButtonProps: { danger: true },
+      cancelText: "Continue Editing",
+      onOk: () => {
+        navigate("/customer/my-jobs");
+      },
+    });
   };
 
   const roleOptions = [
@@ -172,9 +196,12 @@ const SkillRequired = ({ initialData, onNext }) => {
         </Select>
       </Form.Item>
 
-      <div className="form-actions">
+      <div className="form-actions" style={{ justifyContent: "space-between" }}>
         <Button type="primary" htmlType="submit">
           Save & Next
+        </Button>
+        <Button onClick={handleCancel}>
+          Cancel
         </Button>
       </div>
     </Form>
