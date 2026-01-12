@@ -31,7 +31,7 @@ import AdminTalentDetails from "./TalentProfiles/TalentDetails/TalentDetails";
 import TalentDocuments from "./TalentProfiles/TalentDocuments/TalentDocuments";
 import JobRequirments from "./JobRequirments/JobRequirments";
 import PostNewJob from "./JobRequirments/PostNewJob";
-import AdminJobDetails from "./JobRequirments/JobDetails";
+import AdminJobDetails, { AdminJobHiredTalents } from "./JobRequirments/JobDetails";
 import ApprovalProcess from "./ApprovalProcess/ApprovalProcess";
 import TalentsHired from "./TalentsHired/TalentsHired";
 import AddHiringRecord from "./TalentsHired/AddHiringRecord/AddHiringRecord";
@@ -248,6 +248,10 @@ const Dashboard = () => {
               <Route
                 path="/job-requirments/job-details/:jobId"
                 element={<AdminJobDetails />}
+              />
+              <Route
+                path="/job-requirments/hired-talents/:jobId"
+                element={<AdminJobHiredTalents />}
               />
               <Route path="/talents-hired" element={<TalentsHired />} />
               <Route

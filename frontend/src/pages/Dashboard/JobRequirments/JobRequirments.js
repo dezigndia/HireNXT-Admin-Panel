@@ -422,7 +422,7 @@ const JobRequirments = () => {
             type="primary" 
             size="small"
             style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
-            onClick={() => navigate(`/home/talents-hired?jobId=${record.id}`)}
+            onClick={() => navigate(`/home/job-requirments/hired-talents/${record.id}`)}
           >
             View Hired
           </Button>
