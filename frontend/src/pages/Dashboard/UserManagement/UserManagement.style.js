@@ -6,13 +6,10 @@ export const UserManagementWrapper = styled.div`
   min-height: 100vh;
 
   .title-header {
-    font-family: Quicksand;
+    font-size: 24px;
     font-weight: 600;
-    font-size: 28px;
-    line-height: 37.5px;
-    letter-spacing: 0%;
     color: #014c75;
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .ant-table-thead .ant-table-cell {
