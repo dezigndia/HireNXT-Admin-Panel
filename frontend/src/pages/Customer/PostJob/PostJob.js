@@ -14,11 +14,7 @@ const mockJobData = {
   "2930493": {
     role: "SAP Hana Developer",
     experienceRange: "5-6 Years",
-    primarySkills: [
-      { skill: "SAP HANA", level: "Expert" },
-      { skill: "SQL", level: "Advanced" },
-      { skill: "Data Modeling", level: "Expert" },
-    ],
+    primarySkills: ["SAP HANA", "SQL", "Data Modeling"],
     secondarySkills: [
       { skill: "Python", level: "Intermediate" },
     ],
@@ -42,11 +38,7 @@ const mockJobData = {
   "2930494": {
     role: "React Frontend Developer",
     experienceRange: "3-5 Years",
-    primarySkills: [
-      { skill: "React", level: "Expert" },
-      { skill: "TypeScript", level: "Advanced" },
-      { skill: "Redux", level: "Expert" },
-    ],
+    primarySkills: ["React", "TypeScript", "Redux"],
     secondarySkills: [
       { skill: "Node.js", level: "Intermediate" },
     ],
@@ -70,11 +62,7 @@ const mockJobData = {
   "2930495": {
     role: "DevOps Engineer",
     experienceRange: "4-7 Years",
-    primarySkills: [
-      { skill: "Docker", level: "Expert" },
-      { skill: "Kubernetes", level: "Advanced" },
-      { skill: "AWS", level: "Expert" },
-    ],
+    primarySkills: ["Docker", "Kubernetes", "AWS"],
     secondarySkills: [
       { skill: "Terraform", level: "Advanced" },
     ],
@@ -98,11 +86,7 @@ const mockJobData = {
   "2930496": {
     role: "Python Backend Developer",
     experienceRange: "2-4 Years",
-    primarySkills: [
-      { skill: "Python", level: "Expert" },
-      { skill: "Django", level: "Advanced" },
-      { skill: "PostgreSQL", level: "Advanced" },
-    ],
+    primarySkills: ["Python", "Django", "PostgreSQL"],
     secondarySkills: [
       { skill: "Redis", level: "Intermediate" },
     ],

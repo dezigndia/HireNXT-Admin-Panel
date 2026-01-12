@@ -65,7 +65,6 @@ const SkillRequired = ({ initialData, onNext }) => {
     "Scrum",
   ];
 
-  const expertiseLevels = ["Advanced", "Intermediate"];
 
   return (
     <Form
@@ -113,79 +112,42 @@ const SkillRequired = ({ initialData, onNext }) => {
       </div>
 
       <Form.Item label="Primary Skills" required>
-        <div className="three-skill-row">
-          <div className="skill-item">
-            <Form.Item
-              name={["primarySkills", 0, "skill"]}
-              rules={[
-                { required: true, message: "Please select primary skill 1" },
-              ]}
-              noStyle
-            >
-              <Select placeholder="Select primary skill : 1" showSearch>
-                {skillOptions.map((skill) => (
-                  <Option key={skill} value={skill}>
-                    {skill}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name={["primarySkills", 0, "level"]}
-              rules={[{ required: true, message: "Select level" }]}
-              noStyle
-            >
-              <Select placeholder="Advanced">
-                {expertiseLevels.map((level) => (
-                  <Option key={level} value={level}>
-                    {level}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
+        <div className="three-skill-row-simple">
+          <Form.Item
+            name={["primarySkills", 0]}
+            rules={[
+              { required: true, message: "Please select primary skill 1" },
+            ]}
+            noStyle
+          >
+            <Select placeholder="Select primary skill : 1" showSearch>
+              {skillOptions.map((skill) => (
+                <Option key={skill} value={skill}>
+                  {skill}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-          <div className="skill-item">
-            <Form.Item name={["primarySkills", 1, "skill"]} noStyle>
-              <Select placeholder="Select primary skill : 2" showSearch>
-                {skillOptions.map((skill) => (
-                  <Option key={skill} value={skill}>
-                    {skill}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item name={["primarySkills", 1, "level"]} noStyle>
-              <Select placeholder="Advanced">
-                {expertiseLevels.map((level) => (
-                  <Option key={level} value={level}>
-                    {level}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
+          <Form.Item name={["primarySkills", 1]} noStyle>
+            <Select placeholder="Select primary skill : 2" showSearch>
+              {skillOptions.map((skill) => (
+                <Option key={skill} value={skill}>
+                  {skill}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
 
-          <div className="skill-item">
-            <Form.Item name={["primarySkills", 2, "skill"]} noStyle>
-              <Select placeholder="Select primary skill : 3" showSearch>
-                {skillOptions.map((skill) => (
-                  <Option key={skill} value={skill}>
-                    {skill}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-            <Form.Item name={["primarySkills", 2, "level"]} noStyle>
-              <Select placeholder="Advanced">
-                {expertiseLevels.map((level) => (
-                  <Option key={level} value={level}>
-                    {level}
-                  </Option>
-                ))}
-              </Select>
-            </Form.Item>
-          </div>
+          <Form.Item name={["primarySkills", 2]} noStyle>
+            <Select placeholder="Select primary skill : 3" showSearch>
+              {skillOptions.map((skill) => (
+                <Option key={skill} value={skill}>
+                  {skill}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
         </div>
       </Form.Item>
 
