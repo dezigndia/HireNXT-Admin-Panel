@@ -233,12 +233,6 @@ const PostJob = () => {
             </span>
           )}
         </div>
-        <Button 
-          className="cancel-btn"
-          onClick={handleCancel}
-        >
-          Cancel
-        </Button>
       </div>
 
       <div className="steps-container">
