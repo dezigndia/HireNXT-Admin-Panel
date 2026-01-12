@@ -11,6 +11,8 @@ import {
   Row,
   Col,
   Spin,
+  Input,
+  Switch,
 } from "antd";
 import {
   EditOutlined,
@@ -19,6 +21,7 @@ import {
   TeamOutlined,
   UserOutlined,
   SyncOutlined,
+  MailOutlined,
 } from "@ant-design/icons";
 import {
   SettingsContainer,
@@ -48,7 +51,21 @@ const Settings = () => {
     workingDays: 22,
     workingHours: 8,
     defaultCurrency: "USD",
+    paidLeave: 1,
   });
+
+  const [emailSettings, setEmailSettings] = useState({
+    smtpHost: "smtp.hirenxt.com",
+    smtpPort: 587,
+    senderEmail: "notifications@hirenxt.com",
+    senderName: "HireNXT Notifications",
+    interviewSchedulingEnabled: true,
+    hiringAlertEnabled: true,
+    jobAlertEnabled: true,
+  });
+
+  const [emailForm] = Form.useForm();
+  const [emailSettingsModalVisible, setEmailSettingsModalVisible] = useState(false);
 
   const [clientConfigs, setClientConfigs] = useState([
     {
@@ -60,6 +77,7 @@ const Settings = () => {
       workingDays: 22,
       workingHours: 8,
       currency: "USD",
+      paidLeave: 1,
     },
     {
       id: 2,
@@ -70,6 +88,7 @@ const Settings = () => {
       workingDays: 22,
       workingHours: 8,
       currency: "USD",
+      paidLeave: 1,
     },
     {
       id: 3,
@@ -80,6 +99,7 @@ const Settings = () => {
       workingDays: 22,
       workingHours: 8,
       currency: "USD",
+      paidLeave: 1,
     },
   ]);
 
@@ -158,6 +178,7 @@ const Settings = () => {
       workingDays: record.workingDays,
       workingHours: record.workingHours,
       currency: record.currency,
+      paidLeave: record.paidLeave,
     });
     setClientEditModalVisible(true);
   };
@@ -203,6 +224,14 @@ const Settings = () => {
     });
   };
 
+  const handleUpdateEmailSettings = () => {
+    emailForm.validateFields().then((values) => {
+      setEmailSettings(values);
+      setEmailSettingsModalVisible(false);
+      message.success("Email settings updated successfully");
+    });
+  };
+
   const clientColumns = [
     {
       title: "Client Name",
@@ -244,6 +273,17 @@ const Settings = () => {
       dataIndex: "currency",
       key: "currency",
       width: 100,
+    },
+    {
+      title: "Paid Leave",
+      dataIndex: "paidLeave",
+      key: "paidLeave",
+      width: 100,
+      render: (val) => (
+        <Tag color="blue" style={{ fontSize: 14, padding: "4px 12px" }}>
+          {val}/month
+        </Tag>
+      ),
     },
     {
       title: "Action",
@@ -466,6 +506,86 @@ const Settings = () => {
               </ConfigRow>
             </ConfigCard>
           </ContentSection>
+
+          <ContentSection style={{ marginBottom: 24 }}>
+            <SectionHeader>
+              <h3>Paid Leave</h3>
+            </SectionHeader>
+
+            <ConfigCard>
+              <ConfigRow>
+                <span className="label">Paid Leave per Month</span>
+                <span className="value">
+                  <Tag color="magenta" style={{ fontSize: 16, padding: "6px 16px" }}>
+                    {globalConfig.paidLeave} day(s)
+                  </Tag>
+                  <span style={{ color: "#666", fontSize: 13 }}>
+                    Default paid leave days per month for billing calculations
+                  </span>
+                </span>
+              </ConfigRow>
+            </ConfigCard>
+          </ContentSection>
+
+          <ContentSection>
+            <SectionHeader>
+              <h3>Email Settings</h3>
+              <Button
+                type="primary"
+                icon={<MailOutlined />}
+                onClick={() => {
+                  emailForm.setFieldsValue(emailSettings);
+                  setEmailSettingsModalVisible(true);
+                }}
+                style={{ background: "#00d9a9", borderColor: "#00d9a9" }}
+              >
+                Configure Email
+              </Button>
+            </SectionHeader>
+            <p style={{ color: "#666", marginBottom: 16, fontSize: 14 }}>
+              Configure email notifications for the HireNXT team. This does not apply to Client or Partner communications.
+            </p>
+
+            <ConfigCard>
+              <ConfigRow>
+                <span className="label">SMTP Server</span>
+                <span className="value">
+                  <Tag color="geekblue" style={{ fontSize: 16, padding: "6px 16px" }}>
+                    {emailSettings.smtpHost}:{emailSettings.smtpPort}
+                  </Tag>
+                  <span style={{ color: "#666", fontSize: 13 }}>
+                    Mail server configuration
+                  </span>
+                </span>
+              </ConfigRow>
+              <ConfigRow>
+                <span className="label">Sender Email</span>
+                <span className="value">
+                  <Tag color="geekblue" style={{ fontSize: 16, padding: "6px 16px" }}>
+                    {emailSettings.senderEmail}
+                  </Tag>
+                  <span style={{ color: "#666", fontSize: 13 }}>
+                    {emailSettings.senderName}
+                  </span>
+                </span>
+              </ConfigRow>
+            </ConfigCard>
+
+            <div style={{ marginTop: 16 }}>
+              <h4 style={{ color: "#014c75", marginBottom: 12 }}>Notification Types</h4>
+              <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+                <Tag color={emailSettings.interviewSchedulingEnabled ? "green" : "default"} style={{ padding: "6px 12px" }}>
+                  {emailSettings.interviewSchedulingEnabled ? "✓" : "✗"} Interview Scheduling Alerts
+                </Tag>
+                <Tag color={emailSettings.hiringAlertEnabled ? "green" : "default"} style={{ padding: "6px 12px" }}>
+                  {emailSettings.hiringAlertEnabled ? "✓" : "✗"} Hiring Alerts
+                </Tag>
+                <Tag color={emailSettings.jobAlertEnabled ? "green" : "default"} style={{ padding: "6px 12px" }}>
+                  {emailSettings.jobAlertEnabled ? "✓" : "✗"} Job Related Alerts
+                </Tag>
+              </div>
+            </div>
+          </ContentSection>
         </div>
       )}
 
@@ -578,18 +698,31 @@ const Settings = () => {
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item
-            name="defaultCurrency"
-            label="Default Currency"
-            rules={[{ required: true, message: "Required" }]}
-          >
-            <Select placeholder="Select currency">
-              <Option value="USD">USD - US Dollar</Option>
-              <Option value="INR">INR - Indian Rupee</Option>
-              <Option value="EUR">EUR - Euro</Option>
-              <Option value="GBP">GBP - British Pound</Option>
-            </Select>
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="defaultCurrency"
+                label="Default Currency"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <Select placeholder="Select currency">
+                  <Option value="USD">USD - US Dollar</Option>
+                  <Option value="INR">INR - Indian Rupee</Option>
+                  <Option value="EUR">EUR - Euro</Option>
+                  <Option value="GBP">GBP - British Pound</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="paidLeave"
+                label="Paid Leave per Month"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <InputNumber style={{ width: "100%" }} min={0} max={31} />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
 
@@ -648,6 +781,9 @@ const Settings = () => {
                   </Form.Item>
                 </Col>
               </Row>
+              <Form.Item name="paidLeave" label="Paid Leave per Month">
+                <InputNumber style={{ width: "100%" }} min={0} max={31} />
+              </Form.Item>
             </Form>
           </div>
         )}
@@ -711,6 +847,97 @@ const Settings = () => {
             </Form>
           </div>
         )}
+      </Modal>
+
+      <Modal
+        title="Email Settings Configuration"
+        open={emailSettingsModalVisible}
+        onOk={handleUpdateEmailSettings}
+        onCancel={() => {
+          setEmailSettingsModalVisible(false);
+          emailForm.resetFields();
+        }}
+        width={600}
+        okText="Update"
+        okButtonProps={{ style: { background: "#00d9a9", borderColor: "#00d9a9" } }}
+      >
+        <Form form={emailForm} layout="vertical" style={{ marginTop: 16 }}>
+          <p style={{ color: "#666", marginBottom: 16, fontSize: 13 }}>
+            Configure email settings for HireNXT team notifications. These notifications are used for internal alerts only.
+          </p>
+          <Row gutter={16}>
+            <Col span={16}>
+              <Form.Item
+                name="smtpHost"
+                label="SMTP Host"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <Input placeholder="smtp.example.com" />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                name="smtpPort"
+                label="SMTP Port"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <InputNumber style={{ width: "100%" }} min={1} max={65535} />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="senderEmail"
+                label="Sender Email"
+                rules={[{ required: true, message: "Required" }, { type: "email", message: "Invalid email" }]}
+              >
+                <Input placeholder="notifications@hirenxt.com" />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="senderName"
+                label="Sender Name"
+                rules={[{ required: true, message: "Required" }]}
+              >
+                <Input placeholder="HireNXT Notifications" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <div style={{ marginTop: 8, marginBottom: 8 }}>
+            <h4 style={{ color: "#014c75", marginBottom: 12 }}>Notification Types</h4>
+          </div>
+          <Row gutter={16}>
+            <Col span={8}>
+              <Form.Item
+                name="interviewSchedulingEnabled"
+                label="Interview Scheduling"
+                valuePropName="checked"
+              >
+                <Switch checkedChildren="ON" unCheckedChildren="OFF" />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                name="hiringAlertEnabled"
+                label="Hiring Alerts"
+                valuePropName="checked"
+              >
+                <Switch checkedChildren="ON" unCheckedChildren="OFF" />
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item
+                name="jobAlertEnabled"
+                label="Job Alerts"
+                valuePropName="checked"
+              >
+                <Switch checkedChildren="ON" unCheckedChildren="OFF" />
+              </Form.Item>
+            </Col>
+          </Row>
+        </Form>
       </Modal>
     </SettingsContainer>
   );
