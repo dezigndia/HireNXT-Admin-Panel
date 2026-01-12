@@ -416,12 +416,13 @@ const JobRequirments = () => {
     {
       title: "Action",
       key: "action",
-      render: () => (
+      render: (_, record) => (
         <Tooltip title="View Hired Talents">
           <Button 
             type="primary" 
             size="small"
             style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
+            onClick={() => navigate(`/home/talents-hired?jobId=${record.id}`)}
           >
             View Hired
           </Button>

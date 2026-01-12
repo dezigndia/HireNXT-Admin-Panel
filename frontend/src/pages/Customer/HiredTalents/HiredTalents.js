@@ -18,6 +18,7 @@ const HiredTalents = () => {
   const mockHiredTalents = [
     {
       id: 1,
+      jobId: "JOB001",
       name: "Gaurav Ambekar",
       email: "aditya.k@designindia.com",
       onboardingDate: "2024-01-12",
@@ -30,6 +31,7 @@ const HiredTalents = () => {
     },
     {
       id: 2,
+      jobId: "JOB002",
       name: "Priya Sharma",
       email: "priya.sharma@techsolutions.com",
       onboardingDate: "2023-06-15",
@@ -42,6 +44,7 @@ const HiredTalents = () => {
     },
     {
       id: 3,
+      jobId: "JOB001",
       name: "Rahul Verma",
       email: "rahul.v@innovations.com",
       onboardingDate: "2024-03-20",
@@ -54,6 +57,7 @@ const HiredTalents = () => {
     },
     {
       id: 4,
+      jobId: "JOB003",
       name: "Sneha Patel",
       email: "sneha.p@devstudio.com",
       onboardingDate: "2024-02-10",
@@ -66,6 +70,7 @@ const HiredTalents = () => {
     },
     {
       id: 5,
+      jobId: "JOB002",
       name: "Aditya Kumar",
       email: "aditya.k@techcorp.com",
       onboardingDate: "2024-09-01",
@@ -81,6 +86,7 @@ const HiredTalents = () => {
   const mockInactiveTalents = [
     {
       id: 6,
+      jobId: "JOB001",
       name: "Amit Kumar",
       email: "amit.k@pastproject.com",
       onboardingDate: "2022-05-10",
@@ -93,6 +99,7 @@ const HiredTalents = () => {
     },
     {
       id: 7,
+      jobId: "JOB002",
       name: "Neha Singh",
       email: "neha.singh@oldclient.com",
       onboardingDate: "2021-08-15",
@@ -140,10 +147,28 @@ const HiredTalents = () => {
 
   const columns = [
     {
+      title: "Job Id",
+      dataIndex: "jobId",
+      key: "jobId",
+      width: "8%",
+      render: (jobId) => (
+        <a 
+          href="#" 
+          style={{ color: "#1890ff", fontWeight: 500 }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/customer/my-jobs/job-details/${jobId}`);
+          }}
+        >
+          {jobId}
+        </a>
+      ),
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      width: "14%",
+      width: "12%",
       render: (text, record) => (
         <a 
           href="#" 
@@ -161,14 +186,14 @@ const HiredTalents = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
-      width: "16%",
+      width: "14%",
       render: (email) => <span className="email-text">{email}</span>,
     },
     {
       title: "Onboarding Date",
       dataIndex: "onboardingDate",
       key: "onboardingDate",
-      width: "11%",
+      width: "10%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -183,14 +208,14 @@ const HiredTalents = () => {
       title: "Contract Duration",
       dataIndex: "contractDuration",
       key: "contractDuration",
-      width: "11%",
+      width: "10%",
       render: (duration) => <span className="duration-text">{duration}</span>,
     },
     {
       title: "Last Working Day",
       dataIndex: "lastWorkingDay",
       key: "lastWorkingDay",
-      width: "11%",
+      width: "10%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -205,7 +230,7 @@ const HiredTalents = () => {
       title: "Days Left",
       dataIndex: "daysLeft",
       key: "daysLeft",
-      width: "9%",
+      width: "8%",
       render: (days) => (
         <span className={`days-left ${getDaysLeftClass(days)}`}>
           {days < 0 ? "Completed" : `${days} days`}
@@ -361,7 +386,7 @@ const HiredTalents = () => {
               showSizeChanger: false,
               showTotal: (total) => `Total ${total} talents`,
             }}
-            scroll={{ x: 1200 }}
+            scroll={{ x: 1300 }}
           />
         ) : (
           <EmptyState>
