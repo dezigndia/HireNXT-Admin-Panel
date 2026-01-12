@@ -10,7 +10,7 @@ export const PageHeader = styled.div`
   margin-bottom: 24px;
 
   h1 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: #014c75;
     margin: 0 0 8px 0;
