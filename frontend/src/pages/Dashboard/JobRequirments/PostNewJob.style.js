@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const PostNewJobWrapper = styled.div`
   background: #f8f9fd;
-  padding: 24px 40px;
+  padding: 24px;
 
   .post-job-header {
     h2 {
