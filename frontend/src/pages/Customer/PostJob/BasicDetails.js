@@ -178,23 +178,6 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
         </Form.Item>
       </div>
 
-      <Form.Item
-        name="expectations"
-        label="Expectations"
-        rules={[
-          { required: true, message: "Please enter expectations" },
-          { min: 60, message: "Minimum 60 characters required" },
-        ]}
-        extra="Minimum word 60 characters"
-      >
-        <TextArea
-          rows={4}
-          placeholder="Enter client expectations"
-          showCount
-          maxLength={500}
-        />
-      </Form.Item>
-
       <div className="form-actions">
         <Button onClick={onBack}>
           Back

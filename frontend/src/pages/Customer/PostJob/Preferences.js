@@ -1,10 +1,11 @@
-import React from "react";
-import { Form, Select, Button, InputNumber, Row, Col } from "antd";
+import React, { useState } from "react";
+import { Form, Select, Button, InputNumber, Row, Col, TimePicker } from "antd";
 
 const { Option } = Select;
 
 const Preferences = ({ initialData, onNext, onBack }) => {
   const [form] = Form.useForm();
+  const [shiftTiming, setShiftTiming] = useState(initialData?.shiftTiming || null);
 
   const handleSubmit = (values) => {
     onNext(values);
@@ -60,10 +61,10 @@ const Preferences = ({ initialData, onNext, onBack }) => {
       <div className="four-column-grid">
         <Form.Item
           name="workingTime"
-          label="Working time"
+          label="Timezone"
           rules={[{ required: true, message: "Please select timezone" }]}
         >
-          <Select placeholder="Select Working time-zone" showSearch>
+          <Select placeholder="Select Timezone" showSearch>
             {workingTimeZones.map((zone) => (
               <Option key={zone} value={zone}>
                 {zone}
@@ -120,7 +121,11 @@ const Preferences = ({ initialData, onNext, onBack }) => {
           label="Tools Used to Manage"
           rules={[{ required: true, message: "Please select tools" }]}
         >
-          <Select placeholder="Agile Practice" showSearch>
+          <Select 
+            placeholder="Select tools" 
+            mode="multiple"
+            showSearch
+          >
             {toolsOptions.map((tool) => (
               <Option key={tool} value={tool}>
                 {tool}
@@ -128,6 +133,53 @@ const Preferences = ({ initialData, onNext, onBack }) => {
             ))}
           </Select>
         </Form.Item>
+      </div>
+
+      <div className="four-column-grid">
+        <Form.Item
+          name="shiftTiming"
+          label="Shift Timing"
+          rules={[{ required: true, message: "Please select shift timing" }]}
+        >
+          <Select 
+            placeholder="Select Shift Timing" 
+            onChange={(value) => setShiftTiming(value)}
+          >
+            <Option value="Morning">Morning (6 AM to 3 PM)</Option>
+            <Option value="General">General (9 AM to 6 PM)</Option>
+            <Option value="Custom">Custom</Option>
+          </Select>
+        </Form.Item>
+
+        {shiftTiming === "Custom" && (
+          <>
+            <Form.Item
+              name="shiftStart"
+              label="Shift Start"
+              rules={[{ required: true, message: "Please select start time" }]}
+            >
+              <TimePicker 
+                format="h:mm A" 
+                use12Hours 
+                style={{ width: "100%" }}
+                placeholder="Select start time"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="shiftEnd"
+              label="Shift End"
+              rules={[{ required: true, message: "Please select end time" }]}
+            >
+              <TimePicker 
+                format="h:mm A" 
+                use12Hours 
+                style={{ width: "100%" }}
+                placeholder="Select end time"
+              />
+            </Form.Item>
+          </>
+        )}
       </div>
 
       <div className="form-actions">
