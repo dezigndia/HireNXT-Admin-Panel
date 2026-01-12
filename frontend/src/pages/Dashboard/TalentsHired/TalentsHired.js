@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Table, Dropdown, Button, Empty, Card, Avatar, Input, Select, Flex } from "antd";
-import { MoreOutlined, DollarOutlined, TrophyOutlined, LineChartOutlined, PlusOutlined, SearchOutlined, FilterOutlined } from "@ant-design/icons";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Table, Dropdown, Button, Empty, Card, Avatar, Input, Select, Flex, Tag } from "antd";
+import { MoreOutlined, DollarOutlined, TrophyOutlined, LineChartOutlined, PlusOutlined, SearchOutlined, FilterOutlined, CloseOutlined } from "@ant-design/icons";
 import {
   TalentsHiredContainer,
   PageHeader,
@@ -15,16 +15,30 @@ const { Option } = Select;
 
 const TalentsHired = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState("Active Talents");
   const [searchText, setSearchText] = useState("");
   const [filterRole, setFilterRole] = useState(null);
   const [filterLocation, setFilterLocation] = useState(null);
   const [filterExperience, setFilterExperience] = useState(null);
+  const [filterJobId, setFilterJobId] = useState(searchParams.get("jobId") || null);
 
-  // Single source of truth for all talents data
+  useEffect(() => {
+    const jobIdParam = searchParams.get("jobId");
+    if (jobIdParam) {
+      setFilterJobId(jobIdParam);
+    }
+  }, [searchParams]);
+
+  const clearJobIdFilter = () => {
+    setFilterJobId(null);
+    setSearchParams({});
+  };
+
   const allTalents = [
     {
       id: 1,
+      jobId: "JOB001",
       name: "Rajesh Kumar",
       role: "Senior Full Stack Developer",
       experience: "8 Years",
@@ -39,6 +53,7 @@ const TalentsHired = () => {
     },
     {
       id: 2,
+      jobId: "JOB002",
       name: "Priya Sharma",
       role: "React Native Developer",
       experience: "6 Years",
@@ -53,6 +68,7 @@ const TalentsHired = () => {
     },
     {
       id: 3,
+      jobId: "JOB001",
       name: "Amit Patel",
       role: "Backend Developer",
       experience: "5 Years",
@@ -67,6 +83,7 @@ const TalentsHired = () => {
     },
     {
       id: 4,
+      jobId: "JOB003",
       name: "Sneha Reddy",
       role: "Cloud Architect",
       experience: "10 Years",
@@ -81,6 +98,7 @@ const TalentsHired = () => {
     },
     {
       id: 5,
+      jobId: "JOB002",
       name: "Vikram Singh",
       role: "DevOps Engineer",
       experience: "7 Years",
@@ -95,6 +113,7 @@ const TalentsHired = () => {
     },
     {
       id: 6,
+      jobId: "JOB001",
       name: "Anjali Gupta",
       role: "UI/UX Designer",
       experience: "4 Years",
@@ -109,14 +128,11 @@ const TalentsHired = () => {
     },
   ];
 
-  // Derive active and inactive talents from the single source
   const activeTalents = allTalents.filter((talent) => talent.status === "active");
   const inactiveTalents = allTalents.filter((talent) => talent.status === "inactive");
 
-  // Get base data based on active tab
   const baseData = activeTab === "Active Talents" ? activeTalents : inactiveTalents;
 
-  // Apply search and filters
   const currentData = baseData.filter((talent) => {
     const matchesSearch = 
       searchText === "" ||
@@ -126,14 +142,12 @@ const TalentsHired = () => {
     const matchesRole = !filterRole || talent.role === filterRole;
     const matchesLocation = !filterLocation || talent.location === filterLocation;
     const matchesExperience = !filterExperience || talent.experience.includes(filterExperience);
+    const matchesJobId = !filterJobId || talent.jobId === filterJobId;
 
-    return matchesSearch && matchesRole && matchesLocation && matchesExperience;
+    return matchesSearch && matchesRole && matchesLocation && matchesExperience && matchesJobId;
   });
 
-  // Calculate metrics for active talents only
   const calculateMetrics = () => {
-    // Use the derived activeTalents array
-    
     const activeMonthlyBilling = activeTalents.reduce(
       (sum, talent) => sum + talent.monthlyRate,
       0
@@ -180,6 +194,24 @@ const TalentsHired = () => {
 
   const columns = [
     {
+      title: "Job Id",
+      dataIndex: "jobId",
+      key: "jobId",
+      width: "8%",
+      render: (jobId) => (
+        <a
+          href="#"
+          style={{ color: "#1890ff", fontWeight: 500 }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/home/job-requirments/job-details/${jobId}`);
+          }}
+        >
+          {jobId}
+        </a>
+      ),
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
@@ -190,7 +222,7 @@ const TalentsHired = () => {
           style={{ color: "#1890ff", fontWeight: 500 }}
           onClick={(e) => {
             e.preventDefault();
-            navigate(`/partner/talent-details/${record.id}`);
+            navigate(`/home/talent-details/${record.id}`);
           }}
         >
           {text}
@@ -208,14 +240,14 @@ const TalentsHired = () => {
       title: "Experience",
       dataIndex: "experience",
       key: "experience",
-      width: "10%",
+      width: "9%",
       render: (text) => <span>{text}</span>,
     },
     {
       title: "Monthly Rate",
       dataIndex: "monthlyRate",
       key: "monthlyRate",
-      width: "11%",
+      width: "10%",
       render: (rate) => (
         <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
       ),
@@ -224,7 +256,7 @@ const TalentsHired = () => {
       title: "Total Billed",
       dataIndex: "totalBilled",
       key: "totalBilled",
-      width: "11%",
+      width: "10%",
       render: (amount) => (
         <span className="billed-text" style={{ fontWeight: 600, color: "#014c75" }}>
           ₹ {amount.toLocaleString("en-IN")}
@@ -235,7 +267,7 @@ const TalentsHired = () => {
       title: "Onboarding Date",
       dataIndex: "onboardingDate",
       key: "onboardingDate",
-      width: "11%",
+      width: "10%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -250,14 +282,14 @@ const TalentsHired = () => {
       title: "Contract Duration",
       dataIndex: "contractDuration",
       key: "contractDuration",
-      width: "10%",
+      width: "9%",
       render: (duration) => <span className="duration-text">{duration}</span>,
     },
     {
       title: "Last Working Day",
       dataIndex: "lastWorkingDay",
       key: "lastWorkingDay",
-      width: "11%",
+      width: "10%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -272,7 +304,7 @@ const TalentsHired = () => {
       title: "Days Left",
       dataIndex: "daysLeft",
       key: "daysLeft",
-      width: "10%",
+      width: "8%",
       align: "center",
       render: (days) => (
         <span className={`days-left ${getDaysLeftClass(days)}`}>
@@ -283,7 +315,7 @@ const TalentsHired = () => {
     {
       title: "Action",
       key: "action",
-      width: "12%",
+      width: "10%",
       align: "center",
       render: (_, record) => (
         <div className="action-buttons">
@@ -324,6 +356,16 @@ const TalentsHired = () => {
     <TalentsHiredContainer>
       <PageHeader>
         <h1>Talents Hired</h1>
+        {filterJobId && (
+          <Tag 
+            color="blue" 
+            closable 
+            onClose={clearJobIdFilter}
+            style={{ marginLeft: 16, fontSize: 14, padding: "4px 12px" }}
+          >
+            Filtered by Job: {filterJobId}
+          </Tag>
+        )}
       </PageHeader>
 
       <MetricsContainer>
@@ -480,7 +522,7 @@ const TalentsHired = () => {
               showSizeChanger: false,
               showTotal: (total) => `Total ${total} talents`,
             }}
-            scroll={{ x: 1500 }}
+            scroll={{ x: 1600 }}
           />
         ) : (
           <EmptyState>

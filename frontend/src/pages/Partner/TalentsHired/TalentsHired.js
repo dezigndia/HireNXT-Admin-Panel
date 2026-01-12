@@ -15,10 +15,10 @@ const TalentsHired = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("Active Talents");
 
-  // Single source of truth for all talents data
   const allTalents = [
     {
       id: 1,
+      jobId: "JOB001",
       name: "Rajesh Kumar",
       role: "Senior Full Stack Developer",
       experience: "8 Years",
@@ -32,6 +32,7 @@ const TalentsHired = () => {
     },
     {
       id: 2,
+      jobId: "JOB002",
       name: "Priya Sharma",
       role: "React Native Developer",
       experience: "6 Years",
@@ -45,6 +46,7 @@ const TalentsHired = () => {
     },
     {
       id: 3,
+      jobId: "JOB001",
       name: "Amit Patel",
       role: "Backend Developer",
       experience: "5 Years",
@@ -58,6 +60,7 @@ const TalentsHired = () => {
     },
     {
       id: 4,
+      jobId: "JOB003",
       name: "Sneha Reddy",
       role: "Cloud Architect",
       experience: "10 Years",
@@ -71,6 +74,7 @@ const TalentsHired = () => {
     },
     {
       id: 5,
+      jobId: "JOB002",
       name: "Vikram Singh",
       role: "DevOps Engineer",
       experience: "7 Years",
@@ -84,6 +88,7 @@ const TalentsHired = () => {
     },
     {
       id: 6,
+      jobId: "JOB001",
       name: "Anjali Gupta",
       role: "UI/UX Designer",
       experience: "4 Years",
@@ -97,17 +102,13 @@ const TalentsHired = () => {
     },
   ];
 
-  // Derive active and inactive talents from the single source
   const activeTalents = allTalents.filter((talent) => talent.status === "active");
   const inactiveTalents = allTalents.filter((talent) => talent.status === "inactive");
 
   const currentData =
     activeTab === "Active Talents" ? activeTalents : inactiveTalents;
 
-  // Calculate metrics for active talents only
   const calculateMetrics = () => {
-    // Use the derived activeTalents array
-    
     const activeMonthlyBilling = activeTalents.reduce(
       (sum, talent) => sum + talent.monthlyRate,
       0
@@ -154,6 +155,24 @@ const TalentsHired = () => {
 
   const columns = [
     {
+      title: "Job Id",
+      dataIndex: "jobId",
+      key: "jobId",
+      width: "8%",
+      render: (jobId) => (
+        <a
+          href="#"
+          style={{ color: "#1890ff", fontWeight: 500 }}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(`/partner/ongoing-jobs/job-details/${jobId}`);
+          }}
+        >
+          {jobId}
+        </a>
+      ),
+    },
+    {
       title: "Name",
       dataIndex: "name",
       key: "name",
@@ -175,21 +194,21 @@ const TalentsHired = () => {
       title: "Role",
       dataIndex: "role",
       key: "role",
-      width: "14%",
+      width: "13%",
       render: (text) => <span className="role-text">{text}</span>,
     },
     {
       title: "Experience",
       dataIndex: "experience",
       key: "experience",
-      width: "10%",
+      width: "9%",
       render: (text) => <span>{text}</span>,
     },
     {
       title: "Monthly Rate",
       dataIndex: "monthlyRate",
       key: "monthlyRate",
-      width: "11%",
+      width: "10%",
       render: (rate) => (
         <span className="rate-text">₹ {rate.toLocaleString("en-IN")}</span>
       ),
@@ -198,7 +217,7 @@ const TalentsHired = () => {
       title: "Total Billed",
       dataIndex: "totalBilled",
       key: "totalBilled",
-      width: "11%",
+      width: "10%",
       render: (amount) => (
         <span className="billed-text" style={{ fontWeight: 600, color: "#014c75" }}>
           ₹ {amount.toLocaleString("en-IN")}
@@ -209,7 +228,7 @@ const TalentsHired = () => {
       title: "Onboarding Date",
       dataIndex: "onboardingDate",
       key: "onboardingDate",
-      width: "11%",
+      width: "10%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -224,14 +243,14 @@ const TalentsHired = () => {
       title: "Contract Duration",
       dataIndex: "contractDuration",
       key: "contractDuration",
-      width: "10%",
+      width: "9%",
       render: (duration) => <span className="duration-text">{duration}</span>,
     },
     {
       title: "Last Working Day",
       dataIndex: "lastWorkingDay",
       key: "lastWorkingDay",
-      width: "11%",
+      width: "10%",
       render: (date) => (
         <span className="date-text">
           {new Date(date).toLocaleDateString("en-GB", {
@@ -246,7 +265,7 @@ const TalentsHired = () => {
       title: "Days Left",
       dataIndex: "daysLeft",
       key: "daysLeft",
-      width: "10%",
+      width: "9%",
       align: "center",
       render: (days) => (
         <span className={`days-left ${getDaysLeftClass(days)}`}>
@@ -257,7 +276,7 @@ const TalentsHired = () => {
     {
       title: "Action",
       key: "action",
-      width: "12%",
+      width: "10%",
       align: "center",
       render: (_, record) => (
         <div className="action-buttons">
@@ -371,7 +390,7 @@ const TalentsHired = () => {
               showSizeChanger: false,
               showTotal: (total) => `Total ${total} talents`,
             }}
-            scroll={{ x: 1500 }}
+            scroll={{ x: 1600 }}
           />
         ) : (
           <EmptyState>
