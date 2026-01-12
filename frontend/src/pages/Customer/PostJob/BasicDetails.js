@@ -1,14 +1,38 @@
 import React from "react";
-import { Form, Input, Select, Button, InputNumber, Checkbox, Row, Col } from "antd";
+import { Form, Input, Select, Button, InputNumber, Checkbox, Row, Col, Modal } from "antd";
+import { useNavigate } from "react-router-dom";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 const { TextArea } = Input;
 
 const BasicDetails = ({ initialData, onNext, onBack }) => {
+  const navigate = useNavigate();
   const [form] = Form.useForm();
 
   const handleSubmit = (values) => {
     onNext(values);
+  };
+
+  const handleCancel = () => {
+    Modal.confirm({
+      title: "Cancel Job Posting",
+      icon: <ExclamationCircleOutlined style={{ color: "#faad14" }} />,
+      content: (
+        <div>
+          <p>Are you sure you want to cancel?</p>
+          <p style={{ color: "#666", fontSize: 13 }}>
+            All unsaved changes will be lost.
+          </p>
+        </div>
+      ),
+      okText: "Yes, Cancel",
+      okButtonProps: { danger: true },
+      cancelText: "Continue Editing",
+      onOk: () => {
+        navigate("/customer/my-jobs");
+      },
+    });
   };
 
   const locationOptions = [
@@ -178,12 +202,17 @@ const BasicDetails = ({ initialData, onNext, onBack }) => {
         </Form.Item>
       </div>
 
-      <div className="form-actions">
-        <Button onClick={onBack}>
-          Back
-        </Button>
-        <Button type="primary" htmlType="submit">
-          Save & Next
+      <div className="form-actions" style={{ justifyContent: "space-between" }}>
+        <div style={{ display: "flex", gap: 12 }}>
+          <Button onClick={onBack}>
+            Back
+          </Button>
+          <Button type="primary" htmlType="submit">
+            Save & Next
+          </Button>
+        </div>
+        <Button onClick={handleCancel}>
+          Cancel
         </Button>
       </div>
     </Form>
